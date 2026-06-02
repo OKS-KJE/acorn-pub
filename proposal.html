@@ -1,0 +1,2449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>기획안 분석 관리 — 에이콘</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --nav:#07213E;--nav2:#0D3060;--gold:#D4943A;--gold2:#E8B04A;
+  --blue:#1560B8;--blue2:#0A3E84;--teal:#0A7860;--purple:#4A1A7C;
+  --rose:#8A1A2A;--ops:#0A6A3A;
+  --bg:#EAF3FB;--surface:#fff;--border:#D4E4F4;--border2:#B8D0EC;
+  --text:#0A1A2E;--text2:#2A3A4E;--text3:#5A6A7E;
+  --s2:#F0F7FF;--s3:#E3EFF9;--shadow:0 2px 8px rgba(21,96,184,.08);
+  --r:8px;--rL:12px;
+  --ok:#1A7A1A;--ok-bg:#E8F5E8;--tri:#B87030;--tri-bg:#FFF3E0;--ex:#8A1A1A;--ex-bg:#FDE8E8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+.topnav{background:var(--nav);height:52px;display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.3);position:sticky;top:0;z-index:100;}
+.topnav-logo{font-size:14px;font-weight:800;color:#fff;}
+.topnav-badge{background:var(--gold);color:var(--nav);font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;}
+.topnav-back{margin-left:auto;font-size:12px;color:rgba(255,255,255,.6);text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,.2);border-radius:6px;transition:.2s;}
+.topnav-back:hover{background:rgba(255,255,255,.1);color:#fff;}
+.layout{display:flex;flex:1;}
+.sidebar{width:220px;min-height:calc(100vh - 52px);background:var(--nav2);display:flex;flex-direction:column;flex-shrink:0;}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;transition:.15s;border-left:3px solid transparent;}
+.menu-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.menu-item.active{background:rgba(21,96,184,.25);color:var(--gold2);border-left-color:var(--gold2);}
+.menu-divider{height:1px;background:rgba(255,255,255,.08);margin:6px 14px;}
+.sidebar-stats{padding:12px 14px;margin:8px 10px;background:rgba(255,255,255,.05);border-radius:var(--r);}
+.stat-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px;}
+.stat-label{color:rgba(255,255,255,.5);}
+.stat-val{color:var(--gold2);font-weight:700;font-family:'JetBrains Mono',monospace;}
+.main{flex:1;padding:20px;overflow-y:auto;}
+.view{display:none;}
+.view.active{display:block;}
+.page-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.page-hdr h2{font-size:18px;font-weight:800;}
+.page-hdr .sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'Pretendard',sans-serif;transition:.2s;}
+.btn-primary{background:var(--blue);color:#fff;}.btn-primary:hover{background:var(--blue2);}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2);}.btn-ghost:hover{background:var(--s3);}
+.btn-danger{background:var(--ex-bg);color:var(--ex);border:1px solid #F0B0B0;}
+.btn-sm{padding:5px 10px;font-size:11px;}
+/* cards */
+.dash-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;}
+.dash-card .dc-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.8px;margin-bottom:6px;}
+.dash-card .dc-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;}
+/* form */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:16px;}
+.form-card-hdr{background:var(--nav);padding:13px 18px;display:flex;align-items:center;gap:10px;}
+.form-card-hdr h3{font-size:13px;font-weight:700;color:#fff;}
+.form-card-hdr .fch-sub{font-size:11px;color:rgba(255,255,255,.55);margin-left:auto;}
+.form-body{padding:18px;}
+.form-row{display:grid;gap:12px;margin-bottom:14px;}
+.form-row.c2{grid-template-columns:1fr 1fr;}
+.form-row.c3{grid-template-columns:1fr 1fr 1fr;}
+.form-row.c4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:700;color:var(--text2);}
+.field input,.field select,.field textarea{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-family:'Pretendard',sans-serif;font-size:12px;color:var(--text);background:#fff;transition:.2s;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,96,184,.1);}
+.field textarea{resize:vertical;min-height:65px;}
+/* score section */
+.score-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:16px;}
+.ss-hdr{padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.ss-title{font-size:13px;font-weight:700;}
+.score-items{display:flex;flex-direction:column;}
+.score-item{padding:14px 16px;border-bottom:1px solid var(--border);background:#fff;}
+.score-item:last-child{border-bottom:none;}
+.si-top{display:flex;align-items:flex-start;gap:12px;}
+.si-info{flex:1;}
+.si-label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.si-desc{font-size:11px;color:var(--text3);line-height:1.6;}
+.si-guide{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:7px;font-size:10px;}
+.si-guide-cell{border-radius:5px;padding:5px 7px;line-height:1.5;}
+.si-guide-cell.ok{background:var(--ok-bg);color:var(--ok);}
+.si-guide-cell.tri{background:var(--tri-bg);color:var(--tri);}
+.si-guide-cell.ex{background:var(--ex-bg);color:var(--ex);}
+.si-guide-cell strong{display:block;margin-bottom:2px;}
+.score-radio{display:flex;gap:5px;flex-shrink:0;}
+.score-radio label{cursor:pointer;}
+.score-radio input[type=radio]{display:none;}
+.rb{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1.5px solid var(--border);border-radius:6px;font-size:15px;font-weight:700;transition:.2s;cursor:pointer;background:#fff;}
+.rb:hover{border-color:var(--blue2);}
+.score-radio input:checked+.rb.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);}
+.score-radio input:checked+.rb.tri{background:var(--tri-bg);border-color:var(--tri);color:var(--tri);}
+.score-radio input:checked+.rb.ex{background:var(--ex-bg);border-color:var(--ex);color:var(--ex);}
+.si-note{margin-top:8px;}
+.si-note input{width:100%;border:1px solid var(--border);border-radius:5px;padding:5px 8px;font-size:11px;color:var(--text2);}
+.ss-note{padding:12px 16px;background:var(--s2);border-top:1px solid var(--border);}
+/* decision */
+.decision-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);padding:18px;margin-bottom:16px;}
+.decision-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.dec-card{border-radius:var(--r);padding:12px;text-align:center;cursor:pointer;border:2px solid transparent;transition:.2s;}
+.dec-icon{font-size:20px;margin-bottom:5px;}
+.dec-name{font-size:12px;font-weight:700;}
+.dec-desc{font-size:10px;color:var(--text3);margin-top:3px;}
+/* persuasion guide */
+.persuade-box{border-radius:var(--rL);overflow:hidden;margin-bottom:16px;display:none;}
+.persuade-box.show{display:block;}
+.pb-hdr{padding:13px 18px;display:flex;align-items:center;gap:8px;}
+.pb-hdr h3{font-size:13px;font-weight:700;color:#fff;}
+.pb-body{padding:16px;}
+.pb-script{background:var(--s2);border-radius:var(--r);padding:13px 15px;font-size:12px;color:var(--text2);line-height:1.8;border-left:3px solid;}
+.pb-step{display:flex;gap:10px;margin-bottom:10px;}
+.pb-step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px;}
+.pb-step-body{flex:1;}
+.pb-step-title{font-size:11px;font-weight:700;margin-bottom:3px;}
+.pb-step-desc{font-size:11px;color:var(--text2);line-height:1.6;}
+/* list */
+.list-filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+.filter-select{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;font-family:'Pretendard',sans-serif;color:var(--text2);background:#fff;cursor:pointer;}
+.search-input{flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:12px;font-family:'Pretendard',sans-serif;}
+.search-input:focus{outline:none;border-color:var(--blue);}
+.proposal-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--rL);overflow:hidden;box-shadow:var(--shadow);}
+.proposal-table thead{background:var(--nav);}
+.proposal-table thead th{padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:rgba(255,255,255,.8);}
+.proposal-table tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:.15s;}
+.proposal-table tbody tr:hover{background:var(--s2);}
+.proposal-table td{padding:10px 12px;font-size:12px;color:var(--text2);vertical-align:middle;}
+.score-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:4px;font-size:12px;font-weight:700;}
+.score-badge.ok{background:var(--ok-bg);color:var(--ok);}
+.score-badge.tri{background:var(--tri-bg);color:var(--tri);}
+.score-badge.ex{background:var(--ex-bg);color:var(--ex);}
+.score-badge.na{background:var(--s3);color:var(--text3);}
+.decision-badge{padding:3px 9px;border-radius:12px;font-size:10px;font-weight:700;white-space:nowrap;}
+.db-ok{background:var(--ok-bg);color:var(--ok);}
+.db-cond{background:var(--tri-bg);color:var(--tri);}
+.db-hold{background:#FFFBE0;color:#6A5A00;}
+.db-reject{background:var(--ex-bg);color:var(--ex);}
+.db-pending{background:var(--s3);color:var(--text3);}
+.type-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.tb-plan{background:#EBF3FD;color:var(--blue);}
+.tb-semi{background:#F0E8FF;color:var(--purple);}
+.tb-self{background:#E0F5EE;color:var(--teal);}
+.tb-kdp{background:#FFF3E0;color:var(--tri);}
+/* modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--rL);width:min(920px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-hdr{background:var(--nav);padding:16px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5;}
+.modal-hdr h3{font-size:14px;font-weight:700;color:#fff;flex:1;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;line-height:1;}
+.modal-body{padding:20px;}
+.detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;}
+.detail-section h4{font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.detail-item .di-label{font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.5px;}
+.detail-item .di-val{font-size:12px;color:var(--text2);margin-top:2px;}
+/* analytics */
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;}
+.chart-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.bar-label{font-size:10px;color:var(--text2);width:80px;flex-shrink:0;text-align:right;}
+.bar-track{flex:1;background:var(--s3);border-radius:3px;height:18px;}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px;}
+.bar-fill span{font-size:10px;color:#fff;font-weight:700;}
+.bar-count{font-size:11px;color:var(--text3);width:30px;text-align:right;}
+/* supabase status */
+.db-status{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;}
+.db-status.local{background:rgba(255,200,80,.15);color:var(--gold2);}
+.db-status.cloud{background:rgba(80,200,120,.15);color:#50C878;}
+.db-dot{width:7px;height:7px;border-radius:50%;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-state .es-icon{font-size:48px;margin-bottom:12px;}
+.empty-state h3{font-size:16px;font-weight:700;color:var(--text2);margin-bottom:6px;}
+.criterion-block{background:var(--s2);border-radius:var(--r);padding:12px;margin-bottom:8px;border-left:3px solid;}
+.criterion-scores{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.cs-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);}
+@media(max-width:860px){.sidebar{display:none;}.dash-grid{grid-template-columns:repeat(3,1fr);}.analytics-grid{grid-template-columns:1fr;}}
+
+/* ── PROJECT MGMT ── */
+.stage-bar{display:flex;gap:0;margin:12px 0;border-radius:var(--r);overflow:hidden;}
+.stage-item{flex:1;padding:8px 4px;text-align:center;position:relative;cursor:pointer;transition:.2s;}
+.stage-item .st-num{font-size:10px;font-weight:700;margin-bottom:2px;}
+.stage-item .st-label{font-size:10px;font-weight:600;}
+.stage-item .st-date{font-size:9px;margin-top:2px;opacity:.75;}
+.stage-item.done{background:var(--ok-bg);color:var(--ok);}
+.stage-item.active{background:var(--blue);color:#fff;}
+.stage-item.upcoming{background:var(--s3);color:var(--text3);}
+.stage-item.overdue{background:var(--ex-bg);color:var(--ex);}
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);margin-bottom:14px;overflow:hidden;}
+.project-card-hdr{padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);}
+.project-card-body{padding:16px 18px;}
+.dday-badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.milestone-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.milestone-row:last-child{border-bottom:none;}
+.ms-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;}
+.ms-check.done{background:var(--ok);border-color:var(--ok);color:#fff;}
+.ms-check.overdue{background:var(--ex-bg);border-color:var(--ex);}
+.ms-label{font-size:12px;font-weight:600;color:var(--text);flex:1;}
+.ms-date{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.ms-dday{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+/* ── SALES ── */
+.sales-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+.sales-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.sc-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.8px;margin-bottom:6px;}
+.sc-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;}
+.sc-sub{font-size:10px;color:var(--text3);margin-top:4px;}
+.bep-meter{height:12px;background:var(--s3);border-radius:6px;overflow:hidden;margin:6px 0;}
+.bep-fill{height:100%;border-radius:6px;transition:.6s;}
+.book-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s;}
+.book-row:hover{background:var(--s2);}
+.book-row:last-child{border-bottom:none;}
+.progress-ring{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+
+
+/* ── GLOBAL SEARCH ── */
+.global-search{display:flex;align-items:center;gap:6px;flex:1;max-width:540px;margin:0 16px;}
+.gs-field input{border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 9px;font-size:11px;font-family:'Pretendard',sans-serif;background:rgba(255,255,255,.1);color:#fff;width:100%;}
+.gs-field input::placeholder{color:rgba(255,255,255,.4);}
+.gs-field input:focus{outline:none;border-color:var(--gold2);background:rgba(255,255,255,.15);}
+.gs-field input[type=date]{color:rgba(255,255,255,.7);width:110px;}
+.gs-sep{color:rgba(255,255,255,.4);font-size:11px;flex-shrink:0;}
+.gs-btn{border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px;flex-shrink:0;transition:.2s;}
+.gs-btn:hover{background:rgba(255,255,255,.2);color:#fff;}
+.gs-result-row{display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:.15s;}
+.gs-result-row:hover{background:var(--s2);}
+
+
+/* ── CRITERIA TABS ── */
+.criteria-tab-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:16px;}
+.criteria-tab-bar{display:flex;align-items:stretch;border-bottom:2px solid var(--border);background:var(--s2);}
+.ctab{border:none;background:transparent;padding:12px 16px;font-size:12px;font-weight:700;font-family:'Pretendard',sans-serif;cursor:pointer;color:var(--text3);border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap;}
+.ctab:hover{background:var(--s3);color:var(--text2);}
+.ctab.active{color:var(--blue);border-bottom-color:var(--blue);background:#fff;}
+.ctab.done{color:var(--ok);}
+.ctab.done.active{color:var(--ok);border-bottom-color:var(--ok);}
+.ctab-panel{display:none;padding:0;}
+.ctab-panel.active{display:block;}
+.ctab-score-summary{display:flex;gap:6px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--s2);}
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-logo">📋 기획안 분석 관리 <span class="topnav-badge">ACORN</span></div>
+  <!-- Global Search -->
+  <div class="global-search">
+    <div class="gs-field"><input type="text" id="gs-title" placeholder="🔍 도서명" oninput="globalSearch()"></div>
+    <div class="gs-field"><input type="text" id="gs-author" placeholder="👤 저자명" oninput="globalSearch()"></div>
+    <div class="gs-field"><input type="date" id="gs-from" onchange="globalSearch()" title="접수일 시작"></div>
+    <div class="gs-sep">~</div>
+    <div class="gs-field"><input type="date" id="gs-to" onchange="globalSearch()" title="접수일 종료"></div>
+    <button class="gs-btn" onclick="clearGlobalSearch()">✕</button>
+  </div>
+  <div id="db-status-badge" class="db-status local"><div class="db-dot" style="background:var(--gold2)"></div>localStorage</div>
+  <a href="index.html" class="topnav-back">← 온보딩</a>
+</nav>
+<!-- Search Results Dropdown -->
+<div id="gs-results" style="display:none;position:fixed;top:52px;left:230px;right:0;z-index:90;background:var(--surface);border-bottom:2px solid var(--blue);box-shadow:0 4px 16px rgba(0,0,0,.15);max-height:320px;overflow-y:auto;"></div>
+
+<div class="layout">
+<aside class="sidebar">
+  <div style="padding:8px 0;">
+    <div class="menu-item active" onclick="showView('dashboard')" id="mi-dashboard">📊 대시보드</div>
+    <div class="menu-item" onclick="showView('new')" id="mi-new">➕ 기획안 등록</div>
+    <div class="menu-divider"></div>
+    <div class="menu-item" onclick="showView('list')" id="mi-list">📋 기획안 목록</div>
+    <div class="menu-item" onclick="showView('analytics')" id="mi-analytics">📈 통계 분석</div>
+    <div class="menu-divider"></div>
+    <div class="menu-divider"></div>
+    <div class="menu-item" onclick="showView('projects')" id="mi-projects">📅 프로젝트 관리</div>
+    <div class="menu-item" onclick="showView('sales')" id="mi-sales">💰 판매·손익 관리</div>
+    <div class="menu-divider"></div>
+    <div class="menu-item" onclick="exportCSV()" style="color:rgba(255,255,255,.45);">⬇️ CSV 내보내기</div>
+    <div class="menu-item" onclick="clearAll()" style="color:rgba(255,100,100,.4);">🗑️ 전체 초기화</div>
+  </div>
+  <div style="flex:1"></div>
+  <div class="sidebar-stats">
+    <div class="stat-row"><span class="stat-label">총 기획안</span><span class="stat-val" id="st-total">0</span></div>
+    <div class="stat-row"><span class="stat-label">검토 중</span><span class="stat-val" id="st-pending" style="color:#FFD080">0</span></div>
+    <div class="stat-row"><span class="stat-label">승인·조건부</span><span class="stat-val" id="st-ok" style="color:#90E090">0</span></div>
+    <div class="stat-row"><span class="stat-label">자비출판 유도</span><span class="stat-val" id="st-self" style="color:var(--gold2)">0</span></div>
+    <div class="stat-row"><span class="stat-label">기각</span><span class="stat-val" id="st-reject" style="color:#FFB3B3">0</span></div>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- ══ DASHBOARD ══ -->
+<div class="view active" id="view-dashboard">
+  <div class="page-hdr">
+    <div><h2>📊 대시보드</h2><div class="sub">기획안 접수 현황 및 주요 지표</div></div>
+    <div style="margin-left:auto"><button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button></div>
+  </div>
+  <div class="dash-grid">
+    <div class="dash-card"><div class="dc-label">총 접수</div><div class="dc-val" id="d-total" style="color:var(--blue)">0</div></div>
+    <div class="dash-card"><div class="dc-label">검토 중</div><div class="dc-val" id="d-pending" style="color:var(--gold)">0</div></div>
+    <div class="dash-card"><div class="dc-label">승인</div><div class="dc-val" id="d-ok" style="color:var(--ok)">0</div></div>
+    <div class="dash-card"><div class="dc-label">자비출판 유도</div><div class="dc-val" id="d-self" style="color:var(--teal)">0</div></div>
+    <div class="dash-card"><div class="dc-label">기각</div><div class="dc-val" id="d-reject" style="color:var(--rose)">0</div></div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;">
+    <div style="padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:13px;font-weight:700">최근 기획안</span>
+      <button class="btn btn-ghost btn-sm" onclick="showView('list')">전체 보기 →</button>
+    </div>
+    <div id="recent-list"></div>
+  </div>
+</div>
+
+<!-- ══ NEW/EDIT ══ -->
+<div class="view" id="view-new">
+  <div class="page-hdr">
+    <div><h2 id="new-title-label">➕ 기획안 등록</h2><div class="sub">저자 제안 기획안 4개 항목 분석 — 중소출판사 현실 기준 평가</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button class="btn btn-ghost" onclick="resetForm()">초기화</button>
+      <button class="btn btn-primary" onclick="saveProposal()">💾 저장</button>
+    </div>
+  </div>
+
+  <!-- 기본 정보 -->
+  <div class="form-card">
+    <div class="form-card-hdr"><h3>📚 기본 정보</h3></div>
+    <div class="form-body">
+      <div class="form-row c2">
+        <div class="field"><label>도서 제목 (가제)</label><input id="f-title" type="text" placeholder="예: 파이썬으로 배우는 실전 AI"></div>
+        <div class="field"><label>저자명</label><input id="f-author" type="text" placeholder="홍길동"></div>
+      </div>
+      <div class="form-row c3">
+        <div class="field"><label>저자 전화번호</label><input id="f-author-tel" type="tel" placeholder="010-0000-0000"></div>
+        <div class="field"><label>저자 이메일</label><input id="f-author-email" type="email" placeholder="author@example.com"></div>
+        <div class="field"><label>담당자</label>
+          <input id="f-reviewer" type="text" placeholder="담당자 입력">
+        </div>
+      </div>
+      <div class="form-row c4">
+        <div class="field"><label>접수 경로</label>
+          <select id="f-channel"><option value="">선택</option><option>홈페이지 문의</option><option>이메일</option><option>SNS DM</option><option>지인 소개</option><option>기존 저자</option><option>기타</option></select>
+        </div>
+        <div class="field"><label>도서 장르</label>
+          <select id="f-genre"><option value="">선택</option><option>IT·프로그래밍</option><option>보안·해킹</option><option>AI·머신러닝</option><option>UX·디자인</option><option>게임 개발</option><option>경제·경영</option><option>자기개발</option><option>에세이</option><option>인문·교양</option><option>기타</option></select>
+        </div>
+        <div class="field"><label>예상 정가 (원)</label><input id="f-price" type="number" placeholder="30000"></div>
+        <div class="field"><label>원고 완성도</label>
+          <select id="f-ms-status"><option value="">선택</option><option>완성 원고 제출</option><option>50% 이상 완성</option><option>목차·샘플만</option><option>아이디어 단계</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>📎 원고 파일 <span style="color:var(--text3);font-weight:400">(최대 3개 · 파일당 5MB 이하 권장)</span></label>
+          <div id="ms-files-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+          <input type="file" id="ms-file-input" multiple style="display:none" onchange="handleManuscriptUpload(this.files)">
+          <button class="btn btn-ghost btn-sm" id="ms-add-btn" type="button" onclick="document.getElementById('ms-file-input').click()" style="align-self:flex-start">＋ 원고 파일 추가</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>기획안 요약</label><textarea id="f-summary" placeholder="저자가 제출한 기획안의 핵심 내용, 저자 소개, 주요 내용 등..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4개 기준 평가 — 가로 탭 -->
+  <div class="criteria-tab-wrap">
+    <div class="criteria-tab-bar" id="criteria-tab-bar">
+      <button class="ctab active" onclick="switchCTab(0,this)" id="ctab-0">📄 ① 원고 분석</button>
+      <button class="ctab" onclick="switchCTab(1,this)" id="ctab-1">👤 ② 저자 분석</button>
+      <button class="ctab" onclick="switchCTab(2,this)" id="ctab-2">📊 ③ 시장 분석</button>
+      <button class="ctab" onclick="switchCTab(3,this)" id="ctab-3">📢 ④ 마케팅 지원</button>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:4px;">
+        <div id="criteria-progress" style="font-size:11px;color:var(--text3)">평가 진행: 0/4</div>
+      </div>
+    </div>
+    <div id="ctab-panels">
+      <div class="ctab-panel active" id="ctab-panel-0"></div>
+      <div class="ctab-panel" id="ctab-panel-1"></div>
+      <div class="ctab-panel" id="ctab-panel-2"></div>
+      <div class="ctab-panel" id="ctab-panel-3"></div>
+    </div>
+  </div>
+  <div id="score-sections" style="display:none"></div>
+
+  <!-- 설득 가이드 (자동 생성) -->
+  <div class="persuade-box" id="persuade-box">
+    <div class="pb-hdr" id="persuade-hdr"><h3>🎯 저자 설득 가이드 — 이 기획안에 맞는 전략</h3></div>
+    <div class="pb-body" id="persuade-body"></div>
+  </div>
+
+  <!-- 종합 판정 -->
+  <div class="decision-panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+      <span style="font-size:13px;font-weight:700">🎯 종합 판정</span>
+      <span style="font-size:11px;color:var(--text3)">가중치 기반 1차 자동 판정 → 2차 수동 조정</span>
+    </div>
+
+    <!-- 가중치 점수 readout + 1차 자동 판정 -->
+    <div id="score-readout" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--rL);padding:14px 16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div style="text-align:center;min-width:96px;">
+          <div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.5px;margin-bottom:2px">가중 종합 점수</div>
+          <div id="ro-total" style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--text3);line-height:1">—</div>
+        </div>
+        <div style="flex:1;min-width:240px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;" id="ro-parts"></div>
+      </div>
+      <div id="ro-verdict" style="margin-top:12px;display:none;align-items:center;gap:10px;padding:9px 13px;border-radius:var(--r);">
+        <span style="font-size:11px;font-weight:700;color:var(--text2)">⚡ 1차 자동 판정</span>
+        <span id="ro-verdict-badge" class="decision-badge"></span>
+        <span id="ro-verdict-desc" style="font-size:11px;color:var(--text2)"></span>
+        <button class="btn btn-primary btn-sm" onclick="applyAutoDecision()" style="margin-left:auto">이 판정 적용 →</button>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;">2차 수동 조정 — 1차 판정을 검토 후 필요 시 다른 판정을 직접 선택하세요</div>
+    <div class="decision-grid">
+      <div class="dec-card" onclick="selectDec('approve')" id="dec-approve" style="background:#E8F5E8;border-color:#A0D0A0;">
+        <div class="dec-icon">✅</div><div class="dec-name" style="color:var(--ok)">기획출판 승인</div><div class="dec-desc">가중 70% 이상</div>
+      </div>
+      <div class="dec-card" onclick="selectDec('conditional')" id="dec-conditional" style="background:var(--tri-bg);border-color:#E0C090;">
+        <div class="dec-icon">🔄</div><div class="dec-name" style="color:var(--tri)">조건부 승인 / 반기획</div><div class="dec-desc">가중 60~69%</div>
+      </div>
+      <div class="dec-card" onclick="selectDec('selfpub')" id="dec-selfpub" style="background:#E0F5EE;border-color:#A0D0C0;">
+        <div class="dec-icon">📗</div><div class="dec-name" style="color:var(--teal)">자비출판 유도</div><div class="dec-desc">가중 50~59%</div>
+      </div>
+      <div class="dec-card" onclick="selectDec('reject')" id="dec-reject" style="background:var(--ex-bg);border-color:#F0B0B0;">
+        <div class="dec-icon">❌</div><div class="dec-name" style="color:var(--ex)">기각</div><div class="dec-desc">가중 50% 미만</div>
+      </div>
+    </div>
+    <div id="adjust-tag" style="display:none;font-size:11px;font-weight:700;margin:0 0 12px;padding:7px 12px;border-radius:var(--r);background:#F0E8FF;color:var(--purple)"></div>
+    <div class="form-row c3">
+      <div class="field"><label>접수일 <span style="color:var(--text3);font-weight:400">(저자 제출일)</span></label><input id="f-date" type="date"></div>
+      <div class="field"><label>목표 회신일</label><input id="f-reply" type="date"></div>
+      <div class="field"><label>등록일 <span style="color:var(--blue);font-weight:700">(자동)</span></label><input id="f-reg-date" type="date" readonly style="background:var(--s3);color:var(--text3);cursor:not-allowed"></div>
+    </div>
+    <!-- 판정 사유 자동 작성 (저자 전달용, 카피 가능) -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;margin:0 0 14px;">
+      <div style="background:var(--nav2);padding:11px 16px;display:flex;align-items:center;gap:10px;">
+        <h3 style="font-size:13px;font-weight:700;color:#fff">✍️ 판정 사유 자동 작성 <span style="font-size:11px;font-weight:400;color:rgba(255,255,255,.6)">— 저자에게 그대로 전달 가능한 문안</span></h3>
+        <button class="btn btn-sm" onclick="generateRationale()" style="margin-left:auto;background:var(--gold);color:var(--nav)">⚙️ 사유 생성</button>
+      </div>
+      <div style="padding:14px 16px;">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;color:var(--text3)">선택한 판정과 평가 점수를 바탕으로 저자가 감정 상하지 않게, 설득력 있게 전달할 문안을 자동 작성합니다.</span>
+          <button class="btn btn-ghost btn-sm" id="btn-copy-rationale" onclick="copyRationale()" style="margin-left:auto;display:none">📋 복사</button>
+          <button class="btn btn-ghost btn-sm" id="btn-insert-rationale" onclick="insertRationale()" style="display:none">↧ 메모에 삽입</button>
+        </div>
+        <textarea id="f-rationale" placeholder="‘⚙️ 사유 생성’ 버튼을 누르면 저자 전달용 문안이 여기에 작성됩니다. 직접 수정도 가능합니다." style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:11px 13px;font-family:'Pretendard',sans-serif;font-size:12px;line-height:1.8;color:var(--text2);resize:vertical;min-height:120px;background:#fff;"></textarea>
+      </div>
+    </div>
+
+    <div class="field"><label>판정 사유 &amp; 내부 메모</label><textarea id="f-dec-note" placeholder="내부 판정 근거, 후속 조치 등 (저자 비공개)..."></textarea></div>
+    <input type="hidden" id="f-decision" value="">
+    <input type="hidden" id="f-auto-decision" value="">
+    <input type="hidden" id="f-score-pct" value="">
+    <input type="hidden" id="f-edit-id" value="">
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:30px;">
+    <button class="btn btn-ghost" onclick="resetForm()">취소</button>
+    <button class="btn btn-primary" onclick="saveProposal()">💾 저장</button>
+  </div>
+</div>
+
+<!-- ══ LIST ══ -->
+<div class="view" id="view-list">
+  <div class="page-hdr">
+    <div><h2>📋 기획안 목록</h2><div class="sub" id="list-label">총 0건</div></div>
+    <div style="margin-left:auto"><button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button></div>
+  </div>
+  <div class="list-filters">
+    <input class="search-input" type="text" id="search" placeholder="🔍 도서명·저자명 검색..." oninput="renderList()">
+    <select class="filter-select" id="f-filter-dec" onchange="renderList()">
+      <option value="">전체 판정</option><option value="approve">승인</option><option value="conditional">조건부</option><option value="selfpub">자비출판 유도</option><option value="reject">기각</option><option value="pending">검토 중</option>
+    </select>
+    <select class="filter-select" id="f-filter-genre" onchange="renderList()">
+      <option value="">전체 장르</option><option>IT·프로그래밍</option><option>보안·해킹</option><option>AI·머신러닝</option><option>UX·디자인</option><option>게임 개발</option><option>경제·경영</option><option>자기개발</option><option>에세이</option><option>인문·교양</option>
+    </select>
+  </div>
+  <div id="list-wrap"></div>
+</div>
+
+<!-- ══ ANALYTICS ══ -->
+<div class="view" id="view-analytics">
+  <div class="page-hdr"><div><h2>📈 통계 분석</h2><div class="sub">기획안 데이터 기반 인사이트</div></div></div>
+  <div class="analytics-grid" id="analytics-wrap"></div>
+</div>
+
+
+<!-- ══ PROJECTS ══ -->
+<div class="view" id="view-projects">
+  <div class="page-hdr">
+    <div><h2>📅 프로젝트 관리</h2><div class="sub">승인 도서의 계약 → 출간까지 일정 추적</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button class="btn btn-ghost btn-sm" onclick="renderProjects()">🔄 새로고침</button>
+    </div>
+  </div>
+  <!-- 필터 -->
+  <div class="list-filters" style="margin-bottom:16px;">
+    <select class="filter-select" id="proj-filter-stage" onchange="renderProjects()">
+      <option value="">전체 단계</option>
+      <option value="contract">계약</option><option value="manuscript">원고</option>
+      <option value="editing">편집</option><option value="design">디자인</option>
+      <option value="print">인쇄</option><option value="published">출간 완료</option>
+    </select>
+    <select class="filter-select" id="proj-filter-status" onchange="renderProjects()">
+      <option value="">전체 상태</option>
+      <option value="ontrack">일정 정상</option>
+      <option value="delayed">지연</option>
+      <option value="done">완료</option>
+    </select>
+    <input class="search-input" id="proj-search" type="text" placeholder="🔍 도서명 검색..." oninput="renderProjects()">
+  </div>
+  <div id="projects-wrap"></div>
+</div>
+
+<!-- PROJECT DETAIL MODAL -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="pm-title">프로젝트 일정</h3>
+      <button class="modal-close" onclick="closeProjModal()">×</button>
+    </div>
+    <div class="modal-body" id="pm-body"></div>
+  </div>
+</div>
+
+<!-- ══ SALES ══ -->
+<div class="view" id="view-sales">
+  <div class="page-hdr">
+    <div><h2>💰 판매·손익 관리</h2><div class="sub">출간 도서 판매량·비용·BEP 현황</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button class="btn btn-ghost btn-sm" onclick="renderSales()">🔄 새로고침</button>
+    </div>
+  </div>
+  <!-- 전체 요약 -->
+  <div class="sales-grid" id="sales-summary-cards">
+    <div class="sales-card"><div class="sc-label">출간 도서</div><div class="sc-val" id="sc-published" style="color:var(--blue)">0</div><div class="sc-sub">종</div></div>
+    <div class="sales-card"><div class="sc-label">총 판매액</div><div class="sc-val" id="sc-revenue" style="color:var(--ok)">-</div><div class="sc-sub">원</div></div>
+    <div class="sales-card"><div class="sc-label">총 비용</div><div class="sc-val" id="sc-cost" style="color:var(--rose)">-</div><div class="sc-sub">원</div></div>
+    <div class="sales-card"><div class="sc-label">총 손익</div><div class="sc-val" id="sc-profit" style="color:var(--text)">-</div><div class="sc-sub">BEP 달성률 <span id="sc-bep-rate">-</span></div></div>
+  </div>
+  <!-- 도서별 목록 -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:16px;">
+    <div style="padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:13px;font-weight:700">📚 출간 도서별 손익 현황</span>
+      <span style="font-size:11px;color:var(--text3)">도서를 클릭하면 상세 입력·수정 가능</span>
+    </div>
+    <div id="sales-list-wrap"></div>
+  </div>
+</div>
+
+<!-- SALES DETAIL MODAL -->
+<div class="modal-overlay" id="sales-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="sm-title">판매·손익 상세</h3>
+      <button class="btn btn-primary btn-sm" onclick="saveSalesData()" style="margin-left:auto;margin-right:8px;">💾 저장</button>
+      <button class="modal-close" onclick="closeSalesModal()">×</button>
+    </div>
+    <div class="modal-body" id="sm-body"></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="modal-title">기획안 상세</h3>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="editFromModal()">✏️ 수정</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteFromModal()">🗑️ 삭제</button>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// SUPABASE 연결 설정 — 아래 3줄만 채우면 클라우드 동기화 활성화
+//   1) enabled 를 true 로
+//   2) url  : 프로젝트 URL (예: 'https://abcd1234.supabase.co')
+//   3) key  : Publishable key (sb_publishable_... ) 또는 anon key
+// 테이블 생성 SQL 은 파일 하단 주석 또는 안내문 참조 (테이블명: proposals)
+// ═══════════════════════════════════════════════════════
+const SUPABASE_CONFIG = {
+  enabled: true,
+  url: 'https://jqmhhbnxcmadksaxsvkr.supabase.co/rest/v1/',
+  key: 'sb_publishable_UV-fl4uioJgmpsLvkA63KA_nbUiPgos',
+  table: 'proposals'
+};
+// ═══════════════════════════════════════════════════════
+
+const STORAGE_KEY = 'acorn_proposals_v2';
+let proposals = [];
+let currentModalId = null;
+let currentManuscripts = [];   // 작성 중 첨부 원고 [{name,size,type,data}]
+const MAX_MANUSCRIPTS = 3;
+
+// ── 원고 파일 첨부 (최대 3개) ──────────────────────────────────────
+function fmtBytes(b){ if(b<1024) return b+'B'; if(b<1048576) return (b/1024).toFixed(0)+'KB'; return (b/1048576).toFixed(1)+'MB'; }
+
+function handleManuscriptUpload(fileList){
+  const files=Array.from(fileList||[]);
+  const input=document.getElementById('ms-file-input');
+  if(!files.length) return;
+  if(currentManuscripts.length+files.length>MAX_MANUSCRIPTS){
+    alert(`원고 파일은 최대 ${MAX_MANUSCRIPTS}개까지 첨부할 수 있습니다. (현재 ${currentManuscripts.length}개)`);
+    if(input) input.value=''; return;
+  }
+  let pending=files.length;
+  files.forEach(file=>{
+    if(file.size>8*1048576){
+      alert(`"${file.name}" 파일이 너무 큽니다(${fmtBytes(file.size)}). 브라우저 저장 용량 한계상 5MB 이하를 권장합니다.`);
+      if(--pending===0&&input) input.value=''; return;
+    }
+    const reader=new FileReader();
+    reader.onload=e=>{
+      currentManuscripts.push({name:file.name, size:file.size, type:file.type||'', data:e.target.result});
+      renderManuscriptList();
+      if(--pending===0&&input) input.value='';
+    };
+    reader.onerror=()=>{ alert(`"${file.name}" 읽기에 실패했습니다.`); if(--pending===0&&input) input.value=''; };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removeManuscript(i){ currentManuscripts.splice(i,1); renderManuscriptList(); }
+
+function renderManuscriptList(){
+  const wrap=document.getElementById('ms-files-list');
+  if(!wrap) return;
+  wrap.innerHTML=currentManuscripts.map((m,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:7px 11px;">
+      <span style="font-size:15px">📄</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.name}</div>
+        <div style="font-size:10px;color:var(--text3)">${fmtBytes(m.size)}</div>
+      </div>
+      <a href="${m.data}" download="${m.name}" class="btn btn-ghost btn-sm" style="text-decoration:none">⬇️ 받기</a>
+      <button type="button" class="btn btn-sm" onclick="removeManuscript(${i})" style="background:var(--ex-bg);color:var(--ex)">삭제</button>
+    </div>`).join('');
+  const btn=document.getElementById('ms-add-btn');
+  if(btn) btn.style.display=currentManuscripts.length>=MAX_MANUSCRIPTS?'none':'inline-flex';
+}
+
+// ── CRITERIA (중소출판사 현실 기준) ──────────────────────────────
+const CRITERIA = [
+  {
+    id:'manuscript', label:'원고 분석', icon:'📄', color:'#1560B8', bg:'#EBF3FD',
+    desc:'원고의 완성도와 시장 적합성을 평가합니다. 중소출판사 기준, 편집 비용이 최소화될수록 유리합니다.',
+    items:[
+      {id:'ms1', label:'완성도·분량',
+        desc:'실제 출판 가능한 분량과 완성도인지 확인합니다.',
+        ok:'완성 원고 제출, 분량 250~600p 적정, 바로 편집 진행 가능',
+        tri:'50% 이상 완성, 샘플 챕터 있음, 3개월 내 완성 가능',
+        ex:'목차만 있거나 아이디어 단계, 완성까지 6개월 이상 소요 예상'},
+      {id:'ms2', label:'차별성·독창성',
+        desc:'기존 출간된 유사 도서와 비교해 차별화 포인트가 명확한지 확인합니다.',
+        ok:'국내 유사 도서 없거나, 접근 방식·사례·독자층이 명확히 다름',
+        tri:'유사 도서 있으나 저자 관점·사례가 다름, 차별성 보완 필요',
+        ex:'유사 도서 다수, 번역서 이미 있음, 차별점 설명 불명확'},
+      {id:'ms3', label:'독자 가치·유용성',
+        desc:'독자가 이 책을 사야 할 이유가 있는지, 실질적 도움이 되는지 확인합니다.',
+        ok:'독자 문제 해결, 실습/코드/사례 풍부, 현업 바로 적용 가능',
+        tri:'이론 중심이지만 사례 있음, 독자 활용도 보통',
+        ex:'학술적 내용만, 일반 독자 접근 어려움, 독자 베네핏 불명확'},
+      {id:'ms4', label:'문장·가독성',
+        desc:'편집 비용과 직결됩니다. 문장이 명확하면 편집 시간·비용이 크게 줄어듭니다.',
+        ok:'문장 명확, 오탈자 적음, 별도 교열 없이 편집 바로 가능',
+        tri:'문장 보통, 부분적 교열 필요, 편집 시간 20% 추가 예상',
+        ex:'문장 혼란, 전면 재작성 필요, 편집 비용 2배 이상 예상'},
+      {id:'ms5', label:'구성·논리성',
+        desc:'목차와 챕터 흐름이 독자가 따라가기 쉽게 구성되어 있는지 확인합니다.',
+        ok:'목차 논리적, 챕터 간 흐름 자연스러움, 재구성 불필요',
+        tri:'목차 조정 필요하나 내용은 충실, 1~2챕터 재배치로 해결 가능',
+        ex:'구성 전면 재검토 필요, 중복 챕터 다수, 논리 흐름 불명확'},
+    ]
+  },
+  {
+    id:'author', label:'저자 분석', icon:'👤', color:'#4A1A7C', bg:'#F0E8FF',
+    desc:'현재 단행본 시장에서 저자 채널이 초도 판매의 핵심입니다. 저자가 직접 독자에게 연결될 수 있는 경로를 평가합니다.',
+    items:[
+      {id:'au1', label:'전문성·현장 경력',
+        desc:'저자가 해당 분야 실무 전문가인지, 독자가 신뢰할 수 있는 근거가 있는지 평가합니다.',
+        ok:'현직 전문가 5년↑, 관련 업계 공인 자격·경력, 독자가 신뢰할 근거 명확',
+        tri:'관련 분야 종사 중이나 연차 부족, 또는 전문성은 있으나 실적 검증 어려움',
+        ex:'관련 경력 없거나 불명확, 전문성 근거 부족, 독자 신뢰 확보 어려움'},
+      {id:'au2', label:'강의·교육 이력',
+        desc:'강의 경험이 있는 저자는 초도 판매 시 수강생에게 직접 판매할 수 있어 BEP 달성에 유리합니다.',
+        ok:'정기 강의 진행 중(수강생 100↑), 기업 특강 이력, 교육기관 강의 중',
+        tri:'과거 강의 이력 있으나 현재는 없음, 간헐적 특강 수준',
+        ex:'강의 경험 없음, 향후 계획도 불명확'},
+      {id:'au3', label:'SNS·온라인 채널',
+        desc:'독자에게 직접 도달할 수 있는 저자 채널 규모를 평가합니다. 팔로워 수보다 활성화 여부가 중요합니다.',
+        ok:'팔로워 3천↑(실활성) 또는 유튜브 구독자 1만↑ 또는 블로그 월 5만PV↑',
+        tri:'팔로워 500~3천, 꾸준히 활동 중, 성장 가능성 있음',
+        ex:'채널 없거나 팔로워 500 미만, 마지막 포스팅 3개월↑'},
+      {id:'au4', label:'커뮤니티·네트워크',
+        desc:'특정 커뮤니티(학회, 단체, 기업 네트워크 등)에 연결된 저자는 단체구매·특강이 가능합니다.',
+        ok:'업계 협회·학회 활동 중, 기업 네트워크 보유, 단체구매 가능성 있음',
+        tri:'소규모 커뮤니티 참여, 네트워크 있으나 구매 연결 가능성 낮음',
+        ex:'커뮤니티 연결 없음, 네트워크 전무'},
+      {id:'au5', label:'협업·소통 가능성',
+        desc:'편집 과정에서 저자와의 소통이 원활해야 일정과 품질이 유지됩니다. 중소출판사에서는 특히 중요합니다.',
+        ok:'이메일·미팅 빠른 응답, 수정 피드백 협조적, 일정 준수 의지 명확',
+        tri:'소통 보통, 응답 다소 늦으나 협조적, 일정 협의 가능',
+        ex:'연락 불규칙, 수정 거부 우려, 일정 준수 의지 불명확'},
+    ]
+  },
+  {
+    id:'market', label:'시장 분석', icon:'📊', color:'#0A7860', bg:'#E0F5EE',
+    desc:'현재 서점 채널이 약화된 상황에서 시장성을 현실적으로 평가합니다. 틈새 시장을 정확히 겨냥하는 것이 중요합니다.',
+    items:[
+      {id:'mk1', label:'경쟁 도서 현황',
+        desc:'유사 도서가 많으면 서점 노출이 어렵고 판매소진율이 낮아집니다. 현재 47% 평균 소진율 기준으로 평가합니다.',
+        ok:'국내 유사 도서 3권 미만 또는 5년↑ 구판, 틈새 시장 선점 가능',
+        tri:'유사 도서 4~8권, 그러나 차별점으로 경쟁 가능, 마케팅 전략 필요',
+        ex:'유사 도서 10권↑ 또는 베스트셀러 이미 포화, 가격 경쟁 불리'},
+      {id:'mk2', label:'독자 수요·타깃 명확성',
+        desc:'타깃 독자가 명확할수록 마케팅이 쉽고 판매 전환율이 높아집니다.',
+        ok:'타깃 명확(예: 파이썬 입문자, 3년차 개발자), 독자 규모 추정 가능',
+        tri:'타깃 설정은 있으나 범위 너무 넓거나, 독자 규모 불확실',
+        ex:'타깃 없이 "모든 사람을 위한 책", 독자 정의 불명확'},
+      {id:'mk3', label:'시장 트렌드·시의성',
+        desc:'현재 시장에서 관심이 있는 주제인지, 2~3년 후에도 유효한지 확인합니다.',
+        ok:'현재 급상승 트렌드(AI, 보안 등) 또는 수년간 안정 수요 분야',
+        tri:'트렌드 지났으나 일정 수요 있음, 또는 향후 2년 내 부각 예상',
+        ex:'트렌드 완전히 지남, 또는 너무 앞서 현재 독자 수요 없음'},
+      {id:'mk4', label:'KDP 글로벌 가능성',
+        desc:'Amazon KDP로 글로벌 출판 시 추가 수익 가능성을 평가합니다. KDP는 BEP 달성의 보완 채널로 중요합니다.',
+        ok:'영문 번역 가능, 글로벌 관심 주제, KDP 영어권 독자 수요 있음',
+        tri:'번역 시 가능하나 글로벌 관심 낮음, KDP 매출 기대치 낮음',
+        ex:'한국 특화 내용으로 번역 의미 없음, KDP 불가'},
+    ]
+  },
+  {
+    id:'marketing', label:'마케팅 지원 분석', icon:'📢', color:'#B87030', bg:'#FFF3E0',
+    desc:'기획출판 도서의 63%가 적자인 현실에서 저자 채널 마케팅이 BEP 달성의 핵심입니다. 저자의 구체적 마케팅 계획을 확인합니다.',
+    items:[
+      {id:'ma1', label:'강의·스터디 연계 계획',
+        desc:'출간 후 강의·스터디그룹을 통한 직접 판매는 초도 판매의 가장 확실한 방법입니다.',
+        ok:'출간 즉시 강의 연계 가능, 수강생 100명↑에 도서 사용 계획 있음',
+        tri:'강의 계획 있으나 수강생 규모 작거나, 시기 불확실',
+        ex:'강의 계획 없음, 스터디 연계도 불가'},
+      {id:'ma2', label:'SNS·유튜브 홍보 계획',
+        desc:'저자 스스로 SNS로 책을 홍보할 의지와 역량이 있는지 확인합니다. 구체적 계획일수록 신뢰도 높습니다.',
+        ok:'홍보 일정 구체적(출간 전 D-30부터 연재 등), 채널 활성화 중',
+        tri:'홍보 의지는 있으나 계획 불명확, 채널 규모 작음',
+        ex:'SNS 홍보 계획 없거나, 채널 자체가 없음'},
+      {id:'ma3', label:'단체구매·기업 연계 가능성',
+        desc:'단체구매는 초도 판매에서 가장 강력한 수단입니다. 관련 기업·기관·단체와의 연결이 있는지 확인합니다.',
+        ok:'관련 기업·기관 단체구매 가능성 확인됨, 50부↑ 약속 또는 강한 의지',
+        tri:'단체구매 가능성 있으나 미확인, 의향 있는 기업 있음',
+        ex:'단체구매 경로 없음, 기업·기관 연결 없음'},
+      {id:'ma4', label:'마케팅 예산·의지',
+        desc:'저자가 자비출판 또는 마케팅 비용 분담에 의지가 있는지 확인합니다. 이는 저자의 출판 진지성을 보여줍니다.',
+        ok:'마케팅 비용 분담 의향 있음, 또는 자비출판 전환에 오픈',
+        tri:'비용 분담에 일부 오픈, 협의 가능성 있음',
+        ex:'모든 비용 출판사 부담 요구, 자비출판 거부 의사 명확'},
+    ]
+  }
+];
+
+const DEC_MAP = {
+  approve:{label:'기획출판 승인', cls:'db-ok'},
+  conditional:{label:'조건부 승인', cls:'db-cond'},
+  selfpub:{label:'자비출판 유도', cls:'db-hold'},
+  reject:{label:'기각', cls:'db-reject'},
+  pending:{label:'검토 중', cls:'db-pending'},
+};
+const TYPE_MAP = {
+  plan:{label:'기획출판',cls:'tb-plan'},
+  semi:{label:'반기획',cls:'tb-semi'},
+  self:{label:'자비출판',cls:'tb-self'},
+  kdp:{label:'KDP',cls:'tb-kdp'},
+};
+
+// ── GLOBAL SEARCH ────────────────────────────────────────────────
+function globalSearch(){
+  const title = document.getElementById('gs-title')?.value?.toLowerCase()||'';
+  const author = document.getElementById('gs-author')?.value?.toLowerCase()||'';
+  const from = document.getElementById('gs-from')?.value||'';
+  const to = document.getElementById('gs-to')?.value||'';
+  const hasQuery = title||author||from||to;
+
+  const resultsEl = document.getElementById('gs-results');
+  if(!hasQuery){ resultsEl.style.display='none'; return; }
+
+  const filtered = proposals.filter(p=>{
+    if(title && !p.title.toLowerCase().includes(title) && !p.author.toLowerCase().includes(title)) return false;
+    if(author && !p.author.toLowerCase().includes(author)) return false;
+    if(from && p.date && p.date < from) return false;
+    if(to && p.date && p.date > to) return false;
+    return true;
+  });
+
+  if(!filtered.length){
+    resultsEl.style.display='block';
+    resultsEl.innerHTML='<div style="padding:16px 20px;font-size:12px;color:var(--text3)">검색 결과가 없습니다.</div>';
+    return;
+  }
+
+  resultsEl.style.display='block';
+  resultsEl.innerHTML=`<div style="padding:8px 20px;font-size:11px;font-weight:700;color:var(--text3);border-bottom:1px solid var(--border);">검색 결과 ${filtered.length}건 — 클릭하면 상세보기</div>`+
+    filtered.slice(0,8).map(p=>{
+      const dm = DEC_MAP[p.decision]||DEC_MAP.pending;
+      const scores = CRITERIA.map(cat=>catBadge(catPct(p.scores?.[cat.id], cat.items.length)?.pct??null)).join(' ');
+      return `<div class="gs-result-row" onclick="document.getElementById('gs-results').style.display='none';openModal('${p.id}')">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${p.title}</div>
+          <div style="font-size:11px;color:var(--text3)">${p.author} · ${p.genre||'-'} · ${p.date||'-'}</div>
+        </div>
+        <div>${scores}</div>
+        <span class="decision-badge ${dm.cls}">${dm.label}</span>
+      </div>`;
+    }).join('')+
+    (filtered.length>8?`<div style="padding:10px 20px;font-size:11px;color:var(--blue);cursor:pointer" onclick="showView('list');renderList();document.getElementById('gs-results').style.display='none'">전체 ${filtered.length}건 목록에서 보기 →</div>`:'');
+}
+
+function clearGlobalSearch(){
+  ['gs-title','gs-author','gs-from','gs-to'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('gs-results').style.display='none';
+}
+
+// Close search results on outside click
+document.addEventListener('click',function(e){
+  const res=document.getElementById('gs-results');
+  const searchArea=document.querySelector('.global-search');
+  if(res&&!res.contains(e.target)&&!searchArea?.contains(e.target)){
+    res.style.display='none';
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────
+async function init(){
+  buildScoreForms();
+  updateCTabStatus();
+  document.getElementById('f-date').valueAsDate = new Date();
+  document.getElementById('f-reg-date').value = new Date().toISOString().slice(0,10);
+  renderScoreReadout(getScores());
+  await loadData();
+  updateStats();
+  renderDashboard();
+  updateDbStatus();
+}
+
+function buildScoreForms(){
+  CRITERIA.forEach((cat, idx) => {
+    const panel = document.getElementById('ctab-panel-'+idx);
+    if(!panel) return;
+    panel.innerHTML = `
+    <div class="ctab-score-summary" id="ctab-summary-${idx}">
+      <span style="font-size:14px">${cat.icon}</span>
+      <span style="font-size:12px;font-weight:700;color:${cat.color}">${cat.label}</span>
+      <span style="font-size:11px;color:var(--text3);margin-left:4px">— ${cat.desc}</span>
+      <span id="ctab-score-${cat.id}" style="margin-left:auto;font-size:11px;font-weight:700;color:var(--text3)">미입력</span>
+    </div>
+    <div style="padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="items-${cat.id}">
+      ${cat.items.map(item=>`
+      <div class="score-item" style="border-radius:var(--r);border:1px solid var(--border);">
+        <div class="si-top">
+          <div class="si-info">
+            <div class="si-label">${item.label}</div>
+            <div class="si-desc">${item.desc}</div>
+            <div class="si-guide">
+              <div class="si-guide-cell ok"><strong>◎ 충족</strong>${item.ok}</div>
+              <div class="si-guide-cell tri"><strong>△ 보통</strong>${item.tri}</div>
+              <div class="si-guide-cell ex"><strong>✕ 미흡</strong>${item.ex}</div>
+            </div>
+          </div>
+          <div class="score-radio">
+            <label><input type="radio" name="${item.id}" value="O" onchange="onScoreChange()"><span class="rb ok">◎</span></label>
+            <label><input type="radio" name="${item.id}" value="△" onchange="onScoreChange()"><span class="rb tri">△</span></label>
+            <label><input type="radio" name="${item.id}" value="X" onchange="onScoreChange()"><span class="rb ex">✕</span></label>
+          </div>
+        </div>
+        <div class="si-note"><input type="text" id="n-${item.id}" placeholder="메모..." style="margin-top:6px;width:100%;border:1px solid var(--border);border-radius:5px;padding:5px 8px;font-size:11px;"></div>
+      </div>`).join('')}
+    </div>
+    <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--s2);">
+      <div class="field"><label style="color:${cat.color};font-size:11px;font-weight:700;">${cat.label} 종합 의견</label>
+        <textarea id="note-${cat.id}" placeholder="${cat.label}에 대한 종합적 판단..." style="min-height:55px;"></textarea>
+      </div>
+    </div>`;
+  });
+}
+
+function switchCTab(idx, btn){
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ctab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ctab-panel-'+idx).classList.add('active');
+}
+
+function updateCTabStatus(){
+  let filled=0;
+  CRITERIA.forEach(function(cat,idx){
+    var items=cat.items;
+    var scored=items.filter(function(item){
+      return !!document.querySelector('input[name="'+item.id+'"]:checked');
+    }).length;
+    var scoreEl=document.getElementById('ctab-score-'+cat.id);
+    if(scoreEl){
+      if(scored===0){
+        scoreEl.textContent='입력 전';
+        scoreEl.style.color='var(--text3)';
+      } else {
+        var Os=items.filter(function(item){
+          var el=document.querySelector('input[name="'+item.id+'"]:checked');
+          return el&&el.value==='O';
+        }).length;
+        var Ts=items.filter(function(item){
+          var el=document.querySelector('input[name="'+item.id+'"]:checked');
+          return el&&el.value==='△';
+        }).length;
+        var pctVal=Math.round((Os*2+Ts)/(items.length*2)*100);
+        scoreEl.textContent=scored+'/'+items.length+' 입력 · '+pctVal+'%';
+        scoreEl.style.color=pctVal>=70?'var(--ok)':pctVal>=40?'var(--tri)':'var(--ex)';
+      }
+    }
+    var tabBtn=document.getElementById('ctab-'+idx);
+    if(tabBtn) tabBtn.classList.toggle('done', scored===items.length);
+    if(scored>0) filled++;
+  });
+  var prog=document.getElementById('criteria-progress');
+  if(prog) prog.textContent='평가 진행: '+filled+'/4';
+}
+
+function getScores(){
+  const out={};
+  CRITERIA.forEach(cat=>{
+    out[cat.id]={items:{},note:document.getElementById(`note-${cat.id}`).value};
+    cat.items.forEach(item=>{
+      const checked=document.querySelector(`input[name="${item.id}"]:checked`);
+      out[cat.id].items[item.id]={score:checked?checked.value:'',note:document.getElementById(`n-${item.id}`).value||''};
+    });
+  });
+  return out;
+}
+
+// ── 가중치 (원고 10% · 저자 50% · 시장 10% · 마케팅 30%) ──
+const WEIGHTS = { manuscript:0.10, author:0.50, market:0.10, marketing:0.30 };
+const WEIGHT_PCT = { manuscript:10, author:50, market:10, marketing:30 };
+
+// 카테고리 점수(%) — 미선택 항목은 모두 X(0점)로 처리. 전체 항목 수 기준.
+function catPct(scoresObj, totalItems){
+  if(!scoresObj||!scoresObj.items) return null;
+  const items=Object.values(scoresObj.items);
+  const Os=items.filter(s=>s.score==='O').length;
+  const Ts=items.filter(s=>s.score==='△').length;
+  const Xs=items.filter(s=>s.score==='X').length;
+  const chosen=Os+Ts+Xs;
+  if(chosen===0) return null;                       // 전혀 입력 안 함 → 표시 "-"
+  const total=totalItems||items.length;             // 분모 = 전체 항목 (미선택 = X)
+  return {pct:Math.round((Os*2+Ts)/(total*2)*100), Os, Ts, Xs, n:total, chosen};
+}
+
+// 가중 종합 점수 — 카테고리별 %에 가중치 적용 (미입력 카테고리는 0%)
+function weightedScore(scores){
+  let total=0; const parts={};
+  CRITERIA.forEach(cat=>{
+    const c=catPct(scores[cat.id], cat.items.length);
+    const pct=c?c.pct:0;
+    parts[cat.id]=pct;
+    total+=pct*(WEIGHTS[cat.id]||0);
+  });
+  return {total:Math.round(total), parts};
+}
+
+// 가중 점수 → 1차 자동 판정
+function decisionFromScore(total){
+  if(total>=70) return 'approve';      // 기획출판
+  if(total>=60) return 'conditional';  // 조건부 승인 / 반기획
+  if(total>=50) return 'selfpub';      // 자비출판 유도
+  return 'reject';                     // 기각
+}
+
+function catBadge(pct){
+  if(pct===null) return '<span class="score-badge na">-</span>';
+  if(pct>=70) return '<span class="score-badge ok">◎</span>';
+  if(pct>=40) return '<span class="score-badge tri">△</span>';
+  return '<span class="score-badge ex">✕</span>';
+}
+
+function onScoreChange(){
+  updateCTabStatus();
+  const scores=getScores();
+  renderScoreReadout(scores);
+  generatePersuadeGuide(scores);
+}
+
+// ── 점수 READOUT + 1차 자동 판정 ──────────────────────────────────
+function renderScoreReadout(scores){
+  const ws=weightedScore(scores);
+  const totalEl=document.getElementById('ro-total');
+  const partsEl=document.getElementById('ro-parts');
+  const verdictEl=document.getElementById('ro-verdict');
+  // 입력 여부
+  const anyInput=CRITERIA.some(cat=>catPct(scores[cat.id], cat.items.length)!==null);
+  // 카테고리별 칸
+  partsEl.innerHTML=CRITERIA.map(cat=>{
+    const c=catPct(scores[cat.id], cat.items.length);
+    const pct=c?c.pct:(anyInput?0:null);
+    const contrib=c?Math.round(c.pct*(WEIGHTS[cat.id])):0;
+    const col=pct===null?'var(--text3)':pct>=70?'var(--ok)':pct>=50?'var(--tri)':'var(--ex)';
+    return `<div style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:7px 8px;text-align:center;">
+      <div style="font-size:9px;color:${cat.color};font-weight:700;margin-bottom:2px">${cat.icon} ${cat.label.replace(' 분석','').replace(' 지원','')}</div>
+      <div style="font-size:8px;color:var(--text3);margin-bottom:2px">가중 ${WEIGHT_PCT[cat.id]}%</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:${col}">${pct===null?'-':pct+'%'}</div>
+      <div style="font-size:8px;color:var(--text3);margin-top:1px">기여 ${contrib}p</div>
+    </div>`;
+  }).join('');
+
+  if(!anyInput){
+    totalEl.textContent='—'; totalEl.style.color='var(--text3)';
+    verdictEl.style.display='none';
+    document.getElementById('f-auto-decision').value='';
+    document.getElementById('f-score-pct').value='';
+    return;
+  }
+  totalEl.textContent=ws.total+'%';
+  totalEl.style.color=ws.total>=70?'var(--ok)':ws.total>=60?'var(--tri)':ws.total>=50?'var(--gold)':'var(--ex)';
+
+  const auto=decisionFromScore(ws.total);
+  document.getElementById('f-auto-decision').value=auto;
+  document.getElementById('f-score-pct').value=ws.total;
+  const dm=DEC_MAP[auto];
+  const descMap={approve:'가중 70% 이상 — 기획출판 진행 권장',conditional:'가중 60~69% — 보완 조건부 승인 또는 반기획',selfpub:'가중 50~59% — 자비출판·POD 유도 권장',reject:'가중 50% 미만 — 기획출판 부적합'};
+  const tintMap={approve:'var(--ok-bg)',conditional:'var(--tri-bg)',selfpub:'#E0F5EE',reject:'var(--ex-bg)'};
+  verdictEl.style.display='flex';
+  verdictEl.style.background=tintMap[auto];
+  document.getElementById('ro-verdict-badge').className='decision-badge '+dm.cls;
+  document.getElementById('ro-verdict-badge').textContent=dm.label;
+  document.getElementById('ro-verdict-desc').textContent=descMap[auto];
+}
+
+function applyAutoDecision(){
+  const auto=document.getElementById('f-auto-decision').value;
+  if(!auto){alert('먼저 평가 항목을 입력하세요.');return;}
+  selectDec(auto);
+}
+
+// ── PERSUASION GUIDE GENERATOR ─────────────────────────────────────
+function generatePersuadeGuide(scores){
+  const pcts={};
+  CRITERIA.forEach(cat=>{ pcts[cat.id]=catPct(scores[cat.id], cat.items.length); });
+  const filled=Object.values(pcts).filter(p=>p!==null).length;
+  if(filled<2){document.getElementById('persuade-box').classList.remove('show');return;}
+
+  const ws=weightedScore(scores);
+  const total=ws.total;
+  const msPct=ws.parts.manuscript, auPct=ws.parts.author, mkPct=ws.parts.market, maPct=ws.parts.marketing;
+
+  const decision=decisionFromScore(total);
+  const meta={
+    approve:{color:'var(--ok)',title:'기획출판 승인 — KDP 병행 제안',bg:'var(--ok)'},
+    conditional:{color:'var(--tri)',title:'조건부 승인 / 반기획 — 보완 후 진행',bg:'var(--tri)'},
+    selfpub:{color:'var(--teal)',title:'자비출판 + KDP 제안 전략',bg:'#0A7860'},
+    reject:{color:'var(--ex)',title:'기각 — 재제안 안내',bg:'var(--ex)'},
+  }[decision];
+  const color=meta.color, title=meta.title, bg=meta.bg;
+  const avg=total;
+
+  // Script generation based on scores
+  const scripts=[];
+
+  // Step 1: 공감
+  const empathy=msPct>=60?
+    '원고의 완성도와 내용이 인상적입니다. 저자님의 전문성이 잘 담겨 있습니다.':
+    msPct>=40?'기획안에서 주제에 대한 저자님의 진지한 고민이 느껴집니다. 관심 주제를 책으로 남기려는 의지가 훌륭합니다.':
+    '책을 출판하려는 저자님의 열정과 노력에 진심으로 감사드립니다.';
+  scripts.push({num:1,color:'#1560B8',title:'공감 — 저자의 노력 먼저 인정',desc:empathy});
+
+  // Step 2: 시장 현실 설명
+  const marketReality=auPct>=60&&maPct>=60?
+    '저자님 채널이 탄탄해서 출판 조건이 유리합니다. 다만 현재 단행본 시장은 기획출판 도서의 63%가 손실을 기록하는 구조입니다. 저자 채널이 있어도 KDP 글로벌 동시 출판으로 수익을 극대화하시길 강력히 권합니다.':
+    auPct>=40?`현재 출판 시장은 서점 채널만으로 제작비(평균 1,740만원)를 회수하기가 구조적으로 어렵습니다. 초도 판매의 핵심은 저자 채널(강의·SNS)인데, 현재 저자님 채널 규모를 더 키운 후 진행하시면 훨씬 유리합니다.`:
+    '솔직하게 말씀드리면, 저희 실제 데이터 기준 기획출판 도서의 63%가 손실을 기록합니다. 도서 1권을 만드는 데 평균 1,740만원이 투자되는데, 서점 채널만으로는 이를 회수하기 어렵습니다. 이것은 원고의 문제가 아닌 시장 구조의 현실입니다.';
+  scripts.push({num:2,color:'var(--rose)',title:'시장 현실 — 숫자로 설명',desc:marketReality});
+
+  // Step 3: 대안 제시
+  let alternative='';
+  if(decision==='approve'){
+    alternative='기획출판으로 진행하면서 Amazon KDP 동시 출판을 병행하시길 권합니다. 국내 평균 소진율 47%의 한계를 넘어 190개국 독자에게 추가 도달할 수 있습니다. 에이콘이 KDP 전 과정을 원스톱 대행합니다.';
+  }else if(decision==='conditional'){
+    const weak=[];
+    if(msPct<60) weak.push('원고 보완(문장·구성 다듬기)');
+    if(auPct<60) weak.push('저자 채널 강화(SNS 팔로워·강의 확대)');
+    if(maPct<60) weak.push('구체적 마케팅 계획 수립(강의 일정·단체구매 경로 확보)');
+    alternative=`${weak.join(', ')}을 보완하시면 기획출판 진행이 가능합니다. 보완 기간(2~3개월) 동안 자비출판으로 먼저 시장 반응을 확인하시고, 개정판을 기획출판으로 전환하는 전략도 매우 효과적입니다.`;
+  }else if(decision==='selfpub'){
+    alternative='자비출판으로 먼저 출간하시는 것을 강력히 권합니다. 저자님이 100% 주도하고, 판매 수익도 100% 저자님 것이며, 에이콘의 전국 유통 채널을 그대로 활용하실 수 있습니다. Amazon KDP로 190개국 독자에게 동시 출판도 가능합니다.';
+  }else{
+    alternative='현시점에서는 기획안 수준에서 출판 진행이 어렵습니다. 원고를 더 완성하시고, 저자 채널(SNS·강의)을 먼저 구축하신 후 재제안하시면 검토할 수 있습니다. 자비출판으로 소규모 출판 경험을 쌓는 것도 좋은 방법입니다.';
+  }
+  scripts.push({num:3,color:'var(--teal)',title:'대안 제시 — 더 나은 선택지',desc:alternative});
+
+  // Step 4: KDP 어필 (자비/기획 모두)
+  if(decision!=='reject'&&mkPct>=40){
+    scripts.push({num:4,color:'var(--gold2)',title:'KDP 어필 — 글로벌 시장',desc:'Amazon KDP는 추가 비용 없이 190개국 독자에게 동시 출판할 수 있습니다. 국내 소진율 47%의 한계를 극복하는 현실적 대안입니다. 에이콘이 KDP 계정 설정부터 영문 메타데이터, AMS 광고까지 원스톱으로 대행합니다(기본 패키지 135만원).'});
+  }
+
+  // Weak points summary
+  const weakList=[];
+  if(msPct!==null&&msPct<50) weakList.push(`원고(${msPct}%)`);
+  if(auPct!==null&&auPct<50) weakList.push(`저자채널(${auPct}%)`);
+  if(mkPct!==null&&mkPct<50) weakList.push(`시장성(${mkPct}%)`);
+  if(maPct!==null&&maPct<50) weakList.push(`마케팅(${maPct}%)`);
+
+  const box=document.getElementById('persuade-box');
+  const hdr=document.getElementById('persuade-hdr');
+  const body=document.getElementById('persuade-body');
+  hdr.style.background=bg;
+  box.classList.add('show');
+  body.innerHTML=`
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="background:var(--s2);border-radius:var(--r);padding:10px 14px;flex:1;min-width:150px;">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px">가중 종합 점수</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:${avg>=60?'var(--ok)':avg>=40?'var(--tri)':'var(--ex)'}">${Math.round(avg)}%</div>
+      </div>
+      ${CRITERIA.map(cat=>{const p=pcts[cat.id];return p===null?'':
+        `<div style="background:${cat.bg};border-radius:var(--r);padding:10px 14px;text-align:center;flex:1;min-width:90px;">
+          <div style="font-size:10px;color:${cat.color};font-weight:700;margin-bottom:4px">${cat.icon} ${cat.label}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:${p.pct>=60?'var(--ok)':p.pct>=40?'var(--tri)':'var(--ex)'}">${p.pct}%</div>
+        </div>`;}).join('')}
+    </div>
+    ${weakList.length?`<div style="padding:8px 12px;background:var(--ex-bg);border-radius:var(--r);font-size:11px;color:var(--ex);margin-bottom:14px;">⚠️ 취약 항목: <strong>${weakList.join(' · ')}</strong> — 이 부분을 저자에게 솔직히 전달하세요.</div>`:''}
+    <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;">💬 저자 설득 스크립트</div>
+    ${scripts.map(s=>`
+      <div class="pb-step">
+        <div class="pb-step-num" style="background:${s.color||'var(--blue)'}">${s.num}</div>
+        <div class="pb-step-body">
+          <div class="pb-step-title">${s.title}</div>
+          <div class="pb-step-desc">${s.desc}</div>
+        </div>
+      </div>`).join('')}
+    <div style="margin-top:14px;padding:10px 14px;background:var(--nav);border-radius:var(--r);font-size:11px;color:rgba(255,255,255,.8);line-height:1.7;">
+      <strong style="color:var(--gold2)">핵심 원칙:</strong> 기획출판을 "거절"이 아닌 "더 나은 대안"으로 제안합니다. 63% 적자·35% BEP 달성·47% 소진율 데이터를 근거로 정직하게 설명합니다.
+    </div>`;
+}
+
+// ── DECISION ─────────────────────────────────────────────────────
+function selectDec(d){
+  document.getElementById('f-decision').value=d;
+  ['approve','conditional','selfpub','reject'].forEach(x=>{
+    document.getElementById(`dec-${x}`).style.outline='';
+  });
+  document.getElementById(`dec-${d}`).style.outline='3px solid var(--blue)';
+  // 2차 수동 조정 여부 표시
+  const auto=document.getElementById('f-auto-decision').value;
+  const tag=document.getElementById('adjust-tag');
+  if(tag){
+    if(auto&&d!==auto){
+      tag.style.display='block';
+      tag.style.background='#F0E8FF';tag.style.color='var(--purple)';
+      tag.textContent=`✋ 2차 수동 조정 — 1차 자동 판정(${DEC_MAP[auto].label})을 검토 후 「${DEC_MAP[d].label}」(으)로 직접 변경했습니다.`;
+    }else if(auto&&d===auto){
+      tag.style.display='block';
+      tag.style.background='var(--ok-bg)';tag.style.color='var(--ok)';
+      tag.textContent=`✓ 1차 자동 판정(${DEC_MAP[auto].label})을 그대로 확정했습니다.`;
+    }else{
+      tag.style.display='none';
+    }
+  }
+}
+
+function autoDecide(){ applyAutoDecision(); }
+
+// ── 판정 사유 자동 작성 (저자 전달용, 카피 가능) ──────────────────
+function generateRationale(){
+  const decision=document.getElementById('f-decision').value;
+  if(!decision){alert('먼저 종합 판정을 선택하세요. (1차 자동 판정 적용 또는 2차 수동 선택)');return;}
+  const scores=getScores();
+  const ws=weightedScore(scores);
+  const total=ws.total;
+  const ms=ws.parts.manuscript, au=ws.parts.author, mk=ws.parts.market, ma=ws.parts.marketing;
+  const title=document.getElementById('f-title').value.trim()||'(도서 가제 미입력)';
+  const author=document.getElementById('f-author').value.trim();
+  const greet=author?`${author} 저자님께`:'저자님께';
+
+  // 강점/보완점 추출
+  const strong=[]; const weak=[];
+  const labels={manuscript:'원고 완성도',author:'저자 채널·전문성',market:'시장성',marketing:'마케팅 지원'};
+  Object.keys(labels).forEach(k=>{
+    const v=ws.parts[k];
+    if(v>=70) strong.push(labels[k]);
+    else if(v<50) weak.push(labels[k]);
+  });
+  const strongTxt=strong.length?strong.join(', '):'기획 의도와 주제 선정';
+  const weakTxt=weak.length?weak.join(', '):'';
+
+  let body='';
+  if(decision==='approve'){
+    body=
+`${greet}
+
+먼저 『${title}』 기획안을 보내주셔서 진심으로 감사드립니다. 편집부의 내부 평가 결과, 본 기획안은 ${strongTxt} 면에서 특히 높은 평가를 받았으며, 종합적으로 기획출판을 진행하기에 충분한 경쟁력을 갖춘 것으로 판단되었습니다.
+
+이에 에이콘출판사는 『${title}』을(를) 기획출판으로 정식 진행하고자 합니다. 빠른 시일 내에 계약 조건과 출간 일정을 안내드리겠습니다.
+
+아울러 국내 단행본 시장의 한계를 넘어 더 많은 독자에게 책을 전달하기 위해, Amazon KDP를 통한 글로벌 동시 출판을 함께 제안드립니다. 저자님의 부담 없이 에이콘이 전 과정을 지원해 드립니다.
+
+좋은 원고로 함께하게 되어 매우 기쁩니다. 곧 구체적인 일정으로 다시 연락드리겠습니다.
+
+감사합니다.
+에이콘출판사 편집부 드림`;
+  } else if(decision==='conditional'){
+    const items=weak.length?weak.map(w=>`· ${w} 부분의 보완`).join('\n'):'· 일부 세부 내용의 보완';
+    body=
+`${greet}
+
+『${title}』 기획안을 검토할 기회를 주셔서 감사합니다. 편집부에서는 ${strongTxt} 면의 강점을 높이 평가하고 있으며, 본 기획안이 충분한 가능성을 지니고 있다고 보았습니다.
+
+다만 현재 시점에서 기획출판으로 바로 진행하기에는 아래 부분을 함께 다듬으면 더 좋은 결과를 기대할 수 있다고 판단되었습니다.
+
+${items}
+
+이에 두 가지 방향을 제안드립니다. 첫째, 위 사항을 2~3개월간 보완해 주시면 기획출판으로 재검토하겠습니다. 둘째, 보완과 병행하여 자비출판(또는 반기획)으로 먼저 출간해 시장 반응을 확인하고, 이후 개정판을 기획출판으로 전환하는 방법도 매우 효과적입니다.
+
+어느 쪽이든 저자님께 가장 유리한 길을 함께 찾고자 합니다. 편하게 의견 주시면 자세히 상의드리겠습니다.
+
+감사합니다.
+에이콘출판사 편집부 드림`;
+  } else if(decision==='selfpub'){
+    body=
+`${greet}
+
+『${title}』 기획안을 정성껏 준비해 보내주셔서 감사합니다. 주제와 ${strongTxt}에서 저자님의 진지함이 잘 느껴졌습니다.
+
+다만 솔직하게 현실을 말씀드리면, 현재 단행본 시장은 기획출판 도서의 상당수가 제작비(평균 약 1,740만원) 회수에 어려움을 겪는 구조입니다. 이는 원고의 가치 문제가 아니라 서점 채널 중심 유통이 약화된 시장 구조의 문제입니다. 본 기획안 역시 기획출판으로는 이러한 구조적 위험이 큰 것으로 평가되었습니다.
+
+그래서 저자님께 자비출판(또는 POD) 방식을 권해 드립니다. 이 방식은 저자님이 출간을 100% 주도하시고 판매 수익도 온전히 저자님께 돌아가며, 에이콘의 전국 유통·온라인 서점 입점 채널을 그대로 활용하실 수 있습니다. 원하시면 Amazon KDP를 통한 글로벌 출판도 함께 진행해 드립니다.
+
+거절이 아니라 저자님께 더 합리적인 길을 제안드리는 것으로 받아들여 주시면 감사하겠습니다. 자세한 절차와 비용은 언제든 안내해 드리겠습니다.
+
+감사합니다.
+에이콘출판사 편집부 드림`;
+  } else { // reject
+    body=
+`${greet}
+
+『${title}』 기획안을 보내주셔서 감사합니다. 책을 향한 저자님의 열정과 노력에 깊이 감사드립니다.
+
+편집부에서 신중히 검토한 결과, 아쉽게도 현재 기획안 단계에서는 출간을 진행하기 어렵다는 결론에 이르렀습니다.${weakTxt?` 특히 ${weakTxt} 측면에서 출간 후 시장에서 충분한 성과를 기대하기에는 보완이 더 필요한 상황입니다.`:''} 이는 주제 자체의 가치보다는 현재 시장 여건과 준비 단계를 함께 고려한 판단임을 너그러이 헤아려 주시면 감사하겠습니다.
+
+다만 가능성을 닫는 것은 결코 아닙니다. 원고를 좀 더 완성하시고 저자 채널(강의·SNS 등)을 함께 키우신 뒤 재제안해 주시면 기꺼이 다시 검토하겠습니다. 또한 자비출판이나 POD로 먼저 소규모 출간 경험을 쌓는 것도 좋은 출발점이 될 수 있습니다.
+
+귀한 원고를 보내주신 데 다시 한번 감사드리며, 다음 기회에 좋은 인연으로 뵙기를 바랍니다.
+
+감사합니다.
+에이콘출판사 편집부 드림`;
+  }
+
+  const ta=document.getElementById('f-rationale');
+  ta.value=body;
+  document.getElementById('btn-copy-rationale').style.display='inline-flex';
+  document.getElementById('btn-insert-rationale').style.display='inline-flex';
+}
+
+function copyRationale(){
+  const ta=document.getElementById('f-rationale');
+  if(!ta.value.trim()){alert('먼저 사유를 생성하세요.');return;}
+  const done=()=>{const b=document.getElementById('btn-copy-rationale');const t=b.textContent;b.textContent='✓ 복사됨';setTimeout(()=>b.textContent=t,1500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(done).catch(()=>{ta.select();document.execCommand('copy');done();});
+  }else{ta.select();document.execCommand('copy');done();}
+}
+
+function insertRationale(){
+  const r=document.getElementById('f-rationale').value.trim();
+  if(!r){alert('먼저 사유를 생성하세요.');return;}
+  const note=document.getElementById('f-dec-note');
+  note.value=(note.value?note.value+'\n\n':'')+r;
+  const b=document.getElementById('btn-insert-rationale');const t=b.textContent;b.textContent='✓ 삽입됨';setTimeout(()=>b.textContent=t,1500);
+}
+
+// ── SAVE ─────────────────────────────────────────────────────────
+async function saveProposal(){
+  const title=document.getElementById('f-title').value.trim();
+  const author=document.getElementById('f-author').value.trim();
+  if(!title||!author){alert('도서명과 저자명은 필수입니다.');return;}
+  const editId=document.getElementById('f-edit-id').value;
+  const scores=getScores();
+  const ws=weightedScore(scores);
+  const existing=editId?proposals.find(p=>p.id===editId):null;
+  const decisionVal=document.getElementById('f-decision').value||'pending';
+  const reviewerVal=document.getElementById('f-reviewer').value;
+  const proposal={
+    id:editId||Date.now().toString(),
+    title, author,
+    authorTel:document.getElementById('f-author-tel').value.trim(),
+    authorEmail:document.getElementById('f-author-email').value.trim(),
+    channel:document.getElementById('f-channel').value,
+    genre:document.getElementById('f-genre').value,
+    price:document.getElementById('f-price').value,
+    msStatus:document.getElementById('f-ms-status').value,
+    type:'',  // 목록에서 추후 지정
+    summary:document.getElementById('f-summary').value,
+    manuscripts:currentManuscripts.slice(0,MAX_MANUSCRIPTS),
+    scores,
+    scorePct:ws.total,
+    autoDecision:document.getElementById('f-auto-decision').value||'',
+    decision:decisionVal,
+    decNote:document.getElementById('f-dec-note').value,
+    rationale:document.getElementById('f-rationale').value,
+    reviewer:reviewerVal,
+    date:document.getElementById('f-date').value,
+    reply:document.getElementById('f-reply').value,
+    regDate:document.getElementById('f-reg-date').value||(existing?.regDate)||new Date().toISOString().slice(0,10),
+    history:(existing?.history)?existing.history.slice():[],
+    createdAt:editId?(existing?.createdAt||new Date().toISOString()):new Date().toISOString(),
+    updatedAt:new Date().toISOString(),
+  };
+
+  // ── 수정 이력 기록 (보완 시 변경 내역, 확인 전용) ──
+  const now=new Date().toISOString();
+  if(!existing){
+    proposal.history.push({at:now, by:reviewerVal||'-', type:'created', scorePct:ws.total, decision:decisionVal, changes:['최초 등록']});
+  }else{
+    const changes=[];
+    const dmL=k=>(DEC_MAP[k]?DEC_MAP[k].label:k);
+    if(existing.decision!==decisionVal) changes.push(`판정: ${dmL(existing.decision)} → ${dmL(decisionVal)}`);
+    if((existing.scorePct??'')!==ws.total) changes.push(`가중 점수: ${existing.scorePct??'-'}% → ${ws.total}%`);
+    if((existing.title||'')!==title) changes.push('도서명 수정');
+    if((existing.author||'')!==author) changes.push('저자명 수정');
+    if((existing.authorTel||'')!==proposal.authorTel) changes.push('저자 전화번호 수정');
+    if((existing.authorEmail||'')!==proposal.authorEmail) changes.push('저자 이메일 수정');
+    if((existing.reviewer||'')!==reviewerVal) changes.push(`담당자: ${existing.reviewer||'-'} → ${reviewerVal||'-'}`);
+    if((existing.price||'')!==proposal.price) changes.push('예상 정가 수정');
+    if((existing.genre||'')!==proposal.genre) changes.push('장르 수정');
+    if((existing.summary||'')!==proposal.summary) changes.push('기획안 요약 수정');
+    if((existing.decNote||'')!==proposal.decNote) changes.push('판정 사유·메모 수정');
+    if((existing.rationale||'')!==proposal.rationale) changes.push('저자 전달 문안 수정');
+    const oldMs=(existing.manuscripts||[]).map(m=>m.name).join('|');
+    const newMs=proposal.manuscripts.map(m=>m.name).join('|');
+    if(oldMs!==newMs) changes.push(`원고 파일 변경 (${(existing.manuscripts||[]).length}개 → ${proposal.manuscripts.length}개)`);
+    // 평가 항목 점수 변경 개수
+    let scoreChanged=0;
+    CRITERIA.forEach(cat=>cat.items.forEach(item=>{
+      const o=existing.scores?.[cat.id]?.items?.[item.id]?.score||'';
+      const n=scores?.[cat.id]?.items?.[item.id]?.score||'';
+      if(o!==n) scoreChanged++;
+    }));
+    if(scoreChanged) changes.push(`평가 항목 ${scoreChanged}개 변경`);
+
+    if(changes.length){
+      const memo=prompt('수정 이력에 남길 보완/수정 사유를 입력하세요. (선택 — 비워두면 변경 항목만 기록)','');
+      if(memo===null){ /* 취소해도 저장은 진행, 사유만 생략 */ }
+      proposal.history.push({at:now, by:reviewerVal||'-', type:'revised', scorePct:ws.total, decision:decisionVal, changes, memo:(memo||'').trim()});
+    }
+  }
+
+  if(editId){const idx=proposals.findIndex(p=>p.id===editId);if(idx!==-1)proposals[idx]=proposal;}
+  else proposals.unshift(proposal);
+  try{
+    await saveData();
+  }catch(err){
+    if(editId){const idx=proposals.findIndex(p=>p.id===editId);if(idx!==-1)proposals[idx]=existing;}
+    else proposals.shift();
+    alert('저장 용량을 초과했습니다. 원고 파일 크기가 큰 경우 일부를 삭제하거나 더 작은 파일로 첨부해 주세요.');
+    return;
+  }
+
+  // Auto-create project for approved/selfpub proposals
+  const needsProject = ['approve','conditional','selfpub'].includes(proposal.decision);
+  if(needsProject && !projectData[proposal.id]){
+    projectData[proposal.id] = {
+      id: proposal.id,
+      currentStage: 'contract',
+      stages:{
+        contract:   {date:proposal.date||'', done:false, note:''},
+        manuscript: {date:'', done:false, note:''},
+        editing:    {date:'', done:false, note:''},
+        design:     {date:'', done:false, note:''},
+        print:      {date:'', done:false, note:''},
+        published:  {date:'', done:false, note:''},
+      },
+      tasks: [],
+      notes: '',
+    };
+    saveProjects();
+    const decLabel = proposal.decision==='selfpub'?'자비출판 유도':proposal.decision==='approve'?'기획출판 승인':'조건부 승인';
+    resetForm();
+    updateStats();
+    const goProj = confirm(`"${title}" (${decLabel})\n\n프로젝트가 자동 등록되었습니다. 지금 바로 출판 일정을 설정하시겠습니까?`);
+    if(goProj){ showView('projects'); }
+    else { showView('list'); }
+    return;
+  }
+
+  resetForm();
+  updateStats();
+  showView('list');
+  alert(`"${title}" 저장 완료.`);
+}
+
+function resetForm(){
+  ['f-title','f-author','f-author-tel','f-author-email','f-price','f-summary','f-dec-note','f-reviewer','f-reply','f-rationale'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['f-channel','f-genre','f-ms-status'].forEach(id=>{const e=document.getElementById(id);if(e)e.selectedIndex=0;});
+  currentManuscripts=[];
+  renderManuscriptList();
+  const mfi=document.getElementById('ms-file-input');if(mfi)mfi.value='';
+  document.getElementById('f-date').valueAsDate=new Date();
+  document.getElementById('f-reg-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('f-decision').value='';
+  document.getElementById('f-auto-decision').value='';
+  document.getElementById('f-score-pct').value='';
+  document.getElementById('f-edit-id').value='';
+  document.getElementById('btn-copy-rationale').style.display='none';
+  document.getElementById('btn-insert-rationale').style.display='none';
+  const at=document.getElementById('adjust-tag');if(at)at.style.display='none';
+  CRITERIA.forEach(cat=>{
+    cat.items.forEach(item=>{
+      document.querySelectorAll(`input[name="${item.id}"]`).forEach(r=>r.checked=false);
+      const n=document.getElementById(`n-${item.id}`);if(n)n.value='';
+    });
+    const n=document.getElementById(`note-${cat.id}`);if(n)n.value='';
+  });
+  ['approve','conditional','selfpub','reject'].forEach(x=>{const e=document.getElementById(`dec-${x}`);if(e)e.style.outline='';});
+  document.getElementById('persuade-box').classList.remove('show');
+  renderScoreReadout(getScores());
+  document.getElementById('new-title-label').textContent='➕ 기획안 등록';
+  // Reset criteria tabs to first tab
+  document.querySelectorAll('.ctab').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.querySelectorAll('.ctab-panel').forEach((p,i)=>p.classList.toggle('active',i===0));
+  updateCTabStatus();
+}
+
+// ── DATA PERSISTENCE (localStorage + Supabase) ───────────────────
+// 저장 모델: proposals 테이블 = { id text PK, data jsonb, updated_at timestamptz }
+// data 컬럼에 기획안 객체 전체(원고·이력·점수 포함)를 JSON 으로 보관 → 스키마 변경에 강함
+function sbHeaders(extra){
+  return Object.assign({
+    'apikey':SUPABASE_CONFIG.key,
+    'Authorization':'Bearer '+SUPABASE_CONFIG.key,
+    'Content-Type':'application/json'
+  }, extra||{});
+}
+const sbOn = ()=> SUPABASE_CONFIG.enabled && SUPABASE_CONFIG.url && SUPABASE_CONFIG.key;
+
+async function loadData(){
+  proposals = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');   // 우선 로컬 표시
+  if(!sbOn()) return;
+  try{
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc`,
+      {headers:sbHeaders()});
+    if(res.ok){
+      const rows=await res.json();
+      // data 컬럼(jsonb) 안의 객체를 펼쳐서 사용
+      proposals=rows.map(r=> (r.data && typeof r.data==='object') ? r.data : r ).filter(Boolean);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(proposals));
+    }else{
+      console.warn('Supabase load 실패',res.status,await res.text());
+    }
+  }catch(e){console.warn('Supabase load 오류 — localStorage 사용',e);}
+}
+
+async function saveData(){
+  // 1) 항상 로컬에 저장 (오프라인·실패 대비)
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(proposals));
+  // 2) Supabase 동기화 (전체 upsert)
+  if(!sbOn()) return;
+  const rows=proposals.map(p=>({id:String(p.id), data:p, updated_at:new Date().toISOString()}));
+  const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`,{
+    method:'POST',
+    headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify(rows)
+  });
+  if(!res.ok){
+    const msg=await res.text();
+    console.error('Supabase 저장 실패',res.status,msg);
+    throw new Error('Supabase save failed: '+res.status);   // 호출부에서 롤백/안내
+  }
+}
+
+// 삭제 시 Supabase 행도 함께 제거
+async function sbDelete(id){
+  if(!sbOn()) return;
+  try{
+    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?id=eq.${encodeURIComponent(String(id))}`,
+      {method:'DELETE',headers:sbHeaders({'Prefer':'return=minimal'})});
+  }catch(e){console.warn('Supabase 삭제 오류',e);}
+}
+
+async function updateDbStatus(){
+  const el=document.getElementById('db-status-badge');
+  if(!el) return;
+  el.style.cursor='pointer';
+  el.title='클릭하면 연결 상태를 다시 확인합니다';
+  el.onclick=()=>updateDbStatus();
+
+  // 1) 미설정 — 무엇이 비었는지 표시
+  if(!sbOn()){
+    const miss=[];
+    if(!SUPABASE_CONFIG.enabled) miss.push('enabled=false');
+    if(!SUPABASE_CONFIG.url) miss.push('url 비어있음');
+    if(!SUPABASE_CONFIG.key) miss.push('key 비어있음');
+    el.className='db-status local';
+    el.innerHTML=`<div class="db-dot" style="background:var(--gold2)"></div>localStorage 모드 <span style="opacity:.7;font-weight:400">(${miss.join(', ')})</span>`;
+    return;
+  }
+
+  // 2) 설정됨 — 실제 접속 테스트
+  el.className='db-status local';
+  el.innerHTML='<div class="db-dot" style="background:#9aa0a6"></div>Supabase 확인 중…';
+  try{
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id&limit=1`,{headers:sbHeaders()});
+    if(res.ok){
+      el.className='db-status cloud';
+      el.innerHTML='<div class="db-dot" style="background:#50C878"></div>Supabase 연결됨';
+    }else{
+      const body=await res.text();
+      let hint='';
+      if(res.status===401||res.status===403) hint=' · 키 확인';
+      else if(res.status===404) hint=' · 테이블(proposals) 없음';
+      el.className='db-status local';
+      el.innerHTML=`<div class="db-dot" style="background:var(--ex)"></div>연결 실패 ${res.status}${hint}`;
+      console.error('Supabase 상태 확인 실패',res.status,body);
+    }
+  }catch(e){
+    el.className='db-status local';
+    el.innerHTML='<div class="db-dot" style="background:var(--ex)"></div>연결 실패 (네트워크/CORS)';
+    console.error('Supabase 상태 확인 오류',e);
+  }
+}
+
+// ── RENDER LIST ───────────────────────────────────────────────────
+function renderList(overrideFilter){
+  // Sync global search if active
+  const gsTitle = document.getElementById('gs-title')?.value?.toLowerCase()||'';
+  const gsAuthor = document.getElementById('gs-author')?.value?.toLowerCase()||'';
+  const gsFrom = document.getElementById('gs-from')?.value||'';
+  const gsTo = document.getElementById('gs-to')?.value||'';
+
+  const q = overrideFilter?.q ?? ((document.getElementById('search')?.value||'').toLowerCase());
+  const fd = overrideFilter?.decision ?? (document.getElementById('f-filter-dec')?.value||'');
+  const fg = overrideFilter?.genre ?? (document.getElementById('f-filter-genre')?.value||'');
+
+  // Combine: local search + global search
+  const titleQ = q || gsTitle;
+  const authorQ = gsAuthor;
+
+  const filtered=proposals.filter(p=>{
+    if(titleQ && !p.title.toLowerCase().includes(titleQ)) return false;
+    if(authorQ && !p.author.toLowerCase().includes(authorQ)) return false;
+    if(fd && p.decision!==fd) return false;
+    if(fg && p.genre!==fg) return false;
+    if(gsFrom && p.date && p.date < gsFrom) return false;
+    if(gsTo && p.date && p.date > gsTo) return false;
+    return true;
+  });
+
+  const listLabel = document.getElementById('list-label');
+  if(listLabel) listLabel.textContent=`총 ${filtered.length}건`;
+
+  const wrap=document.getElementById('list-wrap');
+  if(!wrap) return;
+  if(!filtered.length){
+    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📭</div><h3>기획안이 없습니다</h3><p>검색 조건을 변경하거나 기획안을 등록해주세요.</p></div>`;
+    return;
+  }
+  wrap.innerHTML=`<table class="proposal-table">
+    <thead><tr>
+      <th style="width:32px">#</th><th>도서명·저자</th><th style="width:80px">장르</th>
+      <th style="width:120px;text-align:center">원고·저자·시장·마케팅</th>
+      <th style="width:95px;text-align:center">판정</th>
+      <th style="width:70px;text-align:center">담당</th>
+      <th style="width:80px;text-align:center">접수일</th>
+    </tr></thead>
+    <tbody>${filtered.map(p=>{
+      const dm=DEC_MAP[p.decision]||DEC_MAP.pending;
+      return `<tr onclick="openModal('${p.id}')">
+        <td style="color:var(--text3);font-size:11px">${proposals.indexOf(p)+1}</td>
+        <td><div style="font-weight:700;font-size:12px">${p.title}</div><div style="font-size:11px;color:var(--text3)">${p.author}</div></td>
+        <td style="font-size:11px">${p.genre||'-'}</td>
+        <td style="text-align:center">${CRITERIA.map(cat=>catBadge(catPct(p.scores?.[cat.id], cat.items.length)?.pct??null)).join(' ')}</td>
+        <td style="text-align:center"><span class="decision-badge ${dm.cls}">${dm.label}</span></td>
+        <td style="text-align:center;font-size:11px">${p.reviewer||'-'}</td>
+        <td style="text-align:center;font-size:11px">${p.date||'-'}</td>
+      </tr>`;}).join('')}</tbody>
+  </table>`;
+}
+
+
+function renderDashboard(){
+  const dc={approve:0,conditional:0,selfpub:0,reject:0,pending:0};
+  proposals.forEach(p=>dc[p.decision||'pending']++);
+  document.getElementById('d-total').textContent=proposals.length;
+  document.getElementById('d-pending').textContent=dc.pending;
+  document.getElementById('d-ok').textContent=dc.approve+dc.conditional;
+  document.getElementById('d-self').textContent=dc.selfpub;
+  document.getElementById('d-reject').textContent=dc.reject;
+  const rec=proposals.slice(0,5);
+  const el=document.getElementById('recent-list');
+  if(!rec.length){
+    el.innerHTML=`<div class="empty-state" style="padding:30px"><div class="es-icon">📭</div><h3>등록된 기획안이 없습니다</h3><button class="btn btn-primary" style="margin-top:12px" onclick="showView('new')">➕ 첫 기획안 등록</button></div>`;
+    return;
+  }
+  el.innerHTML=`<table class="proposal-table"><thead><tr><th>도서명·저자</th><th style="width:80px">장르</th><th style="width:120px;text-align:center">4항목</th><th style="width:95px;text-align:center">판정</th><th style="width:80px;text-align:center">접수일</th></tr></thead>
+  <tbody>${rec.map(p=>{
+    const dm=DEC_MAP[p.decision]||DEC_MAP.pending;
+    return `<tr onclick="openModal('${p.id}')"><td><div style="font-weight:700;font-size:12px">${p.title}</div><div style="font-size:11px;color:var(--text3)">${p.author}</div></td><td style="font-size:11px">${p.genre||'-'}</td><td style="text-align:center">${CRITERIA.map(cat=>catBadge(catPct(p.scores?.[cat.id], cat.items.length)?.pct??null)).join(' ')}</td><td style="text-align:center"><span class="decision-badge ${dm.cls}">${dm.label}</span></td><td style="text-align:center;font-size:11px">${p.date||'-'}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ── ANALYTICS ─────────────────────────────────────────────────────
+function renderAnalytics(){
+  const el=document.getElementById('analytics-wrap');
+  if(!proposals.length){
+    el.innerHTML=`<div style="grid-column:span 2" class="empty-state"><div class="es-icon">📊</div><h3>데이터가 없습니다</h3></div>`;
+    return;
+  }
+  const dc={approve:0,conditional:0,selfpub:0,reject:0,pending:0};
+  proposals.forEach(p=>dc[p.decision||'pending']++);
+  const genreC={};
+  proposals.forEach(p=>{if(p.genre)genreC[p.genre]=(genreC[p.genre]||0)+1;});
+  const catAvg={};
+  CRITERIA.forEach(cat=>{
+    const all=proposals.map(p=>catPct(p.scores?.[cat.id], cat.items.length)).filter(Boolean);
+    catAvg[cat.id]=all.length?Math.round(all.reduce((s,p)=>s+p.pct,0)/all.length):0;
+  });
+  const n=proposals.length;
+  el.innerHTML=`
+  <div class="chart-card">
+    <div class="chart-title">📊 판정 결과 분포</div>
+    ${[
+      {k:'approve',l:'기획출판 승인',c:'var(--ok)'},
+      {k:'conditional',l:'조건부 승인',c:'var(--tri)'},
+      {k:'selfpub',l:'자비출판 유도',c:'var(--teal)'},
+      {k:'reject',l:'기각',c:'var(--rose)'},
+      {k:'pending',l:'검토 중',c:'var(--text3)'},
+    ].map(({k,l,c})=>`<div class="bar-row"><div class="bar-label" style="color:${c}">${l}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(dc[k]/n*100)}%;background:${c}"><span>${dc[k]}</span></div></div>
+      <div class="bar-count">${Math.round(dc[k]/n*100)}%</div></div>`).join('')}
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">🎯 4개 항목 평균 점수</div>
+    ${CRITERIA.map(cat=>`<div class="bar-row">
+      <div class="bar-label" style="color:${cat.color};font-size:10px">${cat.icon} ${cat.label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${catAvg[cat.id]}%;background:${cat.color}"><span>${catAvg[cat.id]}%</span></div></div>
+      <div class="bar-count">${catAvg[cat.id]}%</div></div>`).join('')}
+    <div style="margin-top:12px;padding:8px 10px;background:var(--s2);border-radius:var(--r);font-size:11px;color:var(--text2)">
+      자비출판 유도율: <strong style="color:var(--teal)">${Math.round(dc.selfpub/n*100)}%</strong> · 기획출판 전환율: <strong style="color:var(--ok)">${Math.round((dc.approve+dc.conditional)/n*100)}%</strong>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">📚 장르별 접수 현황</div>
+    ${Object.entries(genreC).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([g,c])=>`
+      <div class="bar-row"><div class="bar-label" style="font-size:10px">${g.length>6?g.slice(0,6)+'…':g}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/Math.max(...Object.values(genreC))*100)}%;background:var(--blue)"><span>${c}</span></div></div>
+      <div class="bar-count">${c}건</div></div>`).join('')}
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">📋 약점 항목 분석 (✕ 많은 순)</div>
+    <div style="overflow-y:auto;max-height:240px;">
+    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+      <thead><tr style="background:var(--s3)"><th style="padding:5px 8px;text-align:left">항목</th><th style="text-align:center;padding:5px 4px">◎</th><th style="text-align:center;padding:5px 4px">△</th><th style="text-align:center;padding:5px 4px">✕</th><th style="text-align:center;padding:5px 4px">✕율</th></tr></thead>
+      <tbody>${CRITERIA.flatMap(cat=>cat.items.map(item=>{
+        const Os=proposals.filter(p=>p.scores?.[cat.id]?.items?.[item.id]?.score==='O').length;
+        const Ts=proposals.filter(p=>p.scores?.[cat.id]?.items?.[item.id]?.score==='△').length;
+        const Xs=proposals.filter(p=>p.scores?.[cat.id]?.items?.[item.id]?.score==='X').length;
+        const tot=Os+Ts+Xs;
+        return tot>0?{label:item.label,Os,Ts,Xs,tot,xPct:Math.round(Xs/tot*100)}:null;
+      }).filter(Boolean)).sort((a,b)=>b.xPct-a.xPct).slice(0,10).map(s=>`
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:5px 8px">${s.label}</td>
+          <td style="text-align:center;color:var(--ok);font-weight:700">${s.Os}</td>
+          <td style="text-align:center;color:var(--tri);font-weight:700">${s.Ts}</td>
+          <td style="text-align:center;color:var(--ex);font-weight:700">${s.Xs}</td>
+          <td style="text-align:center;color:${s.xPct>50?'var(--ex)':'var(--text3)'}">${s.xPct}%</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>
+  </div>`;
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────
+function openModal(id){
+  currentModalId=id;
+  const p=proposals.find(p=>p.id===id);
+  if(!p) return;
+  const dm=DEC_MAP[p.decision]||DEC_MAP.pending;
+  document.getElementById('modal-title').textContent=p.title;
+  const ws=weightedScore(p.scores||{});
+  const total=(p.scorePct!==undefined&&p.scorePct!==null&&p.scorePct!=='')?p.scorePct:ws.total;
+  const adm=p.autoDecision?DEC_MAP[p.autoDecision]:null;
+  const adjusted=p.autoDecision&&p.decision&&p.decision!=='pending'&&p.decision!==p.autoDecision;
+  const catHTML=CRITERIA.map(cat=>{
+    const sc=p.scores?.[cat.id];
+    const pct=catPct(sc, cat.items.length);
+    return `<div class="criterion-block" style="border-color:${cat.color}">
+      <h5 style="color:${cat.color};font-size:12px;font-weight:700;margin-bottom:8px">${cat.icon} ${cat.label} <span style="font-size:9px;color:var(--text3)">(가중 ${WEIGHT_PCT[cat.id]}%)</span> ${pct?`<span style="font-size:10px;padding:1px 7px;border-radius:10px;background:${pct.pct>=70?'var(--ok-bg)':pct.pct>=50?'var(--tri-bg)':'var(--ex-bg)'};color:${pct.pct>=70?'var(--ok)':pct.pct>=50?'var(--tri)':'var(--ex)'};">${pct.pct}%</span>`:''}</h5>
+      <div class="criterion-scores">${cat.items.map(item=>{const s=sc?.items?.[item.id];return `<div class="cs-item">${!s?.score?'<span class="score-badge na">-</span>':s.score==='O'?'<span class="score-badge ok">◎</span>':s.score==='△'?'<span class="score-badge tri">△</span>':'<span class="score-badge ex">✕</span>'} ${item.label}${s?.note?` <span style="color:var(--text3)">(${s.note})</span>`:''}</div>`;}).join('')}</div>
+      ${sc?.note?`<div style="font-size:11px;color:var(--text2);background:rgba(255,255,255,.6);padding:6px 9px;border-radius:5px;margin-top:6px;">💬 ${sc.note}</div>`:''}
+    </div>`;
+  }).join('');
+  const msHTML=(p.manuscripts&&p.manuscripts.length)?`
+    <div style="margin-top:10px;">
+      <div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:.5px;margin-bottom:6px">📎 원고 파일 (${p.manuscripts.length}개)</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+      ${p.manuscripts.map(m=>`<div style="display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;">
+        <span style="font-size:14px">📄</span>
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.name}</div><div style="font-size:10px;color:var(--text3)">${fmtBytes(m.size)}</div></div>
+        <a href="${m.data}" download="${m.name}" class="btn btn-ghost btn-sm" style="text-decoration:none">⬇️ 받기</a>
+      </div>`).join('')}
+      </div>
+    </div>`:'';
+
+  const hist=(p.history||[]).slice().reverse();
+  const histHTML=hist.length?`
+    <div class="detail-section">
+      <h4>📝 수정 이력 <span style="font-size:10px;color:var(--text3);font-weight:400">(확인 전용 · ${hist.length}건)</span></h4>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+      ${hist.map(h=>{
+        const t=new Date(h.at);
+        const ts=isNaN(t)?h.at:`${t.getFullYear()}.${String(t.getMonth()+1).padStart(2,'0')}.${String(t.getDate()).padStart(2,'0')} ${String(t.getHours()).padStart(2,'0')}:${String(t.getMinutes()).padStart(2,'0')}`;
+        const isCreate=h.type==='created';
+        return `<div style="border-left:3px solid ${isCreate?'var(--blue)':'var(--gold)'};background:var(--s2);border-radius:0 6px 6px 0;padding:8px 12px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="font-size:10px;font-weight:700;padding:1px 8px;border-radius:10px;background:${isCreate?'#EBF3FD':'var(--tri-bg)'};color:${isCreate?'var(--blue)':'var(--tri)'}">${isCreate?'최초 등록':'보완·수정'}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)">${ts}</span>
+            <span style="font-size:11px;color:var(--text3)">담당: ${h.by||'-'}</span>
+            <span style="font-size:11px;color:var(--text3);margin-left:auto">가중 ${h.scorePct??'-'}% · ${DEC_MAP[h.decision]?DEC_MAP[h.decision].label:'-'}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.6">${(h.changes||[]).map(c=>'· '+c).join('<br>')}</div>
+          ${h.memo?`<div style="font-size:11px;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:5px;padding:5px 9px;margin-top:5px"><strong>사유:</strong> ${h.memo}</div>`:''}
+        </div>`;
+      }).join('')}
+      </div>
+    </div>`:'';
+
+  document.getElementById('modal-body').innerHTML=`
+    <div class="detail-section"><h4>기본 정보</h4>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="di-label">도서명</div><div class="di-val" style="font-weight:700">${p.title}</div></div>
+        <div class="detail-item"><div class="di-label">저자</div><div class="di-val">${p.author}</div></div>
+        <div class="detail-item"><div class="di-label">저자 전화번호</div><div class="di-val">${p.authorTel||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">저자 이메일</div><div class="di-val">${p.authorEmail||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">접수 경로</div><div class="di-val">${p.channel||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">장르</div><div class="di-val">${p.genre||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">예상 정가</div><div class="di-val">${p.price?Number(p.price).toLocaleString()+'원':'-'}</div></div>
+        <div class="detail-item"><div class="di-label">원고 상태</div><div class="di-val">${p.msStatus||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">담당자</div><div class="di-val">${p.reviewer||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">접수일 (저자 제출)</div><div class="di-val">${p.date||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">등록일 (자동)</div><div class="di-val">${p.regDate||(p.createdAt?p.createdAt.slice(0,10):'-')}</div></div>
+        <div class="detail-item"><div class="di-label">목표 회신일</div><div class="di-val">${p.reply||'-'}</div></div>
+      </div>
+      ${msHTML}
+      ${p.summary?`<div style="margin-top:10px;font-size:12px;color:var(--text2);background:var(--s2);padding:10px 12px;border-radius:var(--r);line-height:1.7"><strong>요약:</strong> ${p.summary}</div>`:''}
+    </div>
+    <div class="detail-section"><h4>4개 항목 분석 — 가중 종합 ${total}%</h4>${catHTML}</div>
+    <div class="detail-section" style="border:2px solid ${p.decision==='approve'?'var(--ok)':p.decision==='reject'?'var(--ex)':'var(--border)'}">
+      <h4>종합 판정</h4>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:${total>=70?'var(--ok)':total>=60?'var(--tri)':total>=50?'var(--gold)':'var(--ex)'}">${total}%</span>
+        ${adm?`<span style="font-size:11px;color:var(--text3)">1차 자동:</span><span class="decision-badge ${adm.cls}">${adm.label}</span><span style="color:var(--text3)">→</span>`:''}
+        <span style="font-size:11px;color:var(--text3)">최종:</span><span class="decision-badge ${dm.cls}" style="font-size:13px;padding:5px 14px">${dm.label}</span>
+      </div>
+      ${adjusted?`<div style="font-size:11px;font-weight:700;color:var(--purple);background:#F0E8FF;padding:6px 10px;border-radius:5px;margin-bottom:8px">✋ 2차 수동 조정됨 (1차 ${adm.label} → 최종 ${dm.label})</div>`:''}
+      ${p.decNote?`<div style="font-size:12px;color:var(--text2);background:var(--s2);padding:10px 12px;border-radius:var(--r);line-height:1.7;margin-bottom:8px"><strong>내부 메모:</strong> ${p.decNote}</div>`:''}
+      ${p.rationale?`<div style="border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+        <div style="background:var(--nav2);padding:8px 12px;display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:#fff">✍️ 저자 전달 문안</span><button class="btn btn-sm" onclick="copyModalRationale()" style="margin-left:auto;background:var(--gold);color:var(--nav)">📋 복사</button></div>
+        <div id="modal-rationale" style="font-size:12px;color:var(--text2);padding:11px 13px;line-height:1.8;white-space:pre-wrap">${p.rationale.replace(/</g,'&lt;')}</div>
+      </div>`:''}
+    </div>
+    ${histHTML}`;
+  document.getElementById('detail-modal').classList.add('open');
+}
+function copyModalRationale(){
+  const el=document.getElementById('modal-rationale');
+  if(!el) return;
+  const txt=el.textContent;
+  const done=()=>alert('저자 전달 문안이 복사되었습니다.');
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(()=>{const r=document.createRange();r.selectNode(el);const s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();done();});}
+  else{const r=document.createRange();r.selectNode(el);const s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand('copy');s.removeAllRanges();done();}
+}
+function closeModal(){document.getElementById('detail-modal').classList.remove('open');currentModalId=null;}
+function editFromModal(){
+  const p=proposals.find(p=>p.id===currentModalId);
+  if(!p) return;
+  closeModal();
+  // Populate
+  document.getElementById('f-title').value=p.title;
+  document.getElementById('f-author').value=p.author;
+  document.getElementById('f-author-tel').value=p.authorTel||'';
+  document.getElementById('f-author-email').value=p.authorEmail||'';
+  document.getElementById('f-channel').value=p.channel||'';
+  document.getElementById('f-genre').value=p.genre||'';
+  document.getElementById('f-price').value=p.price||'';
+  document.getElementById('f-ms-status').value=p.msStatus||'';
+  document.getElementById('f-summary').value=p.summary||'';
+  document.getElementById('f-reviewer').value=p.reviewer||'';
+  currentManuscripts=(p.manuscripts||[]).map(m=>({...m}));
+  renderManuscriptList();
+  document.getElementById('f-date').value=p.date||'';
+  document.getElementById('f-reply').value=p.reply||'';
+  document.getElementById('f-reg-date').value=p.regDate||(p.createdAt?p.createdAt.slice(0,10):new Date().toISOString().slice(0,10));
+  document.getElementById('f-dec-note').value=p.decNote||'';
+  document.getElementById('f-rationale').value=p.rationale||'';
+  document.getElementById('f-auto-decision').value=p.autoDecision||'';
+  document.getElementById('f-decision').value=p.decision||'';
+  document.getElementById('f-edit-id').value=p.id;
+  if(p.rationale){
+    document.getElementById('btn-copy-rationale').style.display='inline-flex';
+    document.getElementById('btn-insert-rationale').style.display='inline-flex';
+  }else{
+    document.getElementById('btn-copy-rationale').style.display='none';
+    document.getElementById('btn-insert-rationale').style.display='none';
+  }
+  CRITERIA.forEach(cat=>{
+    cat.items.forEach(item=>{
+      const sc=p.scores?.[cat.id]?.items?.[item.id];
+      if(sc?.score){const r=document.querySelector(`input[name="${item.id}"][value="${sc.score}"]`);if(r)r.checked=true;}
+      const n=document.getElementById(`n-${item.id}`);if(n)n.value=sc?.note||'';
+    });
+    const n=document.getElementById(`note-${cat.id}`);if(n)n.value=p.scores?.[cat.id]?.note||'';
+  });
+  document.getElementById('new-title-label').textContent='✏️ 기획안 수정';
+  showView('new');
+  updateCTabStatus();
+  onScoreChange();                       // 점수·readout·1차 자동 판정 재계산
+  if(p.decision && p.decision!=='pending') selectDec(p.decision);  // 2차(최종) 판정 복원 + 조정 태그
+}
+async function deleteFromModal(){
+  if(!currentModalId) return;
+  const p=proposals.find(p=>p.id===currentModalId);
+  if(!p||!confirm(`"${p.title}" 기획안을 삭제하시겠습니까?`)) return;
+  const delId=currentModalId;
+  proposals=proposals.filter(p=>p.id!==delId);
+  await sbDelete(delId);
+  await saveData();
+  closeModal();
+  updateStats();
+  renderDashboard();
+  renderList();
+  renderAnalytics();
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function updateStats(){
+  document.getElementById('st-total').textContent=proposals.length;
+  document.getElementById('st-pending').textContent=proposals.filter(p=>p.decision==='pending'||!p.decision).length;
+  document.getElementById('st-ok').textContent=proposals.filter(p=>['approve','conditional'].includes(p.decision)).length;
+  document.getElementById('st-self').textContent=proposals.filter(p=>p.decision==='selfpub').length;
+  document.getElementById('st-reject').textContent=proposals.filter(p=>p.decision==='reject').length;
+}
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  document.getElementById(`view-${id}`).classList.add('active');
+  document.getElementById(`mi-${id}`)?.classList.add('active');
+  if(id==='list')renderList();
+  if(id==='analytics')renderAnalytics();
+  if(id==='dashboard')renderDashboard();
+}
+function exportCSV(){
+  const rows=[['ID','도서명','저자','저자전화','저자이메일','장르','접수경로','정가','원고상태','1차자동판정','최종판정','가중점수','담당자','접수일','등록일','수정이력수','원고%','저자%','시장%','마케팅%'],...proposals.map(p=>{const ws=weightedScore(p.scores||{});const total=(p.scorePct!==undefined&&p.scorePct!==null&&p.scorePct!=='')?p.scorePct:ws.total;return [p.id,`"${p.title}"`,`"${p.author}"`,`"${p.authorTel||''}"`,`"${p.authorEmail||''}"`,p.genre||'',p.channel||'',p.price||'',p.msStatus||'',p.autoDecision||'',p.decision||'pending',total+'%',p.reviewer||'',p.date||'',p.regDate||(p.createdAt?p.createdAt.slice(0,10):''),(p.history||[]).length,...CRITERIA.map(cat=>{const pct=catPct(p.scores?.[cat.id], cat.items.length);return pct?pct.pct+'%':'0%';})];})];
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`에이콘_기획안_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+function clearAll(){
+  if(!confirm('모든 기획안 데이터를 삭제하시겠습니까?')) return;
+  proposals=[];localStorage.removeItem(STORAGE_KEY);
+  updateStats();renderDashboard();renderList();renderAnalytics();
+}
+document.getElementById('detail-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+init();
+
+
+// ═══════════════════════════════════════════════════════════════
+// PROJECT MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+const PROJ_KEY = 'acorn_projects_v1';
+const SALES_KEY = 'acorn_sales_v1';
+let projectData = JSON.parse(localStorage.getItem(PROJ_KEY) || '{}');  // {proposalId: projectObj}
+let salesData = JSON.parse(localStorage.getItem(SALES_KEY) || '{}');   // {proposalId: salesObj}
+let currentProjId = null;
+let currentSalesId = null;
+
+const STAGES = [
+  {id:'contract',   label:'계약',   icon:'📝', color:'#5A4200', days:0},
+  {id:'manuscript', label:'원고',   icon:'✍️', color:'#1560B8', days:null},
+  {id:'editing',    label:'편집',   icon:'✏️', color:'#0A7860', days:null},
+  {id:'design',     label:'디자인', icon:'🎨', color:'#4A1A7C', days:null},
+  {id:'print',      label:'인쇄',   icon:'🖨️', color:'#8A3A1A', days:null},
+  {id:'published',  label:'출간',   icon:'📚', color:'#1A6A1A', days:null},
+];
+
+function getApprovedProposals(){
+  return proposals.filter(p=>['approve','conditional'].includes(p.decision));
+}
+
+function ensureProject(propId){
+  if(!projectData[propId]){
+    const p = proposals.find(x=>x.id===propId);
+    projectData[propId] = {
+      id: propId,
+      currentStage: 'contract',
+      stages: {
+        contract:   {date:'', done:false, note:''},
+        manuscript: {date:'', done:false, note:''},
+        editing:    {date:'', done:false, note:''},
+        design:     {date:'', done:false, note:''},
+        print:      {date:'', done:false, note:''},
+        published:  {date:'', done:false, note:''},
+      },
+      tasks: [],   // [{id,label,dueDate,done,note}]
+      notes: '',
+    };
+  }
+  return projectData[propId];
+}
+
+function saveProjects(){
+  localStorage.setItem(PROJ_KEY, JSON.stringify(projectData));
+}
+
+function daysUntil(dateStr){
+  if(!dateStr) return null;
+  const diff = Math.round((new Date(dateStr) - new Date()) / 86400000);
+  return diff;
+}
+
+function ddayLabel(days, done){
+  if(done) return '<span class="ms-dday" style="background:var(--ok-bg);color:var(--ok)">✓ 완료</span>';
+  if(days===null) return '<span class="ms-dday" style="background:var(--s3);color:var(--text3)">날짜 미설정</span>';
+  if(days<0)  return `<span class="ms-dday" style="background:var(--ex-bg);color:var(--ex)">D+${Math.abs(days)} 초과</span>`;
+  if(days===0) return '<span class="ms-dday" style="background:#FFF0E0;color:#C06000">D-day</span>';
+  return `<span class="ms-dday" style="background:var(--s2);color:var(--blue)">D-${days}</span>`;
+}
+
+function renderProjects(){
+  const stageFilter = document.getElementById('proj-filter-stage')?.value||'';
+  const statusFilter = document.getElementById('proj-filter-status')?.value||'';
+  const q = (document.getElementById('proj-search')?.value||'').toLowerCase();
+
+  let approved = getApprovedProposals();
+  if(q) approved = approved.filter(p=>p.title.toLowerCase().includes(q)||p.author.toLowerCase().includes(q));
+
+  const wrap = document.getElementById('projects-wrap');
+  if(!approved.length){
+    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📅</div><h3>승인된 기획안이 없습니다</h3><p>기획안 목록에서 기획출판 승인 또는 조건부 승인 판정을 내리면 여기에 표시됩니다.</p></div>`;
+    return;
+  }
+
+  wrap.innerHTML = approved.map(p=>{
+    const proj = ensureProject(p.id);
+    const stages = proj.stages;
+
+    // Compute current active stage
+    let currentStageIdx = 0;
+    STAGES.forEach((st,i)=>{ if(stages[st.id]?.done) currentStageIdx = i+1; });
+    if(currentStageIdx >= STAGES.length) currentStageIdx = STAGES.length-1;
+
+    // Stage progress bar
+    const stageBar = STAGES.map((st,i)=>{
+      const s = stages[st.id];
+      const days = daysUntil(s?.date);
+      let cls = 'upcoming';
+      if(s?.done) cls='done';
+      else if(i===currentStageIdx) cls='active';
+      else if(days!==null&&days<0&&!s?.done) cls='overdue';
+      return `<div class="stage-item ${cls}" title="${st.label}: ${s?.date||'미설정'}">
+        <div class="st-num">${st.icon}</div>
+        <div class="st-label">${st.label}</div>
+        <div class="st-date">${s?.date?s.date.slice(5):'-'}</div>
+      </div>`;
+    }).join('');
+
+    // Next deadline
+    const nextStage = STAGES.find((st,i)=>i>=currentStageIdx&&!stages[st.id]?.done&&stages[st.id]?.date);
+    const nextDays = nextStage?daysUntil(stages[nextStage.id].date):null;
+    const nextLabel = nextStage?`다음: ${nextStage.label} ${stages[nextStage.id].date}`:'';
+
+    // Publish date
+    const pubDate = stages.published?.date||'미정';
+    const pubDone = stages.published?.done;
+
+    return `<div class="project-card">
+      <div class="project-card-hdr">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:var(--text)">${p.title}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${p.author} · ${p.genre||'-'} · 출간예정: <strong>${pubDate}</strong></div>
+        </div>
+        ${nextDays!==null?`<span class="dday-badge" style="background:${nextDays<0?'var(--ex-bg)':nextDays<=7?'#FFF0E0':'var(--s3)'};color:${nextDays<0?'var(--ex)':nextDays<=7?'#C06000':'var(--blue)'}">${nextDays<0?'⚠️ ':nextDays<=7?'🔔 ':''}${nextLabel?nextLabel.split(' ')[1]+' D'+(nextDays<0?'+'+Math.abs(nextDays):nextDays===0?'-day':'-'+nextDays):'-'}</span>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="openProjModal('${p.id}')">⚙️ 일정 관리</button>
+        <button class="btn btn-ghost btn-sm" onclick="openSalesModal('${p.id}')">💰 손익</button>
+      </div>
+      <div class="project-card-body">
+        <div class="stage-bar">${stageBar}</div>
+        ${proj.notes?`<div style="font-size:11px;color:var(--text3);margin-top:8px;padding:7px 10px;background:var(--s2);border-radius:5px">📌 ${proj.notes}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openProjModal(propId){
+  currentProjId = propId;
+  const p = proposals.find(x=>x.id===propId);
+  const proj = ensureProject(propId);
+  document.getElementById('pm-title').textContent = `📅 ${p.title} — 출판 일정`;
+
+  const stageRows = STAGES.map(st=>{
+    const s = proj.stages[st.id];
+    const days = daysUntil(s?.date);
+    return `<div class="milestone-row">
+      <div class="ms-check ${s?.done?'done':days!==null&&days<0?'overdue':''}" onclick="toggleStage('${st.id}')">
+        ${s?.done?'✓':''}
+      </div>
+      <div style="font-size:16px;flex-shrink:0">${st.icon}</div>
+      <div class="ms-label">${st.label}</div>
+      <input type="date" value="${s?.date||''}" onchange="setStageDate('${st.id}',this.value)"
+        style="border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:11px;font-family:'Pretendard',sans-serif;cursor:pointer;">
+      ${ddayLabel(days, s?.done)}
+    </div>`;
+  }).join('');
+
+  // Custom tasks
+  const taskRows = (proj.tasks||[]).map((t,i)=>`
+    <div class="milestone-row" id="task-row-${i}">
+      <div class="ms-check ${t.done?'done':''}" onclick="toggleTask(${i})">${t.done?'✓':''}</div>
+      <div class="ms-label">${t.label}</div>
+      <input type="date" value="${t.dueDate||''}" onchange="setTaskDate(${i},this.value)"
+        style="border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:11px;font-family:'Pretendard',sans-serif;">
+      ${ddayLabel(t.dueDate?daysUntil(t.dueDate):null, t.done)}
+      <button onclick="removeTask(${i})" style="border:none;background:var(--ex-bg);color:var(--ex);border-radius:4px;padding:3px 7px;cursor:pointer;font-size:11px;">삭제</button>
+    </div>`).join('');
+
+  document.getElementById('pm-body').innerHTML = `
+    <div class="detail-section">
+      <h4>📋 출판 단계별 일정</h4>
+      ${stageRows}
+    </div>
+    <div class="detail-section">
+      <h4>✅ 추가 체크리스트</h4>
+      <div id="tasks-wrap">${taskRows||'<div style="color:var(--text3);font-size:12px;padding:8px 0">추가 작업이 없습니다.</div>'}</div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <input type="text" id="new-task-label" placeholder="새 작업 추가..." style="flex:1;border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;font-family:'Pretendard',sans-serif;">
+        <input type="date" id="new-task-date" style="border:1.5px solid var(--border);border-radius:6px;padding:7px 8px;font-size:12px;">
+        <button class="btn btn-primary btn-sm" onclick="addTask()">➕ 추가</button>
+      </div>
+    </div>
+    <div class="detail-section">
+      <h4>📝 담당자 메모</h4>
+      <textarea id="proj-note" style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;font-family:'Pretendard',sans-serif;resize:vertical;min-height:60px;" placeholder="일정 관련 메모, 특이사항...">${proj.notes||''}</textarea>
+      <button class="btn btn-primary" style="margin-top:10px" onclick="saveProjNote()">💾 메모 저장</button>
+    </div>`;
+
+  document.getElementById('project-modal').classList.add('open');
+}
+
+function closeProjModal(){
+  document.getElementById('project-modal').classList.remove('open');
+  currentProjId=null;
+  renderProjects();
+}
+
+function toggleStage(stageId){
+  const proj = projectData[currentProjId];
+  proj.stages[stageId].done = !proj.stages[stageId].done;
+  saveProjects();
+  openProjModal(currentProjId);
+}
+
+function setStageDate(stageId, val){
+  const proj = projectData[currentProjId];
+  proj.stages[stageId].date = val;
+  saveProjects();
+  // Refresh dday labels without full modal rebuild
+  openProjModal(currentProjId);
+}
+
+function toggleTask(i){
+  const proj = projectData[currentProjId];
+  proj.tasks[i].done = !proj.tasks[i].done;
+  saveProjects();
+  openProjModal(currentProjId);
+}
+
+function setTaskDate(i, val){
+  projectData[currentProjId].tasks[i].dueDate = val;
+  saveProjects();
+}
+
+function addTask(){
+  const label = document.getElementById('new-task-label').value.trim();
+  if(!label) return;
+  const date = document.getElementById('new-task-date').value;
+  projectData[currentProjId].tasks.push({id:Date.now().toString(),label,dueDate:date,done:false,note:''});
+  saveProjects();
+  openProjModal(currentProjId);
+}
+
+function removeTask(i){
+  projectData[currentProjId].tasks.splice(i,1);
+  saveProjects();
+  openProjModal(currentProjId);
+}
+
+function saveProjNote(){
+  projectData[currentProjId].notes = document.getElementById('proj-note').value;
+  saveProjects();
+  alert('메모가 저장되었습니다.');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SALES & BEP MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+function ensureSales(propId){
+  if(!salesData[propId]){
+    const p = proposals.find(x=>x.id===propId);
+    salesData[propId] = {
+      id: propId,
+      // 비용 구성
+      royalty:     0,   // 선인세 (원)
+      translation: 0,   // 번역비
+      editing:     0,   // 편집비
+      typesetting: 0,   // 조판비
+      printing:    0,   // 인쇄비
+      paper:       0,   // 용지비
+      design:      0,   // 디자인비
+      marketing:   0,   // 마케팅·광고비
+      other:       0,   // 기타 비용
+      // 판매 현황
+      printQty:    0,   // 인쇄 부수
+      price:       0,   // 정가
+      discountRate: 70, // 서점 정산율 (%)
+      // 쇄별 판매
+      sales: [
+        {label:'1쇄', qty:0, amount:0, date:''}
+      ],
+      notes: '',
+      publishDate: '',
+      isbn: '',
+    };
+  }
+  return salesData[propId];
+}
+
+function saveSalesDataAll(){
+  localStorage.setItem(SALES_KEY, JSON.stringify(salesData));
+}
+
+function calcBEP(sd){
+  const totalCost = (sd.royalty||0)+(sd.translation||0)+(sd.editing||0)+(sd.typesetting||0)+
+                    (sd.printing||0)+(sd.paper||0)+(sd.design||0)+(sd.marketing||0)+(sd.other||0);
+  const pricePerBook = (sd.price||0) * ((sd.discountRate||70)/100);
+  const bep = pricePerBook>0 ? Math.ceil(totalCost/pricePerBook) : 0;
+  const totalSalesQty = (sd.sales||[]).reduce((s,r)=>s+(r.qty||0),0);
+  const totalRevenue = (sd.sales||[]).reduce((s,r)=>s+(r.amount||0),0);
+  const profit = totalRevenue - totalCost;
+  const bepAchieved = bep>0 ? Math.min(100,Math.round(totalSalesQty/bep*100)) : 0;
+  const sellRate = (sd.printQty||0)>0 ? Math.round(totalSalesQty/(sd.printQty)*100) : 0;
+  return {totalCost,pricePerBook,bep,totalSalesQty,totalRevenue,profit,bepAchieved,sellRate};
+}
+
+function renderSales(){
+  const published = getApprovedProposals().filter(p=>{
+    const proj = projectData[p.id];
+    return proj?.stages?.published?.done || salesData[p.id];
+  });
+
+  // Summary cards
+  let totalRev=0, totalCost=0, bepDone=0;
+  published.forEach(p=>{
+    if(salesData[p.id]){
+      const r=calcBEP(salesData[p.id]);
+      totalRev+=r.totalRevenue; totalCost+=r.totalCost;
+      if(r.bepAchieved>=100) bepDone++;
+    }
+  });
+  const totalProfit = totalRev-totalCost;
+  document.getElementById('sc-published').textContent = published.length;
+  document.getElementById('sc-revenue').textContent = totalRev>0?Math.round(totalRev/10000)+'만':'0';
+  document.getElementById('sc-cost').textContent = totalCost>0?Math.round(totalCost/10000)+'만':'0';
+  document.getElementById('sc-profit').textContent = totalProfit!==0?(totalProfit>0?'+':'')+Math.round(totalProfit/10000)+'만':'0';
+  document.getElementById('sc-profit').style.color = totalProfit>0?'var(--ok)':totalProfit<0?'var(--ex)':'var(--text)';
+  document.getElementById('sc-bep-rate').textContent = published.length?`${bepDone}/${published.length}종 달성`:'';
+
+  const wrap = document.getElementById('sales-list-wrap');
+  if(!published.length){
+    // Show all approved books even without sales data
+    const allApproved = getApprovedProposals();
+    if(!allApproved.length){
+      wrap.innerHTML=`<div class="empty-state"><div class="es-icon">💰</div><h3>출간 완료 도서가 없습니다</h3><p>프로젝트 관리에서 '출간' 단계를 완료 처리하거나, 도서를 클릭해 판매 데이터를 입력하세요.</p></div>`;
+      return;
+    }
+    // Show all approved as well
+    renderSalesList(allApproved, wrap);
+    return;
+  }
+  renderSalesList(published, wrap);
+}
+
+function renderSalesList(list, wrap){
+  wrap.innerHTML = list.map(p=>{
+    const sd = salesData[p.id];
+    const r = sd ? calcBEP(sd) : null;
+    const bepPct = r?.bepAchieved||0;
+    const bepColor = bepPct>=100?'var(--ok)':bepPct>=75?'var(--tri)':bepPct>=50?'#B87030':'var(--ex)';
+    const profitColor = r?.profit>0?'var(--ok)':r?.profit<0?'var(--ex)':'var(--text3)';
+    return `<div class="book-row" onclick="openSalesModal('${p.id}')">
+      <div class="progress-ring" style="background:${bepPct>=100?'var(--ok-bg)':bepPct>0?'var(--s3)':'var(--s3)'};color:${bepColor};border:2px solid ${bepColor}">
+        ${bepPct}%
+      </div>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:700;color:var(--text)">${p.title}</div>
+        <div style="font-size:11px;color:var(--text3)">${p.author} · ${p.genre||'-'} ${sd?.publishDate?'· 출간: '+sd.publishDate:''}</div>
+      </div>
+      ${r?`<div style="text-align:right;margin:0 10px;">
+        <div style="font-size:10px;color:var(--text3)">판매량</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace">${r.totalSalesQty.toLocaleString()}부 / ${(sd?.printQty||0).toLocaleString()}부</div>
+        <div style="font-size:10px;color:var(--text3)">소진율 ${r.sellRate}%</div>
+      </div>
+      <div style="text-align:right;margin:0 10px;min-width:80px;">
+        <div style="font-size:10px;color:var(--text3)">손익</div>
+        <div style="font-size:13px;font-weight:700;color:${profitColor};font-family:'JetBrains Mono',monospace">${r.profit>0?'+':''}${Math.round(r.profit/10000)}만</div>
+        <div style="font-size:10px;color:var(--text3)">BEP ${r.bep.toLocaleString()}부</div>
+      </div>
+      <div style="text-align:right;min-width:90px;">
+        <div class="bep-meter" style="width:80px"><div class="bep-fill" style="width:${Math.min(100,bepPct)}%;background:${bepColor}"></div></div>
+        <div style="font-size:10px;color:${bepColor};font-weight:700">BEP ${bepPct}% 달성</div>
+      </div>`:
+      `<span style="font-size:11px;color:var(--text3)">판매 데이터 없음 (클릭해 입력)</span>`}
+      <span style="font-size:18px;color:var(--text3);margin-left:8px">›</span>
+    </div>`;
+  }).join('');
+}
+
+function openSalesModal(propId){
+  currentSalesId = propId;
+  const p = proposals.find(x=>x.id===propId);
+  const sd = ensureSales(propId);
+  const r = calcBEP(sd);
+  document.getElementById('sm-title').textContent = `💰 ${p.title} — 판매·손익`;
+
+  const salesRows = (sd.sales||[]).map((row,i)=>`
+    <tr>
+      <td><input type="text" value="${row.label}" onchange="sd_setVal('sales',${i},'label',this.value)" style="width:70px;border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;font-family:'Pretendard',sans-serif;"></td>
+      <td><input type="date" value="${row.date}" onchange="sd_setVal('sales',${i},'date',this.value)" style="border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;"></td>
+      <td><input type="number" value="${row.qty}" onchange="sd_setVal('sales',${i},'qty',+this.value)" style="width:80px;border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;text-align:right;" placeholder="판매 부수"></td>
+      <td><input type="number" value="${row.amount}" onchange="sd_setVal('sales',${i},'amount',+this.value)" style="width:110px;border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;text-align:right;" placeholder="판매액(원)"></td>
+      <td><button onclick="removeSalesRow(${i})" style="border:none;background:var(--ex-bg);color:var(--ex);border-radius:4px;padding:3px 8px;cursor:pointer;font-size:11px;">삭제</button></td>
+    </tr>`).join('');
+
+  document.getElementById('sm-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+
+      <!-- 비용 구성 -->
+      <div class="detail-section">
+        <h4>💸 원가 구성 (합계: <span id="sm-total-cost" style="color:var(--ex)">${Math.round(r.totalCost/10000)}만원</span>)</h4>
+        ${[
+          {id:'royalty',label:'선인세 (저작권·번역권)'},
+          {id:'translation',label:'번역비'},
+          {id:'editing',label:'편집비'},
+          {id:'typesetting',label:'조판비'},
+          {id:'printing',label:'인쇄비'},
+          {id:'paper',label:'용지비'},
+          {id:'design',label:'디자인비 (표지 포함)'},
+          {id:'marketing',label:'마케팅·광고비'},
+          {id:'other',label:'기타 비용'},
+        ].map(f=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
+          <label style="font-size:11px;color:var(--text2);width:120px;flex-shrink:0">${f.label}</label>
+          <input type="number" id="sm-${f.id}" value="${sd[f.id]||0}" oninput="sd_update('${f.id}',+this.value)"
+            style="flex:1;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px;text-align:right;font-family:'JetBrains Mono',monospace;" placeholder="0">
+          <span style="font-size:10px;color:var(--text3);width:35px">원</span>
+        </div>`).join('')}
+        <div style="margin-top:8px;padding:8px 10px;background:var(--ex-bg);border-radius:6px;font-size:12px;color:var(--ex);font-family:'JetBrains Mono',monospace;font-weight:700;">
+          총 원가: <span id="sm-total-cost2">${r.totalCost.toLocaleString()}</span>원
+        </div>
+      </div>
+
+      <!-- 판매 설정 + BEP -->
+      <div>
+        <div class="detail-section" style="margin-bottom:12px;">
+          <h4>📦 판매 기본 설정</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="field"><label>ISBN</label><input type="text" id="sm-isbn" value="${sd.isbn||''}" oninput="sd_updateField('isbn',this.value)" placeholder="979-..."></div>
+            <div class="field"><label>출간일</label><input type="date" id="sm-pub" value="${sd.publishDate||''}" oninput="sd_updateField('publishDate',this.value)"></div>
+            <div style="display:flex;gap:8px;">
+              <div class="field" style="flex:1"><label>정가 (원)</label><input type="number" id="sm-price" value="${sd.price||0}" oninput="sd_update('price',+this.value)" style="font-family:'JetBrains Mono',monospace;text-align:right;"></div>
+              <div class="field" style="flex:1"><label>서점 정산율 (%)</label><input type="number" id="sm-discount" value="${sd.discountRate||70}" min="0" max="100" oninput="sd_update('discountRate',+this.value)" style="font-family:'JetBrains Mono',monospace;text-align:right;"></div>
+            </div>
+            <div class="field"><label>총 인쇄 부수</label><input type="number" id="sm-print" value="${sd.printQty||0}" oninput="sd_update('printQty',+this.value)" style="font-family:'JetBrains Mono',monospace;text-align:right;"></div>
+          </div>
+        </div>
+
+        <!-- BEP 계산 결과 -->
+        <div class="detail-section" style="background:var(--nav);border:none;">
+          <h4 style="color:var(--gold2)">🎯 BEP 손익 분석</h4>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:11px;color:rgba(255,255,255,.65)">정가 × 정산율</span>
+              <span id="sm-price-book" style="font-size:12px;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace">${r.pricePerBook.toLocaleString()}원/부</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:11px;color:rgba(255,255,255,.65)">BEP 부수</span>
+              <span id="sm-bep" style="font-size:14px;font-weight:700;color:var(--gold3);font-family:'JetBrains Mono',monospace">${r.bep.toLocaleString()}부</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:11px;color:rgba(255,255,255,.65)">총 판매량</span>
+              <span id="sm-sold" style="font-size:12px;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace">${r.totalSalesQty.toLocaleString()}부</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:11px;color:rgba(255,255,255,.65)">판매소진율</span>
+              <span id="sm-sellrate" style="font-size:12px;font-weight:700;color:var(--gold2);font-family:'JetBrains Mono',monospace">${r.sellRate}%</span>
+            </div>
+            <div class="bep-meter" style="width:100%;margin:4px 0;height:14px;">
+              <div class="bep-fill" id="sm-bep-bar" style="width:${Math.min(100,r.bepAchieved)}%;background:${r.bepAchieved>=100?'#50C878':r.bepAchieved>=75?'var(--tri)':'var(--ex)'}"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-size:11px;color:rgba(255,255,255,.65)">BEP 달성률</span>
+              <span id="sm-bep-pct" style="font-size:14px;font-weight:700;color:${r.bepAchieved>=100?'#50C878':r.bepAchieved>=75?'var(--gold2)':'#FFB3B3'};font-family:'JetBrains Mono',monospace">${r.bepAchieved}%</span>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:8px;display:flex;justify-content:space-between;">
+              <span style="font-size:12px;color:rgba(255,255,255,.75);font-weight:700">영업 손익</span>
+              <span id="sm-profit" style="font-size:16px;font-weight:800;color:${r.profit>0?'#50C878':r.profit<0?'#FFB3B3':'rgba(255,255,255,.6)'};font-family:'JetBrains Mono',monospace">${r.profit>0?'+':''}${r.profit.toLocaleString()}원</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 쇄별 판매 -->
+    <div class="detail-section">
+      <h4>📊 쇄·시기별 판매 현황</h4>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px;">
+        <thead><tr style="background:var(--s3)">
+          <th style="padding:7px 10px;text-align:left">구분</th>
+          <th style="padding:7px 10px;text-align:left">날짜</th>
+          <th style="padding:7px 10px;text-align:right">판매 부수</th>
+          <th style="padding:7px 10px;text-align:right">판매액 (원)</th>
+          <th style="padding:7px 10px;width:50px"></th>
+        </tr></thead>
+        <tbody id="sm-sales-rows">${salesRows}</tbody>
+      </table>
+      <button class="btn btn-ghost btn-sm" onclick="addSalesRow()">➕ 판매 기록 추가</button>
+    </div>
+
+    <div class="detail-section">
+      <h4>📝 메모</h4>
+      <textarea id="sm-notes" style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:12px;font-family:'Pretendard',sans-serif;resize:vertical;min-height:55px;" oninput="sd_updateField('notes',this.value)">${sd.notes||''}</textarea>
+    </div>`;
+
+  document.getElementById('sales-modal').classList.add('open');
+}
+
+// Live update helpers
+function sd_update(field, val){
+  if(!currentSalesId) return;
+  salesData[currentSalesId][field] = val;
+  refreshBEPDisplay();
+}
+function sd_updateField(field, val){
+  if(!currentSalesId) return;
+  salesData[currentSalesId][field] = val;
+}
+function sd_setVal(arr, idx, field, val){
+  if(!currentSalesId) return;
+  salesData[currentSalesId][arr][idx][field] = val;
+  refreshBEPDisplay();
+}
+
+function refreshBEPDisplay(){
+  const sd = salesData[currentSalesId];
+  if(!sd) return;
+  const r = calcBEP(sd);
+  const upd = (id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  const updStyle = (id,val,prop)=>{const e=document.getElementById(id);if(e)e.style[prop]=val;};
+  upd('sm-total-cost', Math.round(r.totalCost/10000)+'만원');
+  upd('sm-total-cost2', r.totalCost.toLocaleString());
+  upd('sm-price-book', r.pricePerBook.toLocaleString()+'원/부');
+  upd('sm-bep', r.bep.toLocaleString()+'부');
+  upd('sm-sold', r.totalSalesQty.toLocaleString()+'부');
+  upd('sm-sellrate', r.sellRate+'%');
+  upd('sm-bep-pct', r.bepAchieved+'%');
+  upd('sm-profit', (r.profit>0?'+':'')+r.profit.toLocaleString()+'원');
+  const bar=document.getElementById('sm-bep-bar');
+  if(bar){bar.style.width=Math.min(100,r.bepAchieved)+'%';bar.style.background=r.bepAchieved>=100?'#50C878':r.bepAchieved>=75?'var(--tri)':'var(--ex)';}
+  const profEl=document.getElementById('sm-profit');
+  if(profEl) profEl.style.color=r.profit>0?'#50C878':r.profit<0?'#FFB3B3':'rgba(255,255,255,.6)';
+  const pctEl=document.getElementById('sm-bep-pct');
+  if(pctEl) pctEl.style.color=r.bepAchieved>=100?'#50C878':r.bepAchieved>=75?'var(--gold2)':'#FFB3B3';
+}
+
+function addSalesRow(){
+  const sd = salesData[currentSalesId];
+  const n = sd.sales.length+1;
+  sd.sales.push({label:n+'쇄', date:'', qty:0, amount:0});
+  // Re-render just the table
+  const rows = sd.sales.map((row,i)=>`
+    <tr>
+      <td><input type="text" value="${row.label}" onchange="sd_setVal('sales',${i},'label',this.value)" style="width:70px;border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;font-family:'Pretendard',sans-serif;"></td>
+      <td><input type="date" value="${row.date}" onchange="sd_setVal('sales',${i},'date',this.value)" style="border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;"></td>
+      <td><input type="number" value="${row.qty}" onchange="sd_setVal('sales',${i},'qty',+this.value)" style="width:80px;border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;text-align:right;"></td>
+      <td><input type="number" value="${row.amount}" onchange="sd_setVal('sales',${i},'amount',+this.value)" style="width:110px;border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:11px;text-align:right;"></td>
+      <td><button onclick="removeSalesRow(${i})" style="border:none;background:var(--ex-bg);color:var(--ex);border-radius:4px;padding:3px 8px;cursor:pointer;font-size:11px;">삭제</button></td>
+    </tr>`).join('');
+  document.getElementById('sm-sales-rows').innerHTML=rows;
+}
+
+function removeSalesRow(i){
+  salesData[currentSalesId].sales.splice(i,1);
+  openSalesModal(currentSalesId);
+}
+
+function saveSalesData(){
+  saveSalesDataAll();
+  closeSalesModal();
+  renderSales();
+  alert('판매·손익 데이터가 저장되었습니다.');
+}
+
+function closeSalesModal(){
+  document.getElementById('sales-modal').classList.remove('open');
+  currentSalesId=null;
+}
+
+// Modal overlay close
+document.getElementById('project-modal').addEventListener('click',function(e){if(e.target===this)closeProjModal();});
+document.getElementById('sales-modal').addEventListener('click',function(e){if(e.target===this){saveSalesDataAll();closeSalesModal();}});
+
+// Extended in showView already (add project/sales calls to existing showView)
+// Patch: add project/sales rendering to existing showView
+const _sv = showView;
+showView = function(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  const viewEl = document.getElementById('view-'+id);
+  if(viewEl) viewEl.classList.add('active');
+  const menuEl = document.getElementById('mi-'+id);
+  if(menuEl) menuEl.classList.add('active');
+  if(id==='list') renderList();
+  if(id==='analytics') renderAnalytics();
+  if(id==='dashboard') renderDashboard();
+  if(id==='projects') renderProjects();
+  if(id==='sales') renderSales();
+};
+
+</script>
+</body>
+</html>
