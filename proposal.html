@@ -49,6 +49,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;}
 .dash-card .dc-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.8px;margin-bottom:6px;}
 .dash-card .dc-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;}
+.dash-card.clickable{cursor:pointer;transition:.15s;}
+.dash-card.clickable:hover{border-color:var(--blue);box-shadow:0 4px 14px rgba(21,96,184,.18);transform:translateY(-2px);}
+.dash-card.clickable .dc-val{text-decoration:underline;text-decoration-color:transparent;}
+.dash-card.clickable:hover .dc-val{text-decoration-color:currentColor;}
 /* form */
 .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:16px;}
 .form-card-hdr{background:var(--nav);padding:13px 18px;display:flex;align-items:center;gap:10px;}
@@ -291,11 +295,11 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div style="margin-left:auto"><button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button></div>
   </div>
   <div class="dash-grid">
-    <div class="dash-card"><div class="dc-label">총 접수</div><div class="dc-val" id="d-total" style="color:var(--blue)">0</div></div>
-    <div class="dash-card"><div class="dc-label">검토 중</div><div class="dc-val" id="d-pending" style="color:var(--gold)">0</div></div>
-    <div class="dash-card"><div class="dc-label">승인</div><div class="dc-val" id="d-ok" style="color:var(--ok)">0</div></div>
-    <div class="dash-card"><div class="dc-label">자비출판 유도</div><div class="dc-val" id="d-self" style="color:var(--teal)">0</div></div>
-    <div class="dash-card"><div class="dc-label">기각</div><div class="dc-val" id="d-reject" style="color:var(--rose)">0</div></div>
+    <div class="dash-card clickable" onclick="dashGoto('total')" title="전체 목록 보기"><div class="dc-label">총 접수</div><div class="dc-val" id="d-total" style="color:var(--blue)">0</div></div>
+    <div class="dash-card clickable" onclick="dashGoto('pending')" title="검토 중 목록 보기"><div class="dc-label">검토 중</div><div class="dc-val" id="d-pending" style="color:var(--gold)">0</div></div>
+    <div class="dash-card clickable" onclick="dashGoto('ok')" title="승인·조건부 목록 보기"><div class="dc-label">승인</div><div class="dc-val" id="d-ok" style="color:var(--ok)">0</div></div>
+    <div class="dash-card clickable" onclick="dashGoto('selfpub')" title="자비출판 유도 목록 보기"><div class="dc-label">자비출판 유도</div><div class="dc-val" id="d-self" style="color:var(--teal)">0</div></div>
+    <div class="dash-card clickable" onclick="dashGoto('reject')" title="기각 목록 보기"><div class="dc-label">기각</div><div class="dc-val" id="d-reject" style="color:var(--rose)">0</div></div>
   </div>
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;">
     <div style="padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
@@ -324,19 +328,22 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
         <div class="field"><label>도서 제목 (가제)</label><input id="f-title" type="text" placeholder="예: 파이썬으로 배우는 실전 AI"></div>
         <div class="field"><label>저자명</label><input id="f-author" type="text" placeholder="홍길동"></div>
       </div>
-      <div class="form-row c3">
+      <div class="form-row c4">
         <div class="field"><label>저자 전화번호</label><input id="f-author-tel" type="tel" placeholder="010-0000-0000"></div>
         <div class="field"><label>저자 이메일</label><input id="f-author-email" type="email" placeholder="author@example.com"></div>
+        <div class="field"><label>저자 현 직업</label><input id="f-author-job" type="text" placeholder="예: 현직 1등 항해사 / 대학 교수 / 프리랜서 개발자"></div>
         <div class="field"><label>담당자</label>
           <input id="f-reviewer" type="text" placeholder="담당자 입력">
         </div>
       </div>
       <div class="form-row c4">
         <div class="field"><label>접수 경로</label>
-          <select id="f-channel"><option value="">선택</option><option>홈페이지 문의</option><option>이메일</option><option>SNS DM</option><option>지인 소개</option><option>기존 저자</option><option>기타</option></select>
+          <select id="f-channel" onchange="toggleOther('channel')"><option value="">선택</option><option>홈페이지 문의</option><option>이메일</option><option>SNS DM</option><option>지인 소개</option><option>기존 저자</option><option>해기사 협회</option><option>기타</option></select>
+          <input id="f-channel-other" type="text" placeholder="접수 경로 직접 입력" style="display:none;margin-top:6px;">
         </div>
         <div class="field"><label>도서 장르</label>
-          <select id="f-genre"><option value="">선택</option><option>IT·프로그래밍</option><option>보안·해킹</option><option>AI·머신러닝</option><option>UX·디자인</option><option>게임 개발</option><option>경제·경영</option><option>자기개발</option><option>에세이</option><option>인문·교양</option><option>기타</option></select>
+          <select id="f-genre" onchange="toggleOther('genre')"><option value="">선택</option><option>IT·프로그래밍</option><option>보안·해킹</option><option>AI·머신러닝</option><option>UX·디자인</option><option>게임 개발</option><option>경제·경영</option><option>자기개발</option><option>에세이</option><option>인문·교양</option><option>기타</option></select>
+          <input id="f-genre-other" type="text" placeholder="장르 직접 입력" style="display:none;margin-top:6px;">
         </div>
         <div class="field"><label>예상 정가 (원)</label><input id="f-price" type="number" placeholder="30000"></div>
         <div class="field"><label>원고 완성도</label>
@@ -464,11 +471,11 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div style="margin-left:auto"><button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button></div>
   </div>
   <div class="list-filters">
-    <input class="search-input" type="text" id="search" placeholder="🔍 도서명·저자명 검색..." oninput="renderList()">
-    <select class="filter-select" id="f-filter-dec" onchange="renderList()">
+    <input class="search-input" type="text" id="search" placeholder="🔍 도서명·저자명 검색..." oninput="filterChanged()">
+    <select class="filter-select" id="f-filter-dec" onchange="filterChanged()">
       <option value="">전체 판정</option><option value="approve">승인</option><option value="conditional">조건부</option><option value="selfpub">자비출판 유도</option><option value="reject">기각</option><option value="pending">검토 중</option>
     </select>
-    <select class="filter-select" id="f-filter-genre" onchange="renderList()">
+    <select class="filter-select" id="f-filter-genre" onchange="filterChanged()">
       <option value="">전체 장르</option><option>IT·프로그래밍</option><option>보안·해킹</option><option>AI·머신러닝</option><option>UX·디자인</option><option>게임 개발</option><option>경제·경영</option><option>자기개발</option><option>에세이</option><option>인문·교양</option>
     </select>
   </div>
@@ -1294,8 +1301,11 @@ async function saveProposal(){
     title, author,
     authorTel:document.getElementById('f-author-tel').value.trim(),
     authorEmail:document.getElementById('f-author-email').value.trim(),
+    authorJob:document.getElementById('f-author-job').value.trim(),
     channel:document.getElementById('f-channel').value,
+    channelOther:(document.getElementById('f-channel').value==='기타'?document.getElementById('f-channel-other').value.trim():''),
     genre:document.getElementById('f-genre').value,
+    genreOther:(document.getElementById('f-genre').value==='기타'?document.getElementById('f-genre-other').value.trim():''),
     price:document.getElementById('f-price').value,
     msStatus:document.getElementById('f-ms-status').value,
     type:'',  // 목록에서 추후 지정
@@ -1329,6 +1339,8 @@ async function saveProposal(){
     if((existing.author||'')!==author) changes.push('저자명 수정');
     if((existing.authorTel||'')!==proposal.authorTel) changes.push('저자 전화번호 수정');
     if((existing.authorEmail||'')!==proposal.authorEmail) changes.push('저자 이메일 수정');
+    if((existing.authorJob||'')!==proposal.authorJob) changes.push('저자 현 직업 수정');
+    if((existing.channel||'')!==proposal.channel||(existing.channelOther||'')!==proposal.channelOther) changes.push('접수 경로 수정');
     if((existing.reviewer||'')!==reviewerVal) changes.push(`담당자: ${existing.reviewer||'-'} → ${reviewerVal||'-'}`);
     if((existing.price||'')!==proposal.price) changes.push('예상 정가 수정');
     if((existing.genre||'')!==proposal.genre) changes.push('장르 수정');
@@ -1399,8 +1411,9 @@ async function saveProposal(){
 }
 
 function resetForm(){
-  ['f-title','f-author','f-author-tel','f-author-email','f-price','f-summary','f-dec-note','f-reviewer','f-reply','f-rationale'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['f-title','f-author','f-author-tel','f-author-email','f-author-job','f-channel-other','f-genre-other','f-price','f-summary','f-dec-note','f-reviewer','f-reply','f-rationale'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   ['f-channel','f-genre','f-ms-status'].forEach(id=>{const e=document.getElementById(id);if(e)e.selectedIndex=0;});
+  toggleOther('channel');toggleOther('genre');
   currentManuscripts=[];
   renderManuscriptList();
   const mfi=document.getElementById('ms-file-input');if(mfi)mfi.value='';
@@ -1547,7 +1560,8 @@ function renderList(overrideFilter){
   const filtered=proposals.filter(p=>{
     if(titleQ && !p.title.toLowerCase().includes(titleQ)) return false;
     if(authorQ && !p.author.toLowerCase().includes(authorQ)) return false;
-    if(fd && p.decision!==fd) return false;
+    if(window._dashApproveCombo){ if(!['approve','conditional'].includes(p.decision)) return false; }
+    else if(fd && p.decision!==fd) return false;
     if(fg && p.genre!==fg) return false;
     if(gsFrom && p.date && p.date < gsFrom) return false;
     if(gsTo && p.date && p.date > gsTo) return false;
@@ -1576,7 +1590,7 @@ function renderList(overrideFilter){
       return `<tr onclick="openModal('${p.id}')">
         <td style="color:var(--text3);font-size:11px">${proposals.indexOf(p)+1}</td>
         <td><div style="font-weight:700;font-size:12px">${p.title}</div><div style="font-size:11px;color:var(--text3)">${p.author}</div></td>
-        <td style="font-size:11px">${p.genre||'-'}</td>
+        <td style="font-size:11px">${gnDisp(p)||'-'}</td>
         <td style="text-align:center">${CRITERIA.map(cat=>catBadge(catPct(p.scores?.[cat.id], cat.items.length)?.pct??null)).join(' ')}</td>
         <td style="text-align:center"><span class="decision-badge ${dm.cls}">${dm.label}</span></td>
         <td style="text-align:center;font-size:11px">${p.reviewer||'-'}</td>
@@ -1740,8 +1754,9 @@ function openModal(id){
         <div class="detail-item"><div class="di-label">저자</div><div class="di-val">${p.author}</div></div>
         <div class="detail-item"><div class="di-label">저자 전화번호</div><div class="di-val">${p.authorTel||'-'}</div></div>
         <div class="detail-item"><div class="di-label">저자 이메일</div><div class="di-val">${p.authorEmail||'-'}</div></div>
-        <div class="detail-item"><div class="di-label">접수 경로</div><div class="di-val">${p.channel||'-'}</div></div>
-        <div class="detail-item"><div class="di-label">장르</div><div class="di-val">${p.genre||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">저자 현 직업</div><div class="di-val">${p.authorJob||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">접수 경로</div><div class="di-val">${chDisp(p)||'-'}</div></div>
+        <div class="detail-item"><div class="di-label">장르</div><div class="di-val">${gnDisp(p)||'-'}</div></div>
         <div class="detail-item"><div class="di-label">예상 정가</div><div class="di-val">${p.price?Number(p.price).toLocaleString()+'원':'-'}</div></div>
         <div class="detail-item"><div class="di-label">원고 상태</div><div class="di-val">${p.msStatus||'-'}</div></div>
         <div class="detail-item"><div class="di-label">담당자</div><div class="di-val">${p.reviewer||'-'}</div></div>
@@ -1788,8 +1803,12 @@ function editFromModal(){
   document.getElementById('f-author').value=p.author;
   document.getElementById('f-author-tel').value=p.authorTel||'';
   document.getElementById('f-author-email').value=p.authorEmail||'';
+  document.getElementById('f-author-job').value=p.authorJob||'';
   document.getElementById('f-channel').value=p.channel||'';
+  document.getElementById('f-channel-other').value=p.channelOther||'';
   document.getElementById('f-genre').value=p.genre||'';
+  document.getElementById('f-genre-other').value=p.genreOther||'';
+  toggleOther('channel');toggleOther('genre');
   document.getElementById('f-price').value=p.price||'';
   document.getElementById('f-ms-status').value=p.msStatus||'';
   document.getElementById('f-summary').value=p.summary||'';
@@ -1840,6 +1859,28 @@ async function deleteFromModal(){
   renderAnalytics();
 }
 
+// ── 대시보드 숫자 클릭 → 목록 이동(필터 적용) ────────────────────────
+function dashGoto(key){
+  const s=document.getElementById('search'); if(s)s.value='';
+  const fg=document.getElementById('f-filter-genre'); if(fg)fg.value='';
+  const fd=document.getElementById('f-filter-dec');
+  window._dashApproveCombo=(key==='ok');   // 승인 카드 = 승인+조건부
+  if(fd){ fd.value=(key==='total'||key==='ok')?'':key; }
+  showView('list');
+}
+// 목록 필터 직접 변경 시 콤보 해제 후 렌더
+function filterChanged(){ window._dashApproveCombo=false; renderList(); }
+// 접수경로/장르 '기타' 선택 시 직접입력 필드 표시
+function toggleOther(kind){
+  const sel=document.getElementById('f-'+kind);
+  const inp=document.getElementById('f-'+kind+'-other');
+  if(!sel||!inp) return;
+  inp.style.display=(sel.value==='기타')?'block':'none';
+}
+// 접수경로/장르 표시값 (기타+직접입력 시 입력값 우선)
+function chDisp(p){return (p.channel==='기타'&&p.channelOther)?p.channelOther:(p.channel||'');}
+function gnDisp(p){return (p.genre==='기타'&&p.genreOther)?p.genreOther:(p.genre||'');}
+
 // ── UTILS ─────────────────────────────────────────────────────────
 function updateStats(){
   document.getElementById('st-total').textContent=proposals.length;
@@ -1858,7 +1899,7 @@ function showView(id){
   if(id==='dashboard')renderDashboard();
 }
 function exportCSV(){
-  const rows=[['ID','도서명','저자','저자전화','저자이메일','장르','접수경로','정가','원고상태','1차자동판정','최종판정','가중점수','담당자','접수일','등록일','수정이력수','원고%','저자%','시장%','마케팅%'],...proposals.map(p=>{const ws=weightedScore(p.scores||{});const total=(p.scorePct!==undefined&&p.scorePct!==null&&p.scorePct!=='')?p.scorePct:ws.total;return [p.id,`"${p.title}"`,`"${p.author}"`,`"${p.authorTel||''}"`,`"${p.authorEmail||''}"`,p.genre||'',p.channel||'',p.price||'',p.msStatus||'',p.autoDecision||'',p.decision||'pending',total+'%',p.reviewer||'',p.date||'',p.regDate||(p.createdAt?p.createdAt.slice(0,10):''),(p.history||[]).length,...CRITERIA.map(cat=>{const pct=catPct(p.scores?.[cat.id], cat.items.length);return pct?pct.pct+'%':'0%';})];})];
+  const rows=[['ID','도서명','저자','저자전화','저자이메일','저자현직업','장르','접수경로','정가','원고상태','1차자동판정','최종판정','가중점수','담당자','접수일','등록일','수정이력수','원고%','저자%','시장%','마케팅%'],...proposals.map(p=>{const ws=weightedScore(p.scores||{});const total=(p.scorePct!==undefined&&p.scorePct!==null&&p.scorePct!=='')?p.scorePct:ws.total;return [p.id,`"${p.title}"`,`"${p.author}"`,`"${p.authorTel||''}"`,`"${p.authorEmail||''}"`,`"${p.authorJob||''}"`,`"${gnDisp(p)}"`,`"${chDisp(p)}"`,p.price||'',p.msStatus||'',p.autoDecision||'',p.decision||'pending',total+'%',p.reviewer||'',p.date||'',p.regDate||(p.createdAt?p.createdAt.slice(0,10):''),(p.history||[]).length,...CRITERIA.map(cat=>{const pct=catPct(p.scores?.[cat.id], cat.items.length);return pct?pct.pct+'%':'0%';})];})];
   const csv=rows.map(r=>r.join(',')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
