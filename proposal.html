@@ -2744,7 +2744,7 @@ function calcBEP(sd){
 }
 
 function renderSales(){
-  const published = getApprovedProposals().filter(p=>{
+  const published = getProjectProposals().filter(p=>{
     const proj = projectData[p.id];
     return proj?.stages?.published?.done || salesData[p.id];
   });
@@ -2769,9 +2769,9 @@ function renderSales(){
   const wrap = document.getElementById('sales-list-wrap');
   if(!published.length){
     // Show all approved books even without sales data
-    const allApproved = getApprovedProposals();
+    const allApproved = getProjectProposals();
     if(!allApproved.length){
-      wrap.innerHTML=`<div class="empty-state"><div class="es-icon">💰</div><h3>출간 완료 도서가 없습니다</h3><p>프로젝트 관리에서 '출간' 단계를 완료 처리하거나, 도서를 클릭해 판매 데이터를 입력하세요.</p></div>`;
+      wrap.innerHTML=`<div class="empty-state"><div class="es-icon">💰</div><h3>계약된 도서가 없습니다</h3><p>‘계약서 관리’에서 계약서를 작성하면 도서가 표시됩니다. 계약서를 모두 삭제하면 판매·손익 항목도 함께 사라집니다.</p></div>`;
       return;
     }
     // Show all approved as well
@@ -3781,11 +3781,15 @@ async function deleteContract(proposalId,contractId){
   if(!confirm(`계약서 "${c?c.contractNo:''}" 를 삭제하시겠습니까?`)) return Promise.resolve(false);
   if(!confirm('⚠️ 계약서는 복구할 수 없습니다. 정말 삭제하시겠습니까?')) return Promise.resolve(false);
   p.contracts=(p.contracts||[]).filter(x=>x.id!==contractId);
-  // 계약 기반 동기화: 남은 계약이 없으면 해당 프로젝트도 함께 제거한다.
-  if(!p.contracts.length && projectData[p.id]){ delete projectData[p.id]; saveProjects(); }
+  // 계약 기반 동기화: 남은 계약이 없으면 프로젝트·판매손익 데이터도 함께 제거한다.
+  if(!p.contracts.length){
+    if(projectData[p.id]){ delete projectData[p.id]; saveProjects(); }
+    if(salesData[p.id]){ delete salesData[p.id]; saveSalesDataAll(); }
+  }
   await saveData();
   renderContracts();
   if(document.getElementById('view-projects')?.classList.contains('active')) renderProjects();
+  if(document.getElementById('view-sales')?.classList.contains('active')) renderSales();
 }
 function duplicateContract(proposalId,contractId){
   const p=proposals.find(x=>x.id===proposalId); if(!p)return;
