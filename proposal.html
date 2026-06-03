@@ -584,23 +584,6 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   </div>
 </div>
 
-</main>
-</div>
-
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="detail-modal">
-  <div class="modal">
-    <div class="modal-hdr">
-      <h3 id="modal-title">기획안 상세</h3>
-      <div style="margin-left:auto;display:flex;gap:8px;">
-        <button class="btn btn-ghost btn-sm" onclick="editFromModal()">✏️ 수정</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteFromModal()">🗑️ 삭제</button>
-      </div>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-  </div>
-</div>
 
 <!-- ══ QUOTES (견적서 관리) ══ -->
 <div class="view" id="view-quotes">
@@ -619,6 +602,24 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <span id="q-count" style="font-size:12px;color:var(--text3);margin-left:auto"></span>
   </div>
   <div id="quotes-wrap"></div>
+</div>
+
+</main>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="modal-title">기획안 상세</h3>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="editFromModal()">✏️ 수정</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteFromModal()">🗑️ 삭제</button>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
 </div>
 
 <!-- 견적 에디터 모달 -->
