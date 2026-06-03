@@ -296,6 +296,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="menu-divider"></div>
     <div class="menu-item" onclick="showView('guides')" id="mi-guides">📚 참고자료 · 가이드</div>
     <div class="menu-item" onclick="showView('comments')" id="mi-comments">💬 의견 관리</div>
+    <div class="menu-item" onclick="showView('help')" id="mi-help">📖 사용 설명서</div>
   </div>
   <div style="flex:1"></div>
   <div class="sidebar-stats">
@@ -729,6 +730,80 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   </div>
 </div>
 
+<div class="view" id="view-help">
+  <div class="page-hdr">
+    <div><h2>📖 사용 설명서</h2><div class="sub">핵심만 빠르게 — 처음 사용하는 직원도 바로 따라 할 수 있는 가이드</div></div>
+  </div>
+  <style>
+  .help-flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 2px;}
+  .help-step{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:12px;font-weight:700;color:var(--text);}
+  .help-arrow{color:var(--text3);font-weight:700;}
+  .help-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  @media(max-width:760px){.help-grid{grid-template-columns:1fr;}}
+  .help-card{border:1px solid var(--border);border-left:3px solid var(--c,var(--nav));border-radius:8px;padding:11px 13px;background:#fff;}
+  .help-card h5{font-size:12.5px;font-weight:800;margin-bottom:4px;color:var(--text);}
+  .help-card p{font-size:11.5px;color:var(--text2);line-height:1.65;}
+  .help-ol{margin:2px 0;padding-left:18px;}
+  .help-ol li{font-size:12px;color:var(--text2);line-height:1.95;}
+  .help-ol li b{color:var(--text);}
+  .help-note{background:#fff6e6;border:1px solid #f0d28a;border-radius:8px;padding:12px 14px;font-size:12px;color:#6b4e00;line-height:1.75;}
+  .help-tip{font-size:12px;color:var(--text2);line-height:1.85;}
+  .help-kbd{background:var(--s3);border-radius:5px;padding:1px 6px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text);}
+  </style>
+
+  <div class="detail-section"><h4>🚀 빠른 시작 — 전체 업무 흐름</h4>
+    <div class="help-flow">
+      <span class="help-step">① 기획안 등록</span><span class="help-arrow">→</span>
+      <span class="help-step">② 평가·결정</span><span class="help-arrow">→</span>
+      <span class="help-step">③ 견적/계약서 작성</span><span class="help-arrow">→</span>
+      <span class="help-step">④ 프로젝트(일정)</span><span class="help-arrow">→</span>
+      <span class="help-step">⑤ 판매·손익</span>
+    </div>
+    <p style="font-size:11.5px;color:var(--text3);margin-top:8px;line-height:1.7">기획안을 등록·평가해 결정하고, 계약서를 작성하면 <b>프로젝트 관리</b>와 <b>판매·손익 관리</b>가 자동으로 연동됩니다. <b>참고자료·가이드</b>와 <b>의견 관리</b>는 업무 중 언제든 활용하세요.</p>
+  </div>
+
+  <div class="detail-section"><h4>🧭 메뉴별 핵심 기능</h4>
+    <div class="help-grid">
+      <div class="help-card" style="--c:#1560B8"><h5>📊 대시보드</h5><p>전체 현황을 한눈에 요약합니다.</p></div>
+      <div class="help-card" style="--c:#0A7860"><h5>➕ 기획안 등록</h5><p>신규 기획안(도서명·저자·정가·원고상태)을 입력하고, 원고·저자·시장·마케팅 평가 점수를 매기면 가중점수와 1차 판정이 자동 산출됩니다.</p></div>
+      <div class="help-card" style="--c:#1560B8"><h5>📋 기획안 목록</h5><p>검색·필터로 찾고, 행을 클릭한 상세 화면에서 평가·최종 결정·견적/계약서 작성을 진행합니다.</p></div>
+      <div class="help-card" style="--c:#4A1A7C"><h5>📈 통계 분석</h5><p>접수·판정·점수 데이터를 분석해 인사이트를 제공합니다.</p></div>
+      <div class="help-card" style="--c:#D4943A"><h5>🧾 견적서 관리</h5><p>자비·반기획·아마존 견적서를 작성·인쇄합니다. <b>⚙️ 공급자 정보</b>에서 두 법인(에이콘온/에이콘출판)을 전환할 수 있습니다.</p></div>
+      <div class="help-card" style="--c:#5A4200"><h5>📜 계약서 관리</h5><p>자비·반기획·기획·아마존 계약서를 작성합니다. <b>계약 조항을 항목별로 직접 수정</b>할 수 있고, 오른쪽 탭에서 안내·원고가이드·Q&A를 참고합니다. 저장하면 프로젝트가 등록됩니다.</p></div>
+      <div class="help-card" style="--c:#1560B8"><h5>📅 프로젝트 관리</h5><p>계약된 도서의 계약→출간 일정을 추적합니다. 상단 <b>현황 타일(상태별·단계별)</b>을 클릭하면 해당 항목만 모아 볼 수 있습니다.</p></div>
+      <div class="help-card" style="--c:#1A6A1A"><h5>💰 판매·손익 관리</h5><p>도서별 판매·비용을 입력하면 <b>손익분기점(BEP)</b>이 자동 계산됩니다.</p></div>
+      <div class="help-card" style="--c:#0A7860"><h5>📚 참고자료 · 가이드</h5><p>출판 형태별 원고 작성 가이드라인과 자주 묻는 질문(Q&A)을 제공합니다.</p></div>
+      <div class="help-card" style="--c:#8A1A2A"><h5>💬 의견 관리</h5><p>메뉴·프로세스별 직원 의견을 등록하고, 접수→검토중→반영완료 상태로 관리합니다. 상단 타일로 진행 현황을 봅니다.</p></div>
+    </div>
+  </div>
+
+  <div class="detail-section"><h4>✅ 자주 하는 작업 (따라 하기)</h4>
+    <ol class="help-ol">
+      <li><b>기획안 평가하기</b> — ‘기획안 등록’에서 정보·평가 점수 입력 → 자동 판정 확인 → ‘기획안 목록’ 상세에서 최종 결정.</li>
+      <li><b>승인 후 계약하기</b> — 결정 시 안내창에서 ‘계약서 작성’ → 기획안 정보·계약유형 자동 입력 → 조항 확인·수정 → 상태를 <span class="help-kbd">계약완료(서명)</span>로 저장 → 프로젝트 자동 등록.</li>
+      <li><b>일정 관리</b> — ‘프로젝트 관리’에서 <span class="help-kbd">⚙️ 일정 관리</span> → 단계별 날짜 입력·완료 체크.</li>
+      <li><b>손익 확인</b> — ‘판매·손익 관리’에서 도서 클릭 → 판매·비용 입력 → BEP 달성률 확인.</li>
+      <li><b>의견 남기기</b> — ‘의견 관리 → ➕ 의견 등록’에서 대상 메뉴 선택 후 작성. 담당자는 상태 변경·처리메모로 관리.</li>
+    </ol>
+  </div>
+
+  <div class="detail-section"><h4>⚠️ 꼭 기억할 동기화 규칙</h4>
+    <div class="help-note">
+      <b>프로젝트 관리</b>와 <b>판매·손익 관리</b>는 <b>계약 기반</b>입니다.<br>
+      · 계약서를 작성하면 해당 도서가 두 화면에 자동으로 나타납니다.<br>
+      · 한 도서의 <b>계약서를 모두 삭제하면</b> 프로젝트·판매손익 데이터도 <b>함께 사라집니다.</b> (진행 중 프로젝트의 계약서는 실수로 삭제하지 않도록 주의)
+    </div>
+  </div>
+
+  <div class="detail-section"><h4>💡 알아두면 편한 팁</h4>
+    <p class="help-tip">
+      · 대시보드·프로젝트·의견 관리의 <b>숫자/현황 타일을 클릭</b>하면 관련 목록으로 바로 이동(필터+스크롤)합니다.<br>
+      · 모든 작성 창(모달)은 <span class="help-kbd">×</span> 또는 ‘취소’로 닫으면 직전 메뉴로 돌아갑니다.<br>
+      · 기획안 데이터는 클라우드에 자동 저장되며, 프로젝트 일정·판매·의견 등 일부는 사용 중인 브라우저에 저장됩니다(같은 PC·브라우저에서 유지).<br>
+      · 계약서·견적서는 작성 화면에서 <b>🖨️ 인쇄</b>로 정식 문서를 출력할 수 있습니다.
+    </p>
+  </div>
+</div>
 </main>
 </div>
 
