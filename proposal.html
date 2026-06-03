@@ -24,15 +24,15 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .topnav-back{margin-left:auto;font-size:12px;color:rgba(255,255,255,.6);text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,.2);border-radius:6px;transition:.2s;}
 .topnav-back:hover{background:rgba(255,255,255,.1);color:#fff;}
 .layout{display:flex;flex:1;}
-.sidebar{width:220px;min-height:calc(100vh - 52px);background:var(--nav2);display:flex;flex-direction:column;flex-shrink:0;}
-.menu-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;transition:.15s;border-left:3px solid transparent;}
-.menu-item:hover{background:rgba(255,255,255,.06);color:#fff;}
-.menu-item.active{background:rgba(21,96,184,.25);color:var(--gold2);border-left-color:var(--gold2);}
-.menu-divider{height:1px;background:rgba(255,255,255,.08);margin:6px 14px;}
-.sidebar-stats{padding:12px 14px;margin:8px 10px;background:rgba(255,255,255,.05);border-radius:var(--r);}
+.sidebar{width:220px;min-height:calc(100vh - 52px);background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;color:var(--text2);font-size:12px;font-weight:600;transition:.15s;border-left:3px solid transparent;}
+.menu-item:hover{background:var(--s2);color:var(--nav);}
+.menu-item.active{background:rgba(21,96,184,.10);color:#1560B8;border-left-color:#1560B8;font-weight:700;}
+.menu-divider{height:1px;background:var(--border);margin:6px 14px;}
+.sidebar-stats{padding:12px 14px;margin:8px 10px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);}
 .stat-row{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px;}
-.stat-label{color:rgba(255,255,255,.5);}
-.stat-val{color:var(--gold2);font-weight:700;font-family:'JetBrains Mono',monospace;}
+.stat-label{color:var(--text3);}
+.stat-val{color:var(--text);font-weight:700;font-family:'JetBrains Mono',monospace;}
 .main{flex:1;padding:20px;overflow-y:auto;}
 .view{display:none;}
 .view.active{display:block;}
@@ -42,6 +42,9 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'Pretendard',sans-serif;transition:.2s;}
 .btn-primary{background:var(--blue);color:#fff;}.btn-primary:hover{background:var(--blue2);}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2);}.btn-ghost:hover{background:var(--s3);}
+/* 남색 헤더(모달/폼) 위의 ghost 버튼은 밝게 표시 */
+.modal-hdr .btn-ghost,.form-card-hdr .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.4);}
+.modal-hdr .btn-ghost:hover,.form-card-hdr .btn-ghost:hover{background:rgba(255,255,255,.22);color:#fff;}
 .btn-danger{background:var(--ex-bg);color:var(--ex);border:1px solid #F0B0B0;}
 .btn-sm{padding:5px 10px;font-size:11px;}
 /* cards */
@@ -150,6 +153,13 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .modal-hdr h3{font-size:14px;font-weight:700;color:#fff;flex:1;}
 .modal-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;line-height:1;}
 .modal-body{padding:20px;}
+/* 모달 입력 글자색: 진하게(가독성). -webkit-text-fill-color 미사용(투명화 방지) */
+.modal-body input:not([type=radio]):not([type=checkbox]),
+.modal-body textarea,
+.modal-body select{ color:#0A1A2E; }
+.modal-body input::placeholder,
+.modal-body textarea::placeholder{ color:#6A7A8E; opacity:1; }
+.modal-body input[readonly]{ color:#5A6A7E; background:var(--s3); }
 .detail-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;}
 .detail-section h4{font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -235,10 +245,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 
 /* ── GLOBAL SEARCH ── */
 .global-search{display:flex;align-items:center;gap:6px;flex:1;max-width:540px;margin:0 16px;}
-.gs-field input{border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 9px;font-size:11px;font-family:'Pretendard',sans-serif;background:rgba(255,255,255,.1);color:#fff;width:100%;}
-.gs-field input::placeholder{color:rgba(255,255,255,.4);}
-.gs-field input:focus{outline:none;border-color:var(--gold2);background:rgba(255,255,255,.15);}
-.gs-field input[type=date]{color:rgba(255,255,255,.7);width:110px;}
+.gs-field input{border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:5px 9px;font-size:11px;font-family:'Pretendard',sans-serif;background:#fff;color:var(--text);width:100%;}
+.gs-field input::placeholder{color:var(--text3);opacity:1;}
+.gs-field input:focus{outline:none;border-color:var(--gold2);background:#fff;box-shadow:0 0 0 2px rgba(232,176,74,.35);}
+.gs-field input[type=date]{color:var(--text);width:120px;}
 .gs-sep{color:rgba(255,255,255,.4);font-size:11px;flex-shrink:0;}
 .gs-btn{border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px;flex-shrink:0;transition:.2s;}
 .gs-btn:hover{background:rgba(255,255,255,.2);color:#fff;}
@@ -301,10 +311,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   <div style="flex:1"></div>
   <div class="sidebar-stats">
     <div class="stat-row"><span class="stat-label">총 기획안</span><span class="stat-val" id="st-total">0</span></div>
-    <div class="stat-row"><span class="stat-label">검토 중</span><span class="stat-val" id="st-pending" style="color:#FFD080">0</span></div>
-    <div class="stat-row"><span class="stat-label">승인·조건부</span><span class="stat-val" id="st-ok" style="color:#90E090">0</span></div>
-    <div class="stat-row"><span class="stat-label">자비출판 유도</span><span class="stat-val" id="st-self" style="color:var(--gold2)">0</span></div>
-    <div class="stat-row"><span class="stat-label">기각</span><span class="stat-val" id="st-reject" style="color:#FFB3B3">0</span></div>
+    <div class="stat-row"><span class="stat-label">검토 중</span><span class="stat-val" id="st-pending" style="color:#B87900">0</span></div>
+    <div class="stat-row"><span class="stat-label">승인·조건부</span><span class="stat-val" id="st-ok" style="color:#1A7A3A">0</span></div>
+    <div class="stat-row"><span class="stat-label">자비출판 유도</span><span class="stat-val" id="st-self" style="color:#B07000">0</span></div>
+    <div class="stat-row"><span class="stat-label">기각</span><span class="stat-val" id="st-reject" style="color:#B23A2A">0</span></div>
   </div>
 </aside>
 
@@ -335,7 +345,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 <!-- ══ NEW/EDIT ══ -->
 <div class="view" id="view-new">
   <div class="page-hdr">
-    <div><h2 id="new-title-label">➕ 기획안 등록</h2><div class="sub">저자 제안 기획안 4개 항목 분석 — 중소출판사 현실 기준 평가</div></div>
+    <div><h2 id="new-title-label">➕ 기획안 등록</h2><div class="sub">기본기(원고·시장)와 ‘시장을 견인할 저자·출판사의 파워·노력’을 함께 평가 — 원고 20 / 저자·브랜드 30 / 시장 20 / 마케팅·견인력 30</div></div>
     <div style="margin-left:auto;display:flex;gap:8px;">
       <button class="btn btn-ghost" onclick="resetForm()">초기화</button>
       <button class="btn btn-primary" onclick="saveProposal()">💾 저장</button>
@@ -389,10 +399,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   <!-- 4개 기준 평가 — 가로 탭 -->
   <div class="criteria-tab-wrap">
     <div class="criteria-tab-bar" id="criteria-tab-bar">
-      <button class="ctab active" onclick="switchCTab(0,this)" id="ctab-0">📄 ① 원고 분석</button>
-      <button class="ctab" onclick="switchCTab(1,this)" id="ctab-1">👤 ② 저자 분석</button>
-      <button class="ctab" onclick="switchCTab(2,this)" id="ctab-2">📊 ③ 시장 분석</button>
-      <button class="ctab" onclick="switchCTab(3,this)" id="ctab-3">📢 ④ 마케팅 지원</button>
+      <button class="ctab active" onclick="switchCTab(0,this)" id="ctab-0">📄 ① 원고 분석 (20%)</button>
+      <button class="ctab" onclick="switchCTab(1,this)" id="ctab-1">👤 ② 저자·브랜드 (30%)</button>
+      <button class="ctab" onclick="switchCTab(2,this)" id="ctab-2">📊 ③ 시장 분석 (20%)</button>
+      <button class="ctab" onclick="switchCTab(3,this)" id="ctab-3">📢 ④ 마케팅·견인력 (30%)</button>
       <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:4px;">
         <div id="criteria-progress" style="font-size:11px;color:var(--text3)">평가 진행: 0/4</div>
       </div>
@@ -968,8 +978,8 @@ const CRITERIA = [
     ]
   },
   {
-    id:'author', label:'저자 분석', icon:'👤', color:'#4A1A7C', bg:'#F0E8FF',
-    desc:'현재 단행본 시장에서 저자 채널이 초도 판매의 핵심입니다. 저자가 직접 독자에게 연결될 수 있는 경로를 평가합니다.',
+    id:'author', label:'저자·브랜드 분석', icon:'👤', color:'#4A1A7C', bg:'#F0E8FF',
+    desc:'저자의 전문성·채널과 함께 ‘저자 브랜드’, 그리고 에이콘(출판사) 브랜드와의 적합성·시너지를 평가합니다. 시장을 견인할 저자의 파워를 봅니다.',
     items:[
       {id:'au1', label:'전문성·현장 경력',
         desc:'저자가 해당 분야 실무 전문가인지, 독자가 신뢰할 수 있는 근거가 있는지 평가합니다.',
@@ -996,6 +1006,11 @@ const CRITERIA = [
         ok:'이메일·미팅 빠른 응답, 수정 피드백 협조적, 일정 준수 의지 명확',
         tri:'소통 보통, 응답 다소 늦으나 협조적, 일정 협의 가능',
         ex:'연락 불규칙, 수정 거부 우려, 일정 준수 의지 불명확'},
+      {id:'au6', label:'저자·출판사 브랜드 가치',
+        desc:'저자의 누적 저작·수상·평판(저자 브랜드)과, 에이콘 전문 분야(IT·기술)와의 적합성·시너지를 평가합니다.',
+        ok:'분야 대표성 있는 저자 브랜드 보유, 또는 에이콘 브랜드와 높은 시너지(전문 독자층 일치)',
+        tri:'저자 브랜드는 형성 중이나 에이콘 분야와 부분 적합, 성장 가능성 있음',
+        ex:'저자 브랜드 약함 + 에이콘 전문 분야와 동떨어져 브랜드 시너지 낮음'},
     ]
   },
   {
@@ -1025,8 +1040,8 @@ const CRITERIA = [
     ]
   },
   {
-    id:'marketing', label:'마케팅 지원 분석', icon:'📢', color:'#B87030', bg:'#FFF3E0',
-    desc:'기획출판 도서의 63%가 적자인 현실에서 저자 채널 마케팅이 BEP 달성의 핵심입니다. 저자의 구체적 마케팅 계획을 확인합니다.',
+    id:'marketing', label:'마케팅·견인력 분석', icon:'📢', color:'#B87030', bg:'#FFF3E0',
+    desc:'시장을 견인할 ‘마케팅 파워와 노력’을 평가합니다. 저자의 구체적 마케팅 능력·의지와 더불어, 에이콘(출판사)의 마케팅 역량(채널·KDP·플랫폼) 연계 가능성을 함께 봅니다.',
     items:[
       {id:'ma1', label:'강의·스터디 연계 계획',
         desc:'출간 후 강의·스터디그룹을 통한 직접 판매는 초도 판매의 가장 확실한 방법입니다.',
@@ -1048,6 +1063,11 @@ const CRITERIA = [
         ok:'마케팅 비용 분담 의향 있음, 또는 자비출판 전환에 오픈',
         tri:'비용 분담에 일부 오픈, 협의 가능성 있음',
         ex:'모든 비용 출판사 부담 요구, 자비출판 거부 의사 명확'},
+      {id:'ma5', label:'출판사 마케팅 역량 연계',
+        desc:'에이콘의 마케팅 채널(온·오프라인 서점, 자체 플랫폼, KDP 글로벌, 뉴스레터·SNS)로 시장을 견인할 수 있는지 평가합니다.',
+        ok:'에이콘 채널·KDP·플랫폼과 시너지 큼, 출판사 마케팅만으로도 초도 견인 가능',
+        tri:'일부 채널 활용 가능하나 견인 효과 제한적, 저자 협업 필요',
+        ex:'주제·독자층이 에이콘 채널과 부적합해 출판사 마케팅 견인 어려움'},
     ]
   }
 ];
@@ -1232,8 +1252,8 @@ function getScores(){
 }
 
 // ── 가중치 (원고 10% · 저자 50% · 시장 10% · 마케팅 30%) ──
-const WEIGHTS = { manuscript:0.10, author:0.50, market:0.10, marketing:0.30 };
-const WEIGHT_PCT = { manuscript:10, author:50, market:10, marketing:30 };
+const WEIGHTS = { manuscript:0.20, author:0.30, market:0.20, marketing:0.30 };
+const WEIGHT_PCT = { manuscript:20, author:30, market:20, marketing:30 };
 
 // 카테고리 점수(%) — 미선택 항목은 모두 X(0점)로 처리. 전체 항목 수 기준.
 function catPct(scoresObj, totalItems){
