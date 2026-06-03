@@ -294,8 +294,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="menu-item" onclick="showView('projects')" id="mi-projects">📅 프로젝트 관리</div>
     <div class="menu-item" onclick="showView('sales')" id="mi-sales">💰 판매·손익 관리</div>
     <div class="menu-divider"></div>
-    <div class="menu-item" onclick="exportCSV()" style="color:rgba(255,255,255,.45);">⬇️ CSV 내보내기</div>
-    <div class="menu-item" onclick="clearAll()" style="color:rgba(255,100,100,.4);">🗑️ 전체 초기화</div>
+    <div class="menu-item" onclick="showView('guides')" id="mi-guides">📚 참고자료 · 가이드</div>
   </div>
   <div style="flex:1"></div>
   <div class="sidebar-stats">
@@ -624,6 +623,29 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   <div id="contracts-wrap"></div>
 </div>
 
+<div class="view" id="view-guides">
+  <div class="page-hdr">
+    <div><h2>📚 참고자료 · 출판 가이드</h2><div class="sub">출판 프로세스별 원고 작성 가이드라인과 자주 묻는 질문(Q&amp;A)</div></div>
+  </div>
+  <style>
+  .guide-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .guide-tab{padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:12px;font-weight:700;font-family:'Pretendard',sans-serif;cursor:pointer;transition:.15s;}
+  .guide-tab:hover{border-color:var(--blue);}
+  .guide-tab.on{background:var(--nav);color:#fff;border-color:var(--nav);}
+  .guide-sec{margin-bottom:15px;}
+  .guide-sec-h{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;}
+  .guide-sec ul{margin:0;padding-left:18px;font-size:12px;color:var(--text2);line-height:1.85;}
+  .guide-qa{padding:12px 0;border-bottom:1px solid var(--border);}
+  .guide-qa:last-child{border-bottom:none;}
+  .guide-q{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:6px;}
+  .guide-q::before{content:'Q ';color:var(--blue);font-family:'JetBrains Mono',monospace;}
+  .guide-a{font-size:12px;color:var(--text2);line-height:1.8;padding-left:18px;}
+  .guide-a::before{content:'A ';color:var(--teal);font-family:'JetBrains Mono',monospace;font-weight:700;margin-left:-18px;}
+  </style>
+  <div class="guide-tabs" id="guide-tabs"></div>
+  <div id="guide-body"></div>
+</div>
+
 </main>
 </div>
 
@@ -676,7 +698,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 <div class="modal-overlay" id="provider-modal">
   <div class="modal" style="width:min(560px,96vw)">
     <div class="modal-hdr">
-      <h3>⚙️ 공급자(에이콘온) 정보</h3>
+      <h3>⚙️ 공급자(출판사) 정보</h3>
       <div style="margin-left:auto"><button class="btn btn-primary btn-sm" onclick="saveProviderSettings()">💾 저장</button></div>
       <button class="modal-close" onclick="document.getElementById('provider-modal').classList.remove('open')">×</button>
     </div>
@@ -2015,7 +2037,154 @@ function showView(id){
   if(id==='list')renderList();
   if(id==='analytics')renderAnalytics();
   if(id==='dashboard')renderDashboard();
+  if(id==='guides')renderGuides();
 }
+// ── 참고자료(출판 가이드·Q&A) ──────────────────────────────────────
+const GUIDE_COMMON = {
+  label:'공통', color:'var(--nav)',
+  summary:'모든 출판 형태에 공통으로 적용되는 원고 작성·제출 기준입니다. (출판사 일반 원고 작성 가이드 라인 기준 · 필요시 담당 편집자와 조율)',
+  guide:[
+    {h:'문서 포맷·파일명', items:['파일 형식: MS Word(.docx) 또는 한글(.hwp) 권장.','파일명: [도서명]_Ch[번호]_[장제목].docx (예: 마음수업_Ch03_두려움.docx).','작업 중에는 장별 파일로 관리하고, 최종본은 하나의 파일로 정리합니다.']},
+    {h:'제목·번호 매기기', items:['장 제목(제목 1) / 절 제목(제목 2) / 필요시 제목 3까지 사용.','번호: 장 1, 2, 3… / 절 1.1, 1.2… / 세부 절 1.1.1, 1.1.2…','소제목이 2~3개일 때는 번호 없이 서술형 제목만 사용해도 됩니다. 전체 목차에서 번호가 섞이지 않도록 일관성을 유지합니다.']},
+    {h:'분량·구성', items:['A4 환산 100~120매(단행본 약 250~300페이지)가 기준입니다.','페이지 수보다 내용 충실도가 우선이며, 300~500쪽 내에서 균형을 맞춥니다.','각 장마다 요약 또는 인용을 삽입할 수 있습니다.']},
+    {h:'문장·표기', items:['간결하고 주어·서술어가 명확한 문장. 과도한 수식어·중복은 피합니다.','외래어: 한글 표기 후 괄호 병기 — 마케팅(marketing).','약어: 첫 사용 시 풀네임과 함께 — AIDD(Artificial Intelligence for Drug Discovery), 이후 약어만 사용.','강조는 큰따옴표 또는 진한 글씨(이탤릭·밑줄 자제). 4~6줄마다 단락 구분, 시제는 현재 시제 원칙.']},
+    {h:'이미지·코드·인용', items:['사진·표는 별도 첨부하고 본문에는 “그림 1-1”, “표 2-1”로 표기.','이미지 원본은 고해상도(JPG·PNG, 300dpi 이상)로 별도 제출 필수.','인용은 (저자명, 연도) 또는 각주 방식, 참고문헌은 별도 문서로 정리.','소스코드는 에이콘 홈페이지·깃허브로 제공(필요 시 다른 방식 협의 가능).']},
+    {h:'제출·일정·색인', items:['제출: 이메일 또는 구글 드라이브 폴더(제공 링크).','전체 원고 마감일과 장당 중간 점검 일정을 협의해 확정합니다.','찾아보기(색인)는 조판이 끝나 페이지가 확정된 뒤 편집자 안내에 따라 정리합니다(처음부터 작성하면 페이지 수정 부담이 큼).']}
+  ],
+  qa:[
+    {q:'원고는 어떤 파일 형식으로 보내나요?', a:'MS Word(.docx) 또는 한글(.hwp)을 권장합니다. 이미지는 300dpi 이상 원본을 본문과 별도로 제출해 주세요.'},
+    {q:'제목·소제목 번호는 어떻게 매기나요?', a:'장 1·2·3, 절 1.1·1.2, 세부 절 1.1.1 식을 권장합니다. 소제목이 2~3개면 번호 없이 서술형 제목도 가능하며, 전체 일관성이 가장 중요합니다.'},
+    {q:'약어는 어떻게 표기하나요?', a:'첫 사용 시 풀네임과 약어를 함께 표기합니다(예: AIDD(Artificial Intelligence for Drug Discovery)). 이후 본문에서는 약어만 사용해도 됩니다.'},
+    {q:'분량은 어느 정도가 적당한가요?', a:'핵심 내용과 충분한 설명·사례가 담긴다면 페이지 수 자체는 크게 중요하지 않습니다. 300~500쪽 내에서 내용 충실도를 우선해 구성하면 됩니다.'},
+    {q:'찾아보기(색인)는 언제 정리하나요?', a:'조판이 끝나 페이지가 확정된 뒤 편집자 안내에 따라 정리합니다. 처음부터 정리하면 페이지 수정 시 번거로움이 큽니다.'},
+    {q:'판매량은 어떻게 확인하나요?', a:'전자책은 출판사 자체 플랫폼 또는 분기별 보고로, POD는 예스24·교보문고·알라딘 등 판매처의 분기별 수량 리포트를 받아 전달합니다(요청 시 엑셀·PDF 정산서 제공).'},
+    {q:'검토 결과는 얼마나 걸리나요?', a:'접수 후 통상 2~3주 내 1차 평가 결과를 안내드립니다. 자료·문의 회신은 7영업일 이내를 원칙으로 합니다.'},
+    {q:'한 권 만드는 데 비용이 얼마나 드나요?', a:'종이책 1종 제작에 평균 약 1,740만 원이 투입됩니다(편집·디자인·조판·인쇄·마케팅 포함). 그래서 출판 형태를 함께 설계하는 것이 중요합니다.'}
+  ]
+};
+const GUIDES = [
+  {key:'self', label:'자비출판', color:'var(--teal)',
+   summary:'제작·마케팅 비용을 저자가 부담하고 판매 수익은 저자에게 귀속됩니다. 시장 반응을 빠르게 확인하거나 출간 전 과정을 주도하고 싶을 때 적합합니다.',
+   guide:[
+     {h:'적합한 경우', items:['시장 반응을 빠르게 확인하고 싶을 때.','저자가 출간 일정·방향을 주도하고 싶을 때.','강의·커뮤니티 등 자체 판매 채널이 있을 때 특히 유리합니다.']},
+     {h:'수익·유통 구조', items:['판매 수익은 저자에게 귀속되며, 에이콘의 전국 유통·물류 채널을 그대로 활용합니다.','정식 ISBN을 발급해 일반 도서와 동일하게 서점·온라인에 유통합니다.','acornON POD(주문형 출판)로 초기 재고 부담 없이 소량 출간이 가능합니다.']},
+     {h:'비용 구조 유의', items:['표준 패키지에는 전자책 제작·등록·유통 대행이 포함됩니다.','전문 편집·전문 감수(2,000원/페이지)·커스텀 표지·종이책 제작·킨들 출간 등은 선택(별도 비용) 항목입니다.','전문 편집은 텍스트 중심(정리·교정·교열·표기 통일)이며 조판은 별도 항목입니다.']}
+   ],
+   qa:[
+     {q:'전문 편집에 조판이 포함되나요?', a:'아니요. 전문 편집에는 원고 정리·교정·교열·표기 통일 등 텍스트 중심 편집만 포함되며, 조판(레이아웃·인디자인 작업)은 별도 항목으로 구분됩니다.'},
+     {q:'종이책 제작비는 어떻게 확정되나요?', a:'계약서의 견적 금액은 확정 금액이 아니라 예상 페이지 기준 예시입니다. 편집 완료 후 확정 페이지·인쇄 사양·표지 후가공·용지를 반영해 인쇄 발주 시점에 최종 금액을 확정하며, 모든 결정은 저자와 협의합니다.'},
+     {q:'표준 패키지와 기본 서비스는 다른가요?', a:'동일 개념입니다. 혼동을 막기 위해 “표준 패키지”로 명칭을 통일했습니다.'},
+     {q:'킨들 출간은 계약 후에 결정해도 되나요?', a:'계약 전·후 언제든 결정하셔도 괜찮습니다.'},
+     {q:'나중에 기획출판으로 전환할 수 있나요?', a:'가능합니다. 자비출판으로 시장 반응을 확인한 뒤 개정판을 기획출판으로 전환하는 전략을 권장합니다.'}
+   ]},
+  {key:'semi', label:'반기획출판', color:'var(--blue)',
+   summary:'출판사와 저자가 제작·마케팅 비용과 수익을 나눠 분담하는 형태입니다. 가중 점수 60~69% 구간에서 보완 조건부로 제안됩니다.',
+   guide:[
+     {h:'적합한 경우', items:['기획출판 기준에는 약간 못 미치지만 가능성이 있을 때.','출판사와 저자가 위험과 비용을 함께 나누고자 할 때.']},
+     {h:'비용·수익 분담', items:['제작·마케팅 비용 일부를 저자가 분담하고, 그에 비례해 수익을 배분합니다.','분담 비율은 기획안 평가 점수·예상 BEP·저자 채널 영향력을 바탕으로 협의해 정합니다.','수익 분배 50:50, 정산은 분기별·익월 말일 지급, 최소 지급액 30,000원이 기본입니다.']},
+     {h:'보완 조건', items:['지적된 보완 사항(원고 완성도·시장성·마케팅 계획 등)을 반영하는 것이 전제입니다.','보완 후 기획출판으로 전환하는 것도 가능합니다.']}
+   ],
+   qa:[
+     {q:'분담 비율은 어떻게 정하나요?', a:'기획안 평가 점수·예상 BEP·저자 채널 영향력을 종합해 협의로 결정합니다.'},
+     {q:'기획출판과 무엇이 다른가요?', a:'기획출판은 출판사가 비용 전액 부담, 반기획은 비용·수익을 나누는 구조입니다. 보완 후 기획출판 전환도 가능합니다.'},
+     {q:'재작업 비용은 누가 부담하나요?', a:'귀책 사유에 따릅니다. 출판사 편집 과정의 실수는 무상 수정, 저자의 원고 변경·추가 요청은 작업 분량에 따른 추가 비용이 청구됩니다.'}
+   ]},
+  {key:'gihoek', label:'기획출판', color:'var(--ok)',
+   summary:'출판사가 제작·마케팅 비용을 전액 부담하고 선인세·인세를 지급하는 형태입니다. 가중 점수 70% 이상에서 진행을 권장합니다.',
+   guide:[
+     {h:'적합한 경우', items:['가중 점수 70% 이상으로 기획출판 진행이 권장될 때.','출판사가 비용을 전액 부담하고 선인세·인세를 지급합니다.']},
+     {h:'시장 현실', items:['실제 데이터 기준 기획출판 도서의 약 63%가 손실을 기록합니다.','BEP 달성률 약 35%, 평균 소진율 약 47% 수준입니다.','그래서 저자 채널 마케팅과 KDP 글로벌 병행이 BEP 달성의 핵심입니다.']},
+     {h:'계약·품질 기준', items:['배타적발행권 및 출판권 설정계약을 체결하며, 선인세·인세율·계약 기간을 명시합니다.','품질 기준: 맞춤법·문법 오류율, 기술 오류·오탈자 최소화, 감수 피드백 반영률, 내부 품질 기준(인쇄·전자책 호환성). 정량 수치보다 출판사–저자 신뢰 기반 조율을 우선합니다.']}
+   ],
+   qa:[
+     {q:'인세는 부가세 포함 금액인가요?', a:'수령 주체에 따라 다릅니다. 법인은 부가가치세 대상, 개인은 사업소득으로 분류되어 지급 시 원천징수 3.3%를 공제한 후 지급됩니다.'},
+     {q:'전문 감수자는 어떻게 선정되나요?', a:'해당 분야(IT·BT 등) 실무·학계 전문가로 섭외합니다(저자 풀 또는 저자 추천). 기술 정확성·용어·서술 적합성 검수와 필요 시 Q&A 피드백을 제공하며, 기본은 전체 원고 1회 검토 기준입니다.'},
+     {q:'선인세와 인세율은 어떻게 되나요?', a:'도서 성격·예상 판매량에 따라 협의하며, “계약서 관리”에서 조건을 명시해 발행합니다. 저작권사용료는 정가 × 인세율 × 판매부수로 산정합니다.'},
+     {q:'KDP 글로벌 출판도 함께 하나요?', a:'권장합니다. 국내 소진율 47%의 한계를 넘어 190개국 독자에게 추가 도달할 수 있습니다.'}
+   ]},
+  {key:'amazon', label:'아마존 KDP 대행', color:'var(--gold)',
+   summary:'에이콘이 KDP 계정 설정부터 영문 메타데이터·표지·AMS 광고까지 원스톱으로 대행하는 글로벌 출판 채널입니다(기본 패키지 135만 원).',
+   guide:[
+     {h:'서비스 범위', items:['KDP 계정 설정·영문 메타데이터·표지·내지 변환·AMS 광고 운영까지 원스톱 대행(기본 패키지 135만 원).','명시되지 않은 작업은 별도 비용이 발생합니다.']},
+     {h:'광고비·정산', items:['서비스 비용에 AMS 광고비 60만 원이 포함됩니다.','초과 광고비는 저자 부담이며 CPC(클릭당 과금) 방식으로, 특정 성과를 보증하지 않습니다.','KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않습니다.']},
+     {h:'글로벌 적합성', items:['KDP의 강점은 영어권 시장이므로 영문 번역·메타데이터 최적화를 함께 진행할 때 효과가 큽니다.','한국 특화 주제는 번역 효과가 낮을 수 있어 글로벌 수요 주제를 우선 검토합니다.','원고의 오탈자·사실 오류·저작권 등 내용 책임은 저자에게 있습니다.']}
+   ],
+   qa:[
+     {q:'킨들 출간은 언제 결정하나요?', a:'계약 전·후 언제든 결정하셔도 괜찮습니다.'},
+     {q:'한국어 책도 KDP에 올릴 수 있나요?', a:'가능하지만 KDP의 강점은 영어권 시장입니다. 영문 번역·메타데이터 최적화를 함께 진행할 때 효과가 큽니다.'},
+     {q:'광고비 환불이 되나요?', a:'KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않으며, 광고 성과는 보증되지 않습니다.'},
+     {q:'인세는 어떻게 받나요?', a:'KDP 로열티는 아마존 정책에 따라 지급되며, 정산 방식은 계약 시 안내드립니다.'}
+   ]}
+];
+// 출판 형태(타입) → 가이드 항목
+function guideForType(t){ return GUIDES.find(g=>g.key===t) || GUIDE_COMMON; }
+function guideMiniHTML(t){
+  const g=guideForType(t);
+  const sec=arr=>arr.map(x=>'<div class="guide-sec"><div class="guide-sec-h">'+x.h+'</div><ul>'+x.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>').join('');
+  return '<div style="font-size:11.5px;font-weight:700;color:'+(g.color||'var(--nav)')+';margin-bottom:8px">📝 '+g.label+' 가이드</div>'
+    +(g.summary?'<div style="font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:10px">'+g.summary+'</div>':'')
+    +sec(g.guide)
+    +'<div style="font-size:11.5px;font-weight:700;color:var(--nav);margin:12px 0 8px;padding-top:10px;border-top:1px dashed var(--border)">📄 공통 원고 작성 가이드</div>'
+    +sec(GUIDE_COMMON.guide);
+}
+function qaMiniHTML(t){
+  const g=guideForType(t);
+  const blk=qa=>qa.map(x=>'<div class="guide-qa"><div class="guide-q">'+x.q+'</div><div class="guide-a">'+x.a+'</div></div>').join('');
+  return '<div style="font-size:11.5px;font-weight:700;color:'+(g.color||'var(--nav)')+';margin-bottom:8px">💬 '+g.label+' Q&A</div>'
+    +blk(g.qa)
+    +'<div style="font-size:11.5px;font-weight:700;color:var(--nav);margin:12px 0 8px;padding-top:10px;border-top:1px dashed var(--border)">💬 공통 Q&A</div>'
+    +blk(GUIDE_COMMON.qa);
+}
+// 오른쪽 탭(안내/가이드/Q&A) 전환
+function crefTab(btn,name){
+  const root=btn.closest('.detail-section'); if(!root) return;
+  root.querySelectorAll('.cref-tab').forEach(b=>{b.style.color='var(--text3)';b.style.borderBottomColor='transparent';});
+  btn.style.color='var(--blue)'; btn.style.borderBottomColor='var(--blue)';
+  root.querySelectorAll('.cref-panel').forEach(p=>{p.style.display=(p.getAttribute('data-cref')===name?'block':'none');});
+}
+// ── 계약 조항(항목별) 편집 ──────────────────────────────────────────
+function clauseEditorHTML(c){
+  const E=x=>String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  const arr=(c&&c.clauses)||[];
+  if(!arr.length) return '<div style="font-size:12px;color:var(--text3)">조항이 없습니다. ‘조항 추가’ 또는 ‘기본 문안 재생성’으로 시작하세요.</div>';
+  return arr.map((a,i)=>'<div style="border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:8px;background:#fff">'
+    +'<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">'
+    +'<input value="'+E(a.h)+'" oninput="clauseEdit('+i+",'h',this.value)\" style=\"flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:12px;font-weight:700;font-family:'Pretendard',sans-serif\">"
+    +'<button class="btn btn-ghost btn-sm" onclick="moveClause('+i+',-1)" title="위로">▲</button>'
+    +'<button class="btn btn-ghost btn-sm" onclick="moveClause('+i+',1)" title="아래로">▼</button>'
+    +'<button class="btn btn-danger btn-sm" onclick="delClause('+i+')" title="삭제">✕</button>'
+    +'</div>'
+    +'<textarea oninput="clauseEdit('+i+",'p',this.value)\" style=\"width:100%;min-height:64px;border:1.5px solid var(--border);border-radius:6px;padding:8px;font-size:12px;font-family:'Pretendard',sans-serif;line-height:1.7;resize:vertical\">"+E(a.p)+'</textarea>'
+    +'</div>').join('');
+}
+function refreshClauseList(){ const el=document.getElementById('clause-list'); if(el) el.innerHTML=clauseEditorHTML(currentContract); }
+function clauseEdit(i,field,val){ if(!currentContract||!currentContract.clauses||!currentContract.clauses[i]) return; currentContract.clauses[i][field]=val; }
+function addClause(){ if(!currentContract) return; currentContract.clauses=currentContract.clauses||[]; currentContract.clauses.push({h:'제'+(currentContract.clauses.length+1)+'조 (제목)',p:''}); refreshClauseList(); }
+function delClause(i){ if(!currentContract||!currentContract.clauses) return; currentContract.clauses.splice(i,1); refreshClauseList(); }
+function moveClause(i,d){ if(!currentContract||!currentContract.clauses) return; const a=currentContract.clauses,j=i+d; if(j<0||j>=a.length) return; const t=a[i];a[i]=a[j];a[j]=t; refreshClauseList(); }
+function reseedClauses(){ if(!currentContract) return; if(!confirm('현재 입력된 금액·조건을 반영하여 기본 계약 문안으로 다시 생성합니다. 직접 수정한 조항 내용은 사라집니다. 진행할까요?')) return; currentContract.clauses=defaultClauses(currentContract); refreshClauseList(); }
+
+let curGuideKey = 'common';
+function guideSet(k){ curGuideKey=k; renderGuides(); }
+function renderGuides(){
+  const tabs=document.getElementById('guide-tabs'); if(!tabs) return;
+  const list=[{key:'common',label:'공통 가이드'}].concat(GUIDES.map(g=>({key:g.key,label:g.label})));
+  tabs.innerHTML=list.map(t=>`<button class="guide-tab${t.key===curGuideKey?' on':''}" onclick="guideSet('${t.key}')">${t.label}</button>`).join('');
+  const g = curGuideKey==='common' ? GUIDE_COMMON : GUIDES.find(x=>x.key===curGuideKey);
+  const c = g.color||'var(--nav)';
+  const guideCard='<div class="form-card"><div class="form-card-hdr" style="background:'+c+'">'
+    +'<h3>📝 원고 작성 가이드라인 — '+g.label+'</h3></div><div class="form-body">'
+    +g.guide.map(sec=>'<div class="guide-sec"><div class="guide-sec-h">'+sec.h+'</div><ul>'
+      +sec.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>').join('')
+    +'</div></div>';
+  const qaCard='<div class="form-card"><div class="form-card-hdr" style="background:'+c+'">'
+    +'<h3>💬 자주 묻는 질문 (Q&A) — '+g.label+'</h3></div><div class="form-body">'
+    +g.qa.map(qa=>'<div class="guide-qa"><div class="guide-q">'+qa.q+'</div><div class="guide-a">'+qa.a+'</div></div>').join('')
+    +'</div></div>';
+  const sum = g.summary?'<div style="font-size:12px;color:var(--text2);background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:14px;line-height:1.75">'+g.summary+'</div>':'';
+  document.getElementById('guide-body').innerHTML = sum + guideCard + qaCard;
+}
+
 function exportCSV(){
   const rows=[['ID','도서명','저자','저자전화','저자이메일','저자현직업','장르','접수경로','정가','원고상태','1차자동판정','최종판정','가중점수','담당자','접수일','등록일','수정이력수','원고%','저자%','시장%','마케팅%'],...proposals.map(p=>{const ws=weightedScore(p.scores||{});const total=(p.scorePct!==undefined&&p.scorePct!==null&&p.scorePct!=='')?p.scorePct:ws.total;return [p.id,`"${p.title}"`,`"${p.author}"`,`"${p.authorTel||''}"`,`"${p.authorEmail||''}"`,`"${p.authorJob||''}"`,`"${gnDisp(p)}"`,`"${chDisp(p)}"`,p.price||'',p.msStatus||'',p.autoDecision||'',p.decision||'pending',total+'%',p.reviewer||'',p.date||'',p.regDate||(p.createdAt?p.createdAt.slice(0,10):''),(p.history||[]).length,...CRITERIA.map(cat=>{const pct=catPct(p.scores?.[cat.id], cat.items.length);return pct?pct.pct+'%':'0%';})];})];
   const csv=rows.map(r=>r.join(',')).join('\n');
@@ -2603,6 +2772,7 @@ showView = function(id){
   if(id==='sales') renderSales();
   if(id==='quotes') renderQuotes();
   if(id==='contracts') renderContracts();
+  if(id==='guides') renderGuides();
 };
 
 
@@ -2618,16 +2788,22 @@ const QTYPES = {
 };
 const QTYPE_FALLBACK = {label:'자비출판',short:'자비',cls:'qt-self',color:'#0A7860'};
 const qtype = t => QTYPES[t] || QTYPE_FALLBACK;   // 구버전 agency 등 안전 처리
-const QUOTE_PROVIDER_KEY = 'acorn_quote_provider_v1';
-const DEFAULT_PROVIDER = {
-  company:'주식회사 에이콘온', ceo:'옥경석',
-  addr:'서울시 양천구 국회대로 287 (목동) 3층',
+const QUOTE_PROVIDER_KEY = 'acorn_quote_provider_v2';
+// 두 법인 공통 정보 (주소·연락처·담당자 동일)
+const PROVIDER_SHARED = {
+  addr:'(07547) 서울특별시 강서구 양천로 583 우림블루나인비즈니스센터 A동 2009호',
   tel:'02-2653-7600 / 02-2653-0433',
   email:'acornpub@acornpub.co.kr',
-  bizno:'454-87-03049',
-  bank:'농협은행 301-0357-5709-41 (주식회사 에이콘온)',
-  manager:''
+  manager:'최하늘'
 };
+// 법인별 상이 항목: 회사명·대표·사업자번호·입금계좌
+const PROVIDER_PRESETS = {
+  acornon: Object.assign({key:'acornon', company:'주식회사 에이콘온', ceo:'옥경석',
+    bizno:'454-87-03049', bank:'농협은행 301-0357-5709-41 (주식회사 에이콘온)'}, PROVIDER_SHARED),
+  acornpub: Object.assign({key:'acornpub', company:'에이콘출판(주)', ceo:'황영주',
+    bizno:'111-81-27685', bank:'농협 317-0011-7051-11 (에이콘 출판)'}, PROVIDER_SHARED)
+};
+const DEFAULT_PROVIDER = Object.assign({}, PROVIDER_PRESETS.acornon);
 function getProvider(){ try{return Object.assign({},DEFAULT_PROVIDER,JSON.parse(localStorage.getItem(QUOTE_PROVIDER_KEY)||'{}'));}catch(e){return Object.assign({},DEFAULT_PROVIDER);} }
 function saveProvider(p){ localStorage.setItem(QUOTE_PROVIDER_KEY,JSON.stringify(p)); }
 
@@ -2836,6 +3012,15 @@ function renderQuoteEditor(){
       <h4>💵 합계</h4>
       <div id="q-totals-box"></div>
     </div>
+  </div>
+
+  <div class="detail-section" style="border-color:${provColor};padding:0;overflow:hidden">
+    <div style="display:flex;border-bottom:1px solid var(--border)">
+      <button type="button" class="cref-tab" onclick="crefTab(this,'guide')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--blue);color:var(--blue);font-family:'Pretendard',sans-serif">📝 원고 가이드</button>
+      <button type="button" class="cref-tab" onclick="crefTab(this,'qa')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);font-family:'Pretendard',sans-serif">💬 Q&A</button>
+    </div>
+    <div class="cref-panel" data-cref="guide" style="padding:12px;max-height:300px;overflow:auto">${guideMiniHTML(q.type)}</div>
+    <div class="cref-panel" data-cref="qa" style="display:none;padding:12px;max-height:300px;overflow:auto">${qaMiniHTML(q.type)}</div>
   </div>`;
   renderQuoteItems();
   refreshQuoteTotals();
@@ -2983,8 +3168,17 @@ function newQuoteFromManager_relink(pid){
 // ── 제공자(공급자) 정보 설정 ────────────────────────────────────────
 function openProviderSettings(){
   const p=getProvider();
+  const curKey = p.key || ((p.company||'').indexOf('에이콘출판')>=0 ? 'acornpub' : 'acornon');
   document.getElementById('prov-body').innerHTML=`
-    <div class="q-fields">
+    <div class="field"><label>공급자(법인) 선택</label>
+      <select id="pv-preset" onchange="applyProviderPreset(this.value)">
+        <option value="acornon"${curKey==='acornon'?' selected':''}>주식회사 에이콘온</option>
+        <option value="acornpub"${curKey==='acornpub'?' selected':''}>에이콘출판(주)</option>
+      </select>
+      <span style="font-size:10px;color:var(--text3);margin-top:4px">법인을 선택하면 회사명·대표·사업자번호·입금계좌가 자동 반영됩니다. (주소·연락처·담당자는 두 법인 공통)</span>
+    </div>
+    <input type="hidden" id="pv-key" value="${curKey}">
+    <div class="q-fields" style="margin-top:10px">
       <div class="field"><label>회사명</label><input id="pv-company" value="${p.company}"></div>
       <div class="field"><label>대표</label><input id="pv-ceo" value="${p.ceo}"></div>
     </div>
@@ -2998,8 +3192,16 @@ function openProviderSettings(){
     <div class="field" style="margin-top:10px"><label>기본 담당자</label><input id="pv-manager" value="${p.manager}"></div>`;
   document.getElementById('provider-modal').classList.add('open');
 }
+function applyProviderPreset(key){
+  const preset=PROVIDER_PRESETS[key]; if(!preset) return;
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value=v;};
+  set('pv-key',key); set('pv-company',preset.company); set('pv-ceo',preset.ceo);
+  set('pv-bizno',preset.bizno); set('pv-bank',preset.bank); set('pv-addr',preset.addr);
+  set('pv-tel',preset.tel); set('pv-email',preset.email); set('pv-manager',preset.manager);
+}
 function saveProviderSettings(){
   saveProvider({
+    key:(document.getElementById('pv-key')||{}).value||'acornon',
     company:document.getElementById('pv-company').value, ceo:document.getElementById('pv-ceo').value,
     bizno:document.getElementById('pv-bizno').value,
     addr:document.getElementById('pv-addr').value, tel:document.getElementById('pv-tel').value,
@@ -3143,7 +3345,7 @@ function openContractEditor(proposalId, contractId){
       proposalId: proposalId||'',
       contractNo:newContractNo(),
       date:new Date().toISOString().slice(0,10),
-      place:'서울시 양천구 국회대로 287 (목동) 주식회사 에이콘온',
+      place:getProvider().addr,
       type,
       aName:(p&&p.author)||'', aRRN:'', aAddr:'', aTel:(p&&p.authorTel)||'', aEmail:(p&&p.authorEmail)||'', aJob:(p&&p.authorJob)||'',
       title:(p&&p.title)||'', pages:guessPages, genre:(p&&p.genre)||'', pubDate:'', trim:'188*235mm', runCount:1000, format:'전자책(EPUB)',
@@ -3162,7 +3364,7 @@ function openContractEditor(proposalId, contractId){
   document.getElementById('contract-modal').classList.add('open');
 }
 
-function cf(field,val){ if(!currentContract)return; currentContract[field]=val; if(field==='type') renderContractEditor(); }
+function cf(field,val){ if(!currentContract)return; currentContract[field]=val; if(field==='type'){ currentContract.clauses=null; renderContractEditor(); } }
 function cAmzWords(){
   const est=Math.round((+currentContract.korChars||0)*0.4);
   currentContract.engWords=est; currentContract.wordOver=Math.max(0,Math.floor((est-20000)/1000));
@@ -3172,6 +3374,7 @@ function cAmzWords(){
 
 function renderContractEditor(){
   const c=currentContract; const ty=ctype(c.type);
+  if(!Array.isArray(c.clauses)||!c.clauses.length){ c.clauses=defaultClauses(c); }
   const typeBtns=Object.entries(CTYPES).map(([k,v])=>
     `<button type="button" class="qtype-btn ${c.type===k?'active':''}" style="--qc:${v.color}" onclick="cf('type','${k}')">${v.label}</button>`).join('');
   const fin = renderContractFinanceFields(c);
@@ -3216,17 +3419,32 @@ function renderContractEditor(){
 
   ${fin}
 
+  <div class="detail-section"><h4>📋 계약 조항 (항목별 수정 가능)
+    <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="reseedClauses()">↻ 금액·조건 반영(기본 문안 재생성)</button>
+  </h4>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px">각 조의 <strong>제목과 내용을 직접 수정</strong>할 수 있습니다. 인쇄 시 아래 조항이 그대로 출력됩니다. 금액 필드를 바꾼 뒤에는 ‘기본 문안 재생성’으로 조항 속 금액을 갱신할 수 있습니다.</div>
+    <div id="clause-list">${clauseEditorHTML(c)}</div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="addClause()">＋ 조항 추가</button>
+  </div>
+
   <div class="q-grid2">
     <div class="detail-section"><h4>📝 특약사항 / 비고</h4>
       <textarea style="width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:6px;padding:10px;font-size:12px;font-family:'Pretendard',sans-serif;line-height:1.7;resize:vertical" oninput="cf('special',this.value)" placeholder="추가 합의사항을 입력하면 계약서 특약사항란에 인쇄됩니다.">${c.special||''}</textarea>
       <textarea placeholder="내부 메모(인쇄 시 미포함)" style="width:100%;min-height:50px;margin-top:8px;border:1.5px solid var(--border);border-radius:6px;padding:8px;font-size:12px;font-family:'Pretendard',sans-serif;resize:vertical" oninput="cf('memo',this.value)">${c.memo||''}</textarea>
     </div>
-    <div class="detail-section" style="border-color:${ty.color}"><h4>ℹ️ 안내</h4>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        · ‘계약완료(서명)’로 저장하면 해당 도서가 <strong>프로젝트 관리</strong>에 자동 등록되고 계약 단계가 완료 처리됩니다.<br>
-        · 인쇄 시 ${ty.doc} 전문이 변수와 함께 출력됩니다.<br>
-        · 공급자(에이콘온) 정보·사업자번호는 ‘견적서 관리 → 공급자 정보’에서 설정합니다.
+    <div class="detail-section" style="border-color:${ty.color};padding:0;overflow:hidden">
+      <div style="display:flex;border-bottom:1px solid var(--border)">
+        <button type="button" class="cref-tab" onclick="crefTab(this,'info')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--blue);color:var(--blue);font-family:'Pretendard',sans-serif">ℹ️ 안내</button>
+        <button type="button" class="cref-tab" onclick="crefTab(this,'guide')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);font-family:'Pretendard',sans-serif">📝 원고 가이드</button>
+        <button type="button" class="cref-tab" onclick="crefTab(this,'qa')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);font-family:'Pretendard',sans-serif">💬 Q&A</button>
       </div>
+      <div class="cref-panel" data-cref="info" style="padding:12px;font-size:11px;color:var(--text2);line-height:1.8">
+        · ‘계약완료(서명)’로 저장하면 해당 도서가 <strong>프로젝트 관리</strong>에 자동 등록되고 계약 단계가 완료 처리됩니다.<br>
+        · 인쇄 시 ${ty.doc} 전문이 위 ‘계약 조항’ 내용 그대로 출력됩니다.<br>
+        · 공급자(출판사) 정보·사업자번호는 ‘견적서 관리 → 공급자 정보’에서 설정합니다.
+      </div>
+      <div class="cref-panel" data-cref="guide" style="display:none;padding:12px;max-height:340px;overflow:auto">${guideMiniHTML(c.type)}</div>
+      <div class="cref-panel" data-cref="qa" style="display:none;padding:12px;max-height:340px;overflow:auto">${qaMiniHTML(c.type)}</div>
     </div>
   </div>`;
 }
@@ -3453,6 +3671,7 @@ function buildContractBody(c,prov,ty){
   const bookInfo=`<h2>대상 도서 정보</h2>
     <p>· 도서명(가제): ${blank(c.title)} &nbsp; · 예상 페이지수: ${c.pages||'____'}페이지 &nbsp; · 장르/분야: ${blank(c.genre)}</p>
     <p>${c.type!=='amazon'?`· 판형: ${blank(c.trim)} &nbsp; `:''}${(c.type==='semi'||c.type==='gihoek')?`· 인쇄 부수: ${c.runCount||'____'}부 &nbsp; `:''}${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원 &nbsp; `:''}· 예상 출간일: ${blank(c.pubDate)}</p>`;
+  const amzInfo=`<h2>대상 도서 정보</h2><p>· 제목: ${blank(c.title)} &nbsp; · 페이지: ${c.pages||'____'}쪽 &nbsp; ${c.korChars?`· 한글 약 ${won(c.korChars)}자 (영문 추정 ${won(c.engWords||Math.round(c.korChars*0.4))}단어)`:''} &nbsp; ${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원`:''}</p>`;
   const special = c.special?`<h2>특약사항</h2><div class="ct-note">${E(c.special)}</div>`:'';
   const sign=`<div class="ct-date">계약일자: ${c.date?E(c.date):'________년 ___월 ___일'}</div>
     <div class="ct-sign">
@@ -3462,65 +3681,78 @@ function buildContractBody(c,prov,ty){
     <p style="margin-top:14px;font-size:10.5px;color:#555">본 계약의 성립을 증명하기 위하여 계약서 2부를 작성하고, 양 당사자가 각각 서명·날인하여 각 1부씩 보관한다.</p>`;
   const head=`<h1>${E(ty.doc)}<span class="ct-tag">${ty.label}</span></h1><div class="ct-sub">계약번호 ${E(c.contractNo)} · 작성일 ${E(c.date)}</div>
     <div class="ct-party">${authorTbl}${pubTbl}</div>`;
+  const clauses = clausesHTML(c);
 
-  if(c.type==='self'){
-    return head+bookInfo+`
-    <h2>제1조 (계약의 목적)</h2><p>본 계약은 저작자의 저작물을 전자책(EPUB) 등으로 발행하기 위하여 출판사가 자비출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.</p>
-    <h2>제2조 (제공 서비스 및 비용)</h2>
-    <p><b>표준 패키지: ${won(c.baseAmount)}원</b> (전자책 제작·등록·유통 대행 포함) / 월 관리비 ${won(c.monthlyFee)}원(저자 플랫폼 사용, 최소 12개월).</p>
-    <p>선택 서비스(별도 비용): 전문 편집(페이지당), 전문 감수(2,000원/페이지), 커스텀 표지(800,000원), 아마존 킨들 출간(2,000,000원), 종이책 제작 등은 특약사항에 따른다.</p>
-    <h2>제3조 (비용 및 지급 조건)</h2><p>계약금 30%(계약 후 7일 이내) · 중도금 40%(도서 완성 후) · 잔금 30%(판매 시작 후). 월 관리비는 매월 말일 지급.</p>
-    <h2>제4조 (제작 일정)</h2><p>총 소요 기간은 원고 제출 후 3개월로 한다.</p>
-    <h2>제5조 (사후 관리)</h2><p>저자 전용 대시보드(실시간 판매·인세 현황), 월간 판매·인세 리포트, 월 1회 마케팅 컨설팅을 제공한다.</p>
-    <h2>제6조 (저작권·의무·해지·면책)</h2><p>원고의 모든 저작권은 저작자에게 귀속한다. 출판사는 약정 서비스의 충실한 이행과 일정(3개월)·품질을 보장하며, 원고 내용으로 인한 법적 분쟁·시장 상황·플랫폼 정책 변경·불가항력에 대하여는 면책된다. 손해배상 책임은 계약 금액 범위 내로 제한한다.</p>
-    <h2>제7조 (기타)</h2><p>비밀유지·권리양도 금지·개인정보 보호를 준수하며, 분쟁은 서울중앙지방법원을 관할로 한다. 명시되지 아니한 사항은 양 당사자가 협의하여 정한다.</p>
-    ${special}${sign}`;
-  }
-  if(c.type==='semi'){
-    const author=Math.round((+c.totalCost||0)*((+c.authorShare||50)/100));
-    return head+bookInfo+`
-    <h2>제1조 (계약의 목적)</h2><p>본 계약은 저작자가 저작물 내용과 일부 비용을 제공하고 출판사가 기획·제작·마케팅·유통 서비스를 제공하는 반기획출판에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.</p>
-    <h2>제2조 (출판사 제공 서비스)</h2><p>기획(방향성·시장성 분석), 편집(전문 편집·교정·교열), 디자인(표지 3안·본문 레이아웃), 인쇄·제본, ISBN 등록 및 국립중앙도서관 납본, 온·오프라인 서점 유통(교보문고·예스24·알라딘·리디북스 등), 홍보·마케팅, 판매·인세 관리를 표준 패키지로 제공한다.</p>
-    <h2>제3조 (비용 분담 및 지급)</h2>
-    <p>총 제작 비용: ${won(c.totalCost)}원 (VAT 별도). 분담 — 출판사 ${100-(c.authorShare||50)}% / 저작자 ${c.authorShare||50}%. <b>저작자 부담액: ${won(author)}원.</b></p>
-    <p>지급: 계약금 40%(계약 후 7일 이내) · 중도금 40%(편집 완료 후) · 잔금 20%(출간 시). 월 관리비 ${won(c.monthlyFee)}원.</p>
-    <h2>제4조 (수익 분배 및 인세)</h2><p>수익 분배는 출판사 50% / 저작자 50%를 원칙으로 한다(기본 계약 ${c.termYears||5}년). 수익 기준 — 교보문고 정가의 60%, 대형 온라인 서점 65%, 기타 85%, 전자책 70%. 정산은 분기별, 익월 말일 지급하며 최소 지급액은 30,000원이다.</p>
-    <h2>제5조 (저작권)</h2><p>원고의 모든 저작권은 저작자에게 귀속하며, 출판사는 출판·유통에 필요한 권리만 ${c.termYears||5}년간 행사한다.</p>
-    <h2>제6조 (제작 일정 및 사후 관리)</h2><p>총 소요 기간은 원고 제출 후 6개월이며, 유통 관리 최소 2년, 출간 후 3개월 집중 홍보, 저자 대시보드 및 정기 리포트를 제공한다.</p>
-    <h2>제7조 (기타)</h2><p>비밀유지·개인정보 보호를 준수하며, 명시되지 아니한 사항은 협의하여 정한다.</p>
-    ${special}${sign}`;
-  }
   if(c.type==='gihoek'){
-    return head+`
-    <p style="margin:6px 0">위 저작물의 저작재산권자(이하 '저작권자')와 이를 전자책 등으로 발행하거나 종이책으로 출판하고자 하는 발행사(주식회사 에이콘온)는 다음과 같이 배타적발행권 및 출판권 설정계약을 체결한다.</p>
-    ${bookInfo}
-    <h2>제1조 (목적)</h2><p>이 계약은 위 저작물에 대한 전자책 등의 배타적발행권 및 종이책 출판권 설정에 따른 저작권자와 발행사의 권리·의무를 정함을 목적으로 한다.</p>
-    <h2>제3조 (배타적발행권 및 출판권의 설정)</h2><p>저작권자는 발행사에게 위 저작물에 대한 배타적발행권 및 출판권을 설정한다.</p>
-    <h2>제6조 (존속기간)</h2><p>배타적발행권 및 출판권은 계약일로부터 최초 발행일까지, 그리고 최초 발행일로부터 ${c.termYears||5}년까지 효력을 가지며, 만료 3개월 전까지 종료 통보가 없으면 동일 조건으로 ${c.termYears||5}년 자동 연장된다.</p>
-    <h2>제7조 (완전원고의 인도 및 발행)</h2><p>저작권자는 ${c.manuscriptDate?E(c.manuscriptDate):'____년 ___월 ___일'}까지 완전원고를 인도하며, 발행사는 인도일로부터 6개월 이내(특약 없을 시 9개월)에 발행한다.</p>
-    <h2>제11조 (비용 부담)</h2><p>위 저작물의 기획·편집·제작·홍보·광고 및 판매에 따른 모든 비용은 발행사가 부담한다.</p>
-    <h2>제12조 (이용 방법 및 조건)</h2><p>매체 형식: 전자책/오디오북/종이책. 전자책 정산: 판매정산액의 ${c.settleRate||70}%, 예상정가 적용 ${c.priceRate||100}%.</p>
-    <h2>제13조 (저작권사용료)</h2><p>발행사는 <b>도서정가의 ${c.royaltyRate||10}% × 판매부수</b>를 저작권사용료로 지급한다. 인세가 선급금을 초과한 시점부터 3개월마다 매출 현황을 통보하고 통보 후 30일 이내 지급한다. 납본·증정·서평용 부수는 면제한다.</p>
-    <h2>제14조 (선급금)</h2><p>계약 성립일로부터 10영업일 이내 계약금 ${won(c.advContract)}원, 원고 완료 시 중도금 ${won(c.advMiddle)}원, 초판 출간일 기준 잔금 ${won(c.advBalance)}원을 지급하며, 이후 저작권사용료에서 선급금을 공제한다.</p>
-    <h2>제16조 (발행데이터 권리)</h2><p>발행사의 노력과 비용으로 만들어진 발행데이터(판면파일 포함)의 권리는 발행사에 귀속한다.</p>
-    <h2>제18조 (해지·해제)</h2><p>일방이 계약을 위반한 경우 상대방은 1개월 이상의 기간을 정하여 이행을 요구할 수 있고, 불이행 시 해지·해제 및 손해배상을 청구할 수 있다.</p>
-    <h2>제25조 (분쟁 해결)</h2><p>분쟁 시 한국저작권위원회의 조정을 받을 수 있으며, 조정 불성립 시 제1심 법원은 제소 당사자 소재지 법원으로 한다.</p>
-    <h2>제26조 (기획출판 특약)</h2><p>본 계약은 발행사 주도의 기획출판이며, 발행사는 시장성·완성도 향상을 위해 구성·편집 방향을 제안하고 저작권자와 협의하여 결정한다.</p>
-    <h2>제27조 (해외 출판·번역권 특약)</h2><p>발행사는 해외 출판사와의 계약을 중개할 수 있으며, 해외 출판권 수익은 저작권자와 발행사가 50:50으로 배분한다.</p>
-    <h2>제28조 (2차적저작물 특약)</h2><p>발행사는 오디오북 제작 권리를 가지며, 오디오북 판매액의 ${c.audioRate||15}%를 저작권사용료로 지급한다.</p>
-    ${special}${sign}`;
+    const intro=`<p style="margin:6px 0">위 저작물의 저작재산권자(이하 '저작권자')와 이를 전자책 등으로 발행하거나 종이책으로 출판하고자 하는 발행사(${E(prov.company)})는 다음과 같이 배타적발행권 및 출판권 설정계약을 체결한다.</p>`;
+    return head+intro+bookInfo+clauses+special+sign;
   }
-  // amazon
+  if(c.type==='amazon'){
+    return head+amzInfo+clauses+special+sign;
+  }
+  return head+bookInfo+clauses+special+sign;
+}
+
+// 조항 배열 → 인쇄용 HTML (c.clauses 없으면 기본 문안)
+function clausesHTML(c){
+  const E=x=>String(x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const arr=(c.clauses&&c.clauses.length)?c.clauses:defaultClauses(c);
+  return arr.map(a=>'<h2>'+E(a.h)+'</h2><p>'+E(a.p).replace(/\n/g,'<br>')+'</p>').join('');
+}
+
+// 출판 형태별 기본 계약 조항 (현재 입력값 반영)
+function defaultClauses(c){
+  const t=c.type;
+  if(t==='self'){
+    return [
+      {h:'제1조 (계약의 목적)', p:'본 계약은 저작자의 저작물을 전자책(EPUB) 등으로 발행하기 위하여 출판사가 자비출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.'},
+      {h:'제2조 (제공 서비스 및 비용)', p:'표준 패키지: '+won(c.baseAmount)+'원 (전자책 제작·등록·유통 대행 포함) / 월 관리비 '+won(c.monthlyFee)+'원(저자 플랫폼 사용, 최소 12개월).\n선택 서비스(별도 비용): 전문 편집(페이지당), 전문 감수(2,000원/페이지), 커스텀 표지(800,000원), 아마존 킨들 출간(2,000,000원), 종이책 제작 등은 특약사항에 따른다.'},
+      {h:'제3조 (비용 및 지급 조건)', p:'계약금 30%(계약 후 7일 이내) · 중도금 40%(도서 완성 후) · 잔금 30%(판매 시작 후). 월 관리비는 매월 말일 지급.'},
+      {h:'제4조 (제작 일정)', p:'총 소요 기간은 원고 제출 후 3개월로 한다.'},
+      {h:'제5조 (사후 관리)', p:'저자 전용 대시보드(실시간 판매·인세 현황), 월간 판매·인세 리포트, 월 1회 마케팅 컨설팅을 제공한다.'},
+      {h:'제6조 (저작권·의무·해지·면책)', p:'원고의 모든 저작권은 저작자에게 귀속한다. 출판사는 약정 서비스의 충실한 이행과 일정(3개월)·품질을 보장하며, 원고 내용으로 인한 법적 분쟁·시장 상황·플랫폼 정책 변경·불가항력에 대하여는 면책된다. 손해배상 책임은 계약 금액 범위 내로 제한한다.'},
+      {h:'제7조 (기타)', p:'비밀유지·권리양도 금지·개인정보 보호를 준수하며, 분쟁은 서울중앙지방법원을 관할로 한다. 명시되지 아니한 사항은 양 당사자가 협의하여 정한다.'}
+    ];
+  }
+  if(t==='semi'){
+    const author=Math.round((+c.totalCost||0)*((+c.authorShare||50)/100));
+    return [
+      {h:'제1조 (계약의 목적)', p:'본 계약은 저작자가 저작물 내용과 일부 비용을 제공하고 출판사가 기획·제작·마케팅·유통 서비스를 제공하는 반기획출판에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.'},
+      {h:'제2조 (출판사 제공 서비스)', p:'기획(방향성·시장성 분석), 편집(전문 편집·교정·교열), 디자인(표지 3안·본문 레이아웃), 인쇄·제본, ISBN 등록 및 국립중앙도서관 납본, 온·오프라인 서점 유통(교보문고·예스24·알라딘·리디북스 등), 홍보·마케팅, 판매·인세 관리를 표준 패키지로 제공한다.'},
+      {h:'제3조 (비용 분담 및 지급)', p:'총 제작 비용: '+won(c.totalCost)+'원 (VAT 별도). 분담 — 출판사 '+(100-(c.authorShare||50))+'% / 저작자 '+(c.authorShare||50)+'%. 저작자 부담액: '+won(author)+'원.\n지급: 계약금 40%(계약 후 7일 이내) · 중도금 40%(편집 완료 후) · 잔금 20%(출간 시). 월 관리비 '+won(c.monthlyFee)+'원.'},
+      {h:'제4조 (수익 분배 및 인세)', p:'수익 분배는 출판사 50% / 저작자 50%를 원칙으로 한다(기본 계약 '+(c.termYears||5)+'년). 수익 기준 — 교보문고 정가의 60%, 대형 온라인 서점 65%, 기타 85%, 전자책 70%. 정산은 분기별, 익월 말일 지급하며 최소 지급액은 30,000원이다.'},
+      {h:'제5조 (저작권)', p:'원고의 모든 저작권은 저작자에게 귀속하며, 출판사는 출판·유통에 필요한 권리만 '+(c.termYears||5)+'년간 행사한다.'},
+      {h:'제6조 (제작 일정 및 사후 관리)', p:'총 소요 기간은 원고 제출 후 6개월이며, 유통 관리 최소 2년, 출간 후 3개월 집중 홍보, 저자 대시보드 및 정기 리포트를 제공한다.'},
+      {h:'제7조 (기타)', p:'비밀유지·개인정보 보호를 준수하며, 명시되지 아니한 사항은 협의하여 정한다.'}
+    ];
+  }
+  if(t==='gihoek'){
+    return [
+      {h:'제1조 (목적)', p:'이 계약은 위 저작물에 대한 전자책 등의 배타적발행권 및 종이책 출판권 설정에 따른 저작권자와 발행사의 권리·의무를 정함을 목적으로 한다.'},
+      {h:'제3조 (배타적발행권 및 출판권의 설정)', p:'저작권자는 발행사에게 위 저작물에 대한 배타적발행권 및 출판권을 설정한다.'},
+      {h:'제6조 (존속기간)', p:'배타적발행권 및 출판권은 계약일로부터 최초 발행일까지, 그리고 최초 발행일로부터 '+(c.termYears||5)+'년까지 효력을 가지며, 만료 3개월 전까지 종료 통보가 없으면 동일 조건으로 '+(c.termYears||5)+'년 자동 연장된다.'},
+      {h:'제7조 (완전원고의 인도 및 발행)', p:'저작권자는 '+(c.manuscriptDate||'____년 ___월 ___일')+'까지 완전원고를 인도하며, 발행사는 인도일로부터 6개월 이내(특약 없을 시 9개월)에 발행한다.'},
+      {h:'제11조 (비용 부담)', p:'위 저작물의 기획·편집·제작·홍보·광고 및 판매에 따른 모든 비용은 발행사가 부담한다.'},
+      {h:'제12조 (이용 방법 및 조건)', p:'매체 형식: 전자책/오디오북/종이책. 전자책 정산: 판매정산액의 '+(c.settleRate||70)+'%, 예상정가 적용 '+(c.priceRate||100)+'%.'},
+      {h:'제13조 (저작권사용료)', p:'발행사는 도서정가의 '+(c.royaltyRate||10)+'% × 판매부수를 저작권사용료로 지급한다. 인세가 선급금을 초과한 시점부터 3개월마다 매출 현황을 통보하고 통보 후 30일 이내 지급한다. 납본·증정·서평용 부수는 면제한다.'},
+      {h:'제14조 (선급금)', p:'계약 성립일로부터 10영업일 이내 계약금 '+won(c.advContract)+'원, 원고 완료 시 중도금 '+won(c.advMiddle)+'원, 초판 출간일 기준 잔금 '+won(c.advBalance)+'원을 지급하며, 이후 저작권사용료에서 선급금을 공제한다.'},
+      {h:'제16조 (발행데이터 권리)', p:'발행사의 노력과 비용으로 만들어진 발행데이터(판면파일 포함)의 권리는 발행사에 귀속한다.'},
+      {h:'제18조 (해지·해제)', p:'일방이 계약을 위반한 경우 상대방은 1개월 이상의 기간을 정하여 이행을 요구할 수 있고, 불이행 시 해지·해제 및 손해배상을 청구할 수 있다.'},
+      {h:'제25조 (분쟁 해결)', p:'분쟁 시 한국저작권위원회의 조정을 받을 수 있으며, 조정 불성립 시 제1심 법원은 제소 당사자 소재지 법원으로 한다.'},
+      {h:'제26조 (기획출판 특약)', p:'본 계약은 발행사 주도의 기획출판이며, 발행사는 시장성·완성도 향상을 위해 구성·편집 방향을 제안하고 저작권자와 협의하여 결정한다.'},
+      {h:'제27조 (해외 출판·번역권 특약)', p:'발행사는 해외 출판사와의 계약을 중개할 수 있으며, 해외 출판권 수익은 저작권자와 발행사가 50:50으로 배분한다.'},
+      {h:'제28조 (2차적저작물 특약)', p:'발행사는 오디오북 제작 권리를 가지며, 오디오북 판매액의 '+(c.audioRate||15)+'%를 저작권사용료로 지급한다.'}
+    ];
+  }
   const base=+c.amzBase||0, over=(+c.wordOver||0)*33000, sub=base+over, vat=Math.round(sub*0.1);
-  return head+`
-    <h2>대상 도서 정보</h2><p>· 제목: ${blank(c.title)} &nbsp; · 페이지: ${c.pages||'____'}쪽 &nbsp; ${c.korChars?`· 한글 약 ${won(c.korChars)}자 (영문 추정 ${won(c.engWords||Math.round(c.korChars*0.4))}단어)`:''} &nbsp; ${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원`:''}</p>
-    <h2>제1조 (계약의 목적)</h2><p>본 계약은 저작자의 저작물을 아마존 KDP를 통해 글로벌 출간하기 위하여 출판사가 KDP 출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.</p>
-    <h2>제2조 (제공 서비스)</h2><p>기본 패키지: KDP 계정 설정·등록, 전자책 내지 제작(KDP 포맷 변환), 전자책 표지 제작(KDP 템플릿, 시안 3개·수정 1회), 기본 마케팅(메타데이터·키워드·도서 소개 최적화), 영문 메타데이터 작성, Kindle Previewer 품질 검수, 글로벌 출간·유통 등록, Author Central 구축 가이드(PDF), 유지보수 30일·수정 1회.</p>
-    <h2>제3조 (비용)</h2><p>기본 패키지 ${won(base)}원${over>0?` + 초과 원고 ${c.wordOver}단위 × 33,000원 = ${won(over)}원`:''} (소계 ${won(sub)}원, VAT ${won(vat)}원, <b>합계 ${won(sub+vat)}원</b>). 한글 5만자=영문 2만단어 기준이며 초과분은 1,000단어 단위로 가산한다. 결제조건: ${E(c.amzPay)}.</p>
-    <h2>제4조 (서비스 범위)</h2><p>견적·계약에 명시된 항목에 한하여 제공하며, 명시되지 않은 작업은 별도 비용이 발생한다. AMS 광고는 클릭당 과금(CPC) 방식으로 운영되며 광고비 60만 원이 포함된다. 이를 초과하는 광고비는 저작자가 부담하고, 출판사는 광고 성과를 보증하지 않는다.</p>
-    <h2>제5조 (원고 책임 및 환불)</h2><p>저작자가 제공한 원고의 오탈자·사실 오류·저작권 침해 등 내용에 관한 모든 책임은 저작자에게 있다. KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않는다.</p>
-    <h2>제6조 (저작권)</h2><p>원고 및 저작물의 저작권은 저작자에게 귀속하며, 출판사는 KDP 출간·유통 대행에 필요한 범위에서만 이를 이용한다.</p>
-    ${special}${sign}`;
+  return [
+    {h:'제1조 (계약의 목적)', p:'본 계약은 저작자의 저작물을 아마존 KDP를 통해 글로벌 출간하기 위하여 출판사가 KDP 출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.'},
+    {h:'제2조 (제공 서비스)', p:'기본 패키지: KDP 계정 설정·등록, 전자책 내지 제작(KDP 포맷 변환), 전자책 표지 제작(KDP 템플릿, 시안 3개·수정 1회), 기본 마케팅(메타데이터·키워드·도서 소개 최적화), 영문 메타데이터 작성, Kindle Previewer 품질 검수, 글로벌 출간·유통 등록, Author Central 구축 가이드(PDF), 유지보수 30일·수정 1회.'},
+    {h:'제3조 (비용)', p:'기본 패키지 '+won(base)+'원'+(over>0?(' + 초과 원고 '+c.wordOver+'단위 × 33,000원 = '+won(over)+'원'):'')+' (소계 '+won(sub)+'원, VAT '+won(vat)+'원, 합계 '+won(sub+vat)+'원). 한글 5만자=영문 2만단어 기준이며 초과분은 1,000단어 단위로 가산한다. 결제조건: '+(c.amzPay||'')+'.'},
+    {h:'제4조 (서비스 범위)', p:'견적·계약에 명시된 항목에 한하여 제공하며, 명시되지 않은 작업은 별도 비용이 발생한다. AMS 광고는 클릭당 과금(CPC) 방식으로 운영되며 광고비 60만 원이 포함된다. 이를 초과하는 광고비는 저작자가 부담하고, 출판사는 광고 성과를 보증하지 않는다.'},
+    {h:'제5조 (원고 책임 및 환불)', p:'저작자가 제공한 원고의 오탈자·사실 오류·저작권 침해 등 내용에 관한 모든 책임은 저작자에게 있다. KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않는다.'},
+    {h:'제6조 (저작권)', p:'원고 및 저작물의 저작권은 저작자에게 귀속하며, 출판사는 KDP 출간·유통 대행에 필요한 범위에서만 이를 이용한다.'}
+  ];
 }
 
 function contractSectionHTML(p){
