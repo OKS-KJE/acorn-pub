@@ -1592,7 +1592,7 @@ async function saveProposal(){
     resetForm();
     updateStats();
     const goContract = confirm(`"${title}" (${decLabel})\n\n프로젝트 관리는 계약서를 작성하면 자동 등록됩니다.\n지금 바로 계약서를 작성하시겠습니까?`);
-    if(goContract){ showView('contracts'); openContractEditor(pid, null); }
+    if(goContract){ showView('list'); openContractEditor(pid, null); }
     else { showView('list'); }
     return;
   }
@@ -3561,6 +3561,7 @@ const CTYPES = {
 };
 const ctype = t => CTYPES[t] || CTYPES.self;
 let currentContract = null;
+let editorReturnView = null;   // 계약서 모달을 연 직전의 활성 메뉴(닫을 때 복귀)
 
 function newContractNo(){
   const d=new Date(); const yy=String(d.getFullYear()).slice(2);
@@ -3570,6 +3571,7 @@ function newContractNo(){
 }
 
 function openContractEditor(proposalId, contractId){
+  editorReturnView = (typeof currentView!=='undefined' && currentView) ? currentView : 'list';
   const p = proposals.find(x=>x.id===proposalId);
   const prov = getProvider();
   if(contractId && p){
@@ -3756,8 +3758,8 @@ async function saveContract(){
   if(idx>=0) p.contracts[idx]=c; else p.contracts.push(c);
   syncContractToProject(p.id,c);
   try{ await saveData(); }catch(e){ alert('클라우드 저장 실패(로컬에는 저장됨)\n'+e.message); }
-  closeContractEditor();
-  if(document.getElementById('view-contracts').classList.contains('active')) renderContracts();
+  document.getElementById('contract-modal').classList.remove('open'); currentContract=null;
+  showView('contracts');
   const msg = c.status==='signed' ? '계약서가 저장되고 프로젝트 관리에 동기화되었습니다.' : '계약서가 저장되었습니다.';
   alert(msg);
 }
@@ -3783,9 +3785,10 @@ function duplicateContract(proposalId,contractId){
   const copy=JSON.parse(JSON.stringify(c));
   copy.id='c'+Date.now().toString(36); copy.contractNo=newContractNo(); copy.status='draft';
   copy.createdAt=copy.updatedAt=new Date().toISOString();
+  editorReturnView = (typeof currentView!=='undefined' && currentView) ? currentView : 'contracts';
   currentContract=copy; renderContractEditor(); document.getElementById('contract-modal').classList.add('open');
 }
-function closeContractEditor(){ document.getElementById('contract-modal').classList.remove('open'); currentContract=null; }
+function closeContractEditor(){ document.getElementById('contract-modal').classList.remove('open'); currentContract=null; if(editorReturnView){ showView(editorReturnView); } }
 
 // ── 프로젝트 동기화 ─────────────────────────────────────────────────
 function syncContractToProject(pid,c){
