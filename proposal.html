@@ -290,6 +290,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="menu-divider"></div>
     <div class="menu-divider"></div>
     <div class="menu-item" onclick="showView('quotes')" id="mi-quotes">🧾 견적서 관리</div>
+    <div class="menu-item" onclick="showView('contracts')" id="mi-contracts">📜 계약서 관리</div>
     <div class="menu-item" onclick="showView('projects')" id="mi-projects">📅 프로젝트 관리</div>
     <div class="menu-item" onclick="showView('sales')" id="mi-sales">💰 판매·손익 관리</div>
     <div class="menu-divider"></div>
@@ -604,6 +605,25 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   <div id="quotes-wrap"></div>
 </div>
 
+<!-- ══ CONTRACTS (계약서 관리) ══ -->
+<div class="view" id="view-contracts">
+  <div class="page-hdr">
+    <div><h2>📜 계약서 관리</h2><div class="sub">자비·반기획·기획·아마존 KDP 출판계약서 작성/수정/삭제/인쇄 · 계약완료 시 프로젝트 자동 동기화</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-ghost" onclick="openProviderSettings()">⚙️ 공급자 정보</button>
+      <button class="btn btn-primary" onclick="newContractFromManager()">➕ 새 계약서</button>
+    </div>
+  </div>
+  <div class="list-filters">
+    <input class="search-input" type="text" id="c-search" placeholder="🔍 계약번호·도서명·저작자 검색..." oninput="renderContracts()">
+    <select class="filter-select" id="c-filter-type" onchange="renderContracts()">
+      <option value="">전체 종류</option><option value="self">자비출판</option><option value="semi">반기획출판</option><option value="gihoek">기획출판</option><option value="amazon">아마존 KDP 대행</option>
+    </select>
+    <span id="c-count" style="font-size:12px;color:var(--text3);margin-left:auto"></span>
+  </div>
+  <div id="contracts-wrap"></div>
+</div>
+
 </main>
 </div>
 
@@ -634,6 +654,21 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <button class="modal-close" onclick="closeQuoteEditor()">×</button>
     </div>
     <div class="modal-body" id="quote-editor"></div>
+  </div>
+</div>
+
+<!-- 계약 에디터 모달 -->
+<div class="modal-overlay" id="contract-modal">
+  <div class="modal" style="width:min(1040px,97vw)">
+    <div class="modal-hdr">
+      <h3 id="contract-modal-title">계약서 작성</h3>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="printContract(currentContract&&currentContract.proposalId,currentContract&&currentContract.id)">🖨️ 인쇄</button>
+        <button class="btn btn-primary btn-sm" onclick="saveContract()">💾 저장</button>
+      </div>
+      <button class="modal-close" onclick="closeContractEditor()">×</button>
+    </div>
+    <div class="modal-body" id="contract-editor"></div>
   </div>
 </div>
 
@@ -1850,6 +1885,7 @@ function openModal(id){
       </div>`:''}
     </div>
     ${quoteSectionHTML(p)}
+    ${contractSectionHTML(p)}
     ${histHTML}`;
   document.getElementById('detail-modal').classList.add('open');
 }
@@ -2064,12 +2100,12 @@ function renderProjects(){
   const statusFilter = document.getElementById('proj-filter-status')?.value||'';
   const q = (document.getElementById('proj-search')?.value||'').toLowerCase();
 
-  let approved = getApprovedProposals();
+  let approved = getProjectProposals();
   if(q) approved = approved.filter(p=>p.title.toLowerCase().includes(q)||p.author.toLowerCase().includes(q));
 
   const wrap = document.getElementById('projects-wrap');
   if(!approved.length){
-    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📅</div><h3>승인된 기획안이 없습니다</h3><p>기획안 목록에서 기획출판 승인 또는 조건부 승인 판정을 내리면 여기에 표시됩니다.</p></div>`;
+    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📅</div><h3>등록된 프로젝트가 없습니다</h3><p>기획안을 승인하거나 계약서를 작성(계약완료)하면 해당 도서가 여기에 자동으로 표시됩니다.</p></div>`;
     return;
   }
 
@@ -2566,6 +2602,7 @@ showView = function(id){
   if(id==='projects') renderProjects();
   if(id==='sales') renderSales();
   if(id==='quotes') renderQuotes();
+  if(id==='contracts') renderContracts();
 };
 
 
@@ -2587,6 +2624,7 @@ const DEFAULT_PROVIDER = {
   addr:'서울시 양천구 국회대로 287 (목동) 3층',
   tel:'02-2653-7600 / 02-2653-0433',
   email:'acornpub@acornpub.co.kr',
+  bizno:'454-87-03049',
   bank:'농협은행 301-0357-5709-41 (주식회사 에이콘온)',
   manager:''
 };
@@ -2950,6 +2988,7 @@ function openProviderSettings(){
       <div class="field"><label>회사명</label><input id="pv-company" value="${p.company}"></div>
       <div class="field"><label>대표</label><input id="pv-ceo" value="${p.ceo}"></div>
     </div>
+    <div class="field" style="margin-top:10px"><label>사업자등록번호</label><input id="pv-bizno" value="${p.bizno||'454-87-03049'}"></div>
     <div class="field" style="margin-top:10px"><label>주소</label><input id="pv-addr" value="${p.addr}"></div>
     <div class="q-fields" style="margin-top:10px">
       <div class="field"><label>TEL/FAX</label><input id="pv-tel" value="${p.tel}"></div>
@@ -2962,6 +3001,7 @@ function openProviderSettings(){
 function saveProviderSettings(){
   saveProvider({
     company:document.getElementById('pv-company').value, ceo:document.getElementById('pv-ceo').value,
+    bizno:document.getElementById('pv-bizno').value,
     addr:document.getElementById('pv-addr').value, tel:document.getElementById('pv-tel').value,
     email:document.getElementById('pv-email').value, bank:document.getElementById('pv-bank').value,
     manager:document.getElementById('pv-manager').value,
@@ -3062,6 +3102,446 @@ document.getElementById('provider-modal').addEventListener('click',function(e){i
 
 // showView 확장 — 견적서 페이지 렌더
 (function(){ const _prev=showView; showView=function(id){ _prev(id); if(id==='quotes') renderQuotes(); }; })();
+
+
+// ═══════════════════════════════════════════════════════════════════
+// 출판계약서(Publishing Contract) 모듈 — 자비 / 반기획 / 기획 / 아마존 KDP
+//  · 계약은 각 기획안(proposal) 객체의 p.contracts[] 배열에 저장 → Supabase 자동 동기화
+//  · 계약 저장 시 프로젝트 관리에 자동 동기화(계약 단계 반영)
+// ═══════════════════════════════════════════════════════════════════
+const CTYPES = {
+  self:   {label:'자비출판',        short:'자비',   cls:'qt-self',   color:'#0A7860', doc:'전자 자비출판 대행 계약서'},
+  semi:   {label:'반기획출판',      short:'반기획', cls:'qt-semi',   color:'#8A1A2A', doc:'반기획 출판 계약서'},
+  gihoek: {label:'기획출판',        short:'기획',   cls:'qt-agency', color:'#1560B8', doc:'전자출판 배타적발행권 및 출판권 설정계약서'},
+  amazon: {label:'아마존 KDP 대행', short:'아마존', cls:'qt-amazon', color:'#D4943A', doc:'아마존 KDP 출판 대행 계약서'},
+};
+const ctype = t => CTYPES[t] || CTYPES.self;
+let currentContract = null;
+
+function newContractNo(){
+  const d=new Date(); const yy=String(d.getFullYear()).slice(2);
+  const mm=String(d.getMonth()+1).padStart(2,'0'); const dd=String(d.getDate()).padStart(2,'0');
+  let n=0; proposals.forEach(p=>(p.contracts||[]).forEach(c=>{ if((c.contractNo||'').includes(`${yy}${mm}${dd}`)) n++; }));
+  return `AO-CNT-${yy}${mm}${dd}-${String(n+1).padStart(2,'0')}`;
+}
+
+function openContractEditor(proposalId, contractId){
+  const p = proposals.find(x=>x.id===proposalId);
+  const prov = getProvider();
+  if(contractId && p){
+    currentContract = JSON.parse(JSON.stringify((p.contracts||[]).find(x=>x.id===contractId)));
+    if(!CTYPES[currentContract.type]) currentContract.type='self';
+  }else{
+    const pagesMatch = p&&(/(\d{2,4})\s*페이지|\b(\d{2,4})\s*쪽/.exec(p.summary||''));
+    const guessPages = pagesMatch?(+(pagesMatch[1]||pagesMatch[2])):250;
+    let type='self';
+    if(p&&p.decision==='approve') type='gihoek';
+    else if(p&&p.decision==='conditional') type='semi';
+    else if(p&&p.decision==='selfpub') type='self';
+    currentContract = {
+      id:'c'+Date.now().toString(36),
+      proposalId: proposalId||'',
+      contractNo:newContractNo(),
+      date:new Date().toISOString().slice(0,10),
+      place:'서울시 양천구 국회대로 287 (목동) 주식회사 에이콘온',
+      type,
+      aName:(p&&p.author)||'', aRRN:'', aAddr:'', aTel:(p&&p.authorTel)||'', aEmail:(p&&p.authorEmail)||'', aJob:(p&&p.authorJob)||'',
+      title:(p&&p.title)||'', pages:guessPages, genre:(p&&p.genre)||'', pubDate:'', trim:'188*235mm', runCount:1000, format:'전자책(EPUB)',
+      listPrice:(p&&p.price)||'',
+      baseAmount:1000000, monthlyFee:30000,
+      totalCost:0, authorShare:50,
+      royaltyRate:10, settleRate:70, priceRate:100, advance:0, advContract:0, advMiddle:0, advBalance:0,
+      termYears:5, manuscriptDate:'',
+      korChars:0, engWords:0, wordOver:0, amzBase:1350000, amzPay:'협의 후 결정',
+      audioRate:15, special:'', memo:'', status:'draft',
+      createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
+    };
+  }
+  closeModal();
+  renderContractEditor();
+  document.getElementById('contract-modal').classList.add('open');
+}
+
+function cf(field,val){ if(!currentContract)return; currentContract[field]=val; if(field==='type') renderContractEditor(); }
+function cAmzWords(){
+  const est=Math.round((+currentContract.korChars||0)*0.4);
+  currentContract.engWords=est; currentContract.wordOver=Math.max(0,Math.floor((est-20000)/1000));
+  renderContractEditor();
+  alert(`추정 영문 단어 약 ${est.toLocaleString()}개 · 기본 2만 단어 초과 → 초과 ${currentContract.wordOver}단위(1,000단어)`);
+}
+
+function renderContractEditor(){
+  const c=currentContract; const ty=ctype(c.type);
+  const typeBtns=Object.entries(CTYPES).map(([k,v])=>
+    `<button type="button" class="qtype-btn ${c.type===k?'active':''}" style="--qc:${v.color}" onclick="cf('type','${k}')">${v.label}</button>`).join('');
+  const fin = renderContractFinanceFields(c);
+  document.getElementById('contract-modal-title').textContent=(c.proposalId&&(proposals.find(p=>p.id===c.proposalId)?.contracts||[]).some(x=>x.id===c.id))?'계약서 수정':'계약서 작성';
+  document.getElementById('contract-editor').innerHTML=`
+  <div class="q-typebar">${typeBtns}</div>
+  <div style="font-size:12px;color:${ty.color};font-weight:700;margin-bottom:10px">📜 ${ty.doc}</div>
+
+  <div class="q-grid2">
+    <div class="detail-section"><h4>📄 계약 정보</h4>
+      <div class="q-fields">
+        <div class="field"><label>계약번호</label><input value="${c.contractNo||''}" oninput="cf('contractNo',this.value)"></div>
+        <div class="field"><label>계약일</label><input type="date" value="${c.date||''}" oninput="cf('date',this.value)"></div>
+        <div class="field" style="grid-column:span 2"><label>계약장소</label><input value="${(c.place||'').replace(/"/g,'&quot;')}" oninput="cf('place',this.value)"></div>
+        <div class="field" style="grid-column:span 2"><label>계약 상태</label>
+          <select onchange="cf('status',this.value)"><option value="draft"${c.status!=='signed'?' selected':''}>작성중(초안)</option><option value="signed"${c.status==='signed'?' selected':''}>계약완료(서명) → 프로젝트 동기화</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section"><h4>👤 저작자 정보</h4>
+      <div class="q-fields">
+        <div class="field"><label>성명</label><input value="${c.aName||''}" oninput="cf('aName',this.value)"></div>
+        <div class="field"><label>주민등록번호</label><input value="${c.aRRN||''}" oninput="cf('aRRN',this.value)" placeholder="______-_______"></div>
+        <div class="field" style="grid-column:span 2"><label>주소</label><input value="${(c.aAddr||'').replace(/"/g,'&quot;')}" oninput="cf('aAddr',this.value)"></div>
+        <div class="field"><label>전화</label><input value="${c.aTel||''}" oninput="cf('aTel',this.value)"></div>
+        <div class="field"><label>이메일</label><input value="${c.aEmail||''}" oninput="cf('aEmail',this.value)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-section"><h4>📚 대상 도서</h4>
+    <div class="q-spec">
+      <div class="field" style="grid-column:span 2"><label>도서명(가제)</label><input value="${(c.title||'').replace(/"/g,'&quot;')}" oninput="cf('title',this.value)"></div>
+      <div class="field"><label>예상 페이지</label><input type="number" value="${c.pages||0}" oninput="cf('pages',this.value)"></div>
+      <div class="field"><label>장르/분야</label><input value="${(c.genre||'').replace(/"/g,'&quot;')}" oninput="cf('genre',this.value)"></div>
+      ${c.type==='amazon'?'':`<div class="field"><label>판형</label><input value="${c.trim||''}" oninput="cf('trim',this.value)"></div>`}
+      ${(c.type==='semi'||c.type==='gihoek')?`<div class="field"><label>인쇄 부수</label><input type="number" value="${c.runCount||0}" oninput="cf('runCount',this.value)"></div>`:''}
+      <div class="field"><label>예상 정가(원)</label><input type="number" value="${c.listPrice||''}" oninput="cf('listPrice',this.value)"></div>
+      <div class="field"><label>예상 출간일</label><input value="${(c.pubDate||'').replace(/"/g,'&quot;')}" oninput="cf('pubDate',this.value)" placeholder="2026년 9월"></div>
+    </div>
+  </div>
+
+  ${fin}
+
+  <div class="q-grid2">
+    <div class="detail-section"><h4>📝 특약사항 / 비고</h4>
+      <textarea style="width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:6px;padding:10px;font-size:12px;font-family:'Pretendard',sans-serif;line-height:1.7;resize:vertical" oninput="cf('special',this.value)" placeholder="추가 합의사항을 입력하면 계약서 특약사항란에 인쇄됩니다.">${c.special||''}</textarea>
+      <textarea placeholder="내부 메모(인쇄 시 미포함)" style="width:100%;min-height:50px;margin-top:8px;border:1.5px solid var(--border);border-radius:6px;padding:8px;font-size:12px;font-family:'Pretendard',sans-serif;resize:vertical" oninput="cf('memo',this.value)">${c.memo||''}</textarea>
+    </div>
+    <div class="detail-section" style="border-color:${ty.color}"><h4>ℹ️ 안내</h4>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        · ‘계약완료(서명)’로 저장하면 해당 도서가 <strong>프로젝트 관리</strong>에 자동 등록되고 계약 단계가 완료 처리됩니다.<br>
+        · 인쇄 시 ${ty.doc} 전문이 변수와 함께 출력됩니다.<br>
+        · 공급자(에이콘온) 정보·사업자번호는 ‘견적서 관리 → 공급자 정보’에서 설정합니다.
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderContractFinanceFields(c){
+  if(c.type==='self'){
+    return `<div class="detail-section"><h4>💵 비용 (자비출판 대행)</h4>
+      <div class="q-spec">
+        <div class="field"><label>표준 패키지(원)</label><input type="number" value="${c.baseAmount||0}" oninput="cf('baseAmount',this.value)"></div>
+        <div class="field"><label>월 관리비(원)</label><input type="number" value="${c.monthlyFee||0}" oninput="cf('monthlyFee',this.value)"></div>
+        <div class="field"><label>제작 형식</label><input value="${c.format||''}" oninput="cf('format',this.value)"></div>
+        <div class="field"><label>총 소요기간</label><input value="원고 제출 후 3개월" disabled></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px">지급: 계약금 30%(계약 후 7일 내) · 중도금 40%(완성 후) · 잔금 30%(판매 시작 후). 월 관리비 최소 12개월.</div></div>`;
+  }
+  if(c.type==='semi'){
+    const author=Math.round((+c.totalCost||0)*((+c.authorShare||50)/100));
+    return `<div class="detail-section"><h4>💵 비용 분담 (반기획 ${c.authorShare||50}:${100-(c.authorShare||50)})</h4>
+      <div class="q-spec">
+        <div class="field"><label>총 제작비(원)</label><input type="number" value="${c.totalCost||0}" oninput="cf('totalCost',this.value)"></div>
+        <div class="field"><label>저작자 부담(%)</label><input type="number" value="${c.authorShare||50}" oninput="cf('authorShare',this.value)"></div>
+        <div class="field"><label>계약기간(년)</label><input type="number" value="${c.termYears||5}" oninput="cf('termYears',this.value)"></div>
+        <div class="field"><label>월 관리비(원)</label><input type="number" value="${c.monthlyFee||0}" oninput="cf('monthlyFee',this.value)"></div>
+      </div>
+      <div style="font-size:12px;color:var(--rose);font-weight:700;margin-top:8px">저작자 부담액: ${won(author)}원 (VAT 별도) — 지급: 40% / 40% / 20%</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">수익 분배 50:50 · 정산 분기별 · 인세 최소 지급 30,000원 · 제작기간 원고 후 6개월</div></div>`;
+  }
+  if(c.type==='gihoek'){
+    return `<div class="detail-section"><h4>💵 저작권사용료 / 선급금 (기획출판)</h4>
+      <div class="q-spec">
+        <div class="field"><label>인세율(정가 %)</label><input type="number" value="${c.royaltyRate||10}" oninput="cf('royaltyRate',this.value)"></div>
+        <div class="field"><label>전자책 정산(%)</label><input type="number" value="${c.settleRate||70}" oninput="cf('settleRate',this.value)"></div>
+        <div class="field"><label>예상정가 적용(%)</label><input type="number" value="${c.priceRate||100}" oninput="cf('priceRate',this.value)"></div>
+        <div class="field"><label>계약기간(년)</label><input type="number" value="${c.termYears||5}" oninput="cf('termYears',this.value)"></div>
+        <div class="field"><label>계약금(선급, 원)</label><input type="number" value="${c.advContract||0}" oninput="cf('advContract',this.value)"></div>
+        <div class="field"><label>중도금(원)</label><input type="number" value="${c.advMiddle||0}" oninput="cf('advMiddle',this.value)"></div>
+        <div class="field"><label>잔금(원)</label><input type="number" value="${c.advBalance||0}" oninput="cf('advBalance',this.value)"></div>
+        <div class="field"><label>완전원고 인도일</label><input type="date" value="${c.manuscriptDate||''}" oninput="cf('manuscriptDate',this.value)"></div>
+        <div class="field"><label>오디오북 인세(%)</label><input type="number" value="${c.audioRate||15}" oninput="cf('audioRate',this.value)"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px">배타적발행권·출판권 설정 / 존속기간 ${c.termYears||5}년(자동연장) / 제작·홍보비 발행사 부담 / 저작권사용료 = 정가 ${c.royaltyRate||10}% × 판매부수</div></div>`;
+  }
+  // amazon
+  const base=+c.amzBase||0, over=(+c.wordOver||0)*33000, sub=base+over, vat=Math.round(sub*0.1);
+  return `<div class="detail-section"><h4>💵 비용 (아마존 KDP 대행)</h4>
+    <div class="q-spec">
+      <div class="field"><label>기본 패키지(원)</label><input type="number" value="${c.amzBase||0}" oninput="cf('amzBase',this.value)"></div>
+      <div class="field"><label>한글 자수</label><input type="number" value="${c.korChars||0}" oninput="cf('korChars',this.value)"></div>
+      <div class="field"><label>초과 원고 단위(1,000단어)</label><input type="number" value="${c.wordOver||0}" oninput="cf('wordOver',this.value)"></div>
+      <div class="field" style="justify-content:flex-end"><button class="btn btn-ghost btn-sm" style="align-self:flex-end" onclick="cAmzWords()">🔢 자수→단위 자동</button></div>
+      <div class="field" style="grid-column:span 2"><label>결제조건</label><input value="${(c.amzPay||'').replace(/"/g,'&quot;')}" oninput="cf('amzPay',this.value)"></div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--gold);margin-top:8px">소계 ${won(sub)}원 + VAT ${won(vat)}원 = ${won(sub+vat)}원</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px">기본 패키지에 AMS 광고비 60만원 포함 · 한글 5만자=영문 2만단어 기준 초과분 1,000단어당 33,000원 · KDP 등록 착수 후 환불 불가</div></div>`;
+}
+
+// ── 저장 / 삭제(2단계 확인) / 복제 ─────────────────────────────────
+async function saveContract(){
+  const c=currentContract;
+  if(!c.proposalId){ const sel=document.getElementById('c-link-proposal'); if(sel&&sel.value) c.proposalId=sel.value; }
+  const p=proposals.find(x=>x.id===c.proposalId);
+  if(!p){ alert('연결할 기획안을 선택하세요.'); return; }
+  if(!c.aName){ alert('저작자 성명을 입력하세요.'); return; }
+  c.updatedAt=new Date().toISOString();
+  if(!p.contracts) p.contracts=[];
+  const idx=p.contracts.findIndex(x=>x.id===c.id);
+  if(idx>=0) p.contracts[idx]=c; else p.contracts.push(c);
+  syncContractToProject(p.id,c);
+  try{ await saveData(); }catch(e){ alert('클라우드 저장 실패(로컬에는 저장됨)\n'+e.message); }
+  closeContractEditor();
+  if(document.getElementById('view-contracts').classList.contains('active')) renderContracts();
+  const msg = c.status==='signed' ? '계약서가 저장되고 프로젝트 관리에 동기화되었습니다.' : '계약서가 저장되었습니다.';
+  alert(msg);
+}
+async function deleteContract(proposalId,contractId){
+  const p=proposals.find(x=>x.id===proposalId); if(!p)return;
+  const c=(p.contracts||[]).find(x=>x.id===contractId);
+  if(!confirm(`계약서 "${c?c.contractNo:''}" 를 삭제하시겠습니까?`)) return Promise.resolve(false);
+  if(!confirm('⚠️ 계약서는 복구할 수 없습니다. 정말 삭제하시겠습니까?')) return Promise.resolve(false);
+  p.contracts=(p.contracts||[]).filter(x=>x.id!==contractId);
+  await saveData();
+  renderContracts();
+}
+function duplicateContract(proposalId,contractId){
+  const p=proposals.find(x=>x.id===proposalId); if(!p)return;
+  const c=(p.contracts||[]).find(x=>x.id===contractId); if(!c)return;
+  const copy=JSON.parse(JSON.stringify(c));
+  copy.id='c'+Date.now().toString(36); copy.contractNo=newContractNo(); copy.status='draft';
+  copy.createdAt=copy.updatedAt=new Date().toISOString();
+  currentContract=copy; renderContractEditor(); document.getElementById('contract-modal').classList.add('open');
+}
+function closeContractEditor(){ document.getElementById('contract-modal').classList.remove('open'); currentContract=null; }
+
+// ── 프로젝트 동기화 ─────────────────────────────────────────────────
+function syncContractToProject(pid,c){
+  const proj=ensureProject(pid);
+  proj.contractType=c.type;
+  if(c.status==='signed'){
+    proj.stages.contract.date=c.date||proj.stages.contract.date||'';
+    proj.stages.contract.done=true;
+    proj.stages.contract.note=(proj.stages.contract.note||'')||`${ctype(c.type).label} 계약 (${c.contractNo})`;
+    if(proj.currentStage==='contract') proj.currentStage='manuscript';
+  }else{
+    if(!proj.stages.contract.date) proj.stages.contract.date=c.date||'';
+  }
+  saveProjects();
+}
+// 프로젝트 목록 대상: 승인/조건부 + 계약 보유 + 기존 프로젝트
+function getProjectProposals(){
+  return proposals.filter(p=>['approve','conditional'].includes(p.decision) || (p.contracts&&p.contracts.length) || projectData[p.id]);
+}
+
+// ── 계약서 관리 페이지 ──────────────────────────────────────────────
+function allContracts(){
+  const arr=[]; proposals.forEach(p=>(p.contracts||[]).forEach(c=>arr.push({c,p})));
+  arr.sort((a,b)=>(b.c.updatedAt||'').localeCompare(a.c.updatedAt||''));
+  return arr;
+}
+function renderContracts(){
+  const wrap=document.getElementById('contracts-wrap'); if(!wrap)return;
+  const ft=document.getElementById('c-filter-type')?.value||'';
+  const sq=(document.getElementById('c-search')?.value||'').toLowerCase();
+  let list=allContracts();
+  if(ft) list=list.filter(x=>x.c.type===ft);
+  if(sq) list=list.filter(x=>((x.c.title||x.p.title||'')+(x.c.aName||x.p.author||'')+(x.c.contractNo||'')).toLowerCase().includes(sq));
+  const cnt=document.getElementById('c-count'); if(cnt)cnt.textContent=`총 ${list.length}건`;
+  if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📜</div><h3>계약서가 없습니다</h3><p>기획안 목록에서 기획안을 열고 ‘계약서 작성’을 눌러 생성하세요.</p></div>`; return; }
+  wrap.innerHTML=`<table class="proposal-table"><thead><tr>
+    <th style="width:150px">계약번호</th><th>도서명 · 저작자</th><th style="width:90px">종류</th>
+    <th style="width:80px;text-align:center">상태</th><th style="width:90px;text-align:center">계약일</th><th style="width:190px;text-align:center">관리</th>
+  </tr></thead><tbody>${list.map(({c,p})=>{
+    const ty=ctype(c.type);
+    const st=c.status==='signed'?'<span class="decision-badge ok-badge" style="background:var(--ok-bg);color:var(--ok)">계약완료</span>':'<span class="decision-badge" style="background:var(--s3);color:var(--text3)">작성중</span>';
+    return `<tr>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${c.contractNo||'-'}</td>
+      <td><div style="font-weight:700;font-size:12px">${c.title||p.title||'-'}</div><div style="font-size:11px;color:var(--text3)">${c.aName||p.author||''}</div></td>
+      <td><span class="q-tag ${ty.cls}">${ty.label}</span></td>
+      <td style="text-align:center">${st}</td>
+      <td style="text-align:center;font-size:11px">${c.date||'-'}</td>
+      <td style="text-align:center;white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="printContract('${p.id}','${c.id}')" title="인쇄">🖨️</button>
+        <button class="btn btn-ghost btn-sm" onclick="openContractEditor('${p.id}','${c.id}')" title="수정">✏️</button>
+        <button class="btn btn-ghost btn-sm" onclick="duplicateContract('${p.id}','${c.id}')" title="복제">📑</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteContract('${p.id}','${c.id}')" title="삭제">🗑️</button>
+      </td>
+    </tr>`;}).join('')}</tbody></table>`;
+}
+function newContractFromManager(){
+  if(!proposals.length){ alert('먼저 기획안을 등록하세요.'); return; }
+  openContractEditor('', null);
+  const sel=`<div class="detail-section" style="border-color:var(--gold)"><h4>🔗 연결 기획안 선택 (필수)</h4>
+    <select id="c-link-proposal" class="filter-select" style="width:100%" onchange="linkProposalToContract(this.value)">
+      <option value="">기획안 선택…</option>
+      ${proposals.map(p=>`<option value="${p.id}">${(p.title||'(제목없음)')} — ${p.author||''}</option>`).join('')}
+    </select></div>`;
+  document.getElementById('contract-editor').insertAdjacentHTML('afterbegin',sel);
+}
+function linkProposalToContract(pid){
+  const p=proposals.find(x=>x.id===pid); if(!p)return;
+  currentContract.proposalId=pid;
+  currentContract.aName=currentContract.aName||p.author||''; currentContract.aTel=currentContract.aTel||p.authorTel||'';
+  currentContract.aEmail=currentContract.aEmail||p.authorEmail||''; currentContract.title=currentContract.title||p.title||'';
+  currentContract.listPrice=currentContract.listPrice||p.price||''; currentContract.genre=currentContract.genre||p.genre||'';
+  renderContractEditor();
+  document.getElementById('contract-editor').insertAdjacentHTML('afterbegin',
+    `<div class="detail-section" style="border-color:var(--ok)"><h4>🔗 연결 기획안</h4>
+     <select id="c-link-proposal" class="filter-select" style="width:100%" onchange="linkProposalToContract(this.value)">
+       ${proposals.map(pp=>`<option value="${pp.id}"${pp.id===pid?' selected':''}>${(pp.title||'(제목없음)')} — ${pp.author||''}</option>`).join('')}
+     </select></div>`);
+}
+
+// ── 인쇄 (계약서 전문) ──────────────────────────────────────────────
+function printContract(proposalId,contractId){
+  const p=proposals.find(x=>x.id===proposalId);
+  const c=(p&&(p.contracts||[]).find(x=>x.id===contractId))||(currentContract&&currentContract.id===contractId?currentContract:null);
+  if(!c){alert('계약서를 찾을 수 없습니다.');return;}
+  const prov=getProvider(); const ty=ctype(c.type);
+  const body=buildContractBody(c,prov,ty);
+  const html=`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>${esc(ty.doc)} ${esc(c.contractNo)}</title>
+  <style>
+    @page{size:A4;margin:18mm 16mm}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Batang','Apple SD Gothic Neo','Malgun Gothic',serif;color:#111;font-size:11.5px;line-height:1.7}
+    h1{font-size:19px;text-align:center;font-weight:800;letter-spacing:2px;margin-bottom:4px;color:#111}
+    .ct-sub{text-align:center;font-size:11px;color:#666;margin-bottom:16px}
+    .ct-tag{display:inline-block;background:${ty.color};color:#fff;font-size:10px;font-weight:700;padding:2px 9px;border-radius:9px;vertical-align:middle;margin-left:8px}
+    h2{font-size:12.5px;font-weight:800;margin:14px 0 6px;padding-bottom:3px;border-bottom:1.5px solid ${ty.color};color:${ty.color}}
+    p{margin:3px 0;text-align:justify}
+    .ct-party{display:flex;gap:12px;margin:8px 0 4px}
+    .ct-party table{flex:1;border-collapse:collapse;border:1px solid #ccc}
+    .ct-party caption{font-weight:700;text-align:left;padding:4px 0;font-size:11px}
+    .ct-party td{border:1px solid #ddd;padding:4px 8px;font-size:11px}
+    .ct-party td:first-child{background:#f3f5f8;width:90px;color:#555}
+    .ct-art{margin:6px 0}
+    .ct-art b{color:#000}
+    ol{margin:2px 0 6px 18px}.ct-art li{margin:2px 0}
+    .ct-sign{margin-top:26px;display:flex;justify-content:space-between;gap:30px}
+    .ct-sign .col{flex:1}
+    .ct-sign .ln{margin-top:10px;font-size:11px}
+    .ct-note{white-space:pre-wrap;background:#fafbfc;border:1px solid #e0e0e0;border-radius:5px;padding:8px 10px;font-size:11px;margin-top:4px}
+    .ct-date{text-align:center;margin-top:18px;font-size:12px;font-weight:700}
+  </style></head><body onload="window.print()">${body}</body></html>`;
+  function esc(x){return String(x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  const w=window.open('','_blank'); if(!w){alert('팝업을 허용해 주세요.');return;}
+  w.document.write(html); w.document.close();
+}
+
+function buildContractBody(c,prov,ty){
+  const E=x=>String(x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const blank=v=>v?E(v):'________________';
+  const authorTbl=`<table><caption>저작자(저작권자)</caption>
+    <tr><td>성명</td><td>${blank(c.aName)}</td></tr>
+    <tr><td>주민등록번호</td><td>${blank(c.aRRN)}</td></tr>
+    <tr><td>주소</td><td>${blank(c.aAddr)}</td></tr>
+    <tr><td>전화</td><td>${blank(c.aTel)}</td></tr>
+    <tr><td>이메일</td><td>${blank(c.aEmail)}</td></tr></table>`;
+  const pubTbl=`<table><caption>출판사(발행사)</caption>
+    <tr><td>상호</td><td>${E(prov.company)}</td></tr>
+    <tr><td>사업자등록번호</td><td>${E(prov.bizno||'454-87-03049')}</td></tr>
+    <tr><td>대표</td><td>${E(prov.ceo)}</td></tr>
+    <tr><td>주소</td><td>${E(prov.addr)}</td></tr>
+    <tr><td>전화</td><td>${E(prov.tel)}</td></tr>
+    <tr><td>이메일</td><td>${E(prov.email)}</td></tr></table>`;
+  const bookInfo=`<h2>대상 도서 정보</h2>
+    <p>· 도서명(가제): ${blank(c.title)} &nbsp; · 예상 페이지수: ${c.pages||'____'}페이지 &nbsp; · 장르/분야: ${blank(c.genre)}</p>
+    <p>${c.type!=='amazon'?`· 판형: ${blank(c.trim)} &nbsp; `:''}${(c.type==='semi'||c.type==='gihoek')?`· 인쇄 부수: ${c.runCount||'____'}부 &nbsp; `:''}${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원 &nbsp; `:''}· 예상 출간일: ${blank(c.pubDate)}</p>`;
+  const special = c.special?`<h2>특약사항</h2><div class="ct-note">${E(c.special)}</div>`:'';
+  const sign=`<div class="ct-date">계약일자: ${c.date?E(c.date):'________년 ___월 ___일'}</div>
+    <div class="ct-sign">
+      <div class="col"><b>저작자</b><div class="ln">성명: ${blank(c.aName)} (인)</div></div>
+      <div class="col"><b>출판사 (${E(prov.company)})</b><div class="ln">대표이사: ${E(prov.ceo)} (인)</div></div>
+    </div>
+    <p style="margin-top:14px;font-size:10.5px;color:#555">본 계약의 성립을 증명하기 위하여 계약서 2부를 작성하고, 양 당사자가 각각 서명·날인하여 각 1부씩 보관한다.</p>`;
+  const head=`<h1>${E(ty.doc)}<span class="ct-tag">${ty.label}</span></h1><div class="ct-sub">계약번호 ${E(c.contractNo)} · 작성일 ${E(c.date)}</div>
+    <div class="ct-party">${authorTbl}${pubTbl}</div>`;
+
+  if(c.type==='self'){
+    return head+bookInfo+`
+    <h2>제1조 (계약의 목적)</h2><p>본 계약은 저작자의 저작물을 전자책(EPUB) 등으로 발행하기 위하여 출판사가 자비출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.</p>
+    <h2>제2조 (제공 서비스 및 비용)</h2>
+    <p><b>표준 패키지: ${won(c.baseAmount)}원</b> (전자책 제작·등록·유통 대행 포함) / 월 관리비 ${won(c.monthlyFee)}원(저자 플랫폼 사용, 최소 12개월).</p>
+    <p>선택 서비스(별도 비용): 전문 편집(페이지당), 전문 감수(2,000원/페이지), 커스텀 표지(800,000원), 아마존 킨들 출간(2,000,000원), 종이책 제작 등은 특약사항에 따른다.</p>
+    <h2>제3조 (비용 및 지급 조건)</h2><p>계약금 30%(계약 후 7일 이내) · 중도금 40%(도서 완성 후) · 잔금 30%(판매 시작 후). 월 관리비는 매월 말일 지급.</p>
+    <h2>제4조 (제작 일정)</h2><p>총 소요 기간은 원고 제출 후 3개월로 한다.</p>
+    <h2>제5조 (사후 관리)</h2><p>저자 전용 대시보드(실시간 판매·인세 현황), 월간 판매·인세 리포트, 월 1회 마케팅 컨설팅을 제공한다.</p>
+    <h2>제6조 (저작권·의무·해지·면책)</h2><p>원고의 모든 저작권은 저작자에게 귀속한다. 출판사는 약정 서비스의 충실한 이행과 일정(3개월)·품질을 보장하며, 원고 내용으로 인한 법적 분쟁·시장 상황·플랫폼 정책 변경·불가항력에 대하여는 면책된다. 손해배상 책임은 계약 금액 범위 내로 제한한다.</p>
+    <h2>제7조 (기타)</h2><p>비밀유지·권리양도 금지·개인정보 보호를 준수하며, 분쟁은 서울중앙지방법원을 관할로 한다. 명시되지 아니한 사항은 양 당사자가 협의하여 정한다.</p>
+    ${special}${sign}`;
+  }
+  if(c.type==='semi'){
+    const author=Math.round((+c.totalCost||0)*((+c.authorShare||50)/100));
+    return head+bookInfo+`
+    <h2>제1조 (계약의 목적)</h2><p>본 계약은 저작자가 저작물 내용과 일부 비용을 제공하고 출판사가 기획·제작·마케팅·유통 서비스를 제공하는 반기획출판에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.</p>
+    <h2>제2조 (출판사 제공 서비스)</h2><p>기획(방향성·시장성 분석), 편집(전문 편집·교정·교열), 디자인(표지 3안·본문 레이아웃), 인쇄·제본, ISBN 등록 및 국립중앙도서관 납본, 온·오프라인 서점 유통(교보문고·예스24·알라딘·리디북스 등), 홍보·마케팅, 판매·인세 관리를 표준 패키지로 제공한다.</p>
+    <h2>제3조 (비용 분담 및 지급)</h2>
+    <p>총 제작 비용: ${won(c.totalCost)}원 (VAT 별도). 분담 — 출판사 ${100-(c.authorShare||50)}% / 저작자 ${c.authorShare||50}%. <b>저작자 부담액: ${won(author)}원.</b></p>
+    <p>지급: 계약금 40%(계약 후 7일 이내) · 중도금 40%(편집 완료 후) · 잔금 20%(출간 시). 월 관리비 ${won(c.monthlyFee)}원.</p>
+    <h2>제4조 (수익 분배 및 인세)</h2><p>수익 분배는 출판사 50% / 저작자 50%를 원칙으로 한다(기본 계약 ${c.termYears||5}년). 수익 기준 — 교보문고 정가의 60%, 대형 온라인 서점 65%, 기타 85%, 전자책 70%. 정산은 분기별, 익월 말일 지급하며 최소 지급액은 30,000원이다.</p>
+    <h2>제5조 (저작권)</h2><p>원고의 모든 저작권은 저작자에게 귀속하며, 출판사는 출판·유통에 필요한 권리만 ${c.termYears||5}년간 행사한다.</p>
+    <h2>제6조 (제작 일정 및 사후 관리)</h2><p>총 소요 기간은 원고 제출 후 6개월이며, 유통 관리 최소 2년, 출간 후 3개월 집중 홍보, 저자 대시보드 및 정기 리포트를 제공한다.</p>
+    <h2>제7조 (기타)</h2><p>비밀유지·개인정보 보호를 준수하며, 명시되지 아니한 사항은 협의하여 정한다.</p>
+    ${special}${sign}`;
+  }
+  if(c.type==='gihoek'){
+    return head+`
+    <p style="margin:6px 0">위 저작물의 저작재산권자(이하 '저작권자')와 이를 전자책 등으로 발행하거나 종이책으로 출판하고자 하는 발행사(주식회사 에이콘온)는 다음과 같이 배타적발행권 및 출판권 설정계약을 체결한다.</p>
+    ${bookInfo}
+    <h2>제1조 (목적)</h2><p>이 계약은 위 저작물에 대한 전자책 등의 배타적발행권 및 종이책 출판권 설정에 따른 저작권자와 발행사의 권리·의무를 정함을 목적으로 한다.</p>
+    <h2>제3조 (배타적발행권 및 출판권의 설정)</h2><p>저작권자는 발행사에게 위 저작물에 대한 배타적발행권 및 출판권을 설정한다.</p>
+    <h2>제6조 (존속기간)</h2><p>배타적발행권 및 출판권은 계약일로부터 최초 발행일까지, 그리고 최초 발행일로부터 ${c.termYears||5}년까지 효력을 가지며, 만료 3개월 전까지 종료 통보가 없으면 동일 조건으로 ${c.termYears||5}년 자동 연장된다.</p>
+    <h2>제7조 (완전원고의 인도 및 발행)</h2><p>저작권자는 ${c.manuscriptDate?E(c.manuscriptDate):'____년 ___월 ___일'}까지 완전원고를 인도하며, 발행사는 인도일로부터 6개월 이내(특약 없을 시 9개월)에 발행한다.</p>
+    <h2>제11조 (비용 부담)</h2><p>위 저작물의 기획·편집·제작·홍보·광고 및 판매에 따른 모든 비용은 발행사가 부담한다.</p>
+    <h2>제12조 (이용 방법 및 조건)</h2><p>매체 형식: 전자책/오디오북/종이책. 전자책 정산: 판매정산액의 ${c.settleRate||70}%, 예상정가 적용 ${c.priceRate||100}%.</p>
+    <h2>제13조 (저작권사용료)</h2><p>발행사는 <b>도서정가의 ${c.royaltyRate||10}% × 판매부수</b>를 저작권사용료로 지급한다. 인세가 선급금을 초과한 시점부터 3개월마다 매출 현황을 통보하고 통보 후 30일 이내 지급한다. 납본·증정·서평용 부수는 면제한다.</p>
+    <h2>제14조 (선급금)</h2><p>계약 성립일로부터 10영업일 이내 계약금 ${won(c.advContract)}원, 원고 완료 시 중도금 ${won(c.advMiddle)}원, 초판 출간일 기준 잔금 ${won(c.advBalance)}원을 지급하며, 이후 저작권사용료에서 선급금을 공제한다.</p>
+    <h2>제16조 (발행데이터 권리)</h2><p>발행사의 노력과 비용으로 만들어진 발행데이터(판면파일 포함)의 권리는 발행사에 귀속한다.</p>
+    <h2>제18조 (해지·해제)</h2><p>일방이 계약을 위반한 경우 상대방은 1개월 이상의 기간을 정하여 이행을 요구할 수 있고, 불이행 시 해지·해제 및 손해배상을 청구할 수 있다.</p>
+    <h2>제25조 (분쟁 해결)</h2><p>분쟁 시 한국저작권위원회의 조정을 받을 수 있으며, 조정 불성립 시 제1심 법원은 제소 당사자 소재지 법원으로 한다.</p>
+    <h2>제26조 (기획출판 특약)</h2><p>본 계약은 발행사 주도의 기획출판이며, 발행사는 시장성·완성도 향상을 위해 구성·편집 방향을 제안하고 저작권자와 협의하여 결정한다.</p>
+    <h2>제27조 (해외 출판·번역권 특약)</h2><p>발행사는 해외 출판사와의 계약을 중개할 수 있으며, 해외 출판권 수익은 저작권자와 발행사가 50:50으로 배분한다.</p>
+    <h2>제28조 (2차적저작물 특약)</h2><p>발행사는 오디오북 제작 권리를 가지며, 오디오북 판매액의 ${c.audioRate||15}%를 저작권사용료로 지급한다.</p>
+    ${special}${sign}`;
+  }
+  // amazon
+  const base=+c.amzBase||0, over=(+c.wordOver||0)*33000, sub=base+over, vat=Math.round(sub*0.1);
+  return head+`
+    <h2>대상 도서 정보</h2><p>· 제목: ${blank(c.title)} &nbsp; · 페이지: ${c.pages||'____'}쪽 &nbsp; ${c.korChars?`· 한글 약 ${won(c.korChars)}자 (영문 추정 ${won(c.engWords||Math.round(c.korChars*0.4))}단어)`:''} &nbsp; ${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원`:''}</p>
+    <h2>제1조 (계약의 목적)</h2><p>본 계약은 저작자의 저작물을 아마존 KDP를 통해 글로벌 출간하기 위하여 출판사가 KDP 출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.</p>
+    <h2>제2조 (제공 서비스)</h2><p>기본 패키지: KDP 계정 설정·등록, 전자책 내지 제작(KDP 포맷 변환), 전자책 표지 제작(KDP 템플릿, 시안 3개·수정 1회), 기본 마케팅(메타데이터·키워드·도서 소개 최적화), 영문 메타데이터 작성, Kindle Previewer 품질 검수, 글로벌 출간·유통 등록, Author Central 구축 가이드(PDF), 유지보수 30일·수정 1회.</p>
+    <h2>제3조 (비용)</h2><p>기본 패키지 ${won(base)}원${over>0?` + 초과 원고 ${c.wordOver}단위 × 33,000원 = ${won(over)}원`:''} (소계 ${won(sub)}원, VAT ${won(vat)}원, <b>합계 ${won(sub+vat)}원</b>). 한글 5만자=영문 2만단어 기준이며 초과분은 1,000단어 단위로 가산한다. 결제조건: ${E(c.amzPay)}.</p>
+    <h2>제4조 (서비스 범위)</h2><p>견적·계약에 명시된 항목에 한하여 제공하며, 명시되지 않은 작업은 별도 비용이 발생한다. AMS 광고는 클릭당 과금(CPC) 방식으로 운영되며 광고비 60만 원이 포함된다. 이를 초과하는 광고비는 저작자가 부담하고, 출판사는 광고 성과를 보증하지 않는다.</p>
+    <h2>제5조 (원고 책임 및 환불)</h2><p>저작자가 제공한 원고의 오탈자·사실 오류·저작권 침해 등 내용에 관한 모든 책임은 저작자에게 있다. KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않는다.</p>
+    <h2>제6조 (저작권)</h2><p>원고 및 저작물의 저작권은 저작자에게 귀속하며, 출판사는 KDP 출간·유통 대행에 필요한 범위에서만 이를 이용한다.</p>
+    ${special}${sign}`;
+}
+
+function contractSectionHTML(p){
+  const cs=(p.contracts||[]);
+  const rows=cs.map(c=>{const ty=ctype(c.type);
+    const st=c.status==='signed'?'<span style="color:var(--ok);font-weight:700">계약완료</span>':'<span style="color:var(--text3)">작성중</span>';
+    return `<div class="qrow"><span class="q-tag ${ty.cls}">${ty.label}</span><span class="qno">${c.contractNo||''}</span>`+
+      `<span style="flex:1">${c.title||p.title||''} · ${st}</span>`+
+      `<button class="btn btn-ghost btn-sm" onclick="printContract('${p.id}','${c.id}')">🖨️</button>`+
+      `<button class="btn btn-ghost btn-sm" onclick="openContractEditor('${p.id}','${c.id}')">✏️</button>`+
+      `<button class="btn btn-danger btn-sm" onclick="deleteContract('${p.id}','${c.id}').then(r=>{if(r!==false)openModal('${p.id}')})">🗑️</button></div>`;
+  }).join('');
+  return `<div class="detail-section"><h4>📜 계약서 <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openContractEditor('${p.id}',null)">➕ 계약서 작성</button></h4>`+
+    (cs.length?`<div class="quote-list-mini">${rows}</div>`:`<div style="font-size:12px;color:var(--text3)">작성된 계약서가 없습니다. ‘계약서 작성’으로 자비·반기획·기획·아마존 계약을 자동 생성하세요.</div>`)+`</div>`;
+}
+
+// 모달 오버레이 닫기
+document.getElementById('contract-modal').addEventListener('click',function(e){if(e.target===this)closeContractEditor();});
+
+// showView 확장 — 계약서 페이지 + 프로젝트는 계약 포함 목록으로
+(function(){ const _prev=showView; showView=function(id){ _prev(id); if(id==='contracts') renderContracts(); }; })();
 
 </script>
 </body>
