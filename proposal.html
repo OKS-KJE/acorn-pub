@@ -295,6 +295,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="menu-item" onclick="showView('sales')" id="mi-sales">💰 판매·손익 관리</div>
     <div class="menu-divider"></div>
     <div class="menu-item" onclick="showView('guides')" id="mi-guides">📚 참고자료 · 가이드</div>
+    <div class="menu-item" onclick="showView('comments')" id="mi-comments">💬 의견 관리</div>
   </div>
   <div style="flex:1"></div>
   <div class="sidebar-stats">
@@ -517,6 +518,18 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <button class="btn btn-ghost btn-sm" onclick="renderProjects()">🔄 새로고침</button>
     </div>
   </div>
+  <style>
+  .pj-grid{display:grid;gap:10px;margin-bottom:12px;}
+  .pj-grid.s4{grid-template-columns:repeat(4,1fr);}
+  .pj-grid.s6{grid-template-columns:repeat(6,1fr);}
+  @media(max-width:760px){.pj-grid.s4,.pj-grid.s6{grid-template-columns:repeat(2,1fr);}}
+  .pj-stat{border:1px solid var(--border);border-left:3px solid var(--c,#888);border-radius:8px;padding:11px 13px;background:#fff;cursor:pointer;transition:.15s;}
+  .pj-stat:hover{box-shadow:0 3px 12px rgba(0,0,0,.09);transform:translateY(-1px);border-left-width:5px;}
+  .pj-stat-n{font-size:20px;font-weight:800;color:var(--c,var(--text));font-family:'JetBrains Mono',monospace;line-height:1;}
+  .pj-stat-l{font-size:11px;color:var(--text3);margin-top:4px;font-weight:600;}
+  .pj-sec-h{font-size:11px;font-weight:700;color:var(--text3);margin:2px 0 7px;}
+  </style>
+  <div id="proj-overview"></div>
   <!-- 필터 -->
   <div class="list-filters" style="margin-bottom:16px;">
     <select class="filter-select" id="proj-filter-stage" onchange="renderProjects()">
@@ -532,6 +545,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <option value="done">완료</option>
     </select>
     <input class="search-input" id="proj-search" type="text" placeholder="🔍 도서명 검색..." oninput="renderProjects()">
+    <span id="proj-count" style="font-size:12px;color:var(--text3);margin-left:auto"></span>
   </div>
   <div id="projects-wrap"></div>
 </div>
@@ -644,6 +658,75 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   </style>
   <div class="guide-tabs" id="guide-tabs"></div>
   <div id="guide-body"></div>
+</div>
+
+<div class="view" id="view-comments">
+  <div class="page-hdr">
+    <div><h2>💬 의견 관리</h2><div class="sub">메뉴·프로세스별 직원 의견을 등록·반영하고 진행 현황을 한눈에 관리합니다.</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="openCommentModal()">➕ 의견 등록</button>
+    </div>
+  </div>
+  <style>
+  .cm-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px;}
+  @media(max-width:760px){.cm-stats{grid-template-columns:repeat(2,1fr);}}
+  .cm-stat{border:1px solid var(--border);border-left:3px solid var(--c,#888);border-radius:8px;padding:12px 14px;background:#fff;cursor:pointer;transition:.15s;}
+  .cm-stat:hover{box-shadow:0 3px 12px rgba(0,0,0,.09);transform:translateY(-1px);border-left-width:5px;}
+  .cm-stat-n{font-size:22px;font-weight:800;color:var(--c,var(--text));font-family:'JetBrains Mono',monospace;line-height:1;}
+  .cm-stat-l{font-size:11px;color:var(--text3);margin-top:4px;font-weight:600;}
+  .cm-progress{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:12px;}
+  .cm-progress-top{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;}
+  .cm-progress-bar{height:10px;border-radius:6px;background:var(--s3);overflow:hidden;}
+  .cm-progress-bar>div{height:100%;background:linear-gradient(90deg,#1A7A3A,#37b06a);border-radius:6px;transition:.3s;}
+  .cm-mtable{width:100%;border-collapse:collapse;font-size:11.5px;background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .cm-mtable th,.cm-mtable td{padding:7px 10px;border-bottom:1px solid var(--border);text-align:center;}
+  .cm-mtable th{background:var(--s2);color:var(--text3);font-weight:700;}
+  .cm-mtable td:first-child,.cm-mtable th:first-child{text-align:left;}
+  .cm-mtable tbody tr:hover{background:var(--s2);}
+  .cm-mtable tr:last-child td{border-bottom:none;}
+  .cm-mbar{display:inline-block;height:6px;border-radius:3px;background:#1A7A3A;vertical-align:middle;}
+  .cm-card{border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:#fff;}
+  .cm-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .cm-author{font-size:12px;font-weight:700;color:var(--text);}
+  .cm-when{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+  .cm-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 9px;border-radius:9px;white-space:nowrap;}
+  .cm-text{font-size:12.5px;color:var(--text2);line-height:1.7;}
+  .cm-reply{margin-top:6px;font-size:11.5px;color:#1A7A3A;background:#e7f6ec;border-radius:6px;padding:6px 9px;line-height:1.6;}
+  .cm-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;align-items:center;}
+  .cm-stbtn{border:1px solid var(--border);background:#fff;color:var(--text3);font-size:10.5px;font-weight:700;border-radius:6px;padding:4px 9px;cursor:pointer;font-family:'Pretendard',sans-serif;}
+  .cm-stbtn:hover{border-color:var(--nav);}
+  .cm-stbtn.on{background:var(--nav);color:#fff;border-color:var(--nav);}
+  </style>
+  <div id="cm-overview"></div>
+  <div class="list-filters">
+    <input class="search-input" type="text" id="cm-search" placeholder="🔍 내용·작성자 검색..." oninput="renderComments()">
+    <select class="filter-select" id="cm-filter-menu" onchange="renderComments()"></select>
+    <select class="filter-select" id="cm-filter-status" onchange="renderComments()"></select>
+    <span id="cm-count" style="font-size:12px;color:var(--text3);margin-left:auto"></span>
+  </div>
+  <div id="comments-wrap"></div>
+</div>
+
+<div class="modal-overlay" id="comment-modal">
+  <div class="modal" style="width:min(640px,96vw)">
+    <div class="modal-hdr">
+      <h3 id="comment-modal-title">의견 등록</h3>
+      <button class="modal-close" onclick="closeCommentModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="q-fields">
+        <div class="field"><label>작성자</label><input id="cmm-author" placeholder="이름"></div>
+        <div class="field"><label>대상 메뉴 / 프로세스</label><select id="cmm-menu"></select></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>의견 내용</label>
+        <textarea id="cmm-text" placeholder="이 메뉴/프로세스에 대한 의견·개선 요청을 입력하세요..." style="width:100%;min-height:120px;border:1.5px solid var(--border);border-radius:6px;padding:10px;font-size:12px;font-family:'Pretendard',sans-serif;line-height:1.7;resize:vertical"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+        <button class="btn btn-ghost" onclick="closeCommentModal()">취소</button>
+        <button class="btn btn-primary" onclick="saveCommentFromModal()">저장</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 </main>
@@ -2185,6 +2268,138 @@ function renderGuides(){
   document.getElementById('guide-body').innerHTML = sum + guideCard + qaCard;
 }
 
+// ── 의견 관리(Comments) ─────────────────────────────────────────────
+let currentView = 'dashboard';
+let editingCommentId = null;
+const COMMENT_KEY = 'acorn_comments_v1';
+let comments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '[]');
+const COMMENT_MENUS = [
+  {k:'dashboard', label:'📊 대시보드'},
+  {k:'new',       label:'➕ 기획안 등록'},
+  {k:'list',      label:'📋 기획안 목록'},
+  {k:'analytics', label:'📈 통계 분석'},
+  {k:'quotes',    label:'🧾 견적서 관리'},
+  {k:'contracts', label:'📜 계약서 관리'},
+  {k:'projects',  label:'📅 프로젝트 관리'},
+  {k:'sales',     label:'💰 판매·손익 관리'},
+  {k:'guides',    label:'📚 참고자료 · 가이드'},
+  {k:'etc',       label:'🗂 기타 / 전체'},
+];
+const COMMENT_STATUS = {
+  open:     {label:'접수',     bg:'#eef1f5', color:'#5a6472'},
+  review:   {label:'검토중',   bg:'#e7f0fb', color:'#1560B8'},
+  reflected:{label:'반영완료', bg:'#e7f6ec', color:'#1A7A3A'},
+  hold:     {label:'보류',     bg:'#fdeef0', color:'#8A1A2A'},
+};
+function cmEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function commentMenuLabel(k){ const m=COMMENT_MENUS.find(x=>x.k===k); return m?m.label:'🗂 기타 / 전체'; }
+function saveComments(){ localStorage.setItem(COMMENT_KEY, JSON.stringify(comments)); }
+function cmFillMenuSelect(el, includeAll){
+  if(!el) return;
+  el.innerHTML = (includeAll?'<option value="">전체 메뉴</option>':'') + COMMENT_MENUS.map(m=>'<option value="'+m.k+'">'+m.label+'</option>').join('');
+}
+// 등록/수정 모달
+function openCommentModal(id){
+  editingCommentId = id||null;
+  const sel=document.getElementById('cmm-menu'); cmFillMenuSelect(sel,false);
+  const titleEl=document.getElementById('comment-modal-title');
+  if(id){
+    const c=comments.find(x=>x.id===id); if(!c) return;
+    titleEl.textContent='의견 수정';
+    document.getElementById('cmm-author').value=c.author||'';
+    sel.value=c.menu||'etc';
+    document.getElementById('cmm-text').value=c.text||'';
+  }else{
+    titleEl.textContent='의견 등록';
+    document.getElementById('cmm-author').value='';
+    sel.value = COMMENT_MENUS.some(m=>m.k===currentView)?currentView:'etc';
+    document.getElementById('cmm-text').value='';
+  }
+  document.getElementById('comment-modal').classList.add('open');
+  const t=document.getElementById('cmm-text'); if(t&&t.focus) t.focus();
+}
+function closeCommentModal(){ document.getElementById('comment-modal').classList.remove('open'); editingCommentId=null; }
+function saveCommentFromModal(){
+  const author=(document.getElementById('cmm-author').value||'').trim();
+  const menu=document.getElementById('cmm-menu').value||'etc';
+  const text=(document.getElementById('cmm-text').value||'').trim();
+  if(!text){ alert('의견 내용을 입력하세요.'); return; }
+  const now=new Date().toISOString();
+  if(editingCommentId){
+    const c=comments.find(x=>x.id===editingCommentId);
+    if(c){ c.author=author||'익명'; c.menu=menu; c.text=text; c.updatedAt=now; }
+  }else{
+    comments.unshift({id:'cm'+Date.now().toString(36), menu, author:author||'익명', text, status:'open', reply:'', createdAt:now, updatedAt:now});
+  }
+  saveComments(); closeCommentModal(); renderComments();
+}
+// 상태/처리 관리
+function setCommentStatus(id,st){ const c=comments.find(x=>x.id===id); if(!c)return; c.status=st; c.updatedAt=new Date().toISOString(); saveComments(); renderComments(); }
+function editCommentReply(id){ const c=comments.find(x=>x.id===id); if(!c)return; const r=prompt('처리/반영 메모를 입력하세요. (조치 결과·회신 등)', c.reply||''); if(r===null)return; c.reply=r.trim(); c.updatedAt=new Date().toISOString(); saveComments(); renderComments(); }
+function deleteComment(id){ if(!confirm('이 의견을 삭제하시겠습니까?'))return; comments=comments.filter(x=>x.id!==id); saveComments(); renderComments(); }
+function cmScrollToList(){ const el=document.getElementById('comments-wrap'); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+function filterCommentsByMenu(k){ const f=document.getElementById('cm-filter-menu'); if(f) f.value=k; const sf=document.getElementById('cm-filter-status'); if(sf) sf.value=''; renderComments(); cmScrollToList(); }
+function filterCommentsByStatus(st){ const sf=document.getElementById('cm-filter-status'); if(sf) sf.value=st||''; const mf=document.getElementById('cm-filter-menu'); if(mf) mf.value=''; renderComments(); cmScrollToList(); }
+function commentCard(c){
+  const st=COMMENT_STATUS[c.status]||COMMENT_STATUS.open;
+  const when=(c.createdAt||'').slice(0,16).replace('T',' ');
+  const stbtns=Object.entries(COMMENT_STATUS).map(([k,v])=>'<button class="cm-stbtn'+(c.status===k?' on':'')+'" onclick="setCommentStatus(\''+c.id+'\',\''+k+'\')">'+v.label+'</button>').join('');
+  return '<div class="cm-card">'
+    +'<div class="cm-top"><span class="cm-author">'+cmEsc(c.author)+'</span><span class="cm-when">'+when+'</span>'
+    +'<span class="cm-badge" style="background:'+st.bg+';color:'+st.color+'">'+st.label+'</span></div>'
+    +'<div class="cm-text">'+cmEsc(c.text).replace(/\n/g,'<br>')+'</div>'
+    +(c.reply?'<div class="cm-reply">↪ 처리메모: '+cmEsc(c.reply).replace(/\n/g,'<br>')+'</div>':'')
+    +'<div class="cm-actions">'+stbtns
+    +'<button class="btn btn-ghost btn-sm" onclick="editCommentReply(\''+c.id+'\')">📝 처리메모</button>'
+    +'<button class="btn btn-ghost btn-sm" onclick="openCommentModal(\''+c.id+'\')">✏️ 수정</button>'
+    +'<button class="btn btn-danger btn-sm" onclick="deleteComment(\''+c.id+'\')">🗑️</button></div>'
+    +'</div>';
+}
+// 진행 현황 개요(전체 기준)
+function renderCommentOverview(){
+  const el=document.getElementById('cm-overview'); if(!el) return;
+  const total=comments.length, cnt=st=>comments.filter(c=>c.status===st).length;
+  const open=cnt('open'),review=cnt('review'),reflected=cnt('reflected'),hold=cnt('hold');
+  const rate=total?Math.round(reflected/total*100):0;
+  const tiles=[
+    {n:total,l:'전체',c:'var(--nav)',s:''},
+    {n:open,l:'접수',c:'#5a6472',s:'open'},
+    {n:review,l:'검토중',c:'#1560B8',s:'review'},
+    {n:reflected,l:'반영완료',c:'#1A7A3A',s:'reflected'},
+    {n:hold,l:'보류',c:'#8A1A2A',s:'hold'},
+  ].map(t=>'<div class="cm-stat" style="--c:'+t.c+'" title="클릭하면 해당 의견만 모아 봅니다" onclick="filterCommentsByStatus(\''+t.s+'\')"><div class="cm-stat-n">'+t.n+'</div><div class="cm-stat-l">'+t.l+' ›</div></div>').join('');
+  let rows='';
+  COMMENT_MENUS.forEach(m=>{
+    const arr=comments.filter(c=>c.menu===m.k); if(!arr.length) return;
+    const t=arr.length, r=arr.filter(c=>c.status==='reflected').length, pend=t-r, pr=t?Math.round(r/t*100):0;
+    rows+='<tr style="cursor:pointer" onclick="filterCommentsByMenu(\''+m.k+'\')"><td>'+m.label+'</td><td>'+t+'</td><td style="color:#8A1A2A;font-weight:700">'+pend+'</td><td style="color:#1A7A3A;font-weight:700">'+r+'</td><td><span class="cm-mbar" style="width:'+Math.max(pr*0.45,2)+'px"></span> '+pr+'%</td></tr>';
+  });
+  const table = rows ? '<div class="detail-section"><h4>📋 메뉴별 진행 현황 <span style="font-weight:400;color:var(--text3);font-size:11px;margin-left:6px">행을 클릭하면 해당 메뉴로 필터링</span></h4><table class="cm-mtable"><thead><tr><th>메뉴 / 프로세스</th><th>전체</th><th>미반영</th><th>반영</th><th>반영률</th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '';
+  el.innerHTML =
+    '<div class="cm-stats">'+tiles+'</div>'
+    +'<div class="cm-progress"><div class="cm-progress-top"><span>전체 반영률</span><span>'+rate+'% ('+reflected+'/'+total+')</span></div><div class="cm-progress-bar"><div style="width:'+rate+'%"></div></div></div>'
+    + table;
+}
+function renderComments(){
+  renderCommentOverview();
+  const fmenu=document.getElementById('cm-filter-menu'); if(fmenu && !fmenu.options.length) cmFillMenuSelect(fmenu,true);
+  const fstat=document.getElementById('cm-filter-status'); if(fstat && !fstat.options.length){ fstat.innerHTML='<option value="">전체 상태</option>'+Object.entries(COMMENT_STATUS).map(([k,v])=>'<option value="'+k+'">'+v.label+'</option>').join(''); }
+  const mf=fmenu?fmenu.value:'', sf=fstat?fstat.value:'', q=(document.getElementById('cm-search')?.value||'').toLowerCase();
+  let list=comments.slice();
+  if(mf) list=list.filter(c=>c.menu===mf);
+  if(sf) list=list.filter(c=>c.status===sf);
+  if(q) list=list.filter(c=>((c.text||'')+(c.author||'')+(c.reply||'')).toLowerCase().includes(q));
+  const cnt=document.getElementById('cm-count'); if(cnt) cnt.textContent='표시 '+list.length+'건 / 전체 '+comments.length+'건';
+  const wrap=document.getElementById('comments-wrap'); if(!wrap)return;
+  if(!comments.length){ wrap.innerHTML='<div class="empty-state"><div class="es-icon">💬</div><h3>등록된 의견이 없습니다</h3><p>오른쪽 위 ‘➕ 의견 등록’으로 첫 의견을 남겨보세요.</p></div>'; return; }
+  if(!list.length){ wrap.innerHTML='<div class="empty-state"><div class="es-icon">🔍</div><h3>조건에 맞는 의견이 없습니다</h3><p>필터를 변경해 보세요.</p></div>'; return; }
+  let html='';
+  COMMENT_MENUS.forEach(m=>{ const arr=list.filter(c=>c.menu===m.k); if(!arr.length)return;
+    html+='<div class="detail-section"><h4>'+m.label+' <span style="font-weight:400;color:var(--text3);font-size:11px;margin-left:6px">'+arr.length+'건</span></h4>'+arr.map(commentCard).join('')+'</div>';
+  });
+  wrap.innerHTML=html;
+}
+
 function exportCSV(){
   const rows=[['ID','도서명','저자','저자전화','저자이메일','저자현직업','장르','접수경로','정가','원고상태','1차자동판정','최종판정','가중점수','담당자','접수일','등록일','수정이력수','원고%','저자%','시장%','마케팅%'],...proposals.map(p=>{const ws=weightedScore(p.scores||{});const total=(p.scorePct!==undefined&&p.scorePct!==null&&p.scorePct!=='')?p.scorePct:ws.total;return [p.id,`"${p.title}"`,`"${p.author}"`,`"${p.authorTel||''}"`,`"${p.authorEmail||''}"`,`"${p.authorJob||''}"`,`"${gnDisp(p)}"`,`"${chDisp(p)}"`,p.price||'',p.msStatus||'',p.autoDecision||'',p.decision||'pending',total+'%',p.reviewer||'',p.date||'',p.regDate||(p.createdAt?p.createdAt.slice(0,10):''),(p.history||[]).length,...CRITERIA.map(cat=>{const pct=catPct(p.scores?.[cat.id], cat.items.length);return pct?pct.pct+'%':'0%';})];})];
   const csv=rows.map(r=>r.join(',')).join('\n');
@@ -2264,6 +2479,36 @@ function ddayLabel(days, done){
   return `<span class="ms-dday" style="background:var(--s2);color:var(--blue)">D-${days}</span>`;
 }
 
+function projectMeta(proj){
+  const stages=(proj&&proj.stages)||{};
+  let idx=0; STAGES.forEach((st,i)=>{ if(stages[st.id]&&stages[st.id].done) idx=i+1; });
+  if(idx>=STAGES.length) idx=STAGES.length-1;
+  const stageId=STAGES[idx].id;
+  const done = !!(stages.published&&stages.published.done);
+  let delayed=false;
+  STAGES.forEach(st=>{ const sx=stages[st.id]; if(sx&&!sx.done){ const d=daysUntil(sx.date); if(d!==null&&d<0) delayed=true; } });
+  const status = done?'done':(delayed?'delayed':'ontrack');
+  return {idx,stageId,status,done,delayed};
+}
+function projScrollToList(){ const el=document.getElementById('projects-wrap'); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+function filterProjectsByStage(id){ const f=document.getElementById('proj-filter-stage'); if(f) f.value=id; const st=document.getElementById('proj-filter-status'); if(st) st.value=''; renderProjects(); projScrollToList(); }
+function filterProjectsByStatus(st){ const sf=document.getElementById('proj-filter-status'); if(sf) sf.value=st||''; const f=document.getElementById('proj-filter-stage'); if(f) f.value=''; renderProjects(); projScrollToList(); }
+function renderProjectOverview(all){
+  const el=document.getElementById('proj-overview'); if(!el) return;
+  if(!all.length){ el.innerHTML=''; return; }
+  const metas=all.map(o=>o.meta);
+  const total=metas.length, cntStatus=x=>metas.filter(m=>m.status===x).length;
+  const statusTiles=[
+    {n:total,l:'전체',c:'var(--nav)',s:''},
+    {n:cntStatus('ontrack'),l:'일정 정상',c:'#1A7A3A',s:'ontrack'},
+    {n:cntStatus('delayed'),l:'지연',c:'#8A1A2A',s:'delayed'},
+    {n:cntStatus('done'),l:'완료',c:'#1560B8',s:'done'},
+  ].map(t=>'<div class="pj-stat" style="--c:'+t.c+'" title="클릭하면 해당 프로젝트만 모아 봅니다" onclick="filterProjectsByStatus(\''+t.s+'\')"><div class="pj-stat-n">'+t.n+'</div><div class="pj-stat-l">'+t.l+' ›</div></div>').join('');
+  const cntStage=id=>metas.filter(m=>m.stageId===id).length;
+  const stageTiles=STAGES.map(st=>'<div class="pj-stat" style="--c:'+st.color+'" title="현재 '+st.label+' 단계" onclick="filterProjectsByStage(\''+st.id+'\')"><div class="pj-stat-n">'+cntStage(st.id)+'</div><div class="pj-stat-l">'+st.icon+' '+st.label+' ›</div></div>').join('');
+  el.innerHTML='<div class="pj-sec-h">상태별</div><div class="pj-grid s4">'+statusTiles+'</div>'
+    +'<div class="pj-sec-h">현재 단계별</div><div class="pj-grid s6">'+stageTiles+'</div>';
+}
 function renderProjects(){
   const stageFilter = document.getElementById('proj-filter-stage')?.value||'';
   const statusFilter = document.getElementById('proj-filter-status')?.value||'';
@@ -2273,43 +2518,52 @@ function renderProjects(){
   if(q) approved = approved.filter(p=>p.title.toLowerCase().includes(q)||p.author.toLowerCase().includes(q));
 
   const wrap = document.getElementById('projects-wrap');
-  if(!approved.length){
-    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📅</div><h3>등록된 프로젝트가 없습니다</h3><p>기획안을 승인하거나 계약서를 작성(계약완료)하면 해당 도서가 여기에 자동으로 표시됩니다.</p></div>`;
+  const ov = document.getElementById('proj-overview');
+  const cntEl = document.getElementById('proj-count');
+
+  const all = approved.map(p=>{ const proj=ensureProject(p.id); return {p, proj, meta:projectMeta(proj)}; });
+  renderProjectOverview(all);
+
+  if(!all.length){
+    if(cntEl) cntEl.textContent='';
+    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📅</div><h3>등록된 프로젝트가 없습니다</h3><p>‘계약서 관리’에서 계약서를 작성하면 해당 도서가 여기에 자동으로 표시됩니다. 계약서를 모두 삭제하면 프로젝트도 함께 사라집니다.</p></div>`;
     return;
   }
 
-  wrap.innerHTML = approved.map(p=>{
-    const proj = ensureProject(p.id);
-    const stages = proj.stages;
+  let list = all.slice();
+  if(stageFilter) list = list.filter(o=>o.meta.stageId===stageFilter);
+  if(statusFilter) list = list.filter(o=>o.meta.status===statusFilter);
+  if(cntEl) cntEl.textContent='표시 '+list.length+'건 / 전체 '+all.length+'건';
 
-    // Compute current active stage
+  if(!list.length){
+    wrap.innerHTML=`<div class="empty-state"><div class="es-icon">🔍</div><h3>조건에 맞는 프로젝트가 없습니다</h3><p>위 현황 타일이나 필터를 변경해 보세요.</p></div>`;
+    return;
+  }
+
+  wrap.innerHTML = list.map(({p,proj})=>{
+    const stages = proj.stages;
     let currentStageIdx = 0;
     STAGES.forEach((st,i)=>{ if(stages[st.id]?.done) currentStageIdx = i+1; });
     if(currentStageIdx >= STAGES.length) currentStageIdx = STAGES.length-1;
 
-    // Stage progress bar
     const stageBar = STAGES.map((st,i)=>{
-      const s = stages[st.id];
-      const days = daysUntil(s?.date);
+      const sx = stages[st.id];
+      const days = daysUntil(sx?.date);
       let cls = 'upcoming';
-      if(s?.done) cls='done';
+      if(sx?.done) cls='done';
       else if(i===currentStageIdx) cls='active';
-      else if(days!==null&&days<0&&!s?.done) cls='overdue';
-      return `<div class="stage-item ${cls}" title="${st.label}: ${s?.date||'미설정'}">
+      else if(days!==null&&days<0&&!sx?.done) cls='overdue';
+      return `<div class="stage-item ${cls}" title="${st.label}: ${sx?.date||'미설정'}">
         <div class="st-num">${st.icon}</div>
         <div class="st-label">${st.label}</div>
-        <div class="st-date">${s?.date?s.date.slice(5):'-'}</div>
+        <div class="st-date">${sx?.date?sx.date.slice(5):'-'}</div>
       </div>`;
     }).join('');
 
-    // Next deadline
     const nextStage = STAGES.find((st,i)=>i>=currentStageIdx&&!stages[st.id]?.done&&stages[st.id]?.date);
     const nextDays = nextStage?daysUntil(stages[nextStage.id].date):null;
     const nextLabel = nextStage?`다음: ${nextStage.label} ${stages[nextStage.id].date}`:'';
-
-    // Publish date
     const pubDate = stages.published?.date||'미정';
-    const pubDone = stages.published?.done;
 
     return `<div class="project-card">
       <div class="project-card-hdr">
@@ -2759,6 +3013,7 @@ document.getElementById('sales-modal').addEventListener('click',function(e){if(e
 // Patch: add project/sales rendering to existing showView
 const _sv = showView;
 showView = function(id){
+  currentView = id;
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
   const viewEl = document.getElementById('view-'+id);
@@ -2773,6 +3028,7 @@ showView = function(id){
   if(id==='quotes') renderQuotes();
   if(id==='contracts') renderContracts();
   if(id==='guides') renderGuides();
+  if(id==='comments') renderComments();
 };
 
 
@@ -3525,8 +3781,11 @@ async function deleteContract(proposalId,contractId){
   if(!confirm(`계약서 "${c?c.contractNo:''}" 를 삭제하시겠습니까?`)) return Promise.resolve(false);
   if(!confirm('⚠️ 계약서는 복구할 수 없습니다. 정말 삭제하시겠습니까?')) return Promise.resolve(false);
   p.contracts=(p.contracts||[]).filter(x=>x.id!==contractId);
+  // 계약 기반 동기화: 남은 계약이 없으면 해당 프로젝트도 함께 제거한다.
+  if(!p.contracts.length && projectData[p.id]){ delete projectData[p.id]; saveProjects(); }
   await saveData();
   renderContracts();
+  if(document.getElementById('view-projects')?.classList.contains('active')) renderProjects();
 }
 function duplicateContract(proposalId,contractId){
   const p=proposals.find(x=>x.id===proposalId); if(!p)return;
@@ -3554,7 +3813,9 @@ function syncContractToProject(pid,c){
 }
 // 프로젝트 목록 대상: 승인/조건부 + 계약 보유 + 기존 프로젝트
 function getProjectProposals(){
-  return proposals.filter(p=>['approve','conditional'].includes(p.decision) || (p.contracts&&p.contracts.length) || projectData[p.id]);
+  // 프로젝트 관리는 계약 기반: 계약서가 1건 이상 있는 기획안만 프로젝트로 관리한다.
+  // (계약을 모두 삭제하면 해당 프로젝트도 목록에서 사라진다.)
+  return proposals.filter(p=>p.contracts && p.contracts.length);
 }
 
 // ── 계약서 관리 페이지 ──────────────────────────────────────────────
