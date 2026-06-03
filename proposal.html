@@ -1584,29 +1584,15 @@ async function saveProposal(){
     return;
   }
 
-  // Auto-create project for approved/selfpub proposals
-  const needsProject = ['approve','conditional','selfpub'].includes(proposal.decision);
-  if(needsProject && !projectData[proposal.id]){
-    projectData[proposal.id] = {
-      id: proposal.id,
-      currentStage: 'contract',
-      stages:{
-        contract:   {date:proposal.date||'', done:false, note:''},
-        manuscript: {date:'', done:false, note:''},
-        editing:    {date:'', done:false, note:''},
-        design:     {date:'', done:false, note:''},
-        print:      {date:'', done:false, note:''},
-        published:  {date:'', done:false, note:''},
-      },
-      tasks: [],
-      notes: '',
-    };
-    saveProjects();
+  // 프로젝트는 '계약 기반'으로 등록됨 → 승인 시 계약서 작성으로 유도(임시 프로젝트 자동생성 제거)
+  const needsContract = ['approve','conditional','selfpub'].includes(proposal.decision);
+  if(needsContract){
     const decLabel = proposal.decision==='selfpub'?'자비출판 유도':proposal.decision==='approve'?'기획출판 승인':'조건부 승인';
+    const pid = proposal.id;
     resetForm();
     updateStats();
-    const goProj = confirm(`"${title}" (${decLabel})\n\n프로젝트가 자동 등록되었습니다. 지금 바로 출판 일정을 설정하시겠습니까?`);
-    if(goProj){ showView('projects'); }
+    const goContract = confirm(`"${title}" (${decLabel})\n\n프로젝트 관리는 계약서를 작성하면 자동 등록됩니다.\n지금 바로 계약서를 작성하시겠습니까?`);
+    if(goContract){ showView('contracts'); openContractEditor(pid, null); }
     else { showView('list'); }
     return;
   }
