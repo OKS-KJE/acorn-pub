@@ -3231,6 +3231,14 @@ function quoteTotals(q){
     deposit:Math.round(total*0.3), middle:Math.round(total*0.4), balance:total-Math.round(total*0.3)-Math.round(total*0.4)};
 }
 const won = n => (Math.round(+n||0)).toLocaleString('ko-KR');
+// 결제 조건 (lump 일시금 / split 30·40·30 / tbd 협의 / custom 직접입력)
+function payMode(q){ return q.payMode || (q.type==='amazon'?'tbd':'split'); }
+function payText(q){ const m=payMode(q);
+  return m==='lump' ? '계약 시 일시금 납부'
+       : m==='tbd'  ? '협의 후 결정'
+       : m==='custom' ? (q.payCustom||'(직접 입력)')
+       : '계약금 30% · 중도금 40% · 잔금 30%'; }
+const escH = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 function newQuoteNo(){
   const d=new Date(); const yy=String(d.getFullYear()).slice(2);
@@ -3264,6 +3272,7 @@ function openQuoteEditor(proposalId, quoteId){
       pCompany:prov.company, pCeo:prov.ceo, pAddr:prov.addr, pTel:prov.tel, pEmail:prov.email, pBank:prov.bank, pManager:(p&&p.reviewer)||prov.manager,
       title:(p&&p.title)||'', pages:guessPages, listPrice:(p&&p.price)||'', color:'1', trim:'188*235mm',
       runCount:1000, pubDate:'원고 완성 후 3개월 이내', semiShare:50,
+      payMode:(type==='amazon')?'tbd':'split', payCustom:'',
       wordOver:0, korChars:0, charts:0, figures:0,
       vatRate:0.1, terms:DEFAULT_TERMS, memo:'',
       items: genQuoteItems(type,{pages:guessPages,runCount:1000,color:'1'}),
@@ -3284,9 +3293,14 @@ function qAddAmazonOpt(idx){ if(idx===''||idx==null)return; const o=AMAZON_OPTIO
 function onQuoteTypeChange(){
   const t=currentQuote.type;
   currentQuote.terms = (t==='amazon')?DEFAULT_TERMS_AMAZON:DEFAULT_TERMS;
+  currentQuote.payMode = (t==='amazon')?'tbd':'split';
   // 출판 종류 변경 시 기본 항목을 해당 종류 기준으로 재생성
   currentQuote.items = genQuoteItems(t,currentQuote);
 }
+function qSetPay(v){ if(!currentQuote)return; currentQuote.payMode=v;
+  const w=document.getElementById('q-paycustom-wrap'); if(w) w.style.display=(v==='custom')?'':'none';
+  refreshQuoteTotals(); }
+function qfPayCustom(v){ if(!currentQuote)return; currentQuote.payCustom=v; refreshQuoteTotals(); }
 // 사양 변경 시 라인 단가/수량 재계산
 function qRecalcItems(){
   if(!confirm('현재 사양(페이지·도수·부수)에 맞춰 기본 항목 단가를 다시 채웁니다. 직접 수정한 금액이 초기화됩니다. 진행할까요?'))return;
@@ -3309,6 +3323,7 @@ function qAmzAutoWords(){
 
 function renderQuoteEditor(){
   const q=currentQuote;
+  const pm=payMode(q);
   const opt=(v,cur)=>`<option value="${v}"${String(cur)===String(v)?' selected':''}>${v}</option>`;
   const typeBtns = Object.entries(QTYPES).map(([k,v])=>
     `<button type="button" class="qtype-btn ${q.type===k?'active':''}" style="--qc:${v.color}" onclick="qf('type','${k}');renderQuoteEditor()">${v.label}</button>`).join('');
@@ -3359,7 +3374,7 @@ function renderQuoteEditor(){
       `}
     </div>
     ${q.type==='semi'?`<div style="font-size:11px;color:var(--rose);margin-top:8px">※ 반기획: 아래 항목 총 제작비 중 <strong>${q.semiShare||50}%</strong>를 저자가 부담합니다.</div>`:''}
-    ${isAmazon?`<div style="font-size:11px;color:var(--text3);margin-top:8px">※ 인쇄 항목 없음 · 결제조건 협의 후 결정. 기본 패키지에 광고비 60만 원 포함. 한글 5만자=영문 2만단어 기준, 초과분만 1,000단어 단위로 가산됩니다.</div>`:''}
+    ${isAmazon?`<div style="font-size:11px;color:var(--text3);margin-top:8px">※ 인쇄 항목 없음 · 결제조건은 합계 영역에서 선택. 기본 패키지에 광고비 60만 원 포함. 한글 5만자=영문 2만단어 기준, 초과분만 1,000단어 단위로 가산됩니다.</div>`:''}
   </div>
 
   <div class="detail-section"><h4>🧾 견적 항목 <span style="font-weight:400;color:var(--text3);font-size:11px">(금액 = 수량 × 단가, 자동)</span></h4>
@@ -3381,6 +3396,17 @@ function renderQuoteEditor(){
     </div>
     <div class="detail-section q-totals" style="border-color:${provColor}">
       <h4>💵 합계</h4>
+      <div class="field" style="margin-bottom:8px"><label>결제 조건</label>
+        <select onchange="qSetPay(this.value)" style="width:100%">
+          <option value="lump"${pm==='lump'?' selected':''}>계약 시 일시금 납부</option>
+          <option value="split"${pm==='split'?' selected':''}>계약금 30% · 중도금 40% · 잔금 30%</option>
+          <option value="tbd"${pm==='tbd'?' selected':''}>협의 후 결정</option>
+          <option value="custom"${pm==='custom'?' selected':''}>기타(직접 입력)</option>
+        </select>
+      </div>
+      <div class="field" id="q-paycustom-wrap" style="margin-bottom:8px;${pm==='custom'?'':'display:none'}">
+        <input id="q-paycustom" placeholder="결제 조건 직접 입력 (예: 계약금 50% · 잔금 50%)" value="${(q.payCustom||'').replace(/"/g,'&quot;')}" oninput="qfPayCustom(this.value)">
+      </div>
       <div id="q-totals-box"></div>
     </div>
   </div>
@@ -3415,17 +3441,22 @@ function refreshQuoteTotals(){
   const box=document.getElementById('q-totals-box'); if(!box)return;
   const t=quoteTotals(currentQuote); const q=currentQuote;
   const row=(l,v,strong)=>`<div style="display:flex;justify-content:space-between;padding:6px 0;${strong?'border-top:2px solid var(--border);margin-top:4px':''}"><span style="font-size:${strong?13:12}px;color:var(--text2);font-weight:${strong?800:600}">${l}</span><span style="font-family:'JetBrains Mono',monospace;font-size:${strong?16:13}px;font-weight:${strong?800:700};color:${strong?qtype(q.type).color:'var(--text)'}">${won(v)}원</span></div>`;
+  const pm=payMode(q);
+  let payHTML;
+  if(pm==='split'){
+    payHTML=`<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-size:11px;color:var(--text3)">
+       <div style="display:flex;justify-content:space-between;padding:2px 0"><span>계약금 30%</span><span style="font-family:'JetBrains Mono',monospace">${won(t.deposit)}원</span></div>
+       <div style="display:flex;justify-content:space-between;padding:2px 0"><span>중도금 40%</span><span style="font-family:'JetBrains Mono',monospace">${won(t.middle)}원</span></div>
+       <div style="display:flex;justify-content:space-between;padding:2px 0"><span>잔금 30%</span><span style="font-family:'JetBrains Mono',monospace">${won(t.balance)}원</span></div>
+     </div>`;
+  } else {
+    payHTML=`<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-size:11px;color:var(--text3)">결제조건: ${escH(payText(q))}</div>`;
+  }
   box.innerHTML =
     (q.type==='semi'?row(`총 제작비`,t.full)+row(`저자 부담 (${q.semiShare||50}%) = 소계`,t.subtotal):row('소계',t.subtotal))+
     row(`부가세 (${Math.round((q.vatRate??0.1)*100)}%)`,t.vat)+
     row('합계 (VAT 포함)',t.total,true)+
-    (q.type==='amazon'
-      ? `<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-size:11px;color:var(--text3)">결제조건: 협의 후 결정</div>`
-      : `<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-size:11px;color:var(--text3)">
-       <div style="display:flex;justify-content:space-between;padding:2px 0"><span>계약금 30%</span><span style="font-family:'JetBrains Mono',monospace">${won(t.deposit)}원</span></div>
-       <div style="display:flex;justify-content:space-between;padding:2px 0"><span>중도금 40%</span><span style="font-family:'JetBrains Mono',monospace">${won(t.middle)}원</span></div>
-       <div style="display:flex;justify-content:space-between;padding:2px 0"><span>잔금 30%</span><span style="font-family:'JetBrains Mono',monospace">${won(t.balance)}원</span></div>
-     </div>`);
+    payHTML;
 }
 
 // ── 저장 / 삭제 / 복제 ──────────────────────────────────────────────
@@ -3647,7 +3678,7 @@ function printQuote(proposalId,quoteId){
       <div class="pq-party"><h4>Customer (고객)</h4><table>
         <tr><td>저자명</td><td>${esc(q.cName)}</td></tr>${q.cJob?`<tr><td>현 직업</td><td>${esc(q.cJob)}</td></tr>`:''}
         <tr><td>TEL</td><td>${esc(q.cTel)}</td></tr><tr><td>Email</td><td>${esc(q.cEmail)}</td></tr>
-        <tr><td>결제조건</td><td>${q.type==='amazon'?'협의 후 결정':'계약금 30% · 중도금 40% · 잔금 30%'}</td></tr></table></div>
+        <tr><td>결제조건</td><td>${esc(payText(q))}</td></tr></table></div>
     </div>
     <div class="pq-desc"><b>Service Description</b><br>${esc(specLine)}</div>
     <table class="pq-items"><thead><tr><th>No.</th><th>항 목</th><th>수량</th><th>단가</th><th>금액</th></tr></thead><tbody>${itemRows}</tbody></table>
@@ -3659,7 +3690,7 @@ function printQuote(proposalId,quoteId){
         <tr><td>부가세 (${Math.round((q.vatRate??0.1)*100)}%)</td><td>${won(t.vat)}</td></tr>
         <tr class="total"><td>합계</td><td>${won(t.total)}</td></tr>
       </table>
-      ${q.type==='amazon'?'':`<div class="pq-pay"><div><span>계약금 30%</span><span>${won(t.deposit)}원</span></div><div><span>중도금 40%</span><span>${won(t.middle)}원</span></div><div><span>잔금 30%</span><span>${won(t.balance)}원</span></div></div>`}
+      ${payMode(q)==='split'?`<div class="pq-pay"><div><span>계약금 30%</span><span>${won(t.deposit)}원</span></div><div><span>중도금 40%</span><span>${won(t.middle)}원</span></div><div><span>잔금 30%</span><span>${won(t.balance)}원</span></div></div>`:`<div class="pq-pay"><div><span>결제조건</span><span>${esc(payText(q))}</span></div></div>`}
       ${q.pBank?`<div class="pq-bank">입금계좌: ${esc(q.pBank)}</div>`:''}
       </div>
     </div>
