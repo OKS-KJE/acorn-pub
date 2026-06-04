@@ -3203,6 +3203,7 @@ function genQuoteItems(type, spec){
 }
 // 아마존 프리미엄 옵션(추가용)
 const AMAZON_OPTIONS = [
+  {name:'초과 원고 비용 (영문 1,000단어 초과당 · 한글 5만자=영문 2만단어 기준)', unit:33000},
   {name:'종이책 변환(POD) — 인쇄용 PDF 변환 및 아마존 POD 등록', unit:1000000},
   {name:'프리미엄 표지 디자인(Spine 포함)', unit:600000},
   {name:'하드커버 출간 대행', unit:850000},
@@ -3669,7 +3670,9 @@ function printQuote(proposalId,quoteId){
 }
 
 // 모달 오버레이 닫기
-document.getElementById('quote-modal').addEventListener('click',function(e){if(e.target===this)closeQuoteEditor();});
+(function(){var qm=document.getElementById('quote-modal');var downOnBg=false;
+  qm.addEventListener('mousedown',function(e){downOnBg=(e.target===qm);});
+  qm.addEventListener('click',function(e){if(e.target===qm&&downOnBg)closeQuoteEditor();downOnBg=false;});})();
 document.getElementById('provider-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
 // showView 확장 — 견적서 페이지 렌더
@@ -4152,7 +4155,9 @@ function contractSectionHTML(p){
 }
 
 // 모달 오버레이 닫기
-document.getElementById('contract-modal').addEventListener('click',function(e){if(e.target===this)closeContractEditor();});
+(function(){var cm=document.getElementById('contract-modal');var downOnBg=false;
+  cm.addEventListener('mousedown',function(e){downOnBg=(e.target===cm);});
+  cm.addEventListener('click',function(e){if(e.target===cm&&downOnBg)closeContractEditor();downOnBg=false;});})();
 
 // showView 확장 — 계약서 페이지 + 프로젝트는 계약 포함 목록으로
 (function(){ const _prev=showView; showView=function(id){ _prev(id); if(id==='contracts') renderContracts(); }; })();
