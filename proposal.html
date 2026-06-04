@@ -1195,7 +1195,7 @@ function submissionToProposal(d, created){
     channel:'', channelOther:'', genre:subVal(d.genre), genreOther:'',
     price:subVal(d.price), msStatus:subVal(d.ms_status), type:'',
     summary:subVal(d.summary)||subVal(d.concept),
-    manuscripts:[], scores:{}, scorePct:0,
+    manuscripts:Array.isArray(d.manuscripts)?d.manuscripts.slice(0,3):[], scores:{}, scorePct:0,
     autoDecision:'', decision:'', decNote:'[저자 온라인 제출 원문]\n'+note,
     persuadeA:'', persuadeB:'', rationale:'', reviewer:'',
     date:(created?String(created).slice(0,10):new Date().toISOString().slice(0,10)),
