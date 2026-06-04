@@ -504,7 +504,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 <div class="view" id="view-list">
   <div class="page-hdr">
     <div><h2>📋 기획안 목록</h2><div class="sub" id="list-label">총 0건</div></div>
-    <div style="margin-left:auto"><button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button></div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-ghost" id="btn-inbox" onclick="openSubmissionsModal()">📥 저자 제출함 <span id="inbox-badge" style="display:none;background:var(--rose);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px">0</span></button>
+      <button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button>
+    </div>
   </div>
   <div class="list-filters">
     <input class="search-input" type="text" id="search" placeholder="🔍 도서명·저자명 검색..." oninput="filterChanged()">
@@ -836,6 +839,18 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   </div>
 </div>
 
+<!-- 저자 제출함(접수) 모달 -->
+<div class="modal-overlay" id="submissions-modal">
+  <div class="modal" style="width:min(820px,97vw)">
+    <div class="modal-hdr">
+      <h3>📥 저자 제출함 — 온라인 제안 폼 접수</h3>
+      <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="openSubmissionsModal()">↻ 새로고침</button>
+      <button class="modal-close" onclick="document.getElementById('submissions-modal').classList.remove('open')">×</button>
+    </div>
+    <div class="modal-body" id="submissions-body"><div style="padding:30px;text-align:center;color:var(--text3)">불러오는 중…</div></div>
+  </div>
+</div>
+
 <!-- 견적 에디터 모달 -->
 <div class="modal-overlay" id="quote-modal">
   <div class="modal" style="width:min(1040px,97vw)">
@@ -1151,6 +1166,106 @@ document.addEventListener('click',function(e){
   }
 });
 
+// ── 저자 제출함(온라인 제안 폼 접수) ───────────────────────────────
+const SUBMISSIONS_TABLE = 'author_submissions';
+let _submissions = [];
+function subVal(v){ return (v==null)?'':(Array.isArray(v)?v.join(', '):String(v)); }
+function submissionToProposal(d, created){
+  const note = [
+    ['핵심 컨셉', d.concept], ['부제', d.subtitle],
+    ['기획 배경', d.background], ['기획 의도', d.intent],
+    ['1차 독자', d.target1], ['2차 독자', d.target2],
+    ['유사도서 1', [d.sim1_title,d.sim1_pub,d.sim1_diff].filter(Boolean).join(' / ')],
+    ['유사도서 2', [d.sim2_title,d.sim2_pub,d.sim2_diff].filter(Boolean).join(' / ')],
+    ['유사도서 3', [d.sim3_title,d.sim3_pub,d.sim3_diff].filter(Boolean).join(' / ')],
+    ['차별점', d.diff_summary], ['시장성', d.market],
+    ['저자 소개', d.author_intro],
+    ['채널·SNS', [d.ch_sns,d.ch_sns_scale].filter(Boolean).join(' · ')],
+    ['채널·강의', [d.ch_edu,d.ch_edu_scale].filter(Boolean).join(' · ')],
+    ['채널·커뮤니티', [d.ch_comm,d.ch_comm_scale].filter(Boolean).join(' · ')],
+    ['마케팅 활동', subVal(d.mkt)], ['마케팅 계획', d.mkt_plan],
+    ['목차', d.toc],
+    ['원고 완성도', d.ms_status], ['예상 탈고', d.ms_date], ['원고 형식', d.ms_format],
+    ['희망 출판형태', subVal(d.pubtype)], ['기타 요청', d.etc],
+  ].filter(x=>x[1]&&String(x[1]).trim()).map(x=>'■ '+x[0]+'\n'+x[1]).join('\n\n');
+  return {
+    id:Date.now().toString()+Math.floor(Math.random()*1000),
+    title:subVal(d.title)||'(제목없음)', author:subVal(d.name),
+    authorTel:subVal(d.phone), authorEmail:subVal(d.email), authorJob:subVal(d.job),
+    channel:'', channelOther:'', genre:subVal(d.genre), genreOther:'',
+    price:subVal(d.price), msStatus:subVal(d.ms_status), type:'',
+    summary:subVal(d.summary)||subVal(d.concept),
+    manuscripts:[], scores:{}, scorePct:0,
+    autoDecision:'', decision:'', decNote:'[저자 온라인 제출 원문]\n'+note,
+    persuadeA:'', persuadeB:'', rationale:'', reviewer:'',
+    date:(created?String(created).slice(0,10):new Date().toISOString().slice(0,10)),
+    reply:'', regDate:new Date().toISOString().slice(0,10),
+    history:[], fromSubmission:true,
+    createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
+  };
+}
+async function fetchSubmissions(){
+  if(!sbOn()) return [];
+  try{
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUBMISSIONS_TABLE}?select=id,data,created_at,status&order=created_at.desc`,{headers:sbHeaders()});
+    if(!res.ok) return [];
+    const rows=await res.json();
+    return rows.filter(r=>(r.status||'new')!=='imported');
+  }catch(e){ return []; }
+}
+async function refreshInboxBadge(){
+  _submissions=await fetchSubmissions();
+  const b=document.getElementById('inbox-badge'); if(!b) return;
+  if(_submissions.length){ b.textContent=_submissions.length; b.style.display='inline-block'; } else b.style.display='none';
+}
+async function openSubmissionsModal(){
+  const m=document.getElementById('submissions-modal'); m.classList.add('open');
+  const body=document.getElementById('submissions-body');
+  body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text3)">불러오는 중…</div>';
+  if(!sbOn()){ body.innerHTML='<div style="padding:24px;color:var(--text3)">Supabase 연결이 꺼져 있어 제출함을 불러올 수 없습니다.</div>'; return; }
+  _submissions=await fetchSubmissions(); renderSubmissionsList(); refreshInboxBadge();
+}
+function renderSubmissionsList(){
+  const body=document.getElementById('submissions-body');
+  if(!_submissions.length){ body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text3)">새로 접수된 저자 제안이 없습니다.</div>'; return; }
+  body.innerHTML=_submissions.map((r,i)=>{ const d=r.data||{};
+    return `<div style="border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="font-weight:700;color:var(--nav);font-size:15px">${escH(d.title||'(제목없음)')}</div>
+        <div style="font-size:12px;color:var(--text3)">${escH(d.name||'')} · ${escH(d.email||'')}${d.genre?(' · '+escH(d.genre)):''}</div>
+        <div style="font-size:11px;color:var(--text3);margin-left:auto">${(r.created_at||'').slice(0,10)}</div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6">${escH((d.concept||d.summary||'').slice(0,140))}</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-primary btn-sm" onclick="importSubmission(${i})">➕ 기획안으로 가져오기</button>
+        <button class="btn btn-ghost btn-sm" onclick="dismissSubmission(${i})">처리완료(숨김)</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+async function markSubmission(id,status){
+  if(!sbOn()) return;
+  try{ await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUBMISSIONS_TABLE}?id=eq.${encodeURIComponent(id)}`,
+    {method:'PATCH',headers:Object.assign({},sbHeaders(),{'Content-Type':'application/json','Prefer':'return=minimal'}),body:JSON.stringify({status})}); }catch(e){}
+}
+async function importSubmission(i){
+  const r=_submissions[i]; if(!r) return;
+  const p=submissionToProposal(r.data||{}, r.created_at);
+  proposals.unshift(p);
+  await saveData();
+  await markSubmission(r.id,'imported');
+  _submissions.splice(i,1); renderSubmissionsList(); refreshInboxBadge();
+  if(typeof updateStats==='function') updateStats();
+  if(typeof renderList==='function') renderList();
+  alert('‘'+p.title+'’ 기획안이 목록에 추가되었습니다. 평가는 목록에서 진행하세요.');
+}
+async function dismissSubmission(i){
+  const r=_submissions[i]; if(!r) return;
+  if(!confirm('이 제출을 처리완료로 표시하고 제출함에서 숨길까요?')) return;
+  await markSubmission(r.id,'imported');
+  _submissions.splice(i,1); renderSubmissionsList(); refreshInboxBadge();
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
 async function init(){
   buildScoreForms();
@@ -1163,6 +1278,7 @@ async function init(){
   updateStats();
   renderDashboard();
   updateDbStatus();
+  refreshInboxBadge();
 }
 
 function buildScoreForms(){
