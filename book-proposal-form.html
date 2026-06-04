@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기획안 제안하기 · 에이콘 출판 · acornON</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
+<style>
+:root{
+  --paper:#F7F3EC; --card:#FFFFFF; --ink:#1A2236; --ink2:#3A4358; --muted:#8A8270;
+  --navy:#1B2A4A; --blue:#1560B8; --wine:#7A2233; --gold:#B08A3E; --line:#E4DCCB; --line2:#D9E2EF;
+  --ok:#1A6A4A; --err:#B03A4A; --boxbg:#FBF8F1; --shadow:0 4px 18px rgba(27,42,74,.07);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Pretendard',sans-serif;line-height:1.65;
+  background-image:radial-gradient(circle at 12% -5%,rgba(176,138,62,.06),transparent 40%),radial-gradient(circle at 95% 0%,rgba(21,96,184,.05),transparent 35%);}
+.serif{font-family:'Noto Serif KR',serif;}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 120px;}
+
+/* ── Hero ── */
+header.hero{padding:54px 0 30px;border-bottom:1px solid var(--line);margin-bottom:30px;}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;}
+h1.title{font-family:'Noto Serif KR',serif;font-size:40px;line-height:1.2;font-weight:700;color:var(--navy);margin:10px 0 6px;}
+.subtitle{color:var(--muted);font-size:15px;letter-spacing:.02em;}
+.lede{margin-top:18px;font-size:15.5px;color:var(--ink2);max-width:680px;}
+.note{margin-top:16px;background:var(--boxbg);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:8px;padding:14px 16px;font-size:13.5px;color:var(--ink2);}
+.note b{color:var(--navy);}
+
+/* ── Section ── */
+section.blk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 24px 20px;margin-bottom:18px;box-shadow:var(--shadow);}
+.blk-h{display:flex;align-items:baseline;gap:10px;margin:0 0 4px;}
+.blk-n{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:#fff;background:var(--navy);
+  width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.blk-t{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--navy);}
+.blk-g{color:var(--muted);font-size:13px;margin:2px 0 16px 36px;}
+
+label.fl{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin:0 0 5px;}
+label.fl .req{color:var(--wine);margin-left:3px;}
+.grid{display:grid;gap:14px 16px;}
+.g2{grid-template-columns:1fr 1fr;}
+.g3{grid-template-columns:1fr 1fr 1fr;}
+.field{margin-bottom:14px;}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{
+  width:100%;border:1.5px solid var(--line2);border-radius:9px;padding:11px 13px;font-size:14px;color:var(--ink);
+  font-family:'Pretendard',sans-serif;background:#fff;transition:.15s;}
+textarea{resize:vertical;min-height:96px;line-height:1.7;}
+textarea.code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,96,184,.12);}
+input::placeholder,textarea::placeholder{color:#B9BFC9;}
+.hint{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* checkbox chips */
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:2px 0 4px;}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line2);border-radius:999px;
+  padding:8px 14px;font-size:13px;cursor:pointer;user-select:none;transition:.15s;background:#fff;}
+.chip input{display:none;}
+.chip:hover{border-color:var(--blue);}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.chip .bx{width:15px;height:15px;border:1.5px solid #C4CAD4;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#fff;}
+.chip.on .bx{background:var(--gold);border-color:var(--gold);}
+
+/* similar books rows */
+.simrow{display:grid;grid-template-columns:1.1fr 1fr 1.3fr;gap:10px;margin-bottom:9px;}
+.simrow input{font-size:13px;padding:9px 11px;}
+
+.consent{display:flex;gap:11px;align-items:flex-start;background:var(--boxbg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+.consent input{margin-top:4px;width:18px;height:18px;accent-color:var(--navy);flex-shrink:0;}
+.consent label{font-size:13.5px;color:var(--ink2);}
+
+/* actions */
+.actions{position:sticky;bottom:0;margin-top:26px;background:rgba(247,243,236,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);padding:16px 0 14px;}
+.actions-in{max-width:860px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.btn{border:none;border-radius:10px;padding:13px 22px;font-size:14px;font-weight:700;font-family:'Pretendard',sans-serif;cursor:pointer;transition:.18s;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:#13203a;}
+.btn-primary:disabled{opacity:.55;cursor:default;}
+.btn-ghost{background:#fff;color:var(--ink2);border:1.5px solid var(--line2);}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue);}
+.save-state{font-size:12.5px;color:var(--muted);margin-left:auto;}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
+  background:var(--navy);color:#fff;padding:13px 22px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.25);transition:.3s;z-index:50;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{background:var(--wine);}
+
+/* success overlay */
+.done{position:fixed;inset:0;background:rgba(27,42,74,.55);display:none;align-items:center;justify-content:center;z-index:60;padding:20px;}
+.done.show{display:flex;}
+.done-card{background:#fff;border-radius:18px;max-width:460px;width:100%;padding:38px 34px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3);}
+.done-card .mark{font-size:46px;}
+.done-card h3{font-family:'Noto Serif KR',serif;font-size:24px;color:var(--navy);margin:8px 0 8px;}
+.done-card p{color:var(--ink2);font-size:14.5px;margin:0 0 22px;}
+
+footer.ft{text-align:center;color:var(--muted);font-size:12.5px;padding-top:28px;}
+.err-field{border-color:var(--err)!important;box-shadow:0 0 0 3px rgba(176,58,74,.12)!important;}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr;} h1.title{font-size:32px;} .simrow{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">에이콘 출판 · acornON</div>
+    <h1 class="title">기획안 제안하기</h1>
+    <div class="subtitle">Book Proposal — 저자님의 책을 함께 만들고 싶습니다</div>
+    <p class="lede">좋은 원고는 늘 환영합니다. 아래 양식을 채워 보내주시면, 담당 편집자가 직접 검토하고 통상 <b>2~3주 내</b>에 결과를 안내드립니다. 모든 항목을 완벽히 채우지 않으셔도 됩니다 — 작성 가능한 범위에서 구체적으로 적어주실수록 검토가 빠르고 정확해집니다.</p>
+    <div class="note">✍️ 작성 중 내용은 이 브라우저에 <b>자동 임시저장</b>됩니다. 완성 후 아래 <b>‘제안서 제출’</b> 버튼을 눌러주세요. 완성 원고가 있으시면 제출 후 안내되는 이메일로 함께 보내주시면 좋습니다.</div>
+  </header>
+
+  <form id="pf" autocomplete="on">
+
+  <!-- 1 기본정보 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">1</span><span class="blk-t">기본 정보</span></div>
+    <div class="blk-g">책의 기본 정보를 입력해 주세요.</div>
+    <div class="grid g2">
+      <div class="field"><label class="fl">도서명 (가제)<span class="req">*</span></label><input type="text" name="title" placeholder="예) N잡하기 좋은 날"></div>
+      <div class="field"><label class="fl">부제</label><input type="text" name="subtitle" placeholder="예) 용기가 필요한 누군가를 위한 N잡 실전 보고서"></div>
+      <div class="field"><label class="fl">분야 / 장르</label><input type="text" name="genre" placeholder="예) 에세이 / 자기계발 × 커리어"></div>
+      <div class="field"><label class="fl">예상 정가 (원)</label><input type="text" name="price" placeholder="예) 17,000"></div>
+      <div class="field"><label class="fl">예상 판형 / 분량</label><input type="text" name="format" placeholder="예) 신국판 / 약 280페이지"></div>
+      <div class="field"><label class="fl">핵심 컨셉 (한 줄)</label><input type="text" name="concept" placeholder="예) 좋아하는 일을 삶으로 가져온 사람의 현실 경험 에세이"></div>
+    </div>
+  </section>
+
+  <!-- 2 저자정보 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">2</span><span class="blk-t">저자 정보</span></div>
+    <div class="blk-g">연락을 위한 정보와 저자 소개를 적어주세요.</div>
+    <div class="grid g2">
+      <div class="field"><label class="fl">성명<span class="req">*</span></label><input type="text" name="name" placeholder="예) 홍길동"></div>
+      <div class="field"><label class="fl">현 직업 / 소속</label><input type="text" name="job" placeholder="예) 강사 · 콘텐츠 제작자"></div>
+      <div class="field"><label class="fl">이메일<span class="req">*</span></label><input type="email" name="email" placeholder="author@example.com"></div>
+      <div class="field"><label class="fl">연락처 (전화)</label><input type="tel" name="phone" placeholder="010-0000-0000"></div>
+    </div>
+    <div class="field"><label class="fl">저자 소개</label>
+      <textarea name="author_intro" placeholder="경력·전문성·이력을 자유롭게 소개해 주세요. 이 책의 주제와 연결되는 경험이 있다면 강조해 주세요."></textarea></div>
+  </section>
+
+  <!-- 3 채널·브랜드 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">3</span><span class="blk-t">저자 채널 · 브랜드 현황</span></div>
+    <div class="blk-g">독자에게 직접 닿을 수 있는 채널은 초도 판매와 마케팅에 큰 힘이 됩니다.</div>
+    <div class="grid g2">
+      <div class="field"><label class="fl">SNS · 온라인 채널</label><input type="text" name="ch_sns" placeholder="예) 인스타그램 @handle"></div>
+      <div class="field"><label class="fl">규모 (팔로워·구독자 등)</label><input type="text" name="ch_sns_scale" placeholder="예) 1.2만 팔로워"></div>
+      <div class="field"><label class="fl">강의 · 교육 활동</label><input type="text" name="ch_edu" placeholder="예) 기업 특강 / 정기 강의"></div>
+      <div class="field"><label class="fl">규모 (수강생·횟수 등)</label><input type="text" name="ch_edu_scale" placeholder="예) 월 2회, 회당 30명"></div>
+      <div class="field"><label class="fl">커뮤니티 · 네트워크</label><input type="text" name="ch_comm" placeholder="예) 협회·동호회·기업 네트워크"></div>
+      <div class="field"><label class="fl">규모 (회원 수 등)</label><input type="text" name="ch_comm_scale" placeholder="예) 회원 500명 커뮤니티 운영"></div>
+    </div>
+  </section>
+
+  <!-- 4 기획배경 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">4</span><span class="blk-t">기획 배경</span></div>
+    <div class="blk-g">이 책을 기획하게 된 배경과 문제의식 — ‘왜 지금 이 책이 필요한가’.</div>
+    <textarea name="background" placeholder="예) 다중 커리어는 이제 선택이 아니라 시대적 흐름이지만, 많은 이들이 실행의 문 앞에서 멈춘다..."></textarea>
+  </section>
+
+  <!-- 5 기획의도 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">5</span><span class="blk-t">기획 의도 · 목적</span></div>
+    <div class="blk-g">독자가 이 책을 통해 무엇을 얻길 바라는지(독자에게 주는 변화·효용).</div>
+    <textarea name="intent" placeholder="예) 하고 싶은 일을 해도 괜찮다는 감각을 갖게 하고, 두려움을 낮추며 실행으로 이동시키는 것..."></textarea>
+  </section>
+
+  <!-- 6 차별점 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">6</span><span class="blk-t">핵심 컨셉 · 유사 도서와의 차별점</span></div>
+    <div class="blk-g">이미 출간된 유사 도서를 적고, 이 책만의 차별점을 설명해 주세요.</div>
+    <div style="font-size:12px;color:var(--muted);display:grid;grid-template-columns:1.1fr 1fr 1.3fr;gap:10px;margin-bottom:6px;font-weight:700">
+      <span>유사 도서명</span><span>저자 / 출판사</span><span>이 책과의 차이</span></div>
+    <div class="simrow"><input type="text" name="sim1_title" placeholder="예) 안녕하세요, 프로N잡러입니다"><input type="text" name="sim1_pub" placeholder="○○○ / ○○출판"><input type="text" name="sim1_diff" placeholder="방법론 중심 → 본서는 정체성·용기 중심"></div>
+    <div class="simrow"><input type="text" name="sim2_title" placeholder="유사 도서명"><input type="text" name="sim2_pub" placeholder="저자 / 출판사"><input type="text" name="sim2_diff" placeholder="차이"></div>
+    <div class="simrow"><input type="text" name="sim3_title" placeholder="유사 도서명"><input type="text" name="sim3_pub" placeholder="저자 / 출판사"><input type="text" name="sim3_diff" placeholder="차이"></div>
+    <div class="field" style="margin-top:12px"><label class="fl">한 문단 요약 — 이 책의 핵심 차별점</label>
+      <textarea name="diff_summary" placeholder="예) 많은 유사서가 ‘어떻게’에 초점을 두지만, 이 책은 ‘왜 그렇게 살고 싶은가’에서 출발한다..."></textarea></div>
+  </section>
+
+  <!-- 7 타깃독자 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">7</span><span class="blk-t">타깃 독자</span></div>
+    <div class="grid g2">
+      <div class="field"><label class="fl">1차 핵심 독자</label><input type="text" name="target1" placeholder="예) 커리어 전환에 관심 있으나 용기가 필요한 20~30대"></div>
+      <div class="field"><label class="fl">2차 확장 독자</label><input type="text" name="target2" placeholder="예) 프리랜서, 정체성·용기 회복이 필요한 20~40대"></div>
+    </div>
+  </section>
+
+  <!-- 8 목차 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">8</span><span class="blk-t">목차 (구성안)</span></div>
+    <div class="blk-g">장(Part)·절(꼭지) 구조로 작성해 주세요. 가안도 괜찮습니다.</div>
+    <textarea name="toc" class="code" style="min-height:170px" placeholder="1부. 하고 싶은 일만 하면서 돈을 벌 수 있을까?&#10;   1) 월급쟁이는 체질이 아니어서요&#10;   2) ...&#10;2부. 나는 관심 있던 일부터 실행에 옮기기로 했다&#10;   1) ..."></textarea>
+  </section>
+
+  <!-- 9 원고요약 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">9</span><span class="blk-t">원고 요약</span></div>
+    <div class="blk-g">책 전체 내용을 5~10줄로 요약해 주세요. (검토·보도자료의 기초가 됩니다.)</div>
+    <textarea name="summary" style="min-height:120px" placeholder="이 책은 ...에 관한 책으로, ...를 다룬다. 핵심 메시지는 ...이다."></textarea>
+  </section>
+
+  <!-- 10 시장성 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">10</span><span class="blk-t">시장성</span></div>
+    <div class="blk-g">시장 수요·트렌드·경쟁 상황에 대한 생각(관련 근거가 있으면 함께).</div>
+    <textarea name="market" placeholder="예) 부업·N잡 관심 인구 증가, 실행 이전 심리를 다루는 콘텐츠는 시장에 부족, 20~40대 직장인의 보편적 고민..."></textarea>
+  </section>
+
+  <!-- 11 마케팅 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">11</span><span class="blk-t">마케팅 전략 (저자 참여)</span></div>
+    <div class="blk-g">출간 후 저자께서 직접 하실 수 있는 활동에 표시하고, 구체 계획을 적어주세요.</div>
+    <div class="chips" id="mkt-chips">
+      <label class="chip"><input type="checkbox" name="mkt" value="강연·북토크"><span class="bx">✓</span>강연·북토크</label>
+      <label class="chip"><input type="checkbox" name="mkt" value="강의·스터디 연계"><span class="bx">✓</span>강의·스터디 연계</label>
+      <label class="chip"><input type="checkbox" name="mkt" value="기업교육·HRD"><span class="bx">✓</span>기업교육·HRD</label>
+      <label class="chip"><input type="checkbox" name="mkt" value="SNS·유튜브·릴스"><span class="bx">✓</span>SNS·유튜브·릴스</label>
+      <label class="chip"><input type="checkbox" name="mkt" value="단체구매·기관 납품"><span class="bx">✓</span>단체구매·기관 납품</label>
+      <label class="chip"><input type="checkbox" name="mkt" value="팟캐스트·인터뷰"><span class="bx">✓</span>팟캐스트·인터뷰</label>
+      <label class="chip"><input type="checkbox" name="mkt" value="후속 도서·시리즈"><span class="bx">✓</span>후속 도서·시리즈</label>
+    </div>
+    <div class="field" style="margin-top:10px"><label class="fl">구체 계획 (예상 횟수·규모·시기 등)</label>
+      <textarea name="mkt_plan" placeholder="예) 출간 D-30부터 인스타 연재, 월 2회 강연 시 도서 비치 판매, ○○기업 단체구매 50부 협의 중..."></textarea></div>
+  </section>
+
+  <!-- 12 원고진행 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">12</span><span class="blk-t">원고 진행 상황</span></div>
+    <div class="grid g3">
+      <div class="field"><label class="fl">완성도</label>
+        <select name="ms_status"><option value="">선택</option><option>탈고된 초고</option><option>50% 이상 완성</option><option>목차·샘플만</option><option>아이디어 단계</option></select></div>
+      <div class="field"><label class="fl">예상 탈고일</label><input type="text" name="ms_date" placeholder="예) 2026-09 (협의 가능)"></div>
+      <div class="field"><label class="fl">원고 파일 형식</label><input type="text" name="ms_format" placeholder="예) MS Word(.docx) / 한글(.hwp)"></div>
+    </div>
+  </section>
+
+  <!-- 13 출판형태 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">13</span><span class="blk-t">희망 출판 형태 · 기타 요청</span></div>
+    <div class="blk-g">희망 형태·일정 등을 적어주세요. (희망이며, 검토 후 협의합니다.)</div>
+    <div class="chips" id="pub-chips">
+      <label class="chip"><input type="checkbox" name="pubtype" value="기획출판"><span class="bx">✓</span>기획출판(출판사 부담)</label>
+      <label class="chip"><input type="checkbox" name="pubtype" value="반기획출판"><span class="bx">✓</span>반기획출판(분담)</label>
+      <label class="chip"><input type="checkbox" name="pubtype" value="자비출판/POD"><span class="bx">✓</span>자비출판/POD</label>
+      <label class="chip"><input type="checkbox" name="pubtype" value="아마존 KDP"><span class="bx">✓</span>아마존 KDP 글로벌</label>
+      <label class="chip"><input type="checkbox" name="pubtype" value="미정·협의"><span class="bx">✓</span>미정·협의</label>
+    </div>
+    <div class="field" style="margin-top:10px"><textarea name="etc" placeholder="예) 빠른 출간을 희망하며, 강연 일정과 연계해 ○○월 출간을 원합니다..."></textarea></div>
+  </section>
+
+  <!-- 14 동의 -->
+  <section class="blk">
+    <div class="blk-h"><span class="blk-n">14</span><span class="blk-t">개인정보 수집 · 이용 동의</span></div>
+    <div class="blk-g">제출하신 정보는 기획안 검토 및 연락 목적에 한해 사용되며, 검토 종료 후 관련 법령에 따라 관리·파기됩니다.</div>
+    <div class="consent">
+      <input type="checkbox" id="consent" name="consent">
+      <label for="consent">위 내용에 동의하며, 기획안 검토를 위한 개인정보 수집·이용에 동의합니다.<span class="req" style="color:var(--wine)"> *</span></label>
+    </div>
+  </section>
+
+  </form>
+
+  <footer class="ft">에이콘 출판 · acornON  ·  문의: acornpub@acornpub.co.kr · 02-2653-7600<br>(07547) 서울 강서구 양천로 583 우림블루나인 A동 2009호</footer>
+</div>
+
+<div class="actions">
+  <div class="actions-in">
+    <button type="button" class="btn btn-primary" id="btn-submit">제안서 제출</button>
+    <button type="button" class="btn btn-ghost" id="btn-email">이메일로 보내기</button>
+    <button type="button" class="btn btn-ghost" id="btn-copy">내용 복사</button>
+    <button type="button" class="btn btn-ghost" id="btn-clear">초기화</button>
+    <span class="save-state" id="save-state">자동 저장 준비됨</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="done" id="done">
+  <div class="done-card">
+    <div class="mark">📮</div>
+    <h3>제안서가 접수되었습니다</h3>
+    <p>소중한 기획안 감사합니다. 담당 편집자가 검토 후 <b>2~3주 내</b>에 입력하신 이메일로 결과를 안내드립니다. 완성 원고가 있으시면 <b>acornpub@acornpub.co.kr</b>로 함께 보내주세요.</p>
+    <button type="button" class="btn btn-primary" id="btn-done">확인</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  제출 설정 — Supabase(우선) / 이메일(대체)
+//  ※ Supabase 사용 시, 아래 테이블을 한 번 생성해 주세요(SQL Editor):
+//    create table author_submissions ( id bigint generated always as identity primary key,
+//      data jsonb, status text default 'new', created_at timestamptz default now() );
+//    alter table author_submissions enable row level security;
+//    create policy "anon insert" on author_submissions for insert to anon with check (true);
+//    create policy "anon read"   on author_submissions for select to anon using (true);
+//    create policy "anon update" on author_submissions for update to anon using (true) with check (true);
+// ════════════════════════════════════════════════════════════════
+const SUBMIT_CONFIG = {
+  supabase: {
+    enabled: true,
+    url: 'https://edwfljyybrrccbxccvdh.supabase.co',
+    key: 'sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl',
+    table: 'author_submissions'
+  },
+  email: { to: 'acornpub@acornpub.co.kr' }
+};
+const DRAFT_KEY = 'acorn_proposal_draft_v1';
+const form = document.getElementById('pf');
+const toastEl = document.getElementById('toast');
+let toastTimer;
+
+function toast(msg, isErr){
+  toastEl.textContent = msg; toastEl.className = 'toast show' + (isErr?' err':'');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>toastEl.className='toast'+(isErr?' err':''), 2600);
+}
+
+// ── 체크박스 chip 토글 표시 ──
+document.querySelectorAll('.chip input').forEach(cb=>{
+  const sync=()=>cb.closest('.chip').classList.toggle('on', cb.checked);
+  cb.addEventListener('change', ()=>{ sync(); saveDraft(); }); sync();
+});
+
+// ── 데이터 수집 ──
+function collect(){
+  const d={};
+  form.querySelectorAll('input, textarea, select').forEach(el=>{
+    if(el.type==='checkbox'){
+      if(el.name==='consent'){ d.consent = el.checked; return; }
+      (d[el.name] = d[el.name] || []); if(el.checked) d[el.name].push(el.value);
+    } else { d[el.name] = el.value; }
+  });
+  return d;
+}
+function applyDraft(d){
+  if(!d) return;
+  form.querySelectorAll('input, textarea, select').forEach(el=>{
+    if(el.type==='checkbox'){
+      if(el.name==='consent'){ el.checked = !!d.consent; }
+      else if(Array.isArray(d[el.name])){ el.checked = d[el.name].includes(el.value); }
+    } else if(d[el.name]!==undefined){ el.value = d[el.name]; }
+  });
+  document.querySelectorAll('.chip input').forEach(cb=>cb.closest('.chip').classList.toggle('on', cb.checked));
+}
+
+// ── 자동 임시저장 ──
+let saveTimer;
+function saveDraft(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(collect()));
+      const t=new Date(); document.getElementById('save-state').textContent =
+        '자동 저장됨 · ' + t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0');
+    }catch(e){ document.getElementById('save-state').textContent='저장 공간 부족'; }
+  }, 500);
+}
+form.addEventListener('input', saveDraft);
+try{ applyDraft(JSON.parse(localStorage.getItem(DRAFT_KEY)||'null')); }catch(e){}
+
+// ── 검증 ──
+function validate(d){
+  const errs=[];
+  document.querySelectorAll('.err-field').forEach(e=>e.classList.remove('err-field'));
+  const mark=(name)=>{const el=form.querySelector('[name="'+name+'"]'); if(el) el.classList.add('err-field');};
+  if(!d.title || !d.title.trim()){ errs.push('도서명(가제)'); mark('title'); }
+  if(!d.name || !d.name.trim()){ errs.push('성명'); mark('name'); }
+  if(!d.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim())){ errs.push('유효한 이메일'); mark('email'); }
+  if(!d.consent){ errs.push('개인정보 수집·이용 동의'); document.getElementById('consent').closest('.consent').style.borderColor='var(--err)'; }
+  return errs;
+}
+
+// ── 텍스트 요약(이메일/복사/다운로드용) ──
+const L={title:'도서명(가제)',subtitle:'부제',genre:'분야/장르',price:'예상정가',format:'판형/분량',concept:'핵심컨셉',
+  name:'성명',job:'현직업/소속',email:'이메일',phone:'연락처',author_intro:'저자소개',
+  ch_sns:'SNS채널',ch_sns_scale:'SNS규모',ch_edu:'강의·교육',ch_edu_scale:'강의규모',ch_comm:'커뮤니티',ch_comm_scale:'커뮤니티규모',
+  background:'기획배경',intent:'기획의도',
+  sim1_title:'유사도서1',sim1_pub:'유사도서1 저자/출판',sim1_diff:'유사도서1 차이',
+  sim2_title:'유사도서2',sim2_pub:'유사도서2 저자/출판',sim2_diff:'유사도서2 차이',
+  sim3_title:'유사도서3',sim3_pub:'유사도서3 저자/출판',sim3_diff:'유사도서3 차이',
+  diff_summary:'차별점요약',target1:'1차독자',target2:'2차독자',toc:'목차',summary:'원고요약',market:'시장성',
+  mkt:'마케팅활동',mkt_plan:'마케팅계획',ms_status:'완성도',ms_date:'예상탈고일',ms_format:'원고형식',
+  pubtype:'희망출판형태',etc:'기타요청'};
+function toText(d){
+  let s='[에이콘 기획안 제안서]\n제출일: '+new Date().toLocaleString('ko-KR')+'\n\n';
+  Object.keys(L).forEach(k=>{
+    let v=d[k]; if(Array.isArray(v)) v=v.join(', ');
+    if(v && String(v).trim()) s += '■ '+L[k]+'\n'+String(v).trim()+'\n\n';
+  });
+  return s;
+}
+
+// ── 제출(Supabase) ──
+async function submitSupabase(d){
+  const c=SUBMIT_CONFIG.supabase;
+  if(!c.enabled || !c.url || !c.key) return {ok:false, reason:'no-config'};
+  try{
+    const res = await fetch(c.url+'/rest/v1/'+c.table, {
+      method:'POST',
+      headers:{ 'apikey':c.key, 'Authorization':'Bearer '+c.key, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+      body: JSON.stringify([{ data: d, status: 'new', created_at: new Date().toISOString() }])
+    });
+    if(res.ok) return {ok:true};
+    return {ok:false, reason:'http '+res.status+' '+(await res.text())};
+  }catch(e){ return {ok:false, reason:String(e)}; }
+}
+
+// ── 이메일(mailto) ──
+function openMail(d){
+  const subject='[기획안 제안] '+(d.title||'제목 미입력')+' — '+(d.name||'');
+  const body=toText(d);
+  window.location.href='mailto:'+SUBMIT_CONFIG.email.to+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+}
+
+const btnSubmit=document.getElementById('btn-submit');
+btnSubmit.addEventListener('click', async ()=>{
+  const d=collect();
+  const errs=validate(d);
+  if(errs.length){ toast('필수 항목을 확인해 주세요: '+errs.join(', '), true);
+    const first=document.querySelector('.err-field'); if(first) first.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  btnSubmit.disabled=true; btnSubmit.textContent='제출 중...';
+  const r=await submitSupabase(d);
+  btnSubmit.disabled=false; btnSubmit.textContent='제안서 제출';
+  if(r.ok){
+    localStorage.removeItem(DRAFT_KEY);
+    document.getElementById('done').classList.add('show');
+  }else if(r.reason==='no-config'){
+    toast('이메일 제출로 안내합니다.'); openMail(d);
+  }else{
+    toast('온라인 제출에 실패해 이메일로 전환합니다.', true); openMail(d);
+  }
+});
+document.getElementById('btn-email').addEventListener('click', ()=>{
+  const d=collect(); const errs=validate(d);
+  if(errs.length){ toast('필수 항목을 확인해 주세요: '+errs.join(', '), true); return; }
+  openMail(d);
+});
+document.getElementById('btn-copy').addEventListener('click', ()=>{
+  const txt=toText(collect());
+  const done=()=>toast('내용이 복사되었습니다. 메일에 붙여넣어 보내실 수 있습니다.');
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(()=>fallbackCopy(txt,done)); }
+  else fallbackCopy(txt,done);
+});
+function fallbackCopy(txt,done){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');done();}catch(e){toast('복사 실패',true);} document.body.removeChild(ta); }
+document.getElementById('btn-clear').addEventListener('click', ()=>{
+  if(!confirm('작성한 내용을 모두 지우시겠어요? 임시저장된 내용도 삭제됩니다.')) return;
+  form.reset(); document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  document.getElementById('consent').closest('.consent').style.borderColor='';
+  localStorage.removeItem(DRAFT_KEY); document.getElementById('save-state').textContent='초기화됨'; window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('btn-done').addEventListener('click', ()=>{ document.getElementById('done').classList.remove('show'); window.scrollTo({top:0,behavior:'smooth'}); });
+</script>
+</body>
+</html>
