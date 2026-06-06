@@ -151,6 +151,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <div class="app">
   <!-- Top -->
   <div class="top">
+    <button class="icon-btn" onclick="backToStart()" aria-label="처음 화면으로" title="처음 화면으로">←</button>
     <div class="logo">ACORN 해양 저자 <small>⚓ MARITIME AUTHORS</small></div>
     <div class="sp"></div>
     <button class="icon-btn" onclick="openNoti()">🔔<span class="dot-badge" id="noti-badge">0</span></button>
@@ -377,6 +378,17 @@ document.querySelectorAll('#onb-seg label').forEach(l=>l.addEventListener('click
   l.querySelector('input').checked=true;
 }));
 function logout(){ if(!confirm('로그아웃할까요? (로컬 기록은 이 기기에 남습니다)'))return; localStorage.removeItem(K.sess); location.reload(); }
+// 초기 선택(온보딩) 화면으로 돌아가기 — 데이터 유지, 역할 재선택 후 다시 시작
+function backToStart(){
+  closeSheet('me-sheet'); closeSheet('noti-sheet'); closeSheet('post-sheet');
+  document.querySelectorAll('#onb-seg label').forEach(l=>{
+    const on = session && l.dataset.role===session.role;
+    l.classList.toggle('sel', !!on); const r=l.querySelector('input'); if(r) r.checked=!!on;
+  });
+  if($('onb-name')) $('onb-name').value='';
+  if($('onb-email')) $('onb-email').value='';
+  $('onb').classList.add('on');
+}
 
 /* ── Navigation ── */
 let cur='home';
