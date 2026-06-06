@@ -251,7 +251,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
     <p style="font-size:13px;color:rgba(255,255,255,.8)">역할에 따라 맞춤 화면이 제공됩니다.<br>언제든 변경할 수 있습니다.</p>
   </div>
 
-  <!-- 역할 카드 3개 -->
+  <!-- 역할 카드 2개 -->
   <div id="role-cards" style="display:flex;flex-direction:column;gap:14px;margin:6px 0 20px;">
 
     <!-- 저자 -->
@@ -268,23 +268,6 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
         <span class="pill">💰 인세 조회</span>
         <span class="pill">📊 단계 모니터링</span>
         <span class="pill">📸 현장 기록</span>
-      </div>
-    </div>
-
-    <!-- 저자후보 -->
-    <div class="role-card" onclick="switchRole('저자후보')" style="background:var(--card);border:2px solid var(--line);border-radius:20px;padding:22px 20px;cursor:pointer;transition:.18s;box-shadow:0 3px 14px rgba(10,37,64,.07);">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div style="width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🌱</div>
-        <div style="flex:1;">
-          <div style="font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;">저자 후보</div>
-          <div style="font-size:12.5px;color:var(--mute);line-height:1.55;">기획안 제출 · 현장 기록 → 기획 초안 변환 · 커뮤니티 활동 · 출판 제안서 작성</div>
-        </div>
-        <div style="font-size:22px;color:var(--ok);">›</div>
-      </div>
-      <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;">
-        <span class="pill" style="background:rgba(19,122,82,.1);color:var(--ok);">✍️ 기획안 제출</span>
-        <span class="pill" style="background:rgba(19,122,82,.1);color:var(--ok);">🗂️ 기록→기획</span>
-        <span class="pill" style="background:rgba(19,122,82,.1);color:var(--ok);">🌊 커뮤니티</span>
       </div>
     </div>
 
@@ -376,7 +359,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
   </div>
   <!-- 추천 도서 -->
   <div class="card">
-    <div class="section-hd"><h3>📖 해양 추천 도서</h3><a onclick="go('community')">전체보기</a></div>
+    <div class="section-hd"><h3>📖 추천 도서</h3><a onclick="go('community')">전체보기</a></div>
     <div class="book-row" id="home-books"></div>
   </div>
 </section>
@@ -402,12 +385,18 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
       <div id="channel-breakdown"></div>
       <button class="btn btn-ghost btn-block" style="margin-top:10px" onclick="openSheet('royalty-sheet')">📊 인세 상세 내역</button>
     </div>
-    <!-- 진행 중 도서 -->
-    <div class="section-hd" style="margin-top:4px"><h3>⚙️ 진행 중 도서</h3></div>
-    <div id="in-progress-list"></div>
     <!-- 출간 도서 -->
     <div class="section-hd" style="margin-top:4px"><h3>📚 출간 도서</h3></div>
     <div id="published-list"></div>
+    <!-- 진행 도서 -->
+    <div class="section-hd" style="margin-top:4px"><h3>✍️ 진행 도서</h3></div>
+    <div id="in-progress-list"></div>
+    <!-- 기획 도서 -->
+    <div class="section-hd" style="margin-top:4px"><h3>💡 기획 도서</h3></div>
+    <div id="planning-list"></div>
+    <!-- 구매·선물 받은 도서 -->
+    <div class="section-hd" style="margin-top:4px"><h3>🎁 구매·선물 받은 도서</h3></div>
+    <div id="author-owned-list"></div>
   </div>
   <div id="books-reader-view" style="display:none">
     <div class="card">
@@ -593,6 +582,14 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
   </div>
 </div>
 
+<!-- 도서 구매 상세 페이지 -->
+<div class="sheet-bg" id="book-detail-sheet">
+  <div class="sheet">
+    <div class="sheet-h"><span style="font-size:22px">📖</span><h3>도서 상세</h3><button class="x" onclick="closeSheet('book-detail-sheet')">×</button></div>
+    <div id="book-detail-body"></div>
+  </div>
+</div>
+
 <!-- 바다 이야기 연재 -->
 <div class="sheet-bg" id="serial-sheet">
   <div class="sheet">
@@ -703,14 +700,13 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <div class="onb" id="onb">
   <div class="eye">⚓ ACORN MARITIME PLATFORM</div>
   <h1>바다인의<br>지식 플랫폼</h1>
-  <p>해양·수산 저자, 저자 후보, 그리고 독자를 위한 앱입니다. 항해 중 오프라인에서도 기록하고 입항 후 자동으로 이어집니다.</p>
+  <p>해양·수산 저자와 독자를 위한 앱입니다. 항해 중 오프라인에서도 기록하고 입항 후 자동으로 이어집니다.</p>
   <div class="field"><input id="onb-name" placeholder="이름 / 필명 (비워도 됩니다)"></div>
   <div class="field"><input id="onb-email" type="email" placeholder="이메일"></div>
   <div class="field">
     <label class="fl" style="color:rgba(255,255,255,.7)">역할</label>
     <div class="seg" id="onb-seg">
       <label class="sel" data-role="저자"><input type="radio" name="role" value="저자" checked><span>✍️ 저자</span></label>
-      <label data-role="저자후보"><input type="radio" name="role" value="저자후보"><span>🌱 저자후보</span></label>
       <label data-role="독자"><input type="radio" name="role" value="독자"><span>📖 독자</span></label>
     </div>
   </div>
@@ -749,6 +745,7 @@ const K = {
   sess:'oa_session', feed:'oa_feed_l', chat:'oa_chat_l', rec:'oa_rec_l',
   proposals:'oa_prop_l', gifts:'oa_gifts_l', serials:'oa_serial_l',
   notes:'oa_notes_l', cart:'oa_cart', noti:'oa_noti', outbox:'oa_outbox', likes:'oa_likes',
+  purchased:'oa_purchased_l',
   subserials:'oa_subseriials'
 };
 
@@ -779,7 +776,7 @@ document.querySelectorAll('#onb-seg label').forEach(l=>l.addEventListener('click
   l.querySelector('input').checked=true;
 }));
 function logout(){ if(!confirm('로그아웃할까요? (로컬 기록은 이 기기에 남습니다)'))return; localStorage.removeItem(K.sess); location.reload(); }
-const isAuthor = () => session&&(session.role==='저자'||session.role==='저자후보');
+const isAuthor = () => session&&session.role==='저자';
 const isReader = () => session&&session.role==='독자';
 
 /* ─── Nav ─── */
@@ -818,7 +815,7 @@ function openSheet(id){ $(id).classList.add('on');
     hb.onclick=function(){ closeSheet(id); go('role-select'); };
     var x=sh.querySelector('.x');
     if(x) sh.insertBefore(hb,x); else sh.appendChild(hb);
-  } if(id==='noti-sheet'){renderNoti();markNotiRead();} if(id==='me-sheet')renderProfileSheet(); if(id==='gift-sheet')renderGiftSheet(); if(id==='serial-sheet')renderSerialSheet(); if(id==='r2p-sheet')renderR2PSheet(); if(id==='map-sheet')renderMapSheet(); if(id==='royalty-sheet')renderRoyaltyDetail(); }
+  } if(id==='noti-sheet'){renderNoti();markNotiRead();} if(id==='me-sheet')renderProfileSheet(); if(id==='gift-sheet')renderGiftSheet(); if(id==='serial-sheet')renderSerialSheet(); if(id==='r2p-sheet')renderR2PSheet(); if(id==='map-sheet')renderMapSheet(); if(id==='royalty-sheet')renderRoyaltyDetail(); if(id==='book-detail-sheet')renderBookDetail(); }
 function closeSheet(id){ $(id).classList.remove('on'); }
 function openNoti(){ openSheet('noti-sheet'); }
 document.querySelectorAll('.sheet-bg').forEach(bg=>bg.addEventListener('click',e=>{ if(e.target===bg)bg.classList.remove('on'); }));
@@ -842,8 +839,9 @@ const NOTICES=[
 const SEED_BOOKS=[
   {id:'b1',title:'자율운항 시대의 항해',price:24000,emoji:'🚢',status:'published',royaltyRate:.1,sales:{domestic:320,ebook:185,global:42},royaltyPaid:1320000},
   {id:'b2',title:'해녀, 바다를 읽다',price:18000,emoji:'🤿',status:'published',royaltyRate:.12,sales:{domestic:520,ebook:290,global:18},royaltyPaid:1730000},
-  {id:'b3',title:'해운 DX 실무 가이드',price:32000,emoji:'⚙️',status:'inprogress',stage:4,stageName:'원고 집필',deadline:now()+60*86400e3,wordCount:42000,targetWord:80000},
-  {id:'b4',title:'어촌 소멸과 미래 수산',price:22000,emoji:'🎣',status:'inprogress',stage:2,stageName:'계약 검토',deadline:now()+120*86400e3,wordCount:0,targetWord:70000},
+  {id:'b3',title:'해운 DX 실무 가이드',price:32000,emoji:'⚙️',status:'inprogress',phase:'writing',stage:4,stageName:'원고 집필',deadline:now()+60*86400e3,wordCount:42000,targetWord:80000},
+  {id:'b4',title:'어촌 소멸과 미래 수산',price:22000,emoji:'🎣',status:'inprogress',phase:'planning',stage:2,stageName:'계약 검토',deadline:now()+120*86400e3,wordCount:0,targetWord:70000},
+  {id:'b5',title:'바다 위 데이터센터',price:0,emoji:'🛰️',status:'inprogress',phase:'planning',stage:0,stageName:'기획안 검토',deadline:now()+180*86400e3,wordCount:0,targetWord:60000},
 ];
 
 const SEED_ROYALTY=[
@@ -869,7 +867,7 @@ function seedAll(){
   if(!load(K.feed,null)) save(K.feed,[
     {id:uid(),author:'해녀 김복순',init:'복순',role:'저자',channel:'all',text:'제주 성산 앞바다, 오늘 물질 기록. 수온 17도, 소라 풍년입니다 🐚\n다음 달 원고 마감이라 조급한데, 바다가 위로해 줍니다.',tags:['해녀','조업일지','성산'],geo:{lat:33.46,lng:126.94},img:null,t:now()-3600e3,likes:18,mine:false},
     {id:uid(),author:'항해사 이도현',init:'도현',role:'저자',channel:'author',text:'부산→싱가포르 항로 자율운항 테스트 3일차. 야간 회피기동 데이터 양호 📊\n이번 경험이 책의 6장 핵심이 될 것 같습니다.',tags:['자율운항','해운DX','집필'],geo:{lat:1.29,lng:103.85},img:null,t:now()-7200e3,likes:12,mine:false},
-    {id:uid(),author:'수산연구사 박명수',init:'명수',role:'저자후보',channel:'qa',text:'[Q] 양식장 스마트화 관련 국내 사례 자료 어디서 찾으시나요? 책 쓰려고 하는데 자료 수집이 가장 막막합니다.',tags:['수산','스마트양식','Q&A'],geo:null,img:null,t:now()-14400e3,likes:5,mine:false},
+    {id:uid(),author:'수산연구사 박명수',init:'명수',role:'저자',channel:'qa',text:'[Q] 양식장 스마트화 관련 국내 사례 자료 어디서 찾으시나요? 책 쓰려고 하는데 자료 수집이 가장 막막합니다.',tags:['수산','스마트양식','Q&A'],geo:null,img:null,t:now()-14400e3,likes:5,mine:false},
     {id:uid(),author:'항만공학 최원석',init:'원석',role:'저자',channel:'book',text:'[도서토론] 제 책 "해운 DX 실무 가이드" 초안 1-3장을 커뮤니티에 먼저 공개합니다. 피드백 환영합니다.',tags:['해운DX','도서토론','피드백'],geo:null,img:null,t:now()-28800e3,likes:22,mine:false},
   ]);
   if(!load(K.serials,null)) save(K.serials,SEED_SERIALS);
@@ -883,7 +881,7 @@ function seedAll(){
 const BOOK_COVERS=['🌊','🚢','🤿','⚓','🐋','🦈','🐙','⛵','🦞','🌊'];
 function renderHome(){
   $('hero-eyebrow').textContent=isReader()?'📖 독자 대시보드':'⚓ ACORN MARITIME PLATFORM';
-  $('hero-name').textContent=session?(isReader()?session.name+'님, 바다 이야기를 만나세요':session.name+(session.role==='저자후보'?' 저자후보님':' 저자님')+', 환영합니다'):'바다인의 지식 플랫폼';
+  $('hero-name').textContent=session?(isReader()?session.name+'님, 바다 이야기를 만나세요':session.name+' 저자님, 환영합니다'):'바다인의 지식 플랫폼';
   $('hero-sub').textContent=isReader()?'해양 도서를 선물하고, 저자의 연재를 구독하고, 독서 노트를 남겨보세요.':'바다에서 길어 올린 한 줄이 곧 새 항로의 좌표가 됩니다.';
   // stats
   if(isAuthor()){
@@ -913,7 +911,7 @@ function renderHome(){
   $('notice-list').innerHTML=NOTICES.map(n=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)">
     <div style="font-weight:700;font-size:13px">${esc(n.t)}</div><div class="muted">${esc(n.d)}</div></div>`).join('');
   // 추천 도서
-  $('home-books').innerHTML=SEED_BOOKS.filter(b=>b.status==='published').concat(SEED_BOOKS).slice(0,6).map(b=>`<div class="book-mini" onclick="toast('「${esc(b.title)}」 상세 페이지 — 곧 출시')">
+  $('home-books').innerHTML=SEED_BOOKS.filter(b=>b.status==='published').concat(SEED_BOOKS).slice(0,6).map(b=>`<div class="book-mini" onclick="openBookDetail('${b.id}')">
     <div class="book-mini-cover bm-cover" style="background:linear-gradient(135deg,var(--deep),var(--sea2))">${b.emoji||'📖'}</div>
     <div class="bm-t">${esc(b.title)}</div></div>`).join('');
 }
@@ -939,29 +937,13 @@ function renderBooks(){
     const key=['domestic','ebook','global'][i]; const val=totSales[key];
     return `<div class="ch-bar"><div class="ch-lbl">${lbl}</div><div class="ch-prog"><div class="ch-fill" style="width:${Math.round(val/maxS*100)}%"></div></div><div class="ch-val">${val}부</div></div>`;
   }).join('');
-  // 진행 중
-  const inProgress=SEED_BOOKS.filter(b=>b.status==='inprogress');
-  $('in-progress-list').innerHTML=inProgress.map(b=>{
-    const pct=b.targetWord?Math.round(b.wordCount/b.targetWord*100):0;
-    const dday=Math.max(0,Math.round((b.deadline-now())/86400e3));
-    return `<div class="card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:24px">${b.emoji}</span>
-          <div><div style="font-weight:700;font-size:14px">${esc(b.title)}</div>
-          <span class="pill">${esc(b.stageName)}</span></div></div>
-        <div style="text-align:right"><div style="font-size:11px;color:var(--warn);font-weight:700">D-${dday}</div><div class="muted">마감</div></div>
-      </div>
-      <div style="overflow-x:auto;padding-bottom:4px">
-      <div style="display:flex;align-items:center;gap:0;min-width:360px">${STAGES.map((st,i)=>{
-        const done=i<b.stage; const isCur=i===b.stage;
-        return (i>0?`<div class="stage-line${done?' done':''}"></div>`:'')+
-          `<div class="stage-item"><div class="stage-dot${done?' done':isCur?' cur':''}">${done?'✓':isCur?'▶':i+1}</div><div class="stage-lbl">${st}</div></div>`;
-      }).join('')}</div></div>
-      <div class="prog-wrap" style="margin-top:10px"><div class="prog-bar" style="width:${pct}%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mute)">
-        <span>원고 ${b.wordCount.toLocaleString()}자 / 목표 ${b.targetWord.toLocaleString()}자</span><span>${pct}%</span></div>
-    </div>`;
-  }).join('')||'<div class="empty">진행 중인 도서가 없습니다.</div>';
+  // 진행 도서 (집필 단계) / 기획 도서 (기획·계약 단계)
+  const writing=SEED_BOOKS.filter(b=>b.status==='inprogress'&&b.phase!=='planning');
+  const planning=SEED_BOOKS.filter(b=>b.status==='inprogress'&&b.phase==='planning');
+  $('in-progress-list').innerHTML=writing.map(progressCardHTML).join('')||'<div class="empty">진행 중인 도서가 없습니다.</div>';
+  $('planning-list').innerHTML=planning.map(progressCardHTML).join('')||'<div class="empty">기획 중인 도서가 없습니다.</div>';
+  // 구매·선물 받은 도서 (저자도 독자처럼 보유 가능)
+  renderOwnedList('author-owned-list');
   // 출간 도서
   $('published-list').innerHTML=published.map(b=>`<div class="card">
     <div style="display:flex;gap:12px;align-items:center">
@@ -979,6 +961,52 @@ function renderBooks(){
     </div>
   </div>`).join('')||'<div class="empty">출간 도서가 없습니다.</div>';
 }
+// 진행·기획 도서 공용 카드
+function progressCardHTML(b){
+  const pct=b.targetWord?Math.round(b.wordCount/b.targetWord*100):0;
+  const dday=Math.max(0,Math.round((b.deadline-now())/86400e3));
+  const isPlan=b.phase==='planning';
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:24px">${b.emoji}</span>
+        <div><div style="font-weight:700;font-size:14px">${esc(b.title)}</div>
+        <span class="pill ${isPlan?'pill-gold':''}">${esc(b.stageName)}</span></div></div>
+      <div style="text-align:right"><div style="font-size:11px;color:var(--warn);font-weight:700">D-${dday}</div><div class="muted">${isPlan?'출간 목표':'마감'}</div></div>
+    </div>
+    <div style="overflow-x:auto;padding-bottom:4px">
+    <div style="display:flex;align-items:center;gap:0;min-width:360px">${STAGES.map((st,i)=>{
+      const done=i<b.stage; const isCur=i===b.stage;
+      return (i>0?`<div class="stage-line${done?' done':''}"></div>`:'')+
+        `<div class="stage-item"><div class="stage-dot${done?' done':isCur?' cur':''}">${done?'✓':isCur?'▶':i+1}</div><div class="stage-lbl">${st}</div></div>`;
+    }).join('')}</div></div>
+    <div class="prog-wrap" style="margin-top:10px"><div class="prog-bar" style="width:${pct}%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mute)">
+      <span>원고 ${b.wordCount.toLocaleString()}자 / 목표 ${b.targetWord.toLocaleString()}자</span><span>${pct}%</span></div>
+  </div>`;
+}
+// 구매·선물 받은 도서 목록 (저자/독자 공용)
+function renderOwnedList(elId){
+  const purchased=load(K.purchased,[]);
+  const received=load(K.gifts,[]).filter(g=>g.direction==='received');
+  let html=purchased.map(ownedItemHTML).join('')+received.map(giftItemHTML).join('');
+  $(elId).innerHTML=html||'<div class="empty">구매하거나 선물받은 도서가 없습니다.</div>';
+}
+function ownedItemHTML(p){
+  const fmt=p.format||'도서';
+  const digital=fmt==='PDF'||fmt==='ePub';
+  return `<div class="shelf-item" onclick="openBookDetail('${p.bookId}')" style="cursor:pointer">
+    <div class="shelf-cover" style="background:linear-gradient(135deg,var(--deep),var(--sea2))">${p.emoji||'📖'}</div>
+    <div style="flex:1"><div style="font-weight:700;font-size:13px">${esc(p.title)}</div>
+    <div class="muted">${esc(fmt)} · 구매 완료 · ${timeAgo(p.t)}</div>
+    <button class="btn btn-sm btn-ok" style="margin-top:6px" onclick="event.stopPropagation();openBookReader('${p.bookId}')">${digital?'📖 읽기':'🚚 배송 조회'}</button></div></div>`;
+}
+function giftItemHTML(g){
+  return `<div class="shelf-item">
+    <div class="shelf-cover" style="background:linear-gradient(135deg,var(--rose),#D04060)">${g.bookEmoji||'🎁'}</div>
+    <div style="flex:1"><div style="font-weight:700;font-size:13px">${esc(g.bookTitle)}</div>
+    <div class="muted">🎁 ${esc(g.from||'익명')}님의 선물 · ${esc(g.format||'도서')}</div>
+    ${g.message?`<div style="font-size:12px;color:var(--sea2);margin-top:4px">"${esc(g.message)}"</div>`:''}</div></div>`;
+}
 function renderRoyaltyDetail(){
   $('royalty-detail-list').innerHTML=SEED_ROYALTY.map(r=>`<div class="card" style="padding:13px;margin-bottom:8px">
     <div style="display:flex;align-items:center"><span class="pill pill-ok">${esc(r.status)}</span>
@@ -987,13 +1015,11 @@ function renderRoyaltyDetail(){
   </div>`).join('');
 }
 function renderReaderBooks(){
-  $('shelf-list').innerHTML='<div class="empty">구매한 도서가 없습니다. 해양 도서를 구매하거나 선물을 받아보세요.</div>';
+  const purchased=load(K.purchased,[]);
+  $('shelf-list').innerHTML=purchased.length?purchased.map(ownedItemHTML).join('')
+    :'<div class="empty">구매한 도서가 없습니다. 해양 도서를 구매하거나 선물을 받아보세요.</div>';
   const received=load(K.gifts,[]).filter(g=>g.direction==='received');
-  $('gift-received').innerHTML=received.length?received.map(g=>`<div class="shelf-item">
-    <div class="shelf-cover" style="background:linear-gradient(135deg,var(--rose),#D04060)">${g.bookEmoji||'🎁'}</div>
-    <div><div style="font-weight:700;font-size:13px">${esc(g.bookTitle)}</div>
-    <div class="muted">${esc(g.from||'익명')}님의 선물</div>
-    <div style="font-size:12px;color:var(--sea2);margin-top:4px">"${esc(g.message||'')}"</div></div></div>`).join('')
+  $('gift-received').innerHTML=received.length?received.map(giftItemHTML).join('')
     :'<div class="empty">받은 선물이 없습니다.</div>';
 }
 
@@ -1025,13 +1051,13 @@ function submitProposal(){
   toast(navigator.onLine?'기획안이 접수되었습니다 ✅':'오프라인 — 연결 시 자동 전송'); renderProposal();
 }
 function renderDiscover(){
-  $('discover-list').innerHTML=SEED_BOOKS.map(b=>`<div class="shelf-item">
+  $('discover-list').innerHTML=SEED_BOOKS.map(b=>`<div class="shelf-item" onclick="openBookDetail('${b.id}')" style="cursor:pointer">
     <div class="shelf-cover" style="background:linear-gradient(135deg,var(--deep),var(--sea2))">${b.emoji}</div>
     <div><div style="font-weight:700;font-size:13px">${esc(b.title)}</div>
     <div class="muted">${b.status==='inprogress'?'집필 중':'출간'} · ${won(b.price)}</div>
     <div style="display:flex;gap:6px;margin-top:6px">
-      <button class="btn btn-sm btn-ghost" onclick="openSheet('gift-sheet')">🎁 선물</button>
-      <button class="btn btn-sm btn-sea" onclick="toast('도서 구매 — PG 연동 지점')">구매</button>
+      <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation();openSheet('gift-sheet')">🎁 선물</button>
+      <button class="btn btn-sm btn-sea" onclick="event.stopPropagation();openBookDetail('${b.id}')">상세·구매</button>
     </div></div></div>`).join('');
 }
 
@@ -1052,7 +1078,7 @@ function renderFeedHTML(posts){
   if(!posts.length)return'<div class="empty">글이 없습니다. 첫 글을 남겨보세요!</div>';
   return posts.map(p=>{
     const liked=!!likes[p.id];
-    const roleEmoji=p.role==='저자'?'✍️':p.role==='독자'?'📖':'🌱';
+    const roleEmoji=p.role==='독자'?'📖':'✍️';
     return `<div class="post">
       <div class="post-h">
         <div class="av ${p.role==='독자'?'reader':''}">${esc(p.init||initials(p.author))}</div>
@@ -1104,12 +1130,11 @@ function publishPost(){
 function renderRoleSelect(){
   var lbl=$('cur-role-label');
   if(lbl && session){
-    var roleEmoji={'저자':'✍️','저자후보':'🌱','독자':'📖'};
+    var roleEmoji={'저자':'✍️','독자':'📖'};
     lbl.textContent=(roleEmoji[session.role]||'⚓')+' '+session.role+(session.name?' — '+session.name:'');
   }
   // 현재 역할 카드 테두리 강조
   document.querySelectorAll('.role-card').forEach(function(card){
-    var roleMap={'저자':'저자','저자후보':'저자후보','독자':'독자'};
     var cardRole=card.querySelector('[style*="Noto Serif"]')?card.querySelector('[style*="Noto Serif"]').textContent.trim():'';
     var isActive=session&&session.role===cardRole;
     card.style.borderColor=isActive?'var(--sea2)':'var(--line)';
@@ -1121,7 +1146,7 @@ function switchRole(newRole){
   if(!session){ session={name:'체험',email:'',role:newRole,specialty:'',since:Date.now()}; }
   else { session.role=newRole; }
   save(K.sess,session);
-  toast({'저자':'✍️ 저자 모드로 전환됩니다','저자후보':'🌱 저자 후보 모드로 전환됩니다','독자':'📖 독자 모드로 전환됩니다'}[newRole]||'역할이 변경되었습니다');
+  toast({'저자':'✍️ 저자 모드로 전환됩니다','독자':'📖 독자 모드로 전환됩니다'}[newRole]||'역할이 변경되었습니다');
   setTimeout(function(){ go('home'); },600);
 }
 
@@ -1192,6 +1217,113 @@ function sendGift(){
   pushNoti('선물 전송',`"${selectedGiftBook.title}"을 ${to}님께 선물했습니다.`);
   toast(`🎁 ${to}님께 선물을 보냈습니다!`); closeSheet('gift-sheet'); renderBooks();
 }
+
+/* ════════ BOOK DETAIL · 구매 상세 페이지 ════════ */
+const BOOK_DESC={
+  b1:'자율운항 선박이 바꾸는 해상 물류의 미래를 현장 항해사의 시선으로 풀어낸 책입니다. IMO 규제 동향부터 선교 자동화 기술, 실제 운항 사례까지 한 권에 담았습니다.',
+  b2:'제주 해녀의 물질과 바다 생태를 한 해의 흐름으로 기록한 에세이입니다. 사라져가는 잠수 문화의 가치를 따뜻한 문장으로 전합니다.',
+  b3:'해운 기업의 디지털 전환(DX) 실무를 단계별로 정리한 가이드입니다. 데이터 기반 운항 최적화와 조직 변화 관리 노하우를 담았습니다.',
+  b4:'어촌 소멸 위기 속에서 미래 수산업의 길을 모색하는 정책·현장 보고서입니다. 스마트 양식과 어촌 재생 사례를 분석합니다.'
+};
+let currentDetailBook=null;
+let selectedFormat='종이책';
+const BOOK_FORMATS=['종이책','PDF','ePub'];
+const FMT_META={
+  '종이책':{emoji:'📕',desc:'실물 배송'},
+  'PDF':{emoji:'📄',desc:'PDF 다운로드'},
+  'ePub':{emoji:'📱',desc:'ePub 뷰어'}
+};
+// 형태별 가격 (전자책 PDF·ePub은 30% 할인)
+function fmtPrice(b,fmt){ return fmt==='종이책'?b.price:Math.round(b.price*0.7/100)*100; }
+// 이미 구매한 형태 목록
+function ownedFormats(bookId){ return load(K.purchased,[]).filter(p=>p.bookId===bookId).map(p=>p.format||'종이책'); }
+function openBookDetail(id){
+  currentDetailBook=SEED_BOOKS.find(b=>b.id===id)||null;
+  if(!currentDetailBook){ toast('도서 정보를 찾을 수 없습니다'); return; }
+  // 아직 구매하지 않은 형태를 기본 선택
+  const owned=ownedFormats(id);
+  selectedFormat=BOOK_FORMATS.find(f=>!owned.includes(f))||'종이책';
+  openSheet('book-detail-sheet');
+}
+function selectFormat(fmt){ selectedFormat=fmt; renderBookDetail(); }
+function renderBookDetail(){
+  const b=currentDetailBook; if(!b){ $('book-detail-body').innerHTML='<div class="empty">도서를 선택해 주세요.</div>'; return; }
+  const owned=ownedFormats(b.id);
+  const buyDisabled=b.status!=='published';
+  const statusLabel=b.status==='published'?'출간':'집필 중';
+  const desc=BOOK_DESC[b.id]||'바다에서 길어 올린 이야기를 깊이 있게 담아낸 ACORN 해양 도서입니다.';
+  let salesHtml='';
+  if(b.status==='published'&&b.sales){
+    const total=(b.sales.domestic||0)+(b.sales.ebook||0)+(b.sales.global||0);
+    salesHtml='<div class="card" style="padding:13px;margin-bottom:12px">'
+      +'<div class="pill">📊 판매 현황</div>'
+      +'<div style="display:flex;justify-content:space-between;margin-top:10px;text-align:center">'
+      +'<div><div style="font-weight:800;font-size:16px;color:var(--sea)">'+(b.sales.domestic||0)+'</div><div class="muted" style="font-size:11px">국내</div></div>'
+      +'<div><div style="font-weight:800;font-size:16px;color:var(--sea)">'+(b.sales.ebook||0)+'</div><div class="muted" style="font-size:11px">전자책</div></div>'
+      +'<div><div style="font-weight:800;font-size:16px;color:var(--sea)">'+(b.sales.global||0)+'</div><div class="muted" style="font-size:11px">해외</div></div>'
+      +'<div><div style="font-weight:800;font-size:16px;color:var(--gold)">'+total+'</div><div class="muted" style="font-size:11px">합계(부)</div></div>'
+      +'</div></div>';
+  }
+  // 형태 선택 + 구매 영역
+  let purchaseHtml='';
+  if(buyDisabled){
+    purchaseHtml='<button class="btn btn-block" style="background:var(--line);color:var(--mute);cursor:default" disabled>🔒 출간 예정 — 구매 준비 중</button>';
+  } else {
+    const opts=BOOK_FORMATS.map(function(f){
+      const m=FMT_META[f]; const isSel=selectedFormat===f; const isOwned=owned.includes(f);
+      return '<div onclick="selectFormat(\''+f+'\')" style="flex:1;cursor:pointer;border:2px solid '+(isSel?'var(--sea2)':'var(--line)')+';border-radius:12px;padding:10px 6px;text-align:center;background:'+(isSel?'rgba(11,82,120,.06)':'var(--card)')+';transition:.15s;position:relative">'
+        +(isOwned?'<div style="position:absolute;top:4px;right:6px;font-size:11px;color:var(--ok);font-weight:800">보유✓</div>':'')
+        +'<div style="font-size:22px">'+m.emoji+'</div>'
+        +'<div style="font-weight:700;font-size:13px;margin-top:2px">'+f+'</div>'
+        +'<div class="muted" style="font-size:10.5px">'+m.desc+'</div>'
+        +'<div style="font-weight:800;font-size:12.5px;color:var(--sea);margin-top:4px">'+won(fmtPrice(b,f))+'</div>'
+        +'</div>';
+    }).join('');
+    const selOwned=owned.includes(selectedFormat);
+    let btn;
+    if(selOwned){
+      btn='<button class="btn btn-ok btn-block" style="margin-bottom:8px" onclick="openBookReader(\''+b.id+'\')">📖 '+selectedFormat+' — '+(selectedFormat==='종이책'?'배송 조회':'바로 읽기')+'</button>';
+    } else {
+      btn='<button class="btn btn-sea btn-block" style="margin-bottom:8px" onclick="buyBook(\''+b.id+'\')">🛒 '+selectedFormat+' '+won(fmtPrice(b,selectedFormat))+' 구매하기</button>';
+    }
+    purchaseHtml='<div class="card" style="padding:14px;margin-bottom:12px">'
+      +'<div class="pill">🛍️ 구매 형태 선택</div>'
+      +'<div style="display:flex;gap:8px;margin-top:12px">'+opts+'</div></div>'
+      +btn;
+  }
+  $('book-detail-body').innerHTML=
+    '<div style="text-align:center;margin-bottom:16px">'
+    +'<div style="width:100px;height:138px;margin:0 auto 12px;border-radius:12px;background:linear-gradient(135deg,var(--deep),var(--sea2));display:flex;align-items:center;justify-content:center;font-size:48px;box-shadow:0 8px 24px rgba(3,33,53,.28)">'+(b.emoji||'📖')+'</div>'
+    +'<div style="font-family:\'Noto Serif KR\',serif;font-size:19px;font-weight:700;color:var(--ink)">'+esc(b.title)+'</div>'
+    +'<div class="muted" style="margin-top:4px">ACORN 해양 출판 · '+statusLabel+'</div>'
+    +(b.status==='published'?'<div style="font-size:23px;font-weight:800;color:var(--sea);margin-top:8px">'+won(b.price)+' <span style="font-size:12px;color:var(--mute);font-weight:500">(종이책 기준)</span></div>':'')
+    +(owned.length?'<div style="margin-top:8px"><span class="pill pill-ok">✅ 보유: '+owned.join(', ')+'</span></div>':'')
+    +'</div>'
+    +'<div class="card" style="padding:14px;margin-bottom:12px">'
+    +'<div class="pill">📝 도서 소개</div>'
+    +'<p style="font-size:13.5px;color:var(--ink2);line-height:1.75;margin-top:10px">'+esc(desc)+'</p></div>'
+    +salesHtml
+    +purchaseHtml
+    +'<button class="btn btn-gold btn-block" onclick="closeSheet(\'book-detail-sheet\');openSheet(\'gift-sheet\')">🎁 이 책 선물하기</button>'
+    +'<p class="muted" style="font-size:11px;text-align:center;margin-top:12px">결제는 PG(아임포트·토스페이먼츠 등) 연동 지점입니다</p>';
+}
+function buyBook(id){
+  const b=SEED_BOOKS.find(x=>x.id===id); if(!b)return;
+  if(b.status!=='published'){ toast('출간 후 구매할 수 있습니다'); return; }
+  const fmt=selectedFormat||'종이책';
+  const price=fmtPrice(b,fmt);
+  const purchased=load(K.purchased,[]);
+  if(purchased.some(p=>p.bookId===id&&(p.format||'종이책')===fmt)){ toast(fmt+' 형태는 이미 구매했습니다'); return; }
+  if(!confirm('「'+b.title+'」 ('+fmt+')을(를) '+won(price)+'에 구매하시겠어요?'))return;
+  purchased.unshift({bookId:b.id,title:b.title,emoji:b.emoji,format:fmt,price:price,t:now()});
+  save(K.purchased,purchased);
+  enqueue('purchases',{bookId:b.id,format:fmt,price:price,t:now()});
+  pushNoti('구매 완료','"'+b.title+'" ('+fmt+')을 구매했습니다. 내 도서에서 확인하세요.');
+  toast('🛒 '+fmt+' 구매 완료 — 내 도서에 담겼어요');
+  renderBookDetail();
+  renderBooks();
+}
+function openBookReader(id){ const b=SEED_BOOKS.find(x=>x.id===id); toast('「'+(b?b.title:'도서')+'」 뷰어 — 곧 출시'); }
 
 /* ════════ SERIAL (킬러 서비스) ════════ */
 let wsPhoto=null;
