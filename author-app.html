@@ -27,20 +27,17 @@ html,body{margin:0;padding:0;height:100%;}
 body{font-family:'Pretendard',sans-serif;background:var(--paper);color:var(--ink);overscroll-behavior-y:none;}
 .serif{font-family:'Noto Serif KR',serif;}
 .app{max-width:var(--maxw);margin:0 auto;min-height:100%;background:var(--paper);position:relative;display:flex;flex-direction:column;}
-/* ── Top bar ── */
 .top{position:sticky;top:0;z-index:30;height:calc(var(--top-h) + var(--safe-t));padding-top:var(--safe-t);
-  background:linear-gradient(135deg,var(--sea-deep),var(--sea));color:#fff;display:flex;align-items:center;gap:10px;padding-left:16px;padding-right:12px;box-shadow:0 2px 12px rgba(4,40,70,.25);}
-.top .logo{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;letter-spacing:.02em;}
-.top .logo small{display:block;font-size:9px;font-weight:400;color:var(--gold2);letter-spacing:.18em;font-family:'JetBrains Mono',monospace;}
+  background:linear-gradient(135deg,var(--sea-deep),var(--sea));color:#fff;display:flex;align-items:center;gap:8px;padding-left:12px;padding-right:10px;box-shadow:0 2px 12px rgba(4,40,70,.25);}
+.top .logo{font-family:'Noto Serif KR',serif;font-weight:700;font-size:15px;letter-spacing:.02em;line-height:1.1;}
+.top .logo small{display:block;font-size:8.5px;font-weight:400;color:var(--gold2);letter-spacing:.16em;font-family:'JetBrains Mono',monospace;}
 .top .sp{flex:1;}
-.icon-btn{position:relative;width:38px;height:38px;border:none;background:rgba(255,255,255,.12);border-radius:50%;color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.dot-badge{position:absolute;top:5px;right:6px;min-width:15px;height:15px;background:var(--rose);border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #fff;}
-/* offline banner */
+.icon-btn{position:relative;width:36px;height:36px;border:none;background:rgba(255,255,255,.12);border-radius:50%;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dot-badge{position:absolute;top:4px;right:5px;min-width:15px;height:15px;background:var(--rose);border-radius:8px;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 3px;border:1.5px solid #fff;}
 .offline-bar{display:none;background:var(--warn);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:6px 10px;}
 .offline-bar.show{display:block;}
 .sync-bar{display:none;background:#0E6E96;color:#fff;font-size:11px;text-align:center;padding:4px;}
 .sync-bar.show{display:block;}
-/* ── Main scroll ── */
 main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(var(--nav-h) + var(--safe-b) + 80px);}
 .view{display:none;animation:fade .25s;}
 .view.on{display:block;}
@@ -49,29 +46,59 @@ h2.vtitle{font-family:'Noto Serif KR',serif;font-size:21px;margin:4px 0 12px;col
 .muted{color:var(--mute);font-size:13px;}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 3px 14px rgba(10,37,64,.05);}
 .pill{display:inline-flex;align-items:center;gap:5px;background:rgba(11,82,120,.08);color:var(--sea);border-radius:999px;padding:4px 11px;font-size:11px;font-weight:700;}
+.pill.ok{background:rgba(19,122,82,.12);color:var(--ok);}
+.pill.warn{background:rgba(201,124,45,.14);color:var(--warn);}
+.pill.gold{background:rgba(200,162,74,.16);color:#9a7b2e;}
 .btn{border:none;border-radius:12px;padding:13px 18px;font-size:14px;font-weight:700;font-family:'Pretendard',sans-serif;cursor:pointer;transition:.15s;}
 .btn-sea{background:linear-gradient(135deg,var(--sea),var(--sea2));color:#fff;}
 .btn-gold{background:var(--gold);color:var(--sea-deep);}
 .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink2);}
+.btn-sm{padding:8px 13px;font-size:12.5px;border-radius:10px;}
 .btn-block{width:100%;}
 input,textarea,select{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;font-family:'Pretendard',sans-serif;color:var(--ink);background:#fff;}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--sea2);box-shadow:0 0 0 3px rgba(14,110,150,.12);}
 textarea{resize:vertical;min-height:70px;line-height:1.6;}
 label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0 0 5px;}
-/* ── Hero (home) ── */
 .hero{background:linear-gradient(135deg,var(--sea-deep),var(--sea2));border-radius:20px;padding:20px;color:#fff;position:relative;overflow:hidden;margin-bottom:14px;}
 .hero:after{content:"";position:absolute;right:-30px;bottom:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(127,209,224,.35),transparent 70%);}
 .hero .eyebrow{font-size:10px;letter-spacing:.22em;color:var(--gold2);font-family:'JetBrains Mono',monospace;}
 .hero h1{font-family:'Noto Serif KR',serif;font-size:22px;margin:6px 0 4px;line-height:1.3;}
 .hero p{font-size:13px;color:rgba(255,255,255,.82);margin:0;}
 .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;}
-.quick a{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 4px;text-align:center;text-decoration:none;color:var(--ink2);font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.quick a{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 4px;text-align:center;text-decoration:none;color:var(--ink2);font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;}
 .quick a .qi{font-size:20px;}
 .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;}
-.stat .n{font-family:'Noto Serif KR',serif;font-size:20px;color:var(--sea);font-weight:700;}
+.stat .n{font-family:'Noto Serif KR',serif;font-size:19px;color:var(--sea);font-weight:700;}
 .stat .l{font-size:10px;color:var(--mute);margin-top:2px;}
-/* ── Feed ── */
+/* segmented */
+.seg2{display:flex;background:#EAE4D6;border-radius:12px;padding:4px;margin-bottom:14px;gap:4px;}
+.seg2 button{flex:1;border:none;background:none;border-radius:9px;padding:9px 4px;font-size:12.5px;font-weight:700;color:var(--ink2);cursor:pointer;font-family:'Pretendard',sans-serif;}
+.seg2 button.on{background:#fff;color:var(--sea);box-shadow:0 1px 4px rgba(10,37,64,.12);}
+/* book card */
+.bk{display:flex;gap:13px;}
+.bk-cover{width:54px;height:74px;border-radius:7px;background:linear-gradient(150deg,var(--sea-deep),var(--sea2));flex-shrink:0;box-shadow:0 3px 10px rgba(4,40,70,.25);position:relative;overflow:hidden;}
+.bk-cover:after{content:"";position:absolute;left:6px;top:0;bottom:0;width:3px;background:rgba(255,255,255,.18);}
+.bk-title{font-weight:700;font-size:14.5px;line-height:1.3;}
+.royalty-box{background:linear-gradient(135deg,rgba(200,162,74,.12),rgba(224,190,102,.06));border:1px solid rgba(200,162,74,.3);border-radius:12px;padding:12px;margin-top:11px;}
+.royalty-box .amt{font-family:'Noto Serif KR',serif;font-size:22px;color:#9a7b2e;font-weight:700;}
+.kv{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;}
+.kv span:first-child{color:var(--mute);}
+.bar{height:7px;background:#E9EEF3;border-radius:5px;overflow:hidden;margin-top:4px;}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--sea),var(--sea2));}
+/* stepper */
+.stepper{display:flex;align-items:flex-start;margin-top:12px;}
+.step{flex:1;text-align:center;position:relative;}
+.step:before{content:"";position:absolute;top:11px;left:-50%;width:100%;height:3px;background:#E1E7EE;z-index:0;}
+.step:first-child:before{display:none;}
+.step.done:before,.step.cur:before{background:var(--sea2);}
+.step .dot{position:relative;z-index:1;width:24px;height:24px;border-radius:50%;background:#E1E7EE;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin:0 auto;}
+.step.done .dot{background:var(--ok);}
+.step.cur .dot{background:var(--sea);box-shadow:0 0 0 4px rgba(11,82,120,.18);}
+.step .lb{font-size:9.5px;margin-top:5px;color:var(--mute);font-weight:700;line-height:1.2;}
+.step.cur .lb{color:var(--sea);}
+.step.done .lb{color:var(--ok);}
+/* feed */
 .post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 3px 14px rgba(10,37,64,.05);}
 .post-h{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
 .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--sea),var(--sea2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
@@ -80,59 +107,55 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 .post-txt{font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word;}
 .post-img{width:100%;border-radius:12px;margin-top:10px;display:block;}
 .geo-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(11,82,120,.08);color:var(--sea);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;margin-top:8px;}
+.book-chip-line{display:inline-flex;align-items:center;gap:4px;background:rgba(200,162,74,.14);color:#9a7b2e;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:700;margin-top:8px;}
 .tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;}
 .tag{font-size:11px;color:var(--sea2);font-weight:700;}
 .post-acts{display:flex;gap:18px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);}
 .post-acts button{border:none;background:none;color:var(--ink2);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
 .post-acts button.liked{color:var(--rose);}
 .pending-flag{font-size:10px;color:var(--warn);font-weight:700;margin-left:auto;}
-/* ── Chat ── */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - var(--top-h) - var(--nav-h) - var(--safe-t) - var(--safe-b));}
-.chat-rooms{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;}
-.room-chip{flex-shrink:0;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--ink2);cursor:pointer;}
-.room-chip.on{background:var(--sea);border-color:var(--sea);color:#fff;}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;}
+.chip{flex-shrink:0;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--ink2);cursor:pointer;white-space:nowrap;}
+.chip.on{background:var(--sea);border-color:var(--sea);color:#fff;}
+/* chat */
+.chat-wrap{display:flex;flex-direction:column;height:70vh;}
 .chat-list{flex:1;overflow-y:auto;padding:8px 2px;display:flex;flex-direction:column;gap:8px;}
-.msg{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;line-height:1.5;word-break:break-word;}
+.msg{max-width:80%;padding:9px 13px;border-radius:14px;font-size:14px;line-height:1.5;word-break:break-word;}
 .msg.them{background:#fff;border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:3px;}
 .msg.me{background:linear-gradient(135deg,var(--sea),var(--sea2));color:#fff;align-self:flex-end;border-bottom-right-radius:3px;}
 .msg .mt{display:block;font-size:9px;opacity:.6;margin-top:3px;text-align:right;}
 .chat-input{display:flex;gap:8px;padding:8px 0 2px;}
 .chat-input input{border-radius:999px;}
 .chat-input button{flex-shrink:0;width:46px;border-radius:50%;background:var(--sea);color:#fff;border:none;font-size:18px;}
-/* ── Compose / record ── */
+/* record/compose */
 .field{margin-bottom:12px;}
 .attach-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 .thumb{position:relative;width:72px;height:72px;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
 .thumb img{width:100%;height:100%;object-fit:cover;}
 .thumb button{position:absolute;top:2px;right:2px;width:18px;height:18px;border:none;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:11px;cursor:pointer;}
-/* ── Orders ── */
+.rec-use{display:flex;gap:6px;margin-top:9px;}
+.rec-use button{flex:1;font-size:11.5px;padding:8px 6px;border-radius:9px;border:1.5px solid var(--line);background:#fff;color:var(--ink2);font-weight:700;cursor:pointer;}
+/* orders */
 .book{display:flex;gap:12px;align-items:center;}
-.book-cover{width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,var(--sea-deep),var(--sea2));flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.2);}
 .qty{display:flex;align-items:center;gap:10px;}
 .qty button{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-size:16px;cursor:pointer;}
-/* FAB */
 .fab{position:fixed;right:max(16px,calc((100vw - var(--maxw))/2 + 16px));bottom:calc(var(--nav-h) + var(--safe-b) + 16px);z-index:40;width:56px;height:56px;border-radius:50%;border:none;background:var(--gold);color:var(--sea-deep);font-size:26px;box-shadow:0 6px 20px rgba(200,162,74,.5);cursor:pointer;display:none;}
 .fab.show{display:flex;align-items:center;justify-content:center;}
-/* Bottom nav */
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--maxw);height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);
   background:#fff;border-top:1px solid var(--line);display:flex;z-index:35;box-shadow:0 -3px 16px rgba(10,37,64,.07);}
 .nav button{flex:1;border:none;background:none;color:var(--mute);font-size:10px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding-top:8px;}
 .nav button .ni{font-size:20px;line-height:1;}
 .nav button.on{color:var(--sea);}
-.nav button.on .ni{transform:translateY(-1px);}
-/* Sheet/modal */
 .sheet-bg{position:fixed;inset:0;background:rgba(4,40,70,.5);z-index:50;display:none;align-items:flex-end;justify-content:center;}
 .sheet-bg.on{display:flex;}
-.sheet{background:var(--paper);width:100%;max-width:var(--maxw);border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;padding:18px 16px calc(20px + var(--safe-b));animation:up .25s;}
+.sheet{background:var(--paper);width:100%;max-width:var(--maxw);border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;padding:18px 16px calc(20px + var(--safe-b));animation:up .25s;}
 @keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
 .sheet-h{display:flex;align-items:center;margin-bottom:14px;}
 .sheet-h h3{font-family:'Noto Serif KR',serif;font-size:18px;margin:0;}
 .sheet-h .x{margin-left:auto;border:none;background:none;font-size:24px;color:var(--mute);cursor:pointer;}
-/* toast */
 .toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + var(--safe-b) + 24px);transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:60;opacity:0;pointer-events:none;transition:.25s;max-width:90%;text-align:center;}
 .toast.show{opacity:1;transform:translateX(-50%);}
-.empty{text-align:center;color:var(--mute);font-size:13px;padding:40px 10px;}
-/* onboarding */
+.empty{text-align:center;color:var(--mute);font-size:13px;padding:36px 10px;}
 .onb{position:fixed;inset:0;z-index:80;background:linear-gradient(160deg,var(--sea-deep),var(--sea));color:#fff;display:none;flex-direction:column;justify-content:center;padding:30px 26px calc(30px + var(--safe-b));}
 .onb.on{display:flex;}
 .onb h1{font-family:'Noto Serif KR',serif;font-size:28px;line-height:1.3;margin:0 0 8px;}
@@ -143,19 +166,17 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 .seg{display:flex;gap:8px;}
 .seg label{flex:1;text-align:center;border:1.5px solid rgba(255,255,255,.3);border-radius:12px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;}
 .seg input{display:none;}
-.seg input:checked + span{}
 .seg label.sel{background:var(--gold);color:var(--sea-deep);border-color:var(--gold);}
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- Top -->
   <div class="top">
     <button class="icon-btn" onclick="backToStart()" aria-label="처음 화면으로" title="처음 화면으로">←</button>
     <div class="logo">ACORN 해양 저자 <small>⚓ MARITIME AUTHORS</small></div>
     <div class="sp"></div>
-    <button class="icon-btn" onclick="openNoti()">🔔<span class="dot-badge" id="noti-badge">0</span></button>
-    <button class="icon-btn" onclick="openSheet('me-sheet')">👤</button>
+    <button class="icon-btn" onclick="openChat()" aria-label="채팅">💬<span class="dot-badge" id="chat-badge">0</span></button>
+    <button class="icon-btn" onclick="openNoti()" aria-label="알림">🔔<span class="dot-badge" id="noti-badge">0</span></button>
     <button class="icon-btn" onclick="closeApp()" aria-label="화면 닫기" title="화면 닫기" style="background:rgba(163,49,69,.35)">✕</button>
   </div>
   <div class="offline-bar" id="offline-bar">⚓ 오프라인 — 작성한 내용은 저장되며 연결되면 자동 동기화됩니다</div>
@@ -171,21 +192,15 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
       </div>
       <div id="role-cta"></div>
       <div class="quick">
+        <a onclick="go('library')"><span class="qi">📚</span>내 서재</a>
+        <a onclick="openProposal()"><span class="qi">✍️</span>새 기획안</a>
         <a onclick="go('record')"><span class="qi">📸</span>현장 기록</a>
-        <a onclick="go('feed')"><span class="qi">🌊</span>커뮤니티</a>
-        <a onclick="go('chat')"><span class="qi">💬</span>담당 채팅</a>
-        <a onclick="go('me')"><span class="qi">📚</span>내 책·주문</a>
+        <a onclick="go('community')"><span class="qi">🌊</span>커뮤니티</a>
       </div>
       <div class="stat-row">
-        <div class="stat"><div class="n" id="st-records">0</div><div class="l">현장 기록</div></div>
-        <div class="stat"><div class="n" id="st-posts">0</div><div class="l">내 글</div></div>
-        <div class="stat"><div class="n" id="st-orders">0</div><div class="l">주문</div></div>
-      </div>
-      <div class="card">
-        <div class="pill">📅 집필 일정</div>
-        <h3 class="serif" style="margin:10px 0 4px;font-size:16px">해양 수산 IT·인문 트랙</h3>
-        <p class="muted" style="margin:0">담당 편집자와 1:1 채팅으로 원고 일정을 조율하세요. 오프라인(항해 중)에도 메모·사진·위치를 기록하면 입항 후 자동 전송됩니다.</p>
-        <button class="btn btn-sea btn-block" style="margin-top:12px" onclick="go('record')">＋ 항해 중 현장 기록 시작</button>
+        <div class="stat"><div class="n" id="st-pub">0</div><div class="l">출간 도서</div></div>
+        <div class="stat"><div class="n" id="st-prog">0</div><div class="l">진행 중</div></div>
+        <div class="stat"><div class="n" id="st-roy">0원</div><div class="l">누적 인세</div></div>
       </div>
       <div class="card">
         <div class="pill">📣 공지 · 이벤트</div>
@@ -193,30 +208,32 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
       </div>
     </section>
 
-    <!-- FEED -->
-    <section class="view" id="v-feed">
-      <h2 class="vtitle">커뮤니티 피드</h2>
-      <p class="muted" style="margin:-8px 0 12px">해양·수산 저자들의 현장과 집필을 나눕니다. #태그로 주제를 묶어요.</p>
+    <!-- LIBRARY (3 functions) -->
+    <section class="view" id="v-library">
+      <h2 class="vtitle">내 서재</h2>
+      <div class="seg2" id="lib-seg">
+        <button class="on" data-s="published" onclick="setLib('published')">📕 출간 도서</button>
+        <button data-s="progress" onclick="setLib('progress')">🛠 진행 중</button>
+        <button data-s="proposal" onclick="setLib('proposal')">✍️ 기획안</button>
+      </div>
+      <div id="lib-body"></div>
+    </section>
+
+    <!-- COMMUNITY (general / book-based) -->
+    <section class="view" id="v-community">
+      <h2 class="vtitle">커뮤니티</h2>
+      <div class="seg2" id="com-seg">
+        <button class="on" data-s="general" onclick="setCom('general')">🌊 일반</button>
+        <button data-s="book" onclick="setCom('book')">📚 도서 기반</button>
+      </div>
+      <div id="com-books" class="chips" style="display:none"></div>
       <div id="feed-list"></div>
     </section>
 
-    <!-- CHAT -->
-    <section class="view" id="v-chat">
-      <h2 class="vtitle">소통 · 채팅</h2>
-      <div class="chat-wrap">
-        <div class="chat-rooms" id="chat-rooms"></div>
-        <div class="chat-list" id="chat-list"></div>
-        <div class="chat-input">
-          <input id="chat-text" placeholder="메시지 입력…" onkeydown="if(event.key==='Enter')sendChat()">
-          <button onclick="sendChat()">➤</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- RECORD (camera + geo) -->
+    <!-- RECORD -->
     <section class="view" id="v-record">
       <h2 class="vtitle">현장 기록 · 집필 노트</h2>
-      <p class="muted" style="margin:-8px 0 12px">사진·위치·메모를 함께 남겨 저술 근거로 활용하세요. (오프라인 저장 → 자동 동기화)</p>
+      <p class="muted" style="margin:-8px 0 12px">사진·위치·메모를 남겨 두면 <b>기획안 제안</b>이나 <b>진행 중 원고</b>에 자료로 활용할 수 있습니다. (오프라인 저장 → 자동 동기화)</p>
       <div class="card">
         <div class="field"><label class="fl">제목</label><input id="rec-title" placeholder="예) ○○항 새벽 조업 / 자율운항 테스트 로그"></div>
         <div class="field"><label class="fl">메모</label><textarea id="rec-memo" placeholder="관찰·인터뷰·수치 등 기록"></textarea></div>
@@ -237,36 +254,42 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
       <div id="rec-list"></div>
     </section>
 
-    <!-- ME (orders / payment) -->
+    <!-- ME -->
     <section class="view" id="v-me">
-      <h2 class="vtitle">내 책 · 주문</h2>
+      <h2 class="vtitle">내 정보</h2>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="av" id="me-av" style="width:48px;height:48px;font-size:18px"></div>
+          <div><div id="me-name" style="font-weight:700;font-size:16px"></div><div id="me-role" class="muted"></div><div id="me-email" class="muted" style="font-size:11px"></div></div>
+        </div>
+      </div>
       <div class="card">
         <div class="pill">🛒 도서 주문</div>
         <div id="shop-list" style="margin-top:12px"></div>
         <div id="cart-bar" style="display:none;margin-top:8px;padding-top:12px;border-top:1px solid var(--line)">
-          <div style="display:flex;align-items:center;margin-bottom:10px">
-            <span style="font-weight:700">합계</span>
-            <span id="cart-total" style="margin-left:auto;font-family:'Noto Serif KR',serif;font-size:18px;color:var(--sea)">0원</span>
-          </div>
+          <div style="display:flex;align-items:center;margin-bottom:10px"><span style="font-weight:700">합계</span><span id="cart-total" style="margin-left:auto;font-family:'Noto Serif KR',serif;font-size:18px;color:var(--sea)">0원</span></div>
           <button class="btn btn-gold btn-block" onclick="checkout()">결제하기</button>
           <div class="muted" style="font-size:11px;margin-top:6px;text-align:center">※ 데모 결제 — 실제 PG(토스·KCP 등) 연동 지점</div>
         </div>
       </div>
-      <h3 class="serif" style="font-size:16px;margin:18px 0 10px">주문 내역</h3>
+      <h3 class="serif" style="font-size:15px;margin:16px 0 10px">주문 내역</h3>
       <div id="order-list"></div>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="enablePush()">🔔 푸시 알림 켜기</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="manualSync()">🔄 지금 동기화</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="logout()">로그아웃</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px;color:var(--rose);border-color:rgba(163,49,69,.4)" onclick="closeApp()">✕ 화면 닫기</button>
+      <div class="muted" style="font-size:11px;text-align:center;margin-top:14px">ACORN PUBLISHING · 해양 수산 저자 트랙<br>acornon.kr/maritime</div>
     </section>
   </main>
 
-  <!-- FAB -->
   <button class="fab" id="fab" onclick="onFab()">＋</button>
 
-  <!-- Bottom nav -->
   <div class="nav" id="nav">
     <button class="on" data-v="home" onclick="go('home')"><span class="ni">🏠</span>홈</button>
-    <button data-v="feed" onclick="go('feed')"><span class="ni">🌊</span>커뮤니티</button>
-    <button data-v="chat" onclick="go('chat')"><span class="ni">💬</span>채팅</button>
+    <button data-v="library" onclick="go('library')"><span class="ni">📚</span>서재</button>
+    <button data-v="community" onclick="go('community')"><span class="ni">🌊</span>커뮤니티</button>
     <button data-v="record" onclick="go('record')"><span class="ni">📸</span>기록</button>
-    <button data-v="me" onclick="go('me')"><span class="ni">📚</span>내정보</button>
+    <button data-v="me" onclick="go('me')"><span class="ni">👤</span>내정보</button>
   </div>
 </div>
 
@@ -274,14 +297,22 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <div class="sheet-bg" id="post-sheet">
   <div class="sheet">
     <div class="sheet-h"><h3>새 글 쓰기</h3><button class="x" onclick="closeSheet('post-sheet')">×</button></div>
-    <div class="field"><textarea id="post-text" placeholder="바다에서의 오늘을 기록해 보세요…" style="min-height:110px"></textarea></div>
+    <div class="field">
+      <label class="fl">게시 위치</label>
+      <div class="seg2" style="margin-bottom:8px">
+        <button type="button" id="ps-general" class="on" onclick="setPostScope('general')">🌊 일반</button>
+        <button type="button" id="ps-book" onclick="setPostScope('book')">📚 도서</button>
+      </div>
+      <select id="post-book" style="display:none"></select>
+    </div>
+    <div class="field"><textarea id="post-text" placeholder="바다에서의 오늘을 기록해 보세요…" style="min-height:100px"></textarea></div>
     <div class="field"><label class="fl">태그 (쉼표로 구분)</label><input id="post-tags" placeholder="자율운항, 조업일지, 해녀"></div>
     <div class="field">
       <div class="attach-row" id="post-thumbs"></div>
       <input type="file" id="post-cam" accept="image/*" capture="environment" style="display:none" onchange="onPostPhoto(this.files)">
       <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn btn-ghost" style="flex:1" onclick="document.getElementById('post-cam').click()">📷 사진</button>
-        <button class="btn btn-ghost" style="flex:1" id="post-geo-btn" onclick="postTagLoc()">📍 위치</button>
+        <button class="btn btn-ghost" style="flex:1" onclick="postTagLoc()">📍 위치</button>
       </div>
       <div id="post-geo" class="muted" style="margin-top:6px"></div>
     </div>
@@ -289,31 +320,54 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
   </div>
 </div>
 
-<!-- Notifications sheet -->
-<div class="sheet-bg" id="noti-sheet">
+<!-- Proposal composer sheet -->
+<div class="sheet-bg" id="proposal-sheet">
   <div class="sheet">
-    <div class="sheet-h"><h3>알림</h3>
-      <button class="btn btn-ghost" style="margin-left:auto;padding:6px 12px;font-size:12px" onclick="enablePush()">🔔 푸시 켜기</button>
-      <button class="x" onclick="closeSheet('noti-sheet')">×</button></div>
-    <div id="noti-list"></div>
+    <div class="sheet-h"><h3>새 기획안 제안</h3><button class="x" onclick="closeSheet('proposal-sheet')">×</button></div>
+    <div class="field"><label class="fl">제목(가제)</label><input id="pp-title" placeholder="예) 바다 위 30년, 선장의 기록"></div>
+    <div class="field"><label class="fl">분야</label>
+      <select id="pp-genre"><option value="">선택</option><option>해양 수산 IT</option><option>해운史·해양 인문</option><option>해녀·바다 생태</option><option>항해 에세이</option><option>기타</option></select></div>
+    <div class="field"><label class="fl">기획 요약</label><textarea id="pp-summary" placeholder="어떤 책인지, 왜 지금 필요한지, 독자는 누구인지" style="min-height:96px"></textarea></div>
+    <div class="field"><label class="fl">첨부된 현장 기록</label><div id="pp-recs" class="muted">없음</div></div>
+    <button class="btn btn-sea btn-block" style="margin-bottom:8px" onclick="submitProposal()">기획안 제출</button>
+    <button class="btn btn-ghost btn-block" onclick="window.open('book-proposal-form.html','_blank')">상세 제안 양식으로 작성 (14개 항목)</button>
+    <div class="muted" style="font-size:11px;text-align:center;margin-top:8px">제출 시 담당 편집자가 검토 후 연락드립니다.</div>
   </div>
 </div>
 
-<!-- Me/profile sheet -->
-<div class="sheet-bg" id="me-sheet">
+<!-- Attach-to-book sheet -->
+<div class="sheet-bg" id="attach-sheet">
   <div class="sheet">
-    <div class="sheet-h"><h3>내 프로필</h3><button class="x" onclick="closeSheet('me-sheet')">×</button></div>
-    <div class="card" style="margin:0 0 12px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="av" id="me-av" style="width:48px;height:48px;font-size:18px"></div>
-        <div><div id="me-name" style="font-weight:700;font-size:16px"></div><div id="me-role" class="muted"></div><div id="me-email" class="muted" style="font-size:11px"></div></div>
-      </div>
+    <div class="sheet-h"><h3>진행 중 원고에 첨부</h3><button class="x" onclick="closeSheet('attach-sheet')">×</button></div>
+    <div id="attach-list"></div>
+  </div>
+</div>
+
+<!-- Book detail sheet -->
+<div class="sheet-bg" id="book-sheet">
+  <div class="sheet">
+    <div class="sheet-h"><h3 id="book-sheet-title">도서</h3><button class="x" onclick="closeSheet('book-sheet')">×</button></div>
+    <div id="book-sheet-body"></div>
+  </div>
+</div>
+
+<!-- Chat sheet -->
+<div class="sheet-bg" id="chat-sheet">
+  <div class="sheet">
+    <div class="sheet-h"><h3>소통 · 채팅</h3><button class="x" onclick="closeSheet('chat-sheet')">×</button></div>
+    <div class="chips" id="chat-rooms"></div>
+    <div class="chat-wrap">
+      <div class="chat-list" id="chat-list"></div>
+      <div class="chat-input"><input id="chat-text" placeholder="메시지 입력…" onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">➤</button></div>
     </div>
-    <button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="enablePush()">🔔 푸시 알림 켜기</button>
-    <button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="manualSync()">🔄 지금 동기화</button>
-    <button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="logout()">로그아웃</button>
-    <button class="btn btn-ghost btn-block" style="color:var(--rose);border-color:rgba(163,49,69,.4)" onclick="closeApp()">✕ 화면 닫기</button>
-    <div class="muted" style="font-size:11px;text-align:center;margin-top:14px">ACORN PUBLISHING · 해양 수산 저자 트랙<br>acornon.kr/maritime</div>
+  </div>
+</div>
+
+<!-- Notifications sheet -->
+<div class="sheet-bg" id="noti-sheet">
+  <div class="sheet">
+    <div class="sheet-h"><h3>알림</h3><button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="enablePush()">🔔 푸시 켜기</button><button class="x" onclick="closeSheet('noti-sheet')">×</button></div>
+    <div id="noti-list"></div>
   </div>
 </div>
 
@@ -321,7 +375,8 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <div class="onb" id="onb">
   <div class="eye">⚓ ACORN MARITIME AUTHORS</div>
   <h1>바다인의<br>집필 동반자</h1>
-  <p style="margin-bottom:8px">해양·수산 저자와 저자 후보를 위한 앱입니다. 항해 중 오프라인에서도 기록하고, 입항하면 자동으로 이어집니다.</p><p style="margin:0 0 20px;color:var(--gold2);font-size:12px">※ 체험용으로 이름·이메일은 비워 두어도 바로 시작할 수 있습니다.</p>
+  <p style="margin-bottom:8px">해양·수산 저자와 저자 후보를 위한 앱입니다. 항해 중 오프라인에서도 기록하고, 입항하면 자동으로 이어집니다.</p>
+  <p style="margin:0 0 20px;color:var(--gold2);font-size:12px">※ 체험용으로 이름·이메일은 비워 두어도 바로 시작할 수 있습니다.</p>
   <div class="field"><input id="onb-name" placeholder="이름 / 필명"></div>
   <div class="field"><input id="onb-email" type="email" placeholder="이메일"></div>
   <div class="field">
@@ -336,66 +391,49 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <div class="toast" id="toast"></div>
 
 <script>
-/* ════════════════════════════════════════════════════════════
-   ACORN 해양 저자 앱 — 오프라인 우선(Offline-first) PWA
-   백엔드(Supabase) 동기화는 선택. 미설정/오프라인이어도 로컬로 완전 동작.
-   ── Supabase 사용 시 테이블(예시) ──
-   ma_feed(id,data jsonb,created_at), ma_chat(id,room text,data jsonb,created_at),
-   ma_orders(id,data jsonb,created_at), ma_records(id,data jsonb,created_at)
-   각 테이블 RLS: anon insert/select 허용(공개 앱 기준).
-   ════════════════════════════════════════════════════════════ */
+/* ════════ ACORN 해양 저자 앱 — 오프라인 우선 PWA ════════
+   기능: ①출간 도서(인세) ②진행 중 도서(단계 모니터링) ③기획안 제안
+        ④커뮤니티(일반/도서기반) ⑤현장기록→기획안·원고 활용
+   Supabase 동기화는 선택(SYNC.enabled). 미설정/오프라인에도 로컬 완전 동작. */
 const SYNC = {
-  enabled: false,                       // ← Supabase 연동 시 true
-  url: 'https://edwfljyybrrccbxccvdh.supabase.co',
-  key: 'sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl',
-  tables: { feed:'ma_feed', chat:'ma_chat', orders:'ma_orders', records:'ma_records' }
+  enabled:false, url:'https://edwfljyybrrccbxccvdh.supabase.co',
+  key:'sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl',
+  tables:{ feed:'ma_feed', chat:'ma_chat', orders:'ma_orders', records:'ma_records', proposals:'author_submissions' }
 };
-const K = {
-  sess:'ma_session', feed:'ma_feed_local', chat:'ma_chat_local', rec:'ma_rec_local',
-  orders:'ma_orders_local', cart:'ma_cart', noti:'ma_noti', outbox:'ma_outbox', likes:'ma_likes'
-};
+const K = { sess:'ma_session', books:'ma_books', props:'ma_props', feed:'ma_feed_local', chat:'ma_chat_local',
+  rec:'ma_rec_local', orders:'ma_orders_local', cart:'ma_cart', noti:'ma_noti', outbox:'ma_outbox', likes:'ma_likes' };
 const $ = id => document.getElementById(id);
 const now = () => Date.now();
 const uid = () => now().toString(36)+Math.random().toString(36).slice(2,7);
-function load(k,def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def; }catch(e){ return def; } }
+function load(k,def){ try{ const v=localStorage.getItem(k); return v==null?def:JSON.parse(v); }catch(e){ return def; } }
 function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){ toast('저장 공간이 부족합니다'); } }
 function timeAgo(t){ const s=(now()-t)/1000; if(s<60)return'방금'; if(s<3600)return Math.floor(s/60)+'분 전'; if(s<86400)return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function won(n){ return (Math.round(+n||0)).toLocaleString('ko-KR')+'원'; }
 function initials(n){ n=(n||'').trim(); return n? n.slice(0,2):'⚓'; }
-let toastT;
-function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
+let toastT; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
 
 /* ── Session / onboarding ── */
 let session = load(K.sess,null);
 function startApp(){
   const role=(document.querySelector('input[name=role]:checked')||{}).value||'저자';
   const name=$('onb-name').value.trim() || (role==='저자후보'?'저자 후보(체험)':'저자(체험)');
-  const email=$('onb-email').value.trim();
-  session={ name, email, role, since:now() };
+  session={ name, email:$('onb-email').value.trim(), role, since:now() };
   save(K.sess,session); $('onb').classList.remove('on'); boot();
 }
 document.querySelectorAll('#onb-seg label').forEach(l=>l.addEventListener('click',()=>{
-  document.querySelectorAll('#onb-seg label').forEach(x=>x.classList.remove('sel')); l.classList.add('sel');
-  l.querySelector('input').checked=true;
+  document.querySelectorAll('#onb-seg label').forEach(x=>x.classList.remove('sel')); l.classList.add('sel'); l.querySelector('input').checked=true;
 }));
 function logout(){ if(!confirm('로그아웃할까요? (로컬 기록은 이 기기에 남습니다)'))return; localStorage.removeItem(K.sess); location.reload(); }
-// 초기 선택(온보딩) 화면으로 돌아가기 — 데이터 유지, 역할 재선택 후 다시 시작
+function backToStart(){
+  ['me-sheet','noti-sheet','post-sheet','proposal-sheet','attach-sheet','book-sheet','chat-sheet'].forEach(id=>{const e=$(id);if(e)e.classList.remove('on');});
+  document.querySelectorAll('#onb-seg label').forEach(l=>{ const on=session&&l.dataset.role===session.role; l.classList.toggle('sel',!!on); const r=l.querySelector('input'); if(r)r.checked=!!on; });
+  if($('onb-name'))$('onb-name').value=''; if($('onb-email'))$('onb-email').value=''; $('onb').classList.add('on');
+}
 function closeApp(){
   if(!confirm('이 화면(앱)을 닫을까요?')) return;
   try{ window.open('','_self'); window.close(); }catch(e){}
-  // 스크립트로 열리지 않은 창은 자동으로 닫히지 않을 수 있음
-  setTimeout(()=>{ try{ if(!window.closed){ history.length>1 ? history.back() : (location.href='about:blank'); } }catch(e){ toast('브라우저 탭을 닫아 주세요.'); } }, 350);
-}
-function backToStart(){
-  closeSheet('me-sheet'); closeSheet('noti-sheet'); closeSheet('post-sheet');
-  document.querySelectorAll('#onb-seg label').forEach(l=>{
-    const on = session && l.dataset.role===session.role;
-    l.classList.toggle('sel', !!on); const r=l.querySelector('input'); if(r) r.checked=!!on;
-  });
-  if($('onb-name')) $('onb-name').value='';
-  if($('onb-email')) $('onb-email').value='';
-  $('onb').classList.add('on');
+  setTimeout(()=>{ try{ if(!window.closed){ history.length>1?history.back():(location.href='about:blank'); } }catch(e){ toast('브라우저 탭을 닫아 주세요.'); } }, 350);
 }
 
 /* ── Navigation ── */
@@ -405,139 +443,209 @@ function go(v){
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on', s.id==='v-'+v));
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
   $('main').scrollTop=0;
-  $('fab').classList.toggle('show', v==='feed');
-  if(v==='chat'){ renderChat(); scrollChat(); }
-  if(v==='feed') renderFeed();
+  $('fab').classList.toggle('show', v==='community');
+  if(v==='home') renderHome();
+  if(v==='library') renderLibrary();
+  if(v==='community') renderCommunity();
   if(v==='record') renderRecords();
   if(v==='me') renderMe();
-  if(v==='home') renderHome();
 }
-function onFab(){ if(cur==='feed') openSheet('post-sheet'); }
-
-/* ── Sheets ── */
-function openSheet(id){ $(id).classList.add('on'); if(id==='noti-sheet'){renderNoti(); markNotiRead();} if(id==='me-sheet') renderMe(); }
+function onFab(){ if(cur==='community') openSheet('post-sheet'); }
+function openSheet(id){ $(id).classList.add('on'); }
 function closeSheet(id){ $(id).classList.remove('on'); }
-function openNoti(){ openSheet('noti-sheet'); }
+function openNoti(){ openSheet('noti-sheet'); renderNoti(); markNotiRead(); }
 document.querySelectorAll('.sheet-bg').forEach(bg=>bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('on'); }));
 
-/* ── Image downscale (카메라/사진 → 용량 최소화) ── */
+/* ── Image downscale ── */
 function fileToThumb(file, cb){
   const r=new FileReader();
   r.onload=e=>{ const img=new Image(); img.onload=()=>{
-    const max=1280; let {width:w,height:h}=img; if(w>max||h>max){ const s=max/Math.max(w,h); w=Math.round(w*s); h=Math.round(h*s); }
-    const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-    cb(c.toDataURL('image/jpeg',0.7));
+    const max=1280; let w=img.width,h=img.height; if(w>max||h>max){ const s=max/Math.max(w,h); w=Math.round(w*s); h=Math.round(h*s); }
+    const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); cb(c.toDataURL('image/jpeg',0.7));
   }; img.onerror=()=>cb(null); img.src=e.target.result; };
   r.onerror=()=>cb(null); r.readAsDataURL(file);
 }
-
 /* ── Geolocation ── */
 function getLoc(cb){
   if(!navigator.geolocation){ toast('이 기기는 위치를 지원하지 않습니다'); cb(null); return; }
   toast('위치 확인 중…');
   navigator.geolocation.getCurrentPosition(
     p=>cb({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),acc:Math.round(p.coords.accuracy)}),
-    ()=>{ toast('위치 권한이 필요합니다'); cb(null); },
-    {enableHighAccuracy:true,timeout:8000,maximumAge:60000}
-  );
+    ()=>{ toast('위치 권한이 필요합니다'); cb(null); }, {enableHighAccuracy:true,timeout:8000,maximumAge:60000});
+}
+
+/* ════════ SEED ════════ */
+const STAGES=['계약','원고 저술','편집','디자인','인쇄','출간'];
+function seedAll(){
+  if(load(K.books,null)===null) save(K.books,[
+    {id:'pb1',status:'published',title:'자율운항 시대의 항해',price:24000,royaltyRate:0.10,pubDate:'2025-09',
+     sales:[{m:'2025-09',u:320},{m:'2025-10',u:280},{m:'2025-11',u:210},{m:'2025-12',u:430}]},
+    {id:'wp1',status:'progress',title:'해녀, 바다를 읽다',stage:2,contractDate:'2026-01',target:'2026-09',materials:[]},
+    {id:'wp2',status:'progress',title:'해운 DX 실무 가이드',stage:0,contractDate:'2026-03',target:'2027-02',materials:[]},
+  ]);
+  if(load(K.props,null)===null) save(K.props,[
+    {id:'pr1',title:'(가제) 바다 위 30년, 선장의 기록',genre:'항해 에세이',status:'검토 중',summary:'원양 선장으로 보낸 30년의 항해 일지와 인생 이야기',t:now()-86400e3*3,recs:[]},
+  ]);
+  if(load(K.feed,null)===null) save(K.feed,[
+    {id:uid(),scope:'general',author:'해녀 김복순',init:'복순',text:'제주 성산 앞바다, 오늘 물질 기록. 수온 17도, 소라 풍년입니다 🐚',tags:['해녀','조업일지'],geo:{lat:33.46,lng:126.94},img:null,t:now()-3600e3,likes:12,mine:false},
+    {id:uid(),scope:'book',bookId:'pb1',author:'독자 이정민',init:'정민',text:'《자율운항 시대의 항해》 3장 너무 좋았어요. 야간 회피기동 설명이 인상적!',tags:['독후감'],geo:null,img:null,t:now()-7200e3,likes:5,mine:false},
+  ]);
+  if(load(K.chat,null)===null) save(K.chat,{ editor:[{id:uid(),who:'them',name:'편집자 황영주',text:'안녕하세요 저자님! 1장 초고 잘 받았습니다 ⚓',t:now()-5400e3}], track:[{id:uid(),who:'them',name:'운영자',text:'해양 트랙 단톡방에 오신 것을 환영합니다 🌊',t:now()-86400e3}], support:[] });
+  if(load(K.orders,null)===null) save(K.orders,[]);
 }
 
 /* ════════ HOME ════════ */
 const NOTICES=[
   {t:'해양 수산 IT 트랙 신규 저자 모집', d:'자율운항·해운 DX·해양 사이버보안'},
-  {t:'항해 인문 공모전', d:'해운史·해녀·기항지 이야기 — 상시 접수'},
+  {t:'항해 인문 공모전 — 상시 접수', d:'해운史·해녀·기항지 이야기'},
   {t:'Amazon KDP 글로벌 출간 설명회', d:'190+개국 동시 출간 지원'},
 ];
+function royaltyOf(b){ const sold=(b.sales||[]).reduce((s,x)=>s+x.u,0); return {sold, amount:Math.round(sold*(b.price||0)*(b.royaltyRate||0))}; }
 function renderHome(){
   const cand = session && session.role==='저자후보';
   $('hero-eyebrow').textContent = cand ? '⚓ 저자 후보 · 함께 시작해요' : 'FOR MARITIME EXPLORERS';
   $('hero-name').textContent = session ? (cand?`${session.name}님, 바다 이야기를 책으로`:`${session.name} 저자님, 환영합니다`) : '바다인의 집필 동반자';
-  $('hero-sub').textContent = cand ? '당신의 항로가 곧 새로운 시장입니다. 출판 제안으로 시작하세요.' : '바다에서 길어 올린 한 줄이 곧 새 항로의 좌표가 됩니다.';
-  $('role-cta').innerHTML = cand ? `<div class="card" style="border-color:var(--gold)"><span class="pill" style="background:rgba(200,162,74,.16);color:#9a7b2e">✍️ 저자 후보 전용</span>
-    <h3 class="serif" style="margin:10px 0 4px;font-size:16px">출판 제안서 작성</h3>
-    <p class="muted" style="margin:0 0 12px">기획안을 제출하면 담당 편집자가 검토 후 연락드립니다. 작성 중 항해로 끊겨도 자동 저장됩니다.</p>
-    <button class="btn btn-gold btn-block" onclick="window.open('book-proposal-form.html','_blank')">출판 제안서 작성하기</button></div>` : '';
-  $('st-records').textContent=load(K.rec,[]).length;
-  $('st-posts').textContent=load(K.feed,[]).filter(p=>p.mine).length;
-  $('st-orders').textContent=load(K.orders,[]).length;
-  $('notice-list').innerHTML=NOTICES.map(n=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)">
-    <div style="font-weight:700;font-size:13.5px">${esc(n.t)}</div><div class="muted">${esc(n.d)}</div></div>`).join('');
+  $('hero-sub').textContent = cand ? '당신의 항로가 곧 새로운 시장입니다. 기획안 제안으로 시작하세요.' : '바다에서 길어 올린 한 줄이 곧 새 항로의 좌표가 됩니다.';
+  $('role-cta').innerHTML = cand ? `<div class="card" style="border-color:var(--gold)"><span class="pill gold">✍️ 저자 후보 전용</span>
+    <h3 class="serif" style="margin:10px 0 4px;font-size:16px">출판 기획안 제안</h3>
+    <p class="muted" style="margin:0 0 12px">기획안을 제출하면 담당 편집자가 검토 후 연락드립니다.</p>
+    <button class="btn btn-gold btn-block" onclick="openProposal()">새 기획안 작성하기</button></div>` : '';
+  const books=load(K.books,[]);
+  const pub=books.filter(b=>b.status==='published');
+  $('st-pub').textContent=pub.length;
+  $('st-prog').textContent=books.filter(b=>b.status==='progress').length;
+  $('st-roy').textContent=won(pub.reduce((s,b)=>s+royaltyOf(b).amount,0));
+  $('notice-list').innerHTML=NOTICES.map(n=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><div style="font-weight:700;font-size:13.5px">${esc(n.t)}</div><div class="muted">${esc(n.d)}</div></div>`).join('');
 }
 
-/* ════════ FEED ════════ */
-function seedFeed(){
-  if(load(K.feed,null)) return;
-  save(K.feed,[
-    {id:uid(),author:'해녀 김복순',init:'복순',text:'제주 성산 앞바다, 오늘 물질 기록. 수온 17도, 소라 풍년입니다 🐚',tags:['해녀','조업일지'],geo:{lat:33.46,lng:126.94},img:null,t:now()-3600e3,likes:12,mine:false},
-    {id:uid(),author:'항해사 이도현',init:'도현',text:'부산→싱가포르 항로 자율운항 테스트 3일차. 야간 회피기동 데이터 양호.',tags:['자율운항','해운DX'],geo:{lat:1.29,lng:103.85},img:null,t:now()-7200e3,likes:8,mine:false},
-  ]);
+/* ════════ LIBRARY ════════ */
+let libSeg='published';
+function setLib(s){ libSeg=s; document.querySelectorAll('#lib-seg button').forEach(b=>b.classList.toggle('on',b.dataset.s===s)); renderLibrary(); }
+function renderLibrary(){
+  document.querySelectorAll('#lib-seg button').forEach(b=>b.classList.toggle('on',b.dataset.s===libSeg));
+  const body=$('lib-body'); const books=load(K.books,[]);
+  if(libSeg==='published'){
+    const pub=books.filter(b=>b.status==='published');
+    body.innerHTML = pub.length? pub.map(b=>{ const r=royaltyOf(b);
+      return `<div class="card"><div class="bk"><div class="bk-cover"></div>
+        <div style="flex:1"><div class="bk-title">${esc(b.title)}</div>
+          <div class="muted" style="margin-top:3px">정가 ${won(b.price)} · 출간 ${esc(b.pubDate||'')}</div>
+          <span class="pill ok" style="margin-top:7px">📕 출간</span></div></div>
+        <div class="royalty-box">
+          <div class="muted" style="font-size:11px;font-weight:700">누적 인세 (판매량 기준)</div>
+          <div class="amt">${won(r.amount)}</div>
+          <div class="kv"><span>총 판매량</span><b>${r.sold.toLocaleString()}부</b></div>
+          <div class="kv"><span>인세율</span><b>${Math.round((b.royaltyRate||0)*100)}%</b></div>
+          <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px" onclick="openBook('${b.id}')">월별 판매·인세 보기</button>
+        </div></div>`;
+    }).join('') : '<div class="empty">출간된 도서가 없습니다.</div>';
+  } else if(libSeg==='progress'){
+    const pr=books.filter(b=>b.status==='progress');
+    body.innerHTML = pr.length? pr.map(b=>{
+      const pct=Math.round(((b.stage)/(STAGES.length-1))*100);
+      return `<div class="card"><div class="bk"><div class="bk-cover" style="background:linear-gradient(150deg,#3A5168,#0E6E96)"></div>
+        <div style="flex:1"><div class="bk-title">${esc(b.title)}</div>
+          <div class="muted" style="margin-top:3px">계약 ${esc(b.contractDate||'')} · 목표 출간 ${esc(b.target||'미정')}</div>
+          <span class="pill warn" style="margin-top:7px">🛠 ${esc(STAGES[b.stage]||'진행')} 단계</span></div></div>
+        <div class="stepper">${STAGES.map((s,i)=>`<div class="step ${i<b.stage?'done':''} ${i===b.stage?'cur':''}"><span class="dot">${i<b.stage?'✓':(i+1)}</span><div class="lb">${esc(s)}</div></div>`).join('')}</div>
+        <div class="bar" style="margin-top:12px"><i style="width:${pct}%"></i></div>
+        <div class="muted" style="font-size:11px;margin-top:5px;text-align:right">진행률 ${pct}%</div>
+        ${(b.materials&&b.materials.length)?`<div class="book-chip-line">📎 첨부 자료 ${b.materials.length}건</div>`:''}
+      </div>`;
+    }).join('') : '<div class="empty">진행 중인 도서가 없습니다.</div>';
+  } else {
+    const props=load(K.props,[]);
+    body.innerHTML = `<button class="btn btn-gold btn-block" style="margin-bottom:12px" onclick="openProposal()">＋ 새 기획안 제안</button>`
+      + (props.length? props.slice().sort((a,b)=>b.t-a.t).map(p=>`<div class="card">
+        <div style="display:flex;align-items:center"><span class="pill ${p.status==='검토 중'?'warn':'ok'}">${esc(p.status)}</span><span class="muted" style="margin-left:auto;font-size:11px">${timeAgo(p.t)}${p.pending?' · ⏳':''}</span></div>
+        <div class="bk-title" style="margin-top:8px">${esc(p.title)}</div>
+        ${p.genre?`<div class="muted" style="margin-top:2px">${esc(p.genre)}</div>`:''}
+        ${p.summary?`<div style="font-size:13px;margin-top:6px;line-height:1.55">${esc(p.summary)}</div>`:''}
+        ${(p.recs&&p.recs.length)?`<div class="book-chip-line">📎 현장 기록 ${p.recs.length}건 활용</div>`:''}
+      </div>`).join('') : '<div class="empty">제안한 기획안이 없습니다. 위 버튼으로 시작하세요.</div>');
+  }
 }
-function renderFeed(){
-  const posts=load(K.feed,[]).slice().sort((a,b)=>b.t-a.t);
+function openBook(id){
+  const b=load(K.books,[]).find(x=>x.id===id); if(!b)return; const r=royaltyOf(b);
+  $('book-sheet-title').textContent=b.title;
+  $('book-sheet-body').innerHTML=`<div class="royalty-box"><div class="muted" style="font-size:11px;font-weight:700">누적 인세</div><div class="amt">${won(r.amount)}</div>
+    <div class="kv"><span>정가</span><b>${won(b.price)}</b></div><div class="kv"><span>인세율</span><b>${Math.round(b.royaltyRate*100)}%</b></div><div class="kv"><span>총 판매</span><b>${r.sold.toLocaleString()}부</b></div></div>
+    <h4 class="serif" style="font-size:14px;margin:16px 0 8px">월별 판매·인세</h4>
+    ${(b.sales||[]).map(s=>{ const amt=Math.round(s.u*b.price*b.royaltyRate); return `<div class="card" style="padding:11px 14px;margin-bottom:8px"><div style="display:flex;align-items:center"><b>${esc(s.m)}</b><span style="margin-left:auto;color:var(--sea);font-weight:700">${won(amt)}</span></div><div class="muted" style="font-size:12px;margin-top:2px">${s.u.toLocaleString()}부 판매</div></div>`; }).join('')}`;
+  openSheet('book-sheet');
+}
+
+/* ════════ COMMUNITY (general / book) ════════ */
+let comScope='general', comBook=null;
+function setCom(s){ comScope=s; document.querySelectorAll('#com-seg button').forEach(b=>b.classList.toggle('on',b.dataset.s===s)); renderCommunity(); }
+function renderCommunity(){
+  document.querySelectorAll('#com-seg button').forEach(b=>b.classList.toggle('on',b.dataset.s===comScope));
+  const books=load(K.books,[]);
+  const chipWrap=$('com-books');
+  if(comScope==='book'){
+    chipWrap.style.display='flex';
+    if(!comBook && books[0]) comBook=books[0].id;
+    chipWrap.innerHTML=books.map(b=>`<button class="chip ${b.id===comBook?'on':''}" onclick="comBook='${b.id}';renderCommunity()">${esc(b.title)}</button>`).join('') || '<span class="muted">등록된 도서가 없습니다</span>';
+  } else { chipWrap.style.display='none'; }
   const likes=load(K.likes,{});
+  let posts=load(K.feed,[]).filter(p=> comScope==='general' ? p.scope!=='book' : (p.scope==='book' && p.bookId===comBook));
+  posts=posts.sort((a,b)=>b.t-a.t);
   $('feed-list').innerHTML = posts.length? posts.map(p=>{
-    const liked=!!likes[p.id];
-    return `<div class="post">
-      <div class="post-h"><div class="av">${esc(p.init||initials(p.author))}</div>
-        <div><div class="nm">${esc(p.author)}</div><div class="tm">${timeAgo(p.t)}</div></div>
-        ${p.pending?'<span class="pending-flag">⏳ 전송 대기</span>':''}</div>
+    const liked=!!likes[p.id]; const bk=p.bookId?books.find(x=>x.id===p.bookId):null;
+    return `<div class="post"><div class="post-h"><div class="av">${esc(p.init||initials(p.author))}</div>
+      <div><div class="nm">${esc(p.author)}</div><div class="tm">${timeAgo(p.t)}</div></div>${p.pending?'<span class="pending-flag">⏳ 전송 대기</span>':''}</div>
       <div class="post-txt">${esc(p.text)}</div>
       ${p.img?`<img class="post-img" src="${p.img}">`:''}
+      ${bk?`<div class="book-chip-line">📚 ${esc(bk.title)}</div>`:''}
       ${p.geo?`<div class="geo-chip">📍 ${p.geo.lat}, ${p.geo.lng}</div>`:''}
       ${(p.tags&&p.tags.length)?`<div class="tags">${p.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
-      <div class="post-acts">
-        <button class="${liked?'liked':''}" onclick="toggleLike('${p.id}')">${liked?'❤️':'🤍'} <span>${(p.likes||0)+(liked&&!p._counted?0:0)}</span></button>
-        <button onclick="toast('댓글은 곧 제공됩니다')">💬 댓글</button>
-      </div></div>`;
-  }).join('') : '<div class="empty">아직 글이 없습니다. 우측 하단 ＋로 첫 글을 남겨보세요.</div>';
+      <div class="post-acts"><button class="${liked?'liked':''}" onclick="toggleLike('${p.id}')">${liked?'❤️':'🤍'} <span>${p.likes||0}</span></button>
+      <button onclick="toast('댓글은 곧 제공됩니다')">💬 댓글</button></div></div>`;
+  }).join('') : `<div class="empty">${comScope==='book'?'이 도서의 커뮤니티 글이 없습니다.':'아직 글이 없습니다.'} 우측 하단 ＋로 첫 글을 남겨보세요.</div>`;
 }
-function toggleLike(id){ const likes=load(K.likes,{}); likes[id]=!likes[id]; save(K.likes,likes);
-  const posts=load(K.feed,[]); const p=posts.find(x=>x.id===id); if(p){ p.likes=(p.likes||0)+(likes[id]?1:-1); save(K.feed,posts);} renderFeed(); }
-let postPhoto=null, postGeo=null;
+function toggleLike(id){ const likes=load(K.likes,{}); likes[id]=!likes[id]; save(K.likes,likes); const f=load(K.feed,[]); const p=f.find(x=>x.id===id); if(p){p.likes=(p.likes||0)+(likes[id]?1:-1);save(K.feed,f);} renderCommunity(); }
+let postPhoto=null, postGeo=null, postScope='general';
+function setPostScope(s){ postScope=s; $('ps-general').classList.toggle('on',s==='general'); $('ps-book').classList.toggle('on',s==='book');
+  const sel=$('post-book'); if(s==='book'){ const books=load(K.books,[]); sel.innerHTML=books.map(b=>`<option value="${b.id}">${esc(b.title)}</option>`).join(''); if(comBook)sel.value=comBook; sel.style.display='block'; } else sel.style.display='none'; }
 function onPostPhoto(files){ const f=files&&files[0]; if(!f)return; fileToThumb(f,d=>{ postPhoto=d; $('post-thumbs').innerHTML=d?`<div class="thumb"><img src="${d}"><button onclick="postPhoto=null;document.getElementById('post-thumbs').innerHTML=''">×</button></div>`:''; }); }
 function postTagLoc(){ getLoc(g=>{ postGeo=g; $('post-geo').textContent=g?`📍 ${g.lat}, ${g.lng} (±${g.acc}m)`:''; }); }
 function publishPost(){
   const text=$('post-text').value.trim(); if(!text&&!postPhoto){ toast('내용이나 사진을 입력해 주세요'); return; }
   const tags=($('post-tags').value||'').split(',').map(s=>s.trim()).filter(Boolean);
-  const post={id:uid(),author:session.name,init:initials(session.name),text,tags,geo:postGeo,img:postPhoto,t:now(),likes:0,mine:true,pending:!navigator.onLine};
-  const posts=load(K.feed,[]); posts.unshift(post); save(K.feed,posts);
-  enqueue('feed',post);
+  const scope = postScope==='book' ? 'book':'general';
+  const bookId = scope==='book' ? ($('post-book').value||null) : null;
+  const post={id:uid(),scope,bookId,author:session.name,init:initials(session.name),text,tags,geo:postGeo,img:postPhoto,t:now(),likes:0,mine:true,pending:!navigator.onLine};
+  const f=load(K.feed,[]); f.unshift(post); save(K.feed,f); enqueue('feed',post);
   postPhoto=null; postGeo=null; $('post-text').value=''; $('post-tags').value=''; $('post-thumbs').innerHTML=''; $('post-geo').textContent='';
-  closeSheet('post-sheet'); renderFeed(); renderHome();
+  if(scope==='book'){ comScope='book'; comBook=bookId; }
+  closeSheet('post-sheet'); renderCommunity();
   toast(navigator.onLine?'게시되었습니다':'오프라인 — 연결되면 자동 게시됩니다');
 }
 
-/* ════════ CHAT ════════ */
-const ROOMS=[{id:'editor',name:'담당 편집자'},{id:'track',name:'해양 트랙 단톡'},{id:'support',name:'고객지원'}];
-let room='editor';
-function seedChat(){
-  if(load(K.chat,null)) return;
-  save(K.chat,{ editor:[{id:uid(),who:'them',name:'편집자 황영주',text:'안녕하세요 저자님! 1장 초고 잘 받았습니다. 사진 자료도 함께 주시면 좋아요 ⚓',t:now()-5400e3}],
-    track:[{id:uid(),who:'them',name:'운영자',text:'해양 트랙 단톡방에 오신 것을 환영합니다 🌊',t:now()-86400e3}],
-    support:[] });
+/* ════════ PROPOSAL (저자/후보 공통) ════════ */
+let propRecs=[];
+function openProposal(prefillRec){
+  if(prefillRec){ if(!propRecs.find(r=>r.id===prefillRec.id)) propRecs.push(prefillRec);
+    if(!$('pp-title').value) $('pp-title').value = prefillRec.title||''; }
+  renderPropRecs(); openSheet('proposal-sheet');
 }
-function renderChat(){
-  $('chat-rooms').innerHTML=ROOMS.map(r=>`<button class="room-chip ${r.id===room?'on':''}" onclick="setRoom('${r.id}')">${esc(r.name)}</button>`).join('');
-  const all=load(K.chat,{}); const msgs=(all[room]||[]).slice().sort((a,b)=>a.t-b.t);
-  $('chat-list').innerHTML = msgs.length? msgs.map(m=>`<div class="msg ${m.who==='me'?'me':'them'}">${m.who==='them'?`<div style="font-size:10px;font-weight:700;opacity:.7;margin-bottom:2px">${esc(m.name||'')}</div>`:''}${esc(m.text)}<span class="mt">${timeAgo(m.t)}${m.pending?' · ⏳':''}</span></div>`).join('') : '<div class="empty">대화를 시작해 보세요.</div>';
-}
-function setRoom(r){ room=r; renderChat(); scrollChat(); }
-function scrollChat(){ const el=$('chat-list'); setTimeout(()=>el.scrollTop=el.scrollHeight,30); }
-function sendChat(){
-  const t=$('chat-text').value.trim(); if(!t)return;
-  const all=load(K.chat,{}); all[room]=all[room]||[];
-  const msg={id:uid(),who:'me',name:session.name,text:t,t:now(),room,pending:!navigator.onLine};
-  all[room].push(msg); save(K.chat,all); enqueue('chat',msg);
-  $('chat-text').value=''; renderChat(); scrollChat();
+function renderPropRecs(){ $('pp-recs').innerHTML = propRecs.length? propRecs.map((r,i)=>`<span class="pill" style="margin:0 5px 5px 0">📎 ${esc((r.title||'기록').slice(0,14))} <b style="cursor:pointer" onclick="propRecs.splice(${i},1);renderPropRecs()">×</b></span>`).join('') : '<span class="muted">없음</span>'; }
+function submitProposal(){
+  const title=$('pp-title').value.trim(); if(!title){ toast('제목을 입력해 주세요'); return; }
+  const p={id:uid(),title,genre:$('pp-genre').value,status:'검토 중',summary:$('pp-summary').value.trim(),t:now(),
+    recs:propRecs.map(r=>({id:r.id,title:r.title})),author:session.name,email:session.email,pending:!navigator.onLine};
+  const list=load(K.props,[]); list.unshift(p); save(K.props,list);
+  // 서버 동기화 시 author_submissions 형태로 매핑
+  enqueue('proposals',{ name:session.name, email:session.email, title, genre:p.genre, summary:p.summary, source:'author-app', recs:p.recs });
+  propRecs=[]; $('pp-title').value=''; $('pp-genre').value=''; $('pp-summary').value=''; renderPropRecs();
+  closeSheet('proposal-sheet'); if(cur==='library'){ libSeg='proposal'; renderLibrary(); } else go('library'),setLib('proposal');
+  pushNoti('기획안 제출 완료', title);
+  toast(navigator.onLine?'기획안이 제출되었습니다':'오프라인 — 연결되면 자동 제출됩니다');
 }
 
-/* ════════ RECORD (camera + geo, offline) ════════ */
+/* ════════ RECORD (camera+geo, offline) + 활용 ════════ */
 let recPhotos=[], recGeo=null;
-function onRecPhotos(files){
-  const arr=Array.from(files||[]); if(!arr.length)return;
-  if(recPhotos.length+arr.length>4){ toast('사진은 최대 4장'); return; }
-  arr.forEach(f=>fileToThumb(f,d=>{ if(d){ recPhotos.push(d); renderRecThumbs(); } }));
-}
+function onRecPhotos(files){ const arr=Array.from(files||[]); if(!arr.length)return; if(recPhotos.length+arr.length>4){ toast('사진은 최대 4장'); return; } arr.forEach(f=>fileToThumb(f,d=>{ if(d){recPhotos.push(d);renderRecThumbs();} })); }
 function renderRecThumbs(){ $('rec-thumbs').innerHTML=recPhotos.map((d,i)=>`<div class="thumb"><img src="${d}"><button onclick="recPhotos.splice(${i},1);renderRecThumbs()">×</button></div>`).join(''); }
 function tagLocation(){ getLoc(g=>{ recGeo=g; $('rec-geo').innerHTML=g?`📍 위도 ${g.lat}, 경도 ${g.lng} <span class="muted">(±${g.acc}m)</span>`:'위치 태깅 안 됨'; }); }
 function saveRecord(){
@@ -546,145 +654,111 @@ function saveRecord(){
   const rec={id:uid(),title,memo,photos:recPhotos.slice(),geo:recGeo,t:now(),pending:!navigator.onLine};
   const list=load(K.rec,[]); list.unshift(rec); save(K.rec,list); enqueue('records',rec);
   recPhotos=[]; recGeo=null; $('rec-title').value=''; $('rec-memo').value=''; $('rec-thumbs').innerHTML=''; $('rec-geo').textContent='위치 태깅 안 됨';
-  renderRecords(); renderHome();
-  toast(navigator.onLine?'기록이 저장되었습니다':'오프라인 저장 — 입항 후 자동 동기화');
+  renderRecords(); toast(navigator.onLine?'기록이 저장되었습니다':'오프라인 저장 — 입항 후 자동 동기화');
 }
 function renderRecords(){
   const list=load(K.rec,[]);
   $('rec-list').innerHTML=list.length? list.map(r=>`<div class="card" style="padding:13px">
-    <div style="display:flex;align-items:center;gap:8px"><strong style="font-size:14px">${esc(r.title||'(제목없음)')}</strong>
-      <span class="muted" style="margin-left:auto;font-size:11px">${timeAgo(r.t)}${r.pending?' · ⏳':''}</span></div>
+    <div style="display:flex;align-items:center;gap:8px"><strong style="font-size:14px">${esc(r.title||'(제목없음)')}</strong><span class="muted" style="margin-left:auto;font-size:11px">${timeAgo(r.t)}${r.pending?' · ⏳':''}</span></div>
     ${r.memo?`<div class="muted" style="margin-top:5px;white-space:pre-wrap">${esc(r.memo)}</div>`:''}
     ${(r.photos&&r.photos.length)?`<div class="attach-row" style="margin-top:9px">${r.photos.map(p=>`<div class="thumb"><img src="${p}"></div>`).join('')}</div>`:''}
     ${r.geo?`<div class="geo-chip">📍 ${r.geo.lat}, ${r.geo.lng}</div>`:''}
+    <div class="rec-use"><button onclick="useRecForProposal('${r.id}')">✍️ 기획안에 활용</button><button onclick="useRecForBook('${r.id}')">📚 진행 원고에 첨부</button></div>
   </div>`).join('') : '<div class="empty">아직 기록이 없습니다.</div>';
 }
+function useRecForProposal(id){ const r=load(K.rec,[]).find(x=>x.id===id); if(!r)return; openProposal(r); toast('기획안에 자료로 추가했습니다'); }
+function useRecForBook(id){
+  const r=load(K.rec,[]).find(x=>x.id===id); if(!r)return;
+  const pr=load(K.books,[]).filter(b=>b.status==='progress');
+  if(!pr.length){ toast('진행 중인 원고가 없습니다'); return; }
+  $('attach-list').innerHTML=pr.map(b=>`<button class="btn btn-ghost btn-block" style="margin-bottom:8px;text-align:left" onclick="attachRecToBook('${id}','${b.id}')">📖 ${esc(b.title)} <span class="muted" style="font-size:11px">· ${esc(STAGES[b.stage])} 단계</span></button>`).join('');
+  openSheet('attach-sheet');
+}
+function attachRecToBook(recId,bookId){
+  const books=load(K.books,[]); const b=books.find(x=>x.id===bookId); if(!b)return;
+  b.materials=b.materials||[]; if(!b.materials.find(m=>m.id===recId)){ const r=load(K.rec,[]).find(x=>x.id===recId); b.materials.push({id:recId,title:r?r.title:''}); save(K.books,books); }
+  closeSheet('attach-sheet'); toast('‘'+b.title+'’ 원고 자료로 첨부했습니다'); if(cur==='library'&&libSeg==='progress') renderLibrary();
+}
 
-/* ════════ ME / ORDERS / PAYMENT ════════ */
-const SHOP=[
-  {id:'b1',title:'자율운항 시대의 항해',price:24000},
-  {id:'b2',title:'해녀, 바다를 읽다',price:18000},
-  {id:'b3',title:'해운 DX 실무 가이드',price:32000},
-];
+/* ════════ ME / ORDERS ════════ */
+const SHOP=[{id:'b1',title:'자율운항 시대의 항해',price:24000},{id:'b2',title:'해녀, 바다를 읽다',price:18000},{id:'b3',title:'해운 DX 실무 가이드',price:32000}];
 function renderMe(){
   if(session){ $('me-av').textContent=initials(session.name); $('me-name').textContent=session.name; $('me-role').textContent=session.role; $('me-email').textContent=session.email||''; }
   const cart=load(K.cart,{});
-  $('shop-list').innerHTML=SHOP.map(b=>{ const q=cart[b.id]||0; return `<div class="book" style="padding:10px 0;border-bottom:1px solid var(--line)">
-    <div class="book-cover"></div>
+  $('shop-list').innerHTML=SHOP.map(b=>{ const q=cart[b.id]||0; return `<div class="book" style="padding:10px 0;border-bottom:1px solid var(--line)"><div class="bk-cover" style="width:40px;height:54px"></div>
     <div style="flex:1"><div style="font-weight:700;font-size:13.5px">${esc(b.title)}</div><div class="muted">${won(b.price)}</div></div>
-    <div class="qty"><button onclick="cartAdd('${b.id}',-1)">−</button><span style="min-width:18px;text-align:center;font-weight:700">${q}</span><button onclick="cartAdd('${b.id}',1)">＋</button></div>
-  </div>`; }).join('');
+    <div class="qty"><button onclick="cartAdd('${b.id}',-1)">−</button><span style="min-width:18px;text-align:center;font-weight:700">${q}</span><button onclick="cartAdd('${b.id}',1)">＋</button></div></div>`; }).join('');
   const total=Object.entries(cart).reduce((s,[id,q])=>{ const b=SHOP.find(x=>x.id===id); return s+(b?b.price*q:0); },0);
   $('cart-total').textContent=won(total); $('cart-bar').style.display= total>0?'block':'none';
   renderOrders();
 }
-function cartAdd(id,d){ const cart=load(K.cart,{}); cart[id]=Math.max(0,(cart[id]||0)+d); if(!cart[id])delete cart[id]; save(K.cart,cart); renderMe(); }
+function cartAdd(id,d){ const c=load(K.cart,{}); c[id]=Math.max(0,(c[id]||0)+d); if(!c[id])delete c[id]; save(K.cart,c); renderMe(); }
 function checkout(){
   const cart=load(K.cart,{}); const items=Object.entries(cart).map(([id,q])=>{ const b=SHOP.find(x=>x.id===id); return {id,title:b.title,price:b.price,qty:q}; });
   if(!items.length)return; const total=items.reduce((s,i)=>s+i.price*i.qty,0);
-  // 데모 결제 — 실제로는 PG(토스페이먼츠/KCP/아임포트) 호출 지점
   const order={id:uid(),items,total,status:navigator.onLine?'결제완료(데모)':'결제대기(오프라인)',t:now(),buyer:session.name,pending:!navigator.onLine};
-  const orders=load(K.orders,[]); orders.unshift(order); save(K.orders,orders); enqueue('orders',order);
-  save(K.cart,{}); renderMe(); renderHome();
-  pushNoti('주문 완료', `${items[0].title}${items.length>1?` 외 ${items.length-1}건`:''} · ${won(total)}`);
+  const o=load(K.orders,[]); o.unshift(order); save(K.orders,o); enqueue('orders',order);
+  save(K.cart,{}); renderMe(); pushNoti('주문 완료', `${items[0].title}${items.length>1?` 외 ${items.length-1}건`:''} · ${won(total)}`);
   toast(navigator.onLine?'결제가 완료되었습니다(데모)':'오프라인 — 연결 시 결제 동기화');
 }
 function renderOrders(){
-  const orders=load(K.orders,[]);
-  $('order-list').innerHTML=orders.length? orders.map(o=>`<div class="card" style="padding:13px">
-    <div style="display:flex;align-items:center"><span class="pill">${esc(o.status)}</span><span class="muted" style="margin-left:auto;font-size:11px">${timeAgo(o.t)}</span></div>
-    <div style="margin-top:8px;font-size:13.5px">${o.items.map(i=>`${esc(i.title)} ×${i.qty}`).join(', ')}</div>
-    <div style="font-family:'Noto Serif KR',serif;color:var(--sea);margin-top:4px">${won(o.total)}</div>
-  </div>`).join('') : '<div class="empty">주문 내역이 없습니다.</div>';
+  const o=load(K.orders,[]);
+  $('order-list').innerHTML=o.length? o.map(x=>`<div class="card" style="padding:13px"><div style="display:flex;align-items:center"><span class="pill">${esc(x.status)}</span><span class="muted" style="margin-left:auto;font-size:11px">${timeAgo(x.t)}</span></div><div style="margin-top:8px;font-size:13.5px">${x.items.map(i=>`${esc(i.title)} ×${i.qty}`).join(', ')}</div><div style="font-family:'Noto Serif KR',serif;color:var(--sea);margin-top:4px">${won(x.total)}</div></div>`).join('') : '<div class="empty">주문 내역이 없습니다.</div>';
 }
 
-/* ════════ NOTIFICATIONS (local + push scaffold) ════════ */
-function pushNoti(title, body){
-  const list=load(K.noti,[]); list.unshift({id:uid(),title,body,t:now(),read:false}); save(K.noti,list); updateNotiBadge();
-  if('Notification' in window && Notification.permission==='granted' && document.hidden){
-    try{ new Notification(title,{body,icon:'author-icon-192.png'}); }catch(e){}
-  }
+/* ════════ CHAT ════════ */
+const ROOMS=[{id:'editor',name:'담당 편집자'},{id:'track',name:'해양 트랙 단톡'},{id:'support',name:'고객지원'}];
+let room='editor';
+function openChat(){ openSheet('chat-sheet'); renderChat(); scrollChat(); }
+function renderChat(){
+  $('chat-rooms').innerHTML=ROOMS.map(r=>`<button class="chip ${r.id===room?'on':''}" onclick="setRoom('${r.id}')">${esc(r.name)}</button>`).join('');
+  const all=load(K.chat,{}); const msgs=(all[room]||[]).slice().sort((a,b)=>a.t-b.t);
+  $('chat-list').innerHTML=msgs.length? msgs.map(m=>`<div class="msg ${m.who==='me'?'me':'them'}">${m.who==='them'?`<div style="font-size:10px;font-weight:700;opacity:.7;margin-bottom:2px">${esc(m.name||'')}</div>`:''}${esc(m.text)}<span class="mt">${timeAgo(m.t)}${m.pending?' · ⏳':''}</span></div>`).join('') : '<div class="empty">대화를 시작해 보세요.</div>';
 }
+function setRoom(r){ room=r; renderChat(); scrollChat(); }
+function scrollChat(){ const el=$('chat-list'); setTimeout(()=>el.scrollTop=el.scrollHeight,30); }
+function sendChat(){ const t=$('chat-text').value.trim(); if(!t)return; const all=load(K.chat,{}); all[room]=all[room]||[]; const m={id:uid(),who:'me',name:session.name,text:t,t:now(),room,pending:!navigator.onLine}; all[room].push(m); save(K.chat,all); enqueue('chat',m); $('chat-text').value=''; renderChat(); scrollChat(); }
+
+/* ════════ NOTIFICATIONS ════════ */
+function pushNoti(title,body){ const l=load(K.noti,[]); l.unshift({id:uid(),title,body,t:now(),read:false}); save(K.noti,l); updateNotiBadge(); if('Notification' in window && Notification.permission==='granted' && document.hidden){ try{ new Notification(title,{body,icon:'author-icon-192.png'}); }catch(e){} } }
 function updateNotiBadge(){ const n=load(K.noti,[]).filter(x=>!x.read).length; const b=$('noti-badge'); b.textContent=n; b.style.display=n?'flex':'none'; }
-function markNotiRead(){ const list=load(K.noti,[]); list.forEach(x=>x.read=true); save(K.noti,list); updateNotiBadge(); }
-function renderNoti(){
-  const list=load(K.noti,[]);
-  $('noti-list').innerHTML=list.length? list.map(n=>`<div class="card" style="padding:12px;margin-bottom:8px">
-    <div style="font-weight:700;font-size:13.5px">${esc(n.title)}</div><div class="muted" style="margin-top:3px">${esc(n.body)}</div>
-    <div class="muted" style="font-size:10px;margin-top:5px">${timeAgo(n.t)}</div></div>`).join('') : '<div class="empty">알림이 없습니다.</div>';
-}
-async function enablePush(){
-  if(!('Notification' in window)){ toast('이 기기는 알림을 지원하지 않습니다'); return; }
-  const perm=await Notification.requestPermission();
-  if(perm!=='granted'){ toast('알림 권한이 거부되었습니다'); return; }
-  toast('알림이 켜졌습니다 🔔'); pushNoti('알림 켜짐','새 채팅·공지·주문 알림을 받습니다.');
-  // 서버 푸시(Web Push)는 VAPID 키 + 푸시 서버 필요 — 준비되면 아래 주석을 사용
-  // const reg=await navigator.serviceWorker.ready;
-  // const sub=await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:'<VAPID_PUBLIC_KEY>'});
-  // fetch(SYNC.url+'/rest/v1/ma_push',{method:'POST',headers:sbH(),body:JSON.stringify([{data:sub}])});
-}
+function markNotiRead(){ const l=load(K.noti,[]); l.forEach(x=>x.read=true); save(K.noti,l); updateNotiBadge(); }
+function renderNoti(){ const l=load(K.noti,[]); $('noti-list').innerHTML=l.length? l.map(n=>`<div class="card" style="padding:12px;margin-bottom:8px"><div style="font-weight:700;font-size:13.5px">${esc(n.title)}</div><div class="muted" style="margin-top:3px">${esc(n.body)}</div><div class="muted" style="font-size:10px;margin-top:5px">${timeAgo(n.t)}</div></div>`).join('') : '<div class="empty">알림이 없습니다.</div>'; }
+async function enablePush(){ if(!('Notification' in window)){ toast('이 기기는 알림을 지원하지 않습니다'); return; } const p=await Notification.requestPermission(); if(p!=='granted'){ toast('알림 권한이 거부되었습니다'); return; } toast('알림이 켜졌습니다 🔔'); pushNoti('알림 켜짐','새 채팅·공지·주문 알림을 받습니다.'); }
 
-/* ════════ OFFLINE / SYNC (준 실시간) ════════ */
+/* ════════ OFFLINE / SYNC ════════ */
 function sbH(){ return {'apikey':SYNC.key,'Authorization':'Bearer '+SYNC.key,'Content-Type':'application/json','Prefer':'return=minimal'}; }
 function enqueue(kind,payload){ const ob=load(K.outbox,[]); ob.push({id:uid(),kind,payload,t:now()}); save(K.outbox,ob); flush(); }
 async function flush(){
   if(!SYNC.enabled || !navigator.onLine) return;
-  let ob=load(K.outbox,[]); if(!ob.length) return;
-  $('sync-bar').classList.add('show');
-  const remain=[];
-  for(const op of ob){
-    const table=SYNC.tables[op.kind]; if(!table){ continue; }
-    try{
-      const body = op.kind==='chat' ? [{room:op.payload.room,data:op.payload,created_at:new Date(op.payload.t).toISOString()}]
-                                    : [{data:op.payload,created_at:new Date(op.payload.t).toISOString()}];
+  let ob=load(K.outbox,[]); if(!ob.length) return; $('sync-bar').classList.add('show'); const remain=[];
+  for(const op of ob){ const table=SYNC.tables[op.kind]; if(!table){ continue; }
+    try{ const body = op.kind==='chat' ? [{room:op.payload.room,data:op.payload,created_at:new Date(op.payload.t).toISOString()}]
+        : op.kind==='proposals' ? [{data:op.payload,status:'new',created_at:new Date(op.t).toISOString()}]
+        : [{data:op.payload,created_at:new Date(op.payload.t||op.t).toISOString()}];
       const res=await fetch(`${SYNC.url}/rest/v1/${table}`,{method:'POST',headers:sbH(),body:JSON.stringify(body)});
       if(!res.ok) remain.push(op);
-    }catch(e){ remain.push(op); }
-  }
+    }catch(e){ remain.push(op); } }
   save(K.outbox,remain);
-  // 동기화 후 pending 플래그 정리
-  ['feed','rec','orders'].forEach(k=>{ const a=load(K[k],[]); let ch=false; a.forEach(x=>{if(x.pending){x.pending=false;ch=true;}}); if(ch)save(K[k],a); });
+  ['feed','rec','orders','props'].forEach(k=>{ const a=load(K[k],[]); let ch=false; a.forEach(x=>{if(x.pending){x.pending=false;ch=true;}}); if(ch)save(K[k],a); });
   const c=load(K.chat,{}); let cch=false; Object.values(c).forEach(arr=>arr.forEach(m=>{if(m.pending){m.pending=false;cch=true;}})); if(cch)save(K.chat,c);
-  $('sync-bar').classList.remove('show'); updateOffline();
-  if(cur==='feed')renderFeed(); if(cur==='record')renderRecords(); if(cur==='me')renderMe(); if(cur==='chat')renderChat();
+  $('sync-bar').classList.remove('show');
+  if(cur==='community')renderCommunity(); if(cur==='record')renderRecords(); if(cur==='me')renderMe(); if(cur==='library')renderLibrary();
 }
 function manualSync(){ if(!SYNC.enabled){ toast('Supabase 연동이 꺼져 있습니다 (로컬 저장 중)'); return; } if(!navigator.onLine){ toast('오프라인입니다'); return; } toast('동기화를 시작합니다'); flush(); }
-function updateOffline(){
-  const off=!navigator.onLine; $('offline-bar').classList.toggle('show',off);
-  const pend=load(K.outbox,[]).length;
-  if(!off && pend && SYNC.enabled){ /* 자동 flush */ }
-}
-window.addEventListener('online', ()=>{ updateOffline(); toast('연결됨 — 동기화합니다'); flush(); pollIncoming(); });
+function updateOffline(){ $('offline-bar').classList.toggle('show', !navigator.onLine); }
+window.addEventListener('online', ()=>{ updateOffline(); toast('연결됨 — 동기화합니다'); flush(); });
 window.addEventListener('offline', ()=>{ updateOffline(); toast('오프라인 모드'); });
-
-/* 준 실시간: 온라인일 때 주기적으로 새 채팅/피드 폴링 (Supabase 연동 시) */
-async function pollIncoming(){
-  if(!SYNC.enabled || !navigator.onLine) return;
-  // 데모: 채팅방 신규 메시지 폴링 (실서비스에서는 last_ts 기준 증분 조회)
-  try{
-    const res=await fetch(`${SYNC.url}/rest/v1/${SYNC.tables.chat}?select=room,data,created_at&order=created_at.desc&limit=20`,{headers:{'apikey':SYNC.key,'Authorization':'Bearer '+SYNC.key}});
-    if(res.ok){ /* 병합 로직: 서버 메시지를 로컬과 머지 (id 중복 제거) */ }
-  }catch(e){}
-}
-let pollTimer=null;
-function startPolling(){ if(pollTimer)clearInterval(pollTimer); if(SYNC.enabled) pollTimer=setInterval(pollIncoming,5000); }
+async function pollIncoming(){ if(!SYNC.enabled || !navigator.onLine) return; try{ await fetch(`${SYNC.url}/rest/v1/${SYNC.tables.chat}?select=room,data,created_at&order=created_at.desc&limit=20`,{headers:{'apikey':SYNC.key,'Authorization':'Bearer '+SYNC.key}}); }catch(e){} }
+let pollTimer=null; function startPolling(){ if(pollTimer)clearInterval(pollTimer); if(SYNC.enabled) pollTimer=setInterval(pollIncoming,5000); }
 
 /* ── PWA ── */
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('author-sw.js').catch(()=>{})); }
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredPrompt=e; });
+let deferredPrompt=null; window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredPrompt=e; });
 
 /* ── Boot ── */
-function boot(){
-  seedFeed(); seedChat();
-  if(load(K.orders,null)===null) save(K.orders,[]);
-  updateOffline(); updateNotiBadge(); startPolling(); flush();
-  go('home');
-}
-(function(){
-  if(!session){ $('onb').classList.add('on'); }
-  else boot();
-})();
+function boot(){ seedAll(); updateOffline(); updateNotiBadge(); startPolling(); flush(); go('home'); }
+(function(){ if(!session){ $('onb').classList.add('on'); } else boot(); })();
 </script>
 </body>
 </html>
