@@ -156,6 +156,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
     <div class="sp"></div>
     <button class="icon-btn" onclick="openNoti()">🔔<span class="dot-badge" id="noti-badge">0</span></button>
     <button class="icon-btn" onclick="openSheet('me-sheet')">👤</button>
+    <button class="icon-btn" onclick="closeApp()" aria-label="화면 닫기" title="화면 닫기" style="background:rgba(163,49,69,.35)">✕</button>
   </div>
   <div class="offline-bar" id="offline-bar">⚓ 오프라인 — 작성한 내용은 저장되며 연결되면 자동 동기화됩니다</div>
   <div class="sync-bar" id="sync-bar">동기화 중…</div>
@@ -310,7 +311,8 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
     </div>
     <button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="enablePush()">🔔 푸시 알림 켜기</button>
     <button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="manualSync()">🔄 지금 동기화</button>
-    <button class="btn btn-ghost btn-block" onclick="logout()">로그아웃</button>
+    <button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="logout()">로그아웃</button>
+    <button class="btn btn-ghost btn-block" style="color:var(--rose);border-color:rgba(163,49,69,.4)" onclick="closeApp()">✕ 화면 닫기</button>
     <div class="muted" style="font-size:11px;text-align:center;margin-top:14px">ACORN PUBLISHING · 해양 수산 저자 트랙<br>acornon.kr/maritime</div>
   </div>
 </div>
@@ -379,6 +381,12 @@ document.querySelectorAll('#onb-seg label').forEach(l=>l.addEventListener('click
 }));
 function logout(){ if(!confirm('로그아웃할까요? (로컬 기록은 이 기기에 남습니다)'))return; localStorage.removeItem(K.sess); location.reload(); }
 // 초기 선택(온보딩) 화면으로 돌아가기 — 데이터 유지, 역할 재선택 후 다시 시작
+function closeApp(){
+  if(!confirm('이 화면(앱)을 닫을까요?')) return;
+  try{ window.open('','_self'); window.close(); }catch(e){}
+  // 스크립트로 열리지 않은 창은 자동으로 닫히지 않을 수 있음
+  setTimeout(()=>{ try{ if(!window.closed){ history.length>1 ? history.back() : (location.href='about:blank'); } }catch(e){ toast('브라우저 탭을 닫아 주세요.'); } }, 350);
+}
 function backToStart(){
   closeSheet('me-sheet'); closeSheet('noti-sheet'); closeSheet('post-sheet');
   document.querySelectorAll('#onb-seg label').forEach(l=>{
