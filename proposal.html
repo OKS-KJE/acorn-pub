@@ -813,13 +813,63 @@ const SUPABASE_CONFIG = {
 const STORAGE_KEY = 'acorn_proposals_v2';
 let proposals = [];
 let currentModalId = null;
-let currentManuscripts = [];   // 작성 중 첨부 원고 [{name,size,type,data}]
+let currentManuscripts = [];   // 작성 중 첨부 원고 [{name,size,type,path}] (Storage) 또는 {...,data}(레거시 base64)
 const MAX_MANUSCRIPTS = 3;
+const MS_BUCKET = 'manuscripts';   // Supabase Storage 버킷명
 
-// ── 원고 파일 첨부 (최대 3개) ──────────────────────────────────────
+// ── 원고 파일 첨부 (최대 3개) — Supabase Storage 우선, 미연동 시 base64 ──────────
 function fmtBytes(b){ if(b<1024) return b+'B'; if(b<1048576) return (b/1024).toFixed(0)+'KB'; return (b/1048576).toFixed(1)+'MB'; }
+function escAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
-function handleManuscriptUpload(fileList){
+// Storage 업로드 → 객체 경로(path) 반환
+async function uploadToStorage(file){
+  const ext=(file.name.match(/\.[^.]+$/)||[''])[0];
+  const base=(file.name.replace(/\.[^.]+$/,'')||'file').replace(/[^\w\-]+/g,'_').slice(0,40)||'file';
+  const path=`${Date.now()}_${Math.random().toString(36).slice(2,8)}_${base}${ext}`;
+  const res=await fetch(`${SUPABASE_CONFIG.url}/storage/v1/object/${MS_BUCKET}/${encodeURIComponent(path)}`,{
+    method:'POST',
+    headers:{'apikey':SUPABASE_CONFIG.key,'Authorization':'Bearer '+SUPABASE_CONFIG.key,'Content-Type':file.type||'application/octet-stream','x-upsert':'true'},
+    body:file
+  });
+  if(!res.ok){ const t=await res.text().catch(()=> ''); const e=new Error('UP_'+res.status); e.kind='upload_fail'; e.status=res.status; e.detail=t; throw e; }
+  return path;
+}
+
+// Storage 비공개 다운로드: 인증 GET → blob → 저장 (공개/비공개 버킷 모두 동작)
+async function downloadManuscriptFile(path,name){
+  try{
+    const res=await fetch(`${SUPABASE_CONFIG.url}/storage/v1/object/${MS_BUCKET}/${encodeURIComponent(path)}`,{
+      headers:{'apikey':SUPABASE_CONFIG.key,'Authorization':'Bearer '+SUPABASE_CONFIG.key}
+    });
+    if(!res.ok) throw new Error('DL_'+res.status);
+    const blob=await res.blob();
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=name||'manuscript'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),5000);
+  }catch(e){ console.error('원고 다운로드 실패',e); alert('파일 다운로드에 실패했습니다. 버킷·정책 설정 또는 네트워크를 확인한 뒤 다시 시도해 주세요.'); }
+}
+
+// 다운로드 버튼 HTML (Storage path면 인증 다운로드, 레거시 data면 직접 링크)
+function msDlButton(m){
+  if(m.path){
+    const args=(JSON.stringify(m.path)+','+JSON.stringify(m.name)).replace(/'/g,'&#39;');
+    return `<button type="button" class="btn btn-ghost btn-sm" onclick='downloadManuscriptFile(${args})'>⬇️ 받기</button>`;
+  }
+  return `<a href="${m.data||'#'}" download="${escAttr(m.name)}" class="btn btn-ghost btn-sm" style="text-decoration:none">⬇️ 받기</a>`;
+}
+
+// 원고 Storage 객체 삭제 (기획안 삭제 시 정리)
+async function sbDeleteManuscripts(p){
+  if(!sbOn()||!p||!Array.isArray(p.manuscripts)) return;
+  for(const m of p.manuscripts){
+    if(m && m.path){
+      try{ await fetch(`${SUPABASE_CONFIG.url}/storage/v1/object/${MS_BUCKET}/${encodeURIComponent(m.path)}`,{method:'DELETE',headers:{'apikey':SUPABASE_CONFIG.key,'Authorization':'Bearer '+SUPABASE_CONFIG.key}}); }
+      catch(e){ console.warn('Storage 원고 삭제 오류',e); }
+    }
+  }
+}
+
+async function handleManuscriptUpload(fileList){
   const files=Array.from(fileList||[]);
   const input=document.getElementById('ms-file-input');
   if(!files.length) return;
@@ -827,24 +877,39 @@ function handleManuscriptUpload(fileList){
     alert(`원고 파일은 최대 ${MAX_MANUSCRIPTS}개까지 첨부할 수 있습니다. (현재 ${currentManuscripts.length}개)`);
     if(input) input.value=''; return;
   }
-  let pending=files.length;
-  files.forEach(file=>{
-    if(file.size>8*1048576){
-      alert(`"${file.name}" 파일이 너무 큽니다(${fmtBytes(file.size)}). 브라우저 저장 용량 한계상 5MB 이하를 권장합니다.`);
-      if(--pending===0&&input) input.value=''; return;
+  const online=sbOn();
+  const cap=online?50*1048576:8*1048576;
+  for(const f of files){
+    if(f.size>cap){
+      alert(`"${f.name}" 파일이 너무 큽니다(${fmtBytes(f.size)}). ${online?'50MB':'8MB'} 이하로 첨부해 주세요.`);
+      if(input) input.value=''; return;
     }
-    const reader=new FileReader();
-    reader.onload=e=>{
-      currentManuscripts.push({name:file.name, size:file.size, type:file.type||'', data:e.target.result});
+  }
+  const addBtn=document.getElementById('ms-add-btn');
+  const prevLabel=addBtn?addBtn.textContent:'';
+  if(addBtn){ addBtn.disabled=true; addBtn.textContent='업로드 중…'; }
+  try{
+    for(const file of files){
+      if(online){
+        const path=await uploadToStorage(file);
+        currentManuscripts.push({name:file.name,size:file.size,type:file.type||'',path});
+      }else{
+        const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(new Error('read'));r.readAsDataURL(file);});
+        currentManuscripts.push({name:file.name,size:file.size,type:file.type||'',data});
+      }
       renderManuscriptList();
-      if(--pending===0&&input) input.value='';
-    };
-    reader.onerror=()=>{ alert(`"${file.name}" 읽기에 실패했습니다.`); if(--pending===0&&input) input.value=''; };
-    reader.readAsDataURL(file);
-  });
+    }
+  }catch(e){
+    if(e&&e.kind==='upload_fail') alert(`Storage 업로드 실패(오류 ${e.status||''}).\n버킷 'manuscripts' 생성과 접근 정책을 확인해 주세요.`);
+    else alert('파일 처리 중 오류가 발생했습니다.');
+    console.error(e);
+  }finally{
+    if(addBtn){ addBtn.disabled=false; addBtn.textContent=prevLabel||'＋ 원고 파일 추가'; }
+    if(input) input.value='';
+  }
 }
 
-function removeManuscript(i){ currentManuscripts.splice(i,1); renderManuscriptList(); }
+function removeManuscript(i){ currentManuscripts.splice(i,1); renderManuscriptList(); }   // 목록에서만 제거(Storage 파일은 기획안 삭제 시 정리)
 
 function renderManuscriptList(){
   const wrap=document.getElementById('ms-files-list');
@@ -853,10 +918,10 @@ function renderManuscriptList(){
     <div style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:7px 11px;">
       <span style="font-size:15px">📄</span>
       <div style="flex:1;min-width:0">
-        <div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.name}</div>
-        <div style="font-size:10px;color:var(--text3)">${fmtBytes(m.size)}</div>
+        <div style="font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escAttr(m.name)}</div>
+        <div style="font-size:10px;color:var(--text3)">${fmtBytes(m.size)}${m.path?' · ☁ 클라우드':''}</div>
       </div>
-      <a href="${m.data}" download="${m.name}" class="btn btn-ghost btn-sm" style="text-decoration:none">⬇️ 받기</a>
+      ${msDlButton(m)}
       <button type="button" class="btn btn-sm" onclick="removeManuscript(${i})" style="background:var(--ex-bg);color:var(--ex)">삭제</button>
     </div>`).join('');
   const btn=document.getElementById('ms-add-btn');
@@ -1684,7 +1749,7 @@ function writeLocalMirror(list){
   let toStore=list;
   if(sbOn()){
     toStore=list.map(p=>Object.assign({},p,{
-      manuscripts:(p.manuscripts||[]).map(m=>({name:m.name,size:m.size,type:m.type}))  // data(base64) 제외
+      manuscripts:(p.manuscripts||[]).map(m=> m.path ? {name:m.name,size:m.size,type:m.type,path:m.path} : {name:m.name,size:m.size,type:m.type})  // Storage path 유지, base64(data)만 제외
     }));
   }
   try{
@@ -1965,8 +2030,8 @@ function openModal(id){
       <div style="display:flex;flex-direction:column;gap:5px;">
       ${p.manuscripts.map(m=>`<div style="display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;">
         <span style="font-size:14px">📄</span>
-        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.name}</div><div style="font-size:10px;color:var(--text3)">${fmtBytes(m.size)}</div></div>
-        <a href="${m.data}" download="${m.name}" class="btn btn-ghost btn-sm" style="text-decoration:none">⬇️ 받기</a>
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escAttr(m.name)}</div><div style="font-size:10px;color:var(--text3)">${fmtBytes(m.size)}${m.path?' · ☁ 클라우드':''}</div></div>
+        ${msDlButton(m)}
       </div>`).join('')}
       </div>
     </div>`:'';
@@ -2112,6 +2177,7 @@ async function deleteFromModal(){
   const p=proposals.find(p=>p.id===currentModalId);
   if(!p||!confirm(`"${p.title}" 기획안을 삭제하시겠습니까?`)) return;
   const delId=currentModalId;
+  await sbDeleteManuscripts(p);            // Storage 원고 파일 정리
   proposals=proposals.filter(p=>p.id!==delId);
   await sbDelete(delId);
   await saveData();
