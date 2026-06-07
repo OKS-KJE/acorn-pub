@@ -1584,7 +1584,20 @@ async function saveProposal(){
   }catch(err){
     if(editId){const idx=proposals.findIndex(p=>p.id===editId);if(idx!==-1)proposals[idx]=existing;}
     else proposals.shift();
-    alert('저장 용량을 초과했습니다. 원고 파일 크기가 큰 경우 일부를 삭제하거나 더 작은 파일로 첨부해 주세요.');
+    const k=err&&err.kind;
+    let msg;
+    if(k==='local_quota'){
+      msg='브라우저 로컬 저장 용량(약 5MB)을 초과했습니다.\nSupabase 연동을 켜면 원고 파일은 클라우드에 저장되어 이 한계를 넘지 않습니다. (미사용 시에는 원고 파일을 더 작게 첨부해 주세요.)';
+    }else if(k==='sb_too_large'){
+      msg='Supabase 저장 요청이 너무 큽니다(원고 파일 용량이 원인).\n큰 원고 파일은 Supabase Storage에 올리고 본문에는 링크만 저장하는 방식이 필요합니다. 관리자에게 Storage 적용을 요청하세요.';
+    }else if(k==='sb_network'){
+      msg='Supabase에 연결하지 못했습니다. 인터넷 연결과 설정(url)을 확인한 뒤 잠시 후 다시 시도해 주세요.';
+    }else if(k==='sb_error'){
+      msg='Supabase 저장에 실패했습니다(오류 '+(err.status||'')+').\n키·테이블·정책 설정을 확인해 주세요.';
+    }else{
+      msg='저장에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+    }
+    alert(msg);
     return;
   }
 
@@ -1666,17 +1679,34 @@ function sbHeaders(extra){
 }
 const sbOn = ()=> SUPABASE_CONFIG.enabled && SUPABASE_CONFIG.url && SUPABASE_CONFIG.key;
 
+// 로컬 미러: Supabase가 켜져 있으면 원고 base64(data)를 뺀 가벼운 사본만 저장 → localStorage 5MB 한계 회피
+function writeLocalMirror(list){
+  let toStore=list;
+  if(sbOn()){
+    toStore=list.map(p=>Object.assign({},p,{
+      manuscripts:(p.manuscripts||[]).map(m=>({name:m.name,size:m.size,type:m.type}))  // data(base64) 제외
+    }));
+  }
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(toStore));
+  }catch(e){
+    const quota = e && (e.name==='QuotaExceededError' || e.code===22 || /quota|exceed/i.test(e.message||''));
+    if(quota && sbOn()){ console.warn('로컬 미러 용량 초과 — Supabase가 원본이라 무시'); return; }
+    if(quota){ const err=new Error('LOCAL_QUOTA'); err.kind='local_quota'; throw err; }
+    throw e;
+  }
+}
+
 async function loadData(){
-  proposals = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');   // 우선 로컬 표시
+  try{ proposals = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ proposals=[]; }
   if(!sbOn()) return;
   try{
     const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc`,
       {headers:sbHeaders()});
     if(res.ok){
       const rows=await res.json();
-      // data 컬럼(jsonb) 안의 객체를 펼쳐서 사용
       proposals=rows.map(r=> (r.data && typeof r.data==='object') ? r.data : r ).filter(Boolean);
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(proposals));
+      writeLocalMirror(proposals);   // 가벼운 사본만 로컬에
     }else{
       console.warn('Supabase load 실패',res.status,await res.text());
     }
@@ -1684,20 +1714,26 @@ async function loadData(){
 }
 
 async function saveData(){
-  // 1) 항상 로컬에 저장 (오프라인·실패 대비)
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(proposals));
+  // 1) 로컬 보조 저장 (Supabase 켜지면 원고 base64 제외한 가벼운 사본)
+  writeLocalMirror(proposals);
   // 2) Supabase 동기화 (전체 upsert)
   if(!sbOn()) return;
   const rows=proposals.map(p=>({id:String(p.id), data:p, updated_at:new Date().toISOString()}));
-  const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`,{
-    method:'POST',
-    headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-    body:JSON.stringify(rows)
-  });
+  let res;
+  try{
+    res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`,{
+      method:'POST',
+      headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+      body:JSON.stringify(rows)
+    });
+  }catch(e){ const err=new Error('SB_NETWORK'); err.kind='sb_network'; throw err; }
   if(!res.ok){
-    const msg=await res.text();
+    const msg=await res.text().catch(()=> '');
     console.error('Supabase 저장 실패',res.status,msg);
-    throw new Error('Supabase save failed: '+res.status);   // 호출부에서 롤백/안내
+    const err=new Error('SB_'+res.status);
+    err.kind=(res.status===413 || /too large|payload|exceed/i.test(msg)) ? 'sb_too_large' : 'sb_error';
+    err.status=res.status;
+    throw err;
   }
 }
 
