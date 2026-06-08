@@ -1754,6 +1754,9 @@ async function saveProposal(){
   const reviewerVal=document.getElementById('f-reviewer').value;
   const proposal={
     id:editId||Date.now().toString(),
+    corrPub: editId ? (existing?.corrPub||0) : 0,
+    corrAuth: editId ? (existing?.corrAuth==null?1:existing.corrAuth) : 1,
+    corrTurn: editId ? (existing?.corrTurn||'publisher') : 'publisher',
     title, author,
     authorTel:document.getElementById('f-author-tel').value.trim(),
     authorEmail:document.getElementById('f-author-email').value.trim(),
@@ -2045,6 +2048,37 @@ async function updateDbStatus(){
 }
 
 // ── RENDER LIST ───────────────────────────────────────────────────
+// ── 출판사↔저자 대응 순번/상태 ───────────────────────────────────
+function corrInfo(p){ return { pub:p.corrPub||0, auth:(p.corrAuth==null?1:p.corrAuth), turn:p.corrTurn||'publisher' }; }
+function corrStatusChip(turn){
+  return turn==='publisher'
+    ? `<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--ex-bg);color:var(--ex);white-space:nowrap">🔴 출판사 대응</span>`
+    : `<span style="font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px;background:var(--s3);color:var(--text3);white-space:nowrap">⏳ 저자 회신 대기</span>`;
+}
+function corrCell(p){
+  const c=corrInfo(p);
+  return `<td style="text-align:center" onclick="event.stopPropagation()">
+    <div style="font-size:11px;font-weight:700;white-space:nowrap;margin-bottom:3px"><span style="color:var(--blue)">출판사 ${c.pub}</span> · <span style="color:var(--purple)">저자 ${c.auth}</span></div>
+    <div style="margin-bottom:4px">${corrStatusChip(c.turn)}</div>
+    <div style="display:flex;gap:3px;justify-content:center">
+      <button class="btn btn-ghost btn-sm" title="출판사가 대응함(→저자 회신 대기)" style="padding:1px 6px;font-size:10px" onclick="bumpCorr('${p.id}','pub',event)">출+</button>
+      <button class="btn btn-ghost btn-sm" title="저자가 회신함(→출판사 대응 차례)" style="padding:1px 6px;font-size:10px" onclick="bumpCorr('${p.id}','auth',event)">저+</button>
+      <button class="btn btn-ghost btn-sm" title="초기화" style="padding:1px 6px;font-size:10px" onclick="bumpCorr('${p.id}','reset',event)">↺</button>
+    </div>
+  </td>`;
+}
+function bumpCorr(id, who, ev){
+  if(ev) ev.stopPropagation();
+  const p=proposals.find(x=>x.id===id); if(!p) return;
+  if(p.corrPub==null) p.corrPub=0;
+  if(p.corrAuth==null) p.corrAuth=1;
+  if(who==='pub'){ p.corrPub++; p.corrTurn='author'; }        // 출판사 대응 → 저자 회신 대기
+  else if(who==='auth'){ p.corrAuth++; p.corrTurn='publisher'; } // 저자 회신 → 출판사 대응 차례
+  else if(who==='reset'){ p.corrPub=0; p.corrAuth=1; p.corrTurn='publisher'; }
+  Promise.resolve(saveData()).catch(e=>console.warn('대응 순번 저장 실패',e));
+  renderList();
+}
+
 function renderList(overrideFilter){
   // Sync global search if active
   const gsTitle = document.getElementById('gs-title')?.value?.toLowerCase()||'';
@@ -2085,6 +2119,7 @@ function renderList(overrideFilter){
       <th style="width:32px">#</th><th>도서명·저자</th><th style="width:80px">장르</th>
       <th style="width:120px;text-align:center">원고·저자·시장·마케팅</th>
       <th style="width:95px;text-align:center">판정</th>
+      <th style="width:118px;text-align:center">대응 순번·상태</th>
       <th style="width:70px;text-align:center">담당</th>
       <th style="width:80px;text-align:center">접수일</th>
     </tr></thead>
@@ -2096,6 +2131,7 @@ function renderList(overrideFilter){
         <td style="font-size:11px">${gnDisp(p)||'-'}</td>
         <td style="text-align:center">${CRITERIA.map(cat=>catBadge(catPct(p.scores?.[cat.id], cat.items.length)?.pct??null)).join(' ')}</td>
         <td style="text-align:center"><span class="decision-badge ${dm.cls}">${dm.label}</span></td>
+        ${corrCell(p)}
         <td style="text-align:center;font-size:11px">${p.reviewer||'-'}</td>
         <td style="text-align:center;font-size:11px">${p.date||'-'}</td>
       </tr>`;}).join('')}</tbody>
