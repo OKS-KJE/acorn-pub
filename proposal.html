@@ -2095,7 +2095,7 @@ function bumpCorr(id, who, ev){
 }
 
 // ── 목록 정렬 ─────────────────────────────────────────────────────
-let listSort = { key:'', dir:'asc' };
+let listSort = { key:'date', dir:'desc' };   // 기본: 접수일 최신순
 function setListSort(key){
   if(listSort.key===key){ listSort.dir = (listSort.dir==='asc'?'desc':'asc'); }
   else { listSort.key=key; listSort.dir='asc'; }
