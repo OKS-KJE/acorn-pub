@@ -548,6 +548,8 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <select class="filter-select" id="f-filter-genre" onchange="filterChanged()">
       <option value="">전체 장르</option><option>IT·프로그래밍</option><option>보안·해킹</option><option>AI·머신러닝</option><option>UX·디자인</option><option>게임 개발</option><option>경제·경영</option><option>자기개발</option><option>에세이</option><option>인문·교양</option>
     </select>
+    <button class="btn btn-primary btn-sm" onclick="applyListFilter()">🔎 적용</button>
+    <button class="btn btn-ghost btn-sm" onclick="resetListFilter()">↺ 초기화</button>
   </div>
   <div id="list-wrap"></div>
 </div>
@@ -2398,6 +2400,20 @@ function dashGoto(key){
 }
 // 목록 필터 직접 변경 시 콤보 해제 후 렌더
 function filterChanged(){ window._dashApproveCombo=false; renderList(); }
+// '적용' — 목록 필터만 반영. 이전 전역검색 잔존값이 결과를 가리지 않도록 해제
+function applyListFilter(){
+  window._dashApproveCombo=false;
+  ['gs-title','gs-author','gs-from','gs-to'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  renderList();
+}
+// '초기화' — 검색어·판정·장르 모두 비우고 전체 표시
+function resetListFilter(){
+  window._dashApproveCombo=false;
+  ['gs-title','gs-author','gs-from','gs-to','search'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  const fd=document.getElementById('f-filter-dec'); if(fd)fd.value='';
+  const fg=document.getElementById('f-filter-genre'); if(fg)fg.value='';
+  renderList();
+}
 // 접수경로/장르 '기타' 선택 시 직접입력 필드 표시
 function toggleOther(kind){
   const sel=document.getElementById('f-'+kind);
@@ -2432,6 +2448,11 @@ function showView(id){
   if(id==='analytics')renderAnalytics();
   if(id==='dashboard')renderDashboard();
   if(id==='guides')renderGuides();
+  if(id==='projects')renderProjects();
+  if(id==='quotes')renderQuotes();
+  if(id==='contracts')renderContracts();
+  if(id==='sales')renderSales();
+  if(id==='comments')renderComments();
 }
 // ── 참고자료(출판 가이드·Q&A) ──────────────────────────────────────
 const GUIDE_COMMON = {
