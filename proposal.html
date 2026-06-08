@@ -273,6 +273,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="gs-field"><input type="date" id="gs-to" onchange="globalSearch()" title="접수일 종료"></div>
     <button class="gs-btn" onclick="clearGlobalSearch()">✕</button>
   </div>
+  <button id="btn-refresh" onclick="refreshAllData()" title="서버에서 최신 데이터를 다시 불러옵니다 (캐시 무시)" style="display:flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(80,140,220,.15);color:var(--blue,#3A7BD5);border:none;cursor:pointer">🔄 새로고침</button>
   <div id="db-status-badge" class="db-status local"><div class="db-dot" style="background:var(--gold2)"></div>localStorage</div>
   <a href="index.html" class="topnav-back">← 온보딩</a>
 </nav>
@@ -663,6 +664,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <button class="btn btn-primary" onclick="newQuoteFromManager()">➕ 새 견적서</button>
     </div>
   </div>
+  <div class="list-tabs" style="display:flex;gap:6px;margin-bottom:10px">
+    <button id="qtab-active" class="btn btn-sm btn-primary" onclick="setQMode('active')">🧾 진행 중</button>
+    <button id="qtab-archive" class="btn btn-sm btn-ghost" onclick="setQMode('archive')">🗄️ 보관함 (계약 전환·취소)</button>
+  </div>
   <div class="list-filters">
     <input class="search-input" type="text" id="q-search" placeholder="🔍 견적번호·도서명·저자명 검색..." oninput="renderQuotes()">
     <select class="filter-select" id="q-filter-type" onchange="renderQuotes()">
@@ -681,6 +686,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <button class="btn btn-ghost" onclick="openProviderSettings()">⚙️ 공급자 정보</button>
       <button class="btn btn-primary" onclick="newContractFromManager()">➕ 새 계약서</button>
     </div>
+  </div>
+  <div class="list-tabs" style="display:flex;gap:6px;margin-bottom:10px">
+    <button id="ctab-active" class="btn btn-sm btn-primary" onclick="setCMode('active')">📜 진행 중 (작성중)</button>
+    <button id="ctab-archive" class="btn btn-sm btn-ghost" onclick="setCMode('archive')">✅ 확정·프로젝트 연결</button>
   </div>
   <div class="list-filters">
     <input class="search-input" type="text" id="c-search" placeholder="🔍 계약번호·도서명·저작자 검색..." oninput="renderContracts()">
@@ -1967,8 +1976,8 @@ async function loadData(){
   try{ proposals = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ proposals=[]; }
   if(!sbOn()) return;
   try{
-    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc`,
-      {headers:sbHeaders()});
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc&_=${Date.now()}`,
+      {headers:sbHeaders({'Cache-Control':'no-cache','Pragma':'no-cache'}),cache:'no-store'});
     if(res.ok){
       const rows=await res.json();
       proposals=rows.map(r=> (r.data && typeof r.data==='object') ? r.data : r ).filter(Boolean);
@@ -2026,6 +2035,23 @@ async function sbDelete(id){
   }catch(e){console.warn('Supabase 삭제 오류',e);}
 }
 
+async function refreshAllData(){
+  const btn=document.getElementById('btn-refresh');
+  if(btn){ btn._label=btn.innerHTML; btn.innerHTML='⏳ 불러오는 중…'; btn.disabled=true; }
+  try{
+    await loadData();                                  // Supabase 최신본 (no-store)
+    if(autoCloseStale()){ try{ await saveData(); }catch(e){} }
+    updateStats(); renderDashboard();
+    const act=id=>document.getElementById(id)?.classList.contains('active');
+    if(act('view-list')) renderList();
+    if(act('view-quotes')) renderQuotes();
+    if(act('view-contracts')) renderContracts();
+    if(act('view-projects')) renderProjects();
+    if(act('view-analytics')) renderAnalytics();
+    await updateDbStatus();
+  }catch(e){ alert('새로고침 실패: '+(e&&e.message||e)); }
+  finally{ if(btn){ btn.innerHTML=btn._label||'🔄 새로고침'; btn.disabled=false; } }
+}
 async function updateDbStatus(){
   const el=document.getElementById('db-status-badge');
   if(!el) return;
@@ -2048,7 +2074,7 @@ async function updateDbStatus(){
   el.className='db-status local';
   el.innerHTML='<div class="db-dot" style="background:#9aa0a6"></div>Supabase 확인 중…';
   try{
-    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id&limit=1`,{headers:sbHeaders()});
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id&limit=1&_=${Date.now()}`,{headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'});
     if(res.ok){
       el.className='db-status cloud';
       el.innerHTML='<div class="db-dot" style="background:#50C878"></div>Supabase 연결됨';
@@ -3910,23 +3936,33 @@ function allQuotes(){
   arr.sort((a,b)=>(b.q.updatedAt||'').localeCompare(a.q.updatedAt||''));
   return arr;
 }
+let qMode='active';
+function setQMode(m){
+  qMode=(m==='archive')?'archive':'active';
+  const a=document.getElementById('qtab-active'), b=document.getElementById('qtab-archive');
+  if(a) a.className='btn btn-sm '+(qMode==='active'?'btn-primary':'btn-ghost');
+  if(b) b.className='btn btn-sm '+(qMode==='archive'?'btn-primary':'btn-ghost');
+  renderQuotes();
+}
 function renderQuotes(){
   const wrap=document.getElementById('quotes-wrap'); if(!wrap)return;
   const ft=document.getElementById('q-filter-type')?.value||'';
   const sq=(document.getElementById('q-search')?.value||'').toLowerCase();
   let list=allQuotes();
+  const _qArch=x=>(x.q.status==='accepted'||x.q.status==='canceled');
+  list = (qMode==='archive') ? list.filter(_qArch) : list.filter(x=>!_qArch(x));
   if(ft) list=list.filter(x=>x.q.type===ft);
   if(sq) list=list.filter(x=>((x.q.title||x.p.title||'')+ (x.q.cName||x.p.author||'')+(x.q.quoteNo||'')).toLowerCase().includes(sq));
   const cnt=document.getElementById('q-count'); if(cnt)cnt.textContent=`총 ${list.length}건`;
-  if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">🧾</div><h3>견적서가 없습니다</h3><p>기획안 목록에서 기획안을 열고 ‘견적서 작성’을 눌러 생성하세요.</p></div>`; return; }
+  if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">🧾</div><h3>${qMode==='archive'?'보관된 견적서가 없습니다':'진행 중 견적서가 없습니다'}</h3><p>${qMode==='archive'?'견적을 ‘수락’(계약 전환) 또는 ‘취소’하면 이 탭으로 이동합니다.':'기획안 목록에서 기획안을 열고 ‘견적서 작성’을 눌러 생성하세요.'}</p></div>`; return; }
   wrap.innerHTML=`<table class="proposal-table"><thead><tr>
     <th style="width:150px">견적번호</th><th>도서명 · 저자</th><th style="width:90px">종류</th>
     <th style="width:120px;text-align:right">합계(VAT 포함)</th><th style="width:96px;text-align:center">상태</th><th style="width:90px;text-align:center">작성일</th><th style="width:190px;text-align:center">관리</th>
   </tr></thead><tbody>${list.map(({q,p})=>{
     const t=quoteTotals(q); const ty=QTYPES[q.type]||QTYPES.self;
     const _qs=q.status||'draft';
-    const _qc=_qs==='accepted'?'var(--ok)':(_qs==='sent'?'var(--gold,#B89B54)':'var(--text3)');
-    const qSel='<select onchange="setQuoteStatus(\''+p.id+'\',\''+q.id+'\',this.value)" title="상태 변경" style="font-size:11px;padding:4px 6px;width:100%;cursor:pointer;border-radius:6px;border:1.5px solid '+(_qs==='draft'?'var(--border)':_qc)+';color:'+_qc+';'+(_qs!=='draft'?'font-weight:700':'')+'"><option value="draft"'+(_qs==='draft'?' selected':'')+'>작성중</option><option value="sent"'+(_qs==='sent'?' selected':'')+'>발송</option><option value="accepted"'+(_qs==='accepted'?' selected':'')+'>수락</option></select>';
+    const _qc=_qs==='accepted'?'var(--ok)':(_qs==='sent'?'var(--gold,#B89B54)':(_qs==='canceled'?'var(--rose,#C0607A)':'var(--text3)'));
+    const qSel='<select onchange="setQuoteStatus(\''+p.id+'\',\''+q.id+'\',this.value)" title="상태 변경" style="font-size:11px;padding:4px 6px;width:100%;cursor:pointer;border-radius:6px;border:1.5px solid '+(_qs==='draft'?'var(--border)':_qc)+';color:'+_qc+';'+(_qs!=='draft'?'font-weight:700':'')+'"><option value="draft"'+(_qs==='draft'?' selected':'')+'>작성중</option><option value="sent"'+(_qs==='sent'?' selected':'')+'>발송</option><option value="accepted"'+(_qs==='accepted'?' selected':'')+'>수락(계약 전환)</option><option value="canceled"'+(_qs==='canceled'?' selected':'')+'>취소</option></select>';
     return `<tr>
       <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${q.quoteNo||'-'}</td>
       <td><div style="font-weight:700;font-size:12px">${q.title||p.title||'-'}</div><div style="font-size:11px;color:var(--text3)">${q.cName||p.author||''}</div></td>
@@ -4399,15 +4435,24 @@ function allContracts(){
   arr.sort((a,b)=>(b.c.updatedAt||'').localeCompare(a.c.updatedAt||''));
   return arr;
 }
+let cMode='active';
+function setCMode(m){
+  cMode=(m==='archive')?'archive':'active';
+  const a=document.getElementById('ctab-active'), b=document.getElementById('ctab-archive');
+  if(a) a.className='btn btn-sm '+(cMode==='active'?'btn-primary':'btn-ghost');
+  if(b) b.className='btn btn-sm '+(cMode==='archive'?'btn-primary':'btn-ghost');
+  renderContracts();
+}
 function renderContracts(){
   const wrap=document.getElementById('contracts-wrap'); if(!wrap)return;
   const ft=document.getElementById('c-filter-type')?.value||'';
   const sq=(document.getElementById('c-search')?.value||'').toLowerCase();
   let list=allContracts();
+  list = (cMode==='archive') ? list.filter(x=>x.c.status==='signed') : list.filter(x=>x.c.status!=='signed');
   if(ft) list=list.filter(x=>x.c.type===ft);
   if(sq) list=list.filter(x=>((x.c.title||x.p.title||'')+(x.c.aName||x.p.author||'')+(x.c.contractNo||'')).toLowerCase().includes(sq));
   const cnt=document.getElementById('c-count'); if(cnt)cnt.textContent=`총 ${list.length}건`;
-  if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📜</div><h3>계약서가 없습니다</h3><p>기획안 목록에서 기획안을 열고 ‘계약서 작성’을 눌러 생성하세요.</p></div>`; return; }
+  if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📜</div><h3>${cMode==='archive'?'확정된 계약서가 없습니다':'진행 중 계약서가 없습니다'}</h3><p>${cMode==='archive'?'상태를 ‘계약완료’로 변경하면 이 탭으로 이동하고 프로젝트에 연결됩니다.':'기획안 목록에서 기획안을 열고 ‘계약서 작성’을 눌러 생성하세요.'}</p></div>`; return; }
   wrap.innerHTML=`<table class="proposal-table"><thead><tr>
     <th style="width:150px">계약번호</th><th>도서명 · 저작자</th><th style="width:90px">종류</th>
     <th style="width:112px;text-align:center">상태</th><th style="width:90px;text-align:center">계약일</th><th style="width:190px;text-align:center">관리</th>
