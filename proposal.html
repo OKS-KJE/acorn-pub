@@ -3604,7 +3604,7 @@ function openQuoteEditor(proposalId, quoteId){
       title:(p&&p.title)||'', pages:guessPages, listPrice:(p&&p.price)||'', color:'1', trim:'188*235mm',
       runCount:1000, pubDate:'원고 완성 후 3개월 이내', semiShare:50,
       wordOver:0, korChars:0, charts:0, figures:0,
-      vatRate:0.1, terms:DEFAULT_TERMS, memo:'',
+      vatRate:0.1, terms:DEFAULT_TERMS, memo:'', status:'draft',
       items: genQuoteItems(type,{pages:guessPages,runCount:1000,color:'1'}),
       createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
     };
@@ -3804,11 +3804,18 @@ async function deleteQuote(proposalId,quoteId){
   await saveData();
   renderQuotes();
 }
+async function setQuoteStatus(pid,qid,status){
+  const p=proposals.find(x=>x.id===pid); if(!p) return;
+  const q=(p.quotes||[]).find(x=>x.id===qid); if(!q) return;
+  q.status=status; q.updatedAt=new Date().toISOString();
+  try{ await saveData(); }catch(e){ alert('클라우드 저장 실패(로컬에는 저장됨)\n'+e.message); }
+  renderQuotes();
+}
 function duplicateQuote(proposalId,quoteId){
   const p=proposals.find(x=>x.id===proposalId); if(!p)return;
   const q=(p.quotes||[]).find(x=>x.id===quoteId); if(!q)return;
   const copy=JSON.parse(JSON.stringify(q));
-  copy.id='q'+Date.now().toString(36); copy.quoteNo=newQuoteNo();
+  copy.id='q'+Date.now().toString(36); copy.quoteNo=newQuoteNo(); copy.status='draft';
   copy.createdAt=copy.updatedAt=new Date().toISOString();
   currentQuote=copy; currentQuoteProposalId=proposalId;
   renderQuoteEditor(); document.getElementById('quote-modal').classList.add('open');
@@ -3833,14 +3840,18 @@ function renderQuotes(){
   if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">🧾</div><h3>견적서가 없습니다</h3><p>기획안 목록에서 기획안을 열고 ‘견적서 작성’을 눌러 생성하세요.</p></div>`; return; }
   wrap.innerHTML=`<table class="proposal-table"><thead><tr>
     <th style="width:150px">견적번호</th><th>도서명 · 저자</th><th style="width:90px">종류</th>
-    <th style="width:120px;text-align:right">합계(VAT 포함)</th><th style="width:90px;text-align:center">작성일</th><th style="width:190px;text-align:center">관리</th>
+    <th style="width:120px;text-align:right">합계(VAT 포함)</th><th style="width:96px;text-align:center">상태</th><th style="width:90px;text-align:center">작성일</th><th style="width:190px;text-align:center">관리</th>
   </tr></thead><tbody>${list.map(({q,p})=>{
     const t=quoteTotals(q); const ty=QTYPES[q.type]||QTYPES.self;
+    const _qs=q.status||'draft';
+    const _qc=_qs==='accepted'?'var(--ok)':(_qs==='sent'?'var(--gold,#B89B54)':'var(--text3)');
+    const qSel='<select onchange="setQuoteStatus(\''+p.id+'\',\''+q.id+'\',this.value)" title="상태 변경" style="font-size:11px;padding:4px 6px;width:100%;cursor:pointer;border-radius:6px;border:1.5px solid '+(_qs==='draft'?'var(--border)':_qc)+';color:'+_qc+';'+(_qs!=='draft'?'font-weight:700':'')+'"><option value="draft"'+(_qs==='draft'?' selected':'')+'>작성중</option><option value="sent"'+(_qs==='sent'?' selected':'')+'>발송</option><option value="accepted"'+(_qs==='accepted'?' selected':'')+'>수락</option></select>';
     return `<tr>
       <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${q.quoteNo||'-'}</td>
       <td><div style="font-weight:700;font-size:12px">${q.title||p.title||'-'}</div><div style="font-size:11px;color:var(--text3)">${q.cName||p.author||''}</div></td>
       <td><span class="q-tag ${ty.cls}">${ty.label}</span></td>
       <td style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700">${won(t.total)}원</td>
+      <td style="text-align:center">${qSel}</td>
       <td style="text-align:center;font-size:11px">${q.date||'-'}</td>
       <td style="text-align:center;white-space:nowrap">
         <button class="btn btn-ghost btn-sm" onclick="printQuote('${p.id}','${q.id}')" title="인쇄">🖨️</button>
@@ -4254,6 +4265,15 @@ async function deleteContract(proposalId,contractId){
   renderContracts();
   if(document.getElementById('view-projects')?.classList.contains('active')) renderProjects();
 }
+async function setContractStatus(pid,cid,status){
+  const p=proposals.find(x=>x.id===pid); if(!p) return;
+  const c=(p.contracts||[]).find(x=>x.id===cid); if(!c) return;
+  c.status=status; c.updatedAt=new Date().toISOString();
+  syncContractToProject(pid,c);   // 계약완료 → 프로젝트 계약단계 완료 처리
+  try{ await saveData(); }catch(e){ alert('클라우드 저장 실패(로컬에는 저장됨)\n'+e.message); }
+  renderContracts();
+  if(document.getElementById('view-projects')?.classList.contains('active')) renderProjects();
+}
 function duplicateContract(proposalId,contractId){
   const p=proposals.find(x=>x.id===proposalId); if(!p)return;
   const c=(p.contracts||[]).find(x=>x.id===contractId); if(!c)return;
@@ -4302,10 +4322,11 @@ function renderContracts(){
   if(!list.length){ wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📜</div><h3>계약서가 없습니다</h3><p>기획안 목록에서 기획안을 열고 ‘계약서 작성’을 눌러 생성하세요.</p></div>`; return; }
   wrap.innerHTML=`<table class="proposal-table"><thead><tr>
     <th style="width:150px">계약번호</th><th>도서명 · 저작자</th><th style="width:90px">종류</th>
-    <th style="width:80px;text-align:center">상태</th><th style="width:90px;text-align:center">계약일</th><th style="width:190px;text-align:center">관리</th>
+    <th style="width:112px;text-align:center">상태</th><th style="width:90px;text-align:center">계약일</th><th style="width:190px;text-align:center">관리</th>
   </tr></thead><tbody>${list.map(({c,p})=>{
     const ty=ctype(c.type);
-    const st=c.status==='signed'?'<span class="decision-badge ok-badge" style="background:var(--ok-bg);color:var(--ok)">계약완료</span>':'<span class="decision-badge" style="background:var(--s3);color:var(--text3)">작성중</span>';
+    const _signed=c.status==='signed';
+    const st='<select onchange="setContractStatus(\''+p.id+'\',\''+c.id+'\',this.value)" title="상태 변경" style="font-size:11px;padding:4px 6px;width:100%;cursor:pointer;border-radius:6px;border:1.5px solid '+(_signed?'var(--ok)':'var(--border)')+';'+(_signed?'color:var(--ok);font-weight:700;background:var(--ok-bg)':'color:var(--text3);background:transparent')+'"><option value="draft"'+(_signed?'':' selected')+'>작성중</option><option value="signed"'+(_signed?' selected':'')+'>✅ 계약완료</option></select>';
     return `<tr>
       <td style="font-family:'JetBrains Mono',monospace;font-size:11px">${c.contractNo||'-'}</td>
       <td><div style="font-weight:700;font-size:12px">${c.title||p.title||'-'}</div><div style="font-size:11px;color:var(--text3)">${c.aName||p.author||''}</div></td>
