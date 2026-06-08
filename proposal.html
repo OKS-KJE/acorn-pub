@@ -1836,7 +1836,7 @@ async function saveProposal(){
   if(editId){const idx=proposals.findIndex(p=>p.id===editId);if(idx!==-1)proposals[idx]=proposal;}
   else proposals.unshift(proposal);
   try{
-    await saveData();
+    await saveData([proposal]);
   }catch(err){
     if(editId){const idx=proposals.findIndex(p=>p.id===editId);if(idx!==-1)proposals[idx]=existing;}
     else proposals.shift();
@@ -1849,7 +1849,7 @@ async function saveProposal(){
     }else if(k==='sb_network'){
       msg='Supabase에 연결하지 못했습니다. 인터넷 연결과 설정(url)을 확인한 뒤 잠시 후 다시 시도해 주세요.';
     }else if(k==='sb_error'){
-      msg='Supabase 저장에 실패했습니다(오류 '+(err.status||'')+').\n키·테이블·정책 설정을 확인해 주세요.';
+      msg='Supabase 저장에 실패했습니다(오류 '+(err.status||'')+').\n'+(err.detail?('서버 메시지: '+String(err.detail).slice(0,300)+'\n\n'):'')+'대개 proposals 테이블의 기본키(id) 누락이 원인입니다. 키·테이블·정책 설정을 확인해 주세요.';
     }else{
       msg='저장에 실패했습니다. 잠시 후 다시 시도해 주세요.';
     }
@@ -1972,28 +1972,42 @@ async function loadData(){
   }catch(e){console.warn('Supabase load 오류 — localStorage 사용',e);}
 }
 
-async function saveData(){
+async function saveData(changed){
   // 1) 로컬 보조 저장 (Supabase 켜지면 원고 base64 제외한 가벼운 사본)
   writeLocalMirror(proposals);
-  // 2) Supabase 동기화 (전체 upsert)
+  // 2) Supabase 동기화 — 변경분만 업서트(없으면 전체). 페이로드·타임아웃 500 방지
   if(!sbOn()) return;
-  const rows=proposals.map(p=>({id:String(p.id), data:p, updated_at:new Date().toISOString()}));
-  let res;
-  try{
-    res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}`,{
-      method:'POST',
-      headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-      body:JSON.stringify(rows)
-    });
-  }catch(e){ const err=new Error('SB_NETWORK'); err.kind='sb_network'; throw err; }
-  if(!res.ok){
+  const targets = changed ? (Array.isArray(changed)?changed:[changed]) : proposals;
+  if(!targets.length) return;
+  const rows=targets.map(p=>({id:String(p.id), data:p, updated_at:new Date().toISOString()}));
+  const body=JSON.stringify(rows);
+  const transient=new Set([408,429,500,502,503,504]);
+  const delays=[0,700,1500];   // 최초 1회 + 일시 오류 시 2회 재시도(백오프)
+  let lastErr;
+  for(let i=0;i<delays.length;i++){
+    if(delays[i]) await new Promise(r=>setTimeout(r,delays[i]));
+    let res;
+    try{
+      res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?on_conflict=id`,{
+        method:'POST',
+        headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+        body
+      });
+    }catch(e){ lastErr=Object.assign(new Error('SB_NETWORK'),{kind:'sb_network'}); continue; }  // 네트워크 → 재시도
+    if(res.ok) return;   // 성공
     const msg=await res.text().catch(()=> '');
-    console.error('Supabase 저장 실패',res.status,msg);
+    if(transient.has(res.status) && i<delays.length-1){          // 일시적 → 재시도
+      console.warn('Supabase 일시 오류, 재시도', res.status);
+      lastErr=Object.assign(new Error('SB_'+res.status),{kind:'sb_error',status:res.status,detail:msg});
+      continue;
+    }
+    console.error('Supabase 저장 실패',res.status,msg);           // 영구 오류 → 표면화
     const err=new Error('SB_'+res.status);
     err.kind=(res.status===413 || /too large|payload|exceed/i.test(msg)) ? 'sb_too_large' : 'sb_error';
-    err.status=res.status;
+    err.status=res.status; err.detail=msg;
     throw err;
   }
+  throw (lastErr||Object.assign(new Error('SB_FAIL'),{kind:'sb_error'}));   // 재시도 모두 실패
 }
 
 // 삭제 시 Supabase 행도 함께 제거
@@ -2075,8 +2089,26 @@ function bumpCorr(id, who, ev){
   if(who==='pub'){ p.corrPub++; p.corrTurn='author'; }        // 출판사 대응 → 저자 회신 대기
   else if(who==='auth'){ p.corrAuth++; p.corrTurn='publisher'; } // 저자 회신 → 출판사 대응 차례
   else if(who==='reset'){ p.corrPub=0; p.corrAuth=1; p.corrTurn='publisher'; }
-  Promise.resolve(saveData()).catch(e=>console.warn('대응 순번 저장 실패',e));
+  Promise.resolve(saveData([p])).catch(e=>console.warn('대응 순번 저장 실패',e));
   renderList();
+}
+
+// ── 목록 정렬 ─────────────────────────────────────────────────────
+let listSort = { key:'', dir:'asc' };
+function setListSort(key){
+  if(listSort.key===key){ listSort.dir = (listSort.dir==='asc'?'desc':'asc'); }
+  else { listSort.key=key; listSort.dir='asc'; }
+  renderList();
+}
+function sortArrow(key){
+  if(listSort.key!==key) return '<span style="color:var(--text3);font-size:9px"> ⇅</span>';
+  return `<span style="color:var(--blue);font-size:10px"> ${listSort.dir==='asc'?'▲':'▼'}</span>`;
+}
+function sortVal(p,key){
+  if(key==='genre') return (gnDisp(p)||'').toLowerCase();
+  if(key==='reviewer') return (p.reviewer||'').toLowerCase();
+  if(key==='date') return (p.date||'');
+  return '';
 }
 
 function renderList(overrideFilter){
@@ -2108,6 +2140,16 @@ function renderList(overrideFilter){
   const listLabel = document.getElementById('list-label');
   if(listLabel) listLabel.textContent=`총 ${filtered.length}건`;
 
+  if(listSort.key){
+    const dir = listSort.dir==='asc'?1:-1;
+    filtered.sort((a,b)=>{
+      const va=sortVal(a,listSort.key), vb=sortVal(b,listSort.key);
+      if(va<vb) return -1*dir;
+      if(va>vb) return 1*dir;
+      return 0;
+    });
+  }
+
   const wrap=document.getElementById('list-wrap');
   if(!wrap) return;
   if(!filtered.length){
@@ -2116,12 +2158,12 @@ function renderList(overrideFilter){
   }
   wrap.innerHTML=`<table class="proposal-table">
     <thead><tr>
-      <th style="width:32px">#</th><th>도서명·저자</th><th style="width:80px">장르</th>
+      <th style="width:32px">#</th><th>도서명·저자</th><th style="width:80px;cursor:pointer;user-select:none" onclick="setListSort('genre')">장르${sortArrow('genre')}</th>
       <th style="width:120px;text-align:center">원고·저자·시장·마케팅</th>
       <th style="width:95px;text-align:center">판정</th>
       <th style="width:118px;text-align:center">대응 순번·상태</th>
-      <th style="width:70px;text-align:center">담당</th>
-      <th style="width:80px;text-align:center">접수일</th>
+      <th style="width:70px;text-align:center;cursor:pointer;user-select:none" onclick="setListSort('reviewer')">담당${sortArrow('reviewer')}</th>
+      <th style="width:80px;text-align:center;cursor:pointer;user-select:none" onclick="setListSort('date')">접수일${sortArrow('date')}</th>
     </tr></thead>
     <tbody>${filtered.map(p=>{
       const dm=DEC_MAP[p.decision]||DEC_MAP.pending;
@@ -4027,9 +4069,14 @@ function openContractEditor(proposalId, contractId){
       createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
     };
   }
-  closeModal();
-  renderContractEditor();
-  document.getElementById('contract-modal').classList.add('open');
+  try{
+    renderContractEditor();                 // 먼저 내용 렌더 (실패 시 모달 안 엶)
+    closeModal();
+    document.getElementById('contract-modal').classList.add('open');
+  }catch(err){
+    console.error('계약서 편집기 오류',err);
+    alert('계약서 편집기를 여는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.\n('+(err&&err.message||'')+')');
+  }
 }
 
 function cf(field,val){ if(!currentContract)return; currentContract[field]=val; if(field==='type'){ currentContract.clauses=null; renderContractEditor(); } }
