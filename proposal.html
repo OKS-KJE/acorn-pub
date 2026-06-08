@@ -1876,11 +1876,12 @@ async function saveProposal(){
     };
     saveProjects();
     const decLabel = proposal.decision==='selfpub'?'자비출판 유도':proposal.decision==='approve'?'기획출판 승인':'조건부 승인';
+    const pid = proposal.id;
     resetForm();
     updateStats();
-    const goProj = confirm(`"${title}" (${decLabel})\n\n프로젝트가 자동 등록되었습니다. 지금 바로 출판 일정을 설정하시겠습니까?`);
-    if(goProj){ showView('projects'); }
-    else { showView('list'); }
+    showView('list');   // 저장된 기획안이 보이는 목록으로 (프로젝트는 계약서 작성 시 등록됨)
+    const goContract = confirm(`"${title}" (${decLabel}) 저장되었습니다.\n\n계약서를 작성하면 프로젝트 관리에 자동 등록됩니다. 지금 계약서를 작성하시겠습니까?`);
+    if(goContract){ openContractEditor(pid, null); }
     return;
   }
 
@@ -2518,19 +2519,26 @@ function openMarineApp(){
 }
 
 function showView(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
-  document.getElementById(`view-${id}`).classList.add('active');
-  document.getElementById(`mi-${id}`)?.classList.add('active');
-  if(id==='list')renderList();
-  if(id==='analytics')renderAnalytics();
-  if(id==='dashboard')renderDashboard();
-  if(id==='guides')renderGuides();
-  if(id==='projects')renderProjects();
-  if(id==='quotes')renderQuotes();
-  if(id==='contracts')renderContracts();
-  if(id==='sales')renderSales();
-  if(id==='comments')renderComments();
+  const RENDER={list:renderList, analytics:renderAnalytics, dashboard:renderDashboard, guides:renderGuides,
+                projects:renderProjects, quotes:renderQuotes, contracts:renderContracts, sales:renderSales, comments:renderComments};
+  try{
+    if(!document.getElementById(`view-${id}`)) id='dashboard';   // 없는 뷰면 대시보드로
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+    document.getElementById(`view-${id}`).classList.add('active');
+    document.getElementById(`mi-${id}`)?.classList.add('active');
+    if(RENDER[id]) RENDER[id]();
+  }catch(err){
+    console.error(`화면 표시 오류(${id})`,err);
+    // 어떤 렌더 오류가 나도 빈 화면을 남기지 않고 대시보드로 안전 복귀
+    try{
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      const dash=document.getElementById('view-dashboard');
+      if(dash) dash.classList.add('active');
+      renderDashboard();
+    }catch(e2){ console.error('대시보드 복귀 실패',e2); }
+    alert('화면을 표시하는 중 문제가 발생해 대시보드로 돌아왔습니다.\n(저장은 정상 처리되었습니다. 문제가 계속되면 알려주세요.)');
+  }
 }
 // ── 참고자료(출판 가이드·Q&A) ──────────────────────────────────────
 const GUIDE_COMMON = {
