@@ -420,6 +420,51 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
       <span style="font-size:13px;font-weight:700">🎯 종합 판정</span>
       <span style="font-size:11px;color:var(--text3)">가중치 기반 1차 자동 판정 → 2차 수동 조정</span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="openGuide()" style="margin-left:auto">📖 평가 가이드</button>
+    </div>
+
+    <!-- 출판 트랙 · 사전 관문 (자기계발·에세이·실용 별도 트랙) -->
+    <div id="track-gate" style="background:#F4F1FB;border:1px solid #D8CCF0;border-radius:var(--rL);padding:13px 16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="font-size:12px;font-weight:700;color:var(--purple)">🧭 출판 트랙 · 사전 관문</span>
+        <span style="font-size:10px;color:var(--text3)">일반(자기계발·에세이·실용)은 별도 트랙 — 기본 제안은 자비·POD, 유통 동력이 확인되면 상향</span>
+      </div>
+      <div class="form-row c2" style="margin-bottom:10px;">
+        <div class="field"><label>도서 트랙</label>
+          <select id="f-track" onchange="renderTrackGate()">
+            <option value="core">전문·기술서 (에이콘 코어)</option>
+            <option value="trade">일반 (자기계발·에세이·실용)</option>
+          </select>
+        </div>
+        <div class="field"><label>도서 역할</label>
+          <select id="f-role" onchange="renderTrackGate()">
+            <option value="">선택</option>
+            <option value="revenue">수익형</option>
+            <option value="brand">브랜드형</option>
+            <option value="public">세종·공공형</option>
+            <option value="test">시장테스트형</option>
+            <option value="backlist">백리스트</option>
+          </select>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px">유통 동력 — 저자가 끌어올 판매 경로 (하나라도 ‘있음’이면 기획출판 게이트 후보)</div>
+      <div class="form-row c3" style="margin-bottom:8px;">
+        <div class="field"><label>저자 플랫폼 (SNS·구독자)</label>
+          <select id="f-eng-platform" onchange="renderTrackGate()"><option value="none">없음</option><option value="potential">잠재</option><option value="yes">있음</option></select></div>
+        <div class="field"><label>강의·기업교육·B2B</label>
+          <select id="f-eng-b2b" onchange="renderTrackGate()"><option value="none">없음</option><option value="potential">잠재</option><option value="yes">있음</option></select></div>
+        <div class="field"><label>세종·공공 납품 적합</label>
+          <select id="f-eng-public" onchange="renderTrackGate()"><option value="none">없음</option><option value="potential">잠재</option><option value="yes">있음</option></select></div>
+      </div>
+      <div class="form-row" style="margin-bottom:10px;">
+        <div class="field"><label>유통 동력 메모</label><input id="f-eng-note" type="text" placeholder="예: 브런치 구독 260 / 제일기획 사내강의 / 세종 선정 이력 등"></div>
+      </div>
+      <div id="track-verdict" data-model="" style="display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:var(--r);background:#fff;border:1px solid #D8CCF0;flex-wrap:wrap;">
+        <span style="font-size:11px;font-weight:700;color:var(--purple)">📌 권고 모델</span>
+        <span id="tv-badge" class="decision-badge"></span>
+        <span id="tv-desc" style="font-size:11px;color:var(--text2)"></span>
+        <button class="btn btn-primary btn-sm" onclick="applyTrackVerdict()" style="margin-left:auto">권고 적용 →</button>
+      </div>
     </div>
 
     <!-- 가중치 점수 readout + 1차 자동 판정 -->
@@ -748,6 +793,69 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- 평가 가이드 모달 -->
+<div class="modal-overlay" id="guide-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>📖 평가 가이드 — 4가지 분석 · 도서 역할 · 종합 판정</h3>
+      <button class="modal-close" onclick="closeGuide()">×</button>
+    </div>
+    <div class="modal-body" style="font-size:13px;line-height:1.75;color:var(--text2)">
+
+      <h4 style="font-size:14px;font-weight:800;color:var(--nav);margin:0 0 6px">① 4가지 분석 (평가 항목 · 가중치)</h4>
+      <p style="margin:0 0 8px">네 항목을 각각 채점하고, <b>가중치</b>를 곱해 합산합니다. 항목마다 ◎(충족)=2점, △(부분)=1점, ✕(미흡)=0점이며, <b>선택하지 않은 항목은 ✕(0점)</b>으로 계산됩니다. 항목 점수의 합을 백분율로 환산한 것이 그 분석의 점수입니다.</p>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;margin:0 0 14px">
+        <thead><tr style="background:var(--s2)">
+          <th style="text-align:left;padding:7px 9px;border:1px solid var(--border)">분석 항목</th>
+          <th style="text-align:center;padding:7px 9px;border:1px solid var(--border);white-space:nowrap">가중치</th>
+          <th style="text-align:left;padding:7px 9px;border:1px solid var(--border)">무엇을 보는가 · 가중치 이유</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700;color:#1560B8">📄 원고 분석</td><td style="text-align:center;padding:7px 9px;border:1px solid var(--border);font-weight:700">10%</td><td style="padding:7px 9px;border:1px solid var(--border)">완성도·차별성·독자가치·가독성·구성. 편집 비용이 적게 들수록 유리. <b>좋은 원고만으로 판매가 보장되지 않기에</b> 비중은 낮습니다.</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700;color:#7A4FB5">👤 저자 분석</td><td style="text-align:center;padding:7px 9px;border:1px solid var(--border);font-weight:700">50%</td><td style="padding:7px 9px;border:1px solid var(--border)">전문성·강의이력·SNS채널·커뮤니티·협업 가능성. <b>중소 출판 현실에서 저자가 끌어올 독자·판매 동력이 흥행을 좌우</b>하므로 가장 큰 비중입니다.</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700;color:#1A8A6B">📈 시장 분석</td><td style="text-align:center;padding:7px 9px;border:1px solid var(--border);font-weight:700">10%</td><td style="padding:7px 9px;border:1px solid var(--border)">경쟁 도서·독자 수요·트렌드 시의성·KDP 글로벌 가능성.</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700;color:#C0392B">📣 마케팅 지원</td><td style="text-align:center;padding:7px 9px;border:1px solid var(--border);font-weight:700">30%</td><td style="padding:7px 9px;border:1px solid var(--border)">강의 연계·SNS 홍보·단체구매·예산과 의지. <b>책을 실제로 알릴 실행력</b>으로, 저자 분석과 함께 판매를 결정합니다.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4 style="font-size:14px;font-weight:800;color:var(--nav);margin:0 0 6px">② 종합 판정 (어떻게 결정되는가)</h4>
+      <p style="margin:0 0 6px"><b>가중 종합 점수</b> = 원고×0.10 + 저자×0.50 + 시장×0.10 + 마케팅×0.30</p>
+      <p style="margin:0 0 6px"><b>1차 자동 판정 (점수 기반)</b> — 참고용 출발점입니다.</p>
+      <ul style="margin:0 0 8px;padding-left:18px">
+        <li><b style="color:var(--ok)">70% 이상 → 기획출판</b> (출판사 전액 부담)</li>
+        <li><b style="color:var(--tri)">60~69% → 조건부 승인 / 반기획</b></li>
+        <li><b style="color:var(--teal)">50~59% → 자비출판 유도</b></li>
+        <li><b style="color:var(--ex)">50% 미만 → 기각</b></li>
+      </ul>
+      <p style="margin:0 0 6px"><b>2차 수동 조정</b> — 1차 점수는 기계적 출발점일 뿐, 최종 결정은 편집자가 정성적 판단으로 내립니다. 1차와 다르게 선택하면 ✋ 표시가 남습니다.</p>
+      <p style="margin:0 0 6px"><b>출판 트랙 · 유통 동력 사전 관문</b> — 점수보다 먼저 보는 관문입니다.</p>
+      <ul style="margin:0 0 14px;padding-left:18px">
+        <li><b>코어 트랙</b>(전문·기술서): 위 점수 기반 판정을 그대로 따릅니다.</li>
+        <li><b>일반 트랙</b>(자기계발·에세이·실용): 별도 로직 — <b>기본 제안은 자비출판·POD</b>이며, 유통 동력이 확인되면 상향합니다. 점수만으로 판단하지 않습니다.</li>
+        <li><b>유통 동력</b>(저자 플랫폼 / 강의·B2B / 세종·공공) 중 <b>하나라도 ‘있음’이면 기획출판 게이트 후보</b>. 전무하면 자비·POD, 점수까지 낮으면 정중한 타사 안내로 권고합니다.</li>
+      </ul>
+
+      <h4 style="font-size:14px;font-weight:800;color:var(--nav);margin:0 0 6px">③ 도서 역할 (정확한 의미)</h4>
+      <p style="margin:0 0 8px">책마다 <b>성공의 기준이 다릅니다.</b> 모든 책을 ‘많이 팔렸는가’ 하나로 보지 않고, 역할에 맞는 잣대로 평가하기 위한 분류입니다.</p>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;margin:0 0 6px">
+        <thead><tr style="background:var(--s2)">
+          <th style="text-align:left;padding:7px 9px;border:1px solid var(--border);white-space:nowrap">역할</th>
+          <th style="text-align:left;padding:7px 9px;border:1px solid var(--border)">의미 · 성공 기준</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700">수익형</td><td style="padding:7px 9px;border:1px solid var(--border)">판매 이익 자체가 목적. <b>손익분기(BEP)·판매 부수</b>로 성공을 평가. 기획출판의 핵심 후보.</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700">브랜드형</td><td style="padding:7px 9px;border:1px solid var(--border)">출판사·저자의 전문성과 이미지 구축이 목적. <b>화제성·인용·레퍼런스 가치</b>로 평가. 당장의 판매보다 위상을 봅니다.</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700">세종·공공형</td><td style="padding:7px 9px;border:1px solid var(--border)">세종도서·문학나눔 등 <b>공공 선정과 도서관 납품</b>을 핵심 유통 경로로 보는 책. <b>선정 여부가 곧 BEP.</b> (종교색이 강하면 선정이 어려운 점 등 주의)</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700">시장테스트형</td><td style="padding:7px 9px;border:1px solid var(--border)">새 주제·저자·장르의 반응을 보려는 <b>소량·실험 출간</b>. 판매보다 <b>시장 반응·데이터</b>가 성과. 반기획·POD에 적합.</td></tr>
+          <tr><td style="padding:7px 9px;border:1px solid var(--border);font-weight:700">백리스트</td><td style="padding:7px 9px;border:1px solid var(--border)">오래 꾸준히 팔리는 <b>스테디셀러</b> 지향. 즉각 판매보다 <b>수명·누적 판매</b>로 평가.</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin:0;font-size:11px;color:var(--text3)">※ 권고 모델은 어디까지나 ‘권고’이며, 최종 판정은 2차 수동 선택으로 편집자가 결정합니다. 이 도구는 판단을 대신하지 않고 일관된 출발점만 제시합니다.</p>
+
+    </div>
   </div>
 </div>
 
@@ -1262,6 +1370,58 @@ function decisionFromScore(total){
   return 'reject';                     // 기각
 }
 
+// ── 출판 트랙 · 유통 동력 사전 관문 ───────────────────────────────
+function getTrackInputs(){
+  const v=id=>{const e=document.getElementById(id);return e?e.value:'';};
+  return {
+    track:v('f-track')||'core',
+    role:v('f-role'),
+    platform:v('f-eng-platform')||'none',
+    b2b:v('f-eng-b2b')||'none',
+    public:v('f-eng-public')||'none',
+    note:v('f-eng-note')
+  };
+}
+// 트레이드 트랙에서 모델별 표시 라벨 (코어는 DEC_MAP 그대로)
+function trackModelLabel(model, track){
+  if(track!=='trade') return (DEC_MAP[model]||DEC_MAP.pending).label;
+  return ({approve:'기획출판', conditional:'조건부 · 반기획', selfpub:'자비출판 · POD', reject:'부적합 · 타사 안내'})[model] || (DEC_MAP[model]||DEC_MAP.pending).label;
+}
+function trackRecommendation(){
+  const t=getTrackInputs();
+  const ws=weightedScore(getScores()).total;
+  const eng=[t.platform,t.b2b,t.public];
+  const anyYes=eng.includes('yes');
+  const anyPot=eng.includes('potential');
+  if(t.track==='core'){
+    return {model:decisionFromScore(ws), reason:`코어 트랙 — 가중 점수 기반 판정 (${ws}%)`};
+  }
+  // 일반(자기계발·에세이·실용) 트랙 — 기본 자비·POD, 유통 동력 확인 시 상향
+  if(anyYes && ws>=70) return {model:'approve',     reason:`유통 동력 확인 + 높은 점수(${ws}%) → 기획출판 검토 가능(드문 경우)`};
+  if(anyYes)           return {model:'conditional', reason:'유통 동력 확인 → 조건부·반기획 권장'};
+  if(anyPot)           return {model:'conditional', reason:'유통 동력 잠재 → 반기획 제안(확정 시 상향)'};
+  if(ws>=50)           return {model:'selfpub',     reason:'유통 동력 없음 → 기본 제안: 자비출판·POD'};
+  return {model:'reject', reason:`유통 동력 없음 + 낮은 점수(${ws}%) → 부적합 · 타사 안내`};
+}
+function renderTrackGate(){
+  const box=document.getElementById('track-verdict');
+  if(!box) return;
+  const t=getTrackInputs();
+  const r=trackRecommendation();
+  const dm=DEC_MAP[r.model]||DEC_MAP.pending;
+  const badge=document.getElementById('tv-badge');
+  const desc=document.getElementById('tv-desc');
+  if(badge){ badge.className='decision-badge '+dm.cls; badge.textContent=trackModelLabel(r.model,t.track); }
+  if(desc){ desc.textContent=r.reason; }
+  box.dataset.model=r.model;
+}
+function applyTrackVerdict(){
+  renderTrackGate();
+  const box=document.getElementById('track-verdict');
+  const model=(box&&box.dataset.model)||trackRecommendation().model;
+  selectDec(model);
+}
+
 function catBadge(pct){
   if(pct===null) return '<span class="score-badge na">-</span>';
   if(pct>=70) return '<span class="score-badge ok">◎</span>';
@@ -1274,6 +1434,7 @@ function onScoreChange(){
   const scores=getScores();
   renderScoreReadout(scores);
   generatePersuadeGuide(scores);
+  renderTrackGate();
 }
 
 // ── 점수 READOUT + 1차 자동 판정 ──────────────────────────────────
@@ -1464,6 +1625,7 @@ function generateRationale(){
   const title=document.getElementById('f-title').value.trim()||'(도서 가제 미입력)';
   const author=document.getElementById('f-author').value.trim();
   const greet=author?`${author} 저자님께`:'저자님께';
+  const track=(document.getElementById('f-track')||{}).value||'core';
 
   // 강점/보완점 추출
   const strong=[]; const weak=[];
@@ -1523,6 +1685,21 @@ ${items}
 감사합니다.
 에이콘출판사 편집부 드림`;
   } else { // reject
+    if(track==='trade'){
+      body=
+`${greet}
+
+『${title}』 원고를 보내주셔서 감사합니다. 작품에 담긴 저자님의 진심과 노력을 깊이 느꼈습니다.
+
+솔직하게, 그리고 이 작품을 위해 말씀드립니다. 에이콘출판사는 IT·기술 및 실용 분야를 중심으로 책을 만들어 온 출판사라, 본 원고는 저희가 가장 잘 살려 드릴 수 있는 분야가 아닙니다. 이는 작품의 가치에 대한 평가가 아니라, 저희가 이 책을 책임지고 가장 잘 해드릴 수 있느냐에 대한 솔직한 답입니다.
+
+작품의 진가를 온전히 살리려면, 해당 분야를 전문으로 다루며 그 독자와 닿는 길을 가진 출판사가 더 적합하다고 판단했습니다. 원하신다면 아는 범위에서 적합한 출판 경로를 안내해 드리겠습니다.
+
+귀한 원고를 보내주셔서 다시 한번 감사드리며, 마땅한 자리에서 좋은 독자를 만나시기를 바랍니다.
+
+감사합니다.
+에이콘출판사 편집부 드림`;
+    } else {
     body=
 `${greet}
 
@@ -1536,6 +1713,7 @@ ${items}
 
 감사합니다.
 에이콘출판사 편집부 드림`;
+    }
   }
 
   const ta=document.getElementById('f-rationale');
@@ -1586,6 +1764,14 @@ async function saveProposal(){
     msStatus:document.getElementById('f-ms-status').value,
     type:'',  // 목록에서 추후 지정
     summary:document.getElementById('f-summary').value,
+    track:(document.getElementById('f-track')||{}).value||'core',
+    role:(document.getElementById('f-role')||{}).value||'',
+    engines:{
+      platform:(document.getElementById('f-eng-platform')||{}).value||'none',
+      b2b:(document.getElementById('f-eng-b2b')||{}).value||'none',
+      public:(document.getElementById('f-eng-public')||{}).value||'none'
+    },
+    engNote:(document.getElementById('f-eng-note')||{}).value||'',
     manuscripts:currentManuscripts.slice(0,MAX_MANUSCRIPTS),
     scores,
     scorePct:ws.total,
@@ -1702,6 +1888,8 @@ async function saveProposal(){
 function resetForm(){
   ['f-title','f-author','f-author-tel','f-author-email','f-author-job','f-channel-other','f-genre-other','f-price','f-summary','f-dec-note','f-reviewer','f-reply','f-rationale'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   ['f-channel','f-genre','f-ms-status'].forEach(id=>{const e=document.getElementById(id);if(e)e.selectedIndex=0;});
+  ['f-track','f-eng-platform','f-eng-b2b','f-eng-public'].forEach(id=>{const e=document.getElementById(id);if(e)e.selectedIndex=0;});
+  ['f-role','f-eng-note'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   toggleOther('channel');toggleOther('genre');
   currentManuscripts=[];
   renderManuscriptList();
@@ -1715,6 +1903,7 @@ function resetForm(){
   document.getElementById('btn-copy-rationale').style.display='none';
   document.getElementById('btn-insert-rationale').style.display='none';
   const at=document.getElementById('adjust-tag');if(at)at.style.display='none';
+  renderTrackGate();
   CRITERIA.forEach(cat=>{
     cat.items.forEach(item=>{
       document.querySelectorAll(`input[name="${item.id}"]`).forEach(r=>r.checked=false);
@@ -2122,6 +2311,8 @@ function quoteSectionHTML(p){
     `</div>`;
 }
 function closeModal(){document.getElementById('detail-modal').classList.remove('open');currentModalId=null;}
+function openGuide(){const m=document.getElementById('guide-modal');if(m)m.classList.add('open');}
+function closeGuide(){const m=document.getElementById('guide-modal');if(m)m.classList.remove('open');}
 function editFromModal(){
   const p=proposals.find(p=>p.id===currentModalId);
   if(!p) return;
@@ -2140,6 +2331,14 @@ function editFromModal(){
   document.getElementById('f-price').value=p.price||'';
   document.getElementById('f-ms-status').value=p.msStatus||'';
   document.getElementById('f-summary').value=p.summary||'';
+  const setV=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val;};
+  setV('f-track',p.track||'core');
+  setV('f-role',p.role||'');
+  setV('f-eng-platform',(p.engines&&p.engines.platform)||'none');
+  setV('f-eng-b2b',(p.engines&&p.engines.b2b)||'none');
+  setV('f-eng-public',(p.engines&&p.engines.public)||'none');
+  setV('f-eng-note',p.engNote||'');
+  renderTrackGate();
   document.getElementById('f-reviewer').value=p.reviewer||'';
   currentManuscripts=(p.manuscripts||[]).map(m=>({...m}));
   renderManuscriptList();
@@ -2298,17 +2497,30 @@ const GUIDES = [
      {q:'KDP 글로벌 출판도 함께 하나요?', a:'권장합니다. 국내 소진율 47%의 한계를 넘어 190개국 독자에게 추가 도달할 수 있습니다.'}
    ]},
   {key:'amazon', label:'아마존 KDP 대행', color:'var(--gold)',
-   summary:'에이콘이 KDP 계정 설정부터 영문 메타데이터·표지·AMS 광고까지 원스톱으로 대행하는 글로벌 출판 채널입니다(기본 패키지 135만 원).',
+   summary:'에이콘이 KDP 계정·세금 설정부터 eBook+POD 변환, 표지, 저자 사이트, SEO/AMS까지 원스톱 대행하는 글로벌 출판 채널입니다. 베이직 135만 원 / 프로 340만 원, 기본 영문 3만 단어 포함.',
    guide:[
-     {h:'서비스 범위', items:['KDP 계정 설정·영문 메타데이터·표지·내지 변환·AMS 광고 운영까지 원스톱 대행(기본 패키지 135만 원).','명시되지 않은 작업은 별도 비용이 발생합니다.']},
-     {h:'광고비·정산', items:['서비스 비용에 AMS 광고비 60만 원이 포함됩니다.','초과 광고비는 저자 부담이며 CPC(클릭당 과금) 방식으로, 특정 성과를 보증하지 않습니다.','KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않습니다.']},
-     {h:'글로벌 적합성', items:['KDP의 강점은 영어권 시장이므로 영문 번역·메타데이터 최적화를 함께 진행할 때 효과가 큽니다.','한국 특화 주제는 번역 효과가 낮을 수 있어 글로벌 수요 주제를 우선 검토합니다.','원고의 오탈자·사실 오류·저작권 등 내용 책임은 저자에게 있습니다.']}
+     {h:'패키지', items:[
+       '베이직 ₩1,350,000 — KDP 기반 eBook + POD 작업(계정·세금·저자사이트 PDF), KDP 서식·품질 검수·글로벌 출간/유통 등록, 수정·지원 1회 / 30일.',
+       '프로 ₩3,400,000 — 베이직 전체 + 커스텀 표지(2종)·저자 사이트·SEO/AMS 설정 및 가이드 제공, 수정·지원 2회 / 60일.',
+       '패키지와 프리미엄 옵션을 함께 진행하면 10% 할인이 적용됩니다.']},
+     {h:'기본 제공 분량·초과 단가', items:[
+       '기본 제공: 영문 3만 단어(한글 약 7.5만 자)·시각자료 5개 이내 (타사 대비 높은 기본 제공량).',
+       '초과 원고는 금액 인하 대신 구간별 누진 단가로 저자 부담을 완화 — 1,000단어 단위로 1~10단위 ₩45,000 / 11~30단위 ₩38,000 / 31단위~ ₩33,000 (eBook+POD 공통).',
+       '시각자료 5개 초과분은 이미지 1개당 ₩10,000~20,000(작업 공수 약 5~15분).']},
+     {h:'시장 비교·작업 시간', items:[
+       '크몽 프리랜서 ₩30~50만 대비, 에이콘 베이직 ₩135만은 브랜드와 서비스 범위 차이에 대한 합리적 프리미엄입니다(지속 거래 고객 할인 검토 가능).',
+       '약 200페이지 기준 작업 시간: 전자책 단독 24~40h, 종이책 포함 시 포맷 재작업 +16h, 표지·업로드 약 24h — 총 약 24~80h.']},
+     {h:'광고·환불·책임', items:[
+       'AMS 광고는 CPC(클릭당 과금) 방식으로 운영되며, 초과 광고비는 저자 부담이고 특정 성과를 보증하지 않습니다.',
+       'KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않습니다.',
+       '원고의 오탈자·사실 오류·저작권 등 내용 책임은 저자에게 있습니다. KDP의 강점은 영어권 시장이라 영문 메타데이터 최적화를 함께 진행할 때 효과가 큽니다.']}
    ],
    qa:[
-     {q:'킨들 출간은 언제 결정하나요?', a:'계약 전·후 언제든 결정하셔도 괜찮습니다.'},
+     {q:'베이직과 프로의 차이는?', a:'베이직은 eBook+POD 출간(계정·세금·저자사이트 PDF, 수정 1회·30일)이고, 프로는 여기에 커스텀 표지·저자 사이트·SEO/AMS 설정과 가이드, 수정 2회·60일이 더해집니다.'},
+     {q:'기본 제공 분량을 넘으면?', a:'기본 영문 3만 단어(한글 약 7.5만 자)를 초과하면 1,000단어 단위로 누진 단가(45,000/38,000/33,000원)가 가산됩니다. 금액을 깎는 대신 구간 단가를 낮춰 저자 부담을 줄였습니다.'},
      {q:'한국어 책도 KDP에 올릴 수 있나요?', a:'가능하지만 KDP의 강점은 영어권 시장입니다. 영문 번역·메타데이터 최적화를 함께 진행할 때 효과가 큽니다.'},
-     {q:'광고비 환불이 되나요?', a:'KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않으며, 광고 성과는 보증되지 않습니다.'},
-     {q:'인세는 어떻게 받나요?', a:'KDP 로열티는 아마존 정책에 따라 지급되며, 정산 방식은 계약 시 안내드립니다.'}
+     {q:'할인이 있나요?', a:'패키지와 프리미엄 옵션을 함께 진행하면 10% 할인이 적용됩니다. 지속 거래 고객 할인도 검토 가능합니다.'},
+     {q:'환불이 되나요?', a:'KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않으며, 광고 성과는 보증되지 않습니다.'}
    ]}
 ];
 // 출판 형태(타입) → 가이드 항목
@@ -3177,6 +3389,21 @@ function saveProvider(p){ localStorage.setItem(QUOTE_PROVIDER_KEY,JSON.stringify
 
 const TYPESET_UNIT = {'1':5000,'2':6000,'4':7000};   // 조판 단가/페이지 (도수별)
 const EDIT_UNIT = 5000;                               // 전문편집 단가/페이지 기본값
+
+// ── 아마존 KDP 패키지·단가 (amazon.docx 최신 기준) ──────────────────
+const AMZ_PKG = { basic:1350000, pro:3400000 };       // 베이직 / 프로 패키지가
+const AMZ_BASE_WORDS = 30000;                         // 기본 제공 영문 단어 (= 한글 약 7.5만 자)
+const AMZ_IMG_FREE = 5;                               // 무료 시각자료 개수
+const AMZ_IMG_UNIT = 15000;                           // 시각자료 5개 초과분 1개당 (10,000~20,000 중간값)
+const AMZ_BUNDLE_DISCOUNT = 0.10;                     // 패키지+옵션 동시 진행 10% 할인
+// 초과 원고 누진 단가(1,000단어 단위): 1~10단위 45,000 / 11~30단위 38,000 / 31단위~ 33,000
+function amzExcessCost(units){
+  units=Math.max(0,Math.floor(+units||0)); let cost=0,u=units;
+  const take=(n,rate)=>{const t=Math.min(u,n);cost+=t*rate;u-=t;};
+  take(10,45000); take(20,38000); take(Infinity,33000);
+  return cost;
+}
+function amzExcessBlendUnit(units){ units=Math.max(1,Math.floor(+units||0)); return Math.round(amzExcessCost(units)/units); }
 let currentQuote = null;        // 편집 중 견적 객체
 let currentQuoteProposalId = null;
 
@@ -3184,9 +3411,15 @@ let currentQuoteProposalId = null;
 function genQuoteItems(type, spec){
   const pages = +spec.pages||0, run = +spec.runCount||0, color = String(spec.color||'1');
   if(type==='amazon'){
-    const items=[{name:'기본 패키지 — KDP 계정 설정·등록 / 전자책 내지 제작(KDP 포맷 변환) / 전자책 표지 제작(KDP 템플릿, 시안 3개·수정 1회) / 기본 마케팅(메타데이터·키워드·도서 소개 최적화) / 영문 메타데이터 작성 / Kindle Previewer 포함 품질 최종 검수 / 글로벌 출간·유통 등록 / Author Central 구축 가이드 PDF 제공 / 유지보수 30일·수정 1회', qty:1, unit:1350000}];
+    const pkg=(spec.amazonPkg==='pro')?'pro':'basic';
+    const baseName = pkg==='pro'
+      ? '프로 패키지 — 베이직 전체 + 커스텀 표지(2종)·저자 사이트·SEO/AMS 설정 및 가이드 제공 / 수정·지원 2회·60일'
+      : '베이직 패키지 — KDP 기반 eBook + POD(계정·세금·저자사이트 PDF) / KDP 서식·품질 검수·글로벌 출간·유통 등록 / 수정·지원 1회·30일';
+    const items=[{name:baseName+' · 기본 영문 3만 단어(한글 약 7.5만 자)·시각자료 5개 이내 포함', qty:1, unit:AMZ_PKG[pkg]}];
     const wo=+spec.wordOver||0;
-    if(wo>0) items.push({name:'초과 원고 (영문 1,000단어 초과 당 · 한글 5만자=영문 2만단어 기준)', qty:wo, unit:33000});
+    if(wo>0) items.push({name:'초과 원고 (기본 3만 단어 초과·1,000단어 단위 누진: ~10단위 45,000 / ~30단위 38,000 / 초과 33,000)', qty:wo, unit:amzExcessBlendUnit(wo)});
+    const imgOver=Math.max(0,((+spec.figs)||((+spec.charts||0)+(+spec.figures||0)))-AMZ_IMG_FREE);
+    if(imgOver>0) items.push({name:'시각자료 5개 초과 (이미지 1개당)', qty:imgOver, unit:AMZ_IMG_UNIT});
     return items;
   }
   // 자비/대행/반기획 — 국내 인쇄 제작
@@ -3221,10 +3454,12 @@ const DEFAULT_TERMS_AMAZON = '1. 원고 책임\n저자가 제공한 원고의 �
 function quoteTotals(q){
   const full = (q.items||[]).reduce((s,it)=>s+(+it.qty||0)*(+it.unit||0),0);
   const shareFactor = (q.type==='semi') ? ((+q.semiShare||50)/100) : 1;
-  const subtotal = Math.round(full*shareFactor);
+  let subtotal = Math.round(full*shareFactor);
+  let discount = 0;
+  if(q.type==='amazon' && q.bundleDiscount){ discount = Math.round(subtotal*AMZ_BUNDLE_DISCOUNT); subtotal -= discount; }
   const vat = Math.round(subtotal*(q.vatRate??0.1));
   const total = subtotal+vat;
-  return {full, subtotal, vat, total,
+  return {full, discount, subtotal, vat, total,
     deposit:Math.round(total*0.3), middle:Math.round(total*0.4), balance:total-Math.round(total*0.3)-Math.round(total*0.4)};
 }
 const won = n => (Math.round(+n||0)).toLocaleString('ko-KR');
@@ -3292,16 +3527,17 @@ function qRecalcItems(){
 }
 // 아마존: 한글 자수 → 추정 영문 단어 → 초과 단위(1,000단어) 자동 (프리미엄 옵션은 보존)
 function qAmzAutoWords(){
-  const est=Math.round((+currentQuote.korChars||0)*0.4);   // 한글 5만자 = 영문 2만단어 (×0.4)
-  const wo=Math.max(0,Math.floor((est-20000)/1000));
+  const est=Math.round((+currentQuote.korChars||0)*0.4);   // 한글 7.5만자 = 영문 3만단어 (×0.4)
+  const wo=Math.max(0,Math.floor((est-AMZ_BASE_WORDS)/1000));
   currentQuote.wordOver=wo;
   const items=currentQuote.items;
   const idx=items.findIndex(it=>(it.name||'').includes('초과 원고'));
-  if(wo>0){ if(idx>=0){items[idx].qty=wo; if(!items[idx].unit)items[idx].unit=33000;}
-    else items.splice(1,0,{name:'초과 원고 (영문 1,000단어 초과 당 · 한글 5만자=영문 2만단어 기준)',qty:wo,unit:33000}); }
+  const unit=wo>0?amzExcessBlendUnit(wo):0;
+  if(wo>0){ const line={name:'초과 원고 (기본 3만 단어 초과·1,000단어 단위 누진: ~10단위 45,000 / ~30단위 38,000 / 초과 33,000)',qty:wo,unit};
+    if(idx>=0) items[idx]=Object.assign({},items[idx],line); else items.splice(1,0,line); }
   else if(idx>=0){ items.splice(idx,1); }
   renderQuoteEditor();
-  alert(`추정 영문 단어 약 ${est.toLocaleString()}개\n기본 2만 단어 초과분 → 초과 단위 ${wo}개 (×33,000원) 반영`);
+  alert(`추정 영문 단어 약 ${est.toLocaleString()}개\n기본 3만 단어(한글 약 7.5만 자) 초과분 → 초과 단위 ${wo}개\n누진 합계 ${won(amzExcessCost(wo))}원 반영`);
 }
 
 function renderQuoteEditor(){
@@ -3338,6 +3574,12 @@ function renderQuoteEditor(){
     <div class="q-spec">
       <div class="field" style="grid-column:span 2"><label>도서명(가제)</label><input value="${(q.title||'').replace(/"/g,'&quot;')}" oninput="qf('title',this.value)"></div>
       ${isAmazon?`
+        <div class="field"><label>패키지</label><select onchange="qf('amazonPkg',this.value);qRecalcItems()">
+          <option value="basic"${q.amazonPkg!=='pro'?' selected':''}>베이직 (135만)</option>
+          <option value="pro"${q.amazonPkg==='pro'?' selected':''}>프로 (340만)</option></select></div>
+        <div class="field"><label>패키지+옵션 10% 할인</label><select onchange="qf('bundleDiscount',this.value==='y')">
+          <option value="n"${!q.bundleDiscount?' selected':''}>미적용</option>
+          <option value="y"${q.bundleDiscount?' selected':''}>적용</option></select></div>
         <div class="field"><label>페이지</label><input type="number" value="${q.pages||0}" oninput="qf('pages',this.value)"></div>
         <div class="field"><label>예상 정가(원)</label><input type="number" value="${q.listPrice||''}" oninput="qf('listPrice',this.value)"></div>
         <div class="field"><label>한글 자수</label><input type="number" value="${q.korChars||0}" oninput="qf('korChars',this.value)"></div>
@@ -3356,7 +3598,7 @@ function renderQuoteEditor(){
       `}
     </div>
     ${q.type==='semi'?`<div style="font-size:11px;color:var(--rose);margin-top:8px">※ 반기획: 아래 항목 총 제작비 중 <strong>${q.semiShare||50}%</strong>를 저자가 부담합니다.</div>`:''}
-    ${isAmazon?`<div style="font-size:11px;color:var(--text3);margin-top:8px">※ 인쇄 항목 없음 · 결제조건 협의 후 결정. 기본 패키지에 광고비 60만 원 포함. 한글 5만자=영문 2만단어 기준, 초과분만 1,000단어 단위로 가산됩니다.</div>`:''}
+    ${isAmazon?`<div style="font-size:11px;color:var(--text3);margin-top:8px">※ 인쇄 항목 없음 · 결제조건 협의 후 결정. 기본 제공 영문 3만 단어(한글 약 7.5만 자)·시각자료 5개 이내 포함, 초과분만 가산(누진). 시각자료 5개 초과분은 1개당 ${won(AMZ_IMG_UNIT)}원. ‘패키지+옵션 10% 할인’ 적용 시 소계에서 10% 차감됩니다.</div>`:''}
   </div>
 
   <div class="detail-section"><h4>🧾 견적 항목 <span style="font-weight:400;color:var(--text3);font-size:11px">(금액 = 수량 × 단가, 자동)</span></h4>
@@ -3413,7 +3655,8 @@ function refreshQuoteTotals(){
   const t=quoteTotals(currentQuote); const q=currentQuote;
   const row=(l,v,strong)=>`<div style="display:flex;justify-content:space-between;padding:6px 0;${strong?'border-top:2px solid var(--border);margin-top:4px':''}"><span style="font-size:${strong?13:12}px;color:var(--text2);font-weight:${strong?800:600}">${l}</span><span style="font-family:'JetBrains Mono',monospace;font-size:${strong?16:13}px;font-weight:${strong?800:700};color:${strong?qtype(q.type).color:'var(--text)'}">${won(v)}원</span></div>`;
   box.innerHTML =
-    (q.type==='semi'?row(`총 제작비`,t.full)+row(`저자 부담 (${q.semiShare||50}%) = 소계`,t.subtotal):row('소계',t.subtotal))+
+    (q.type==='semi'?row(`총 제작비`,t.full)+row(`저자 부담 (${q.semiShare||50}%) = 소계`,t.subtotal):
+      (t.discount>0?row('합계(할인 전)',t.full)+row('패키지+옵션 할인 (10%)',-t.discount)+row('소계',t.subtotal):row('소계',t.subtotal)))+
     row(`부가세 (${Math.round((q.vatRate??0.1)*100)}%)`,t.vat)+
     row('합계 (VAT 포함)',t.total,true)+
     (q.type==='amazon'
@@ -3652,7 +3895,7 @@ function printQuote(proposalId,quoteId){
       <div class="pq-terms"><b>Terms &amp; Conditions</b><br>${termsHtml}</div>
       <div class="pq-sum"><table>
         ${shareNote}
-        ${q.type==='semi'?`<tr><td>저자 부담 (${q.semiShare||50}%) 소계</td><td>${won(t.subtotal)}</td></tr>`:`<tr><td>소계</td><td>${won(t.subtotal)}</td></tr>`}
+        ${q.type==='semi'?`<tr><td>저자 부담 (${q.semiShare||50}%) 소계</td><td>${won(t.subtotal)}</td></tr>`:(t.discount>0?`<tr><td>합계(할인 전)</td><td>${won(t.full)}</td></tr><tr><td>패키지+옵션 할인 (10%)</td><td>-${won(t.discount)}</td></tr><tr><td>소계</td><td>${won(t.subtotal)}</td></tr>`:`<tr><td>소계</td><td>${won(t.subtotal)}</td></tr>`)}
         <tr><td>부가세 (${Math.round((q.vatRate??0.1)*100)}%)</td><td>${won(t.vat)}</td></tr>
         <tr class="total"><td>합계</td><td>${won(t.total)}</td></tr>
       </table>
@@ -3735,9 +3978,9 @@ function openContractEditor(proposalId, contractId){
 function cf(field,val){ if(!currentContract)return; currentContract[field]=val; if(field==='type'){ currentContract.clauses=null; renderContractEditor(); } }
 function cAmzWords(){
   const est=Math.round((+currentContract.korChars||0)*0.4);
-  currentContract.engWords=est; currentContract.wordOver=Math.max(0,Math.floor((est-20000)/1000));
+  currentContract.engWords=est; currentContract.wordOver=Math.max(0,Math.floor((est-AMZ_BASE_WORDS)/1000));
   renderContractEditor();
-  alert(`추정 영문 단어 약 ${est.toLocaleString()}개 · 기본 2만 단어 초과 → 초과 ${currentContract.wordOver}단위(1,000단어)`);
+  alert(`추정 영문 단어 약 ${est.toLocaleString()}개 · 기본 3만 단어(한글 약 7.5만 자) 초과 → 초과 ${currentContract.wordOver}단위(1,000단어)`);
 }
 
 function renderContractEditor(){
@@ -3856,7 +4099,7 @@ function renderContractFinanceFields(c){
       <div style="font-size:11px;color:var(--text3);margin-top:8px">배타적발행권·출판권 설정 / 존속기간 ${c.termYears||5}년(자동연장) / 제작·홍보비 발행사 부담 / 저작권사용료 = 정가 ${c.royaltyRate||10}% × 판매부수</div></div>`;
   }
   // amazon
-  const base=+c.amzBase||0, over=(+c.wordOver||0)*33000, sub=base+over, vat=Math.round(sub*0.1);
+  const base=+c.amzBase||0, over=amzExcessCost(+c.wordOver||0), sub=base+over, vat=Math.round(sub*0.1);
   return `<div class="detail-section"><h4>💵 비용 (아마존 KDP 대행)</h4>
     <div class="q-spec">
       <div class="field"><label>기본 패키지(원)</label><input type="number" value="${c.amzBase||0}" oninput="cf('amzBase',this.value)"></div>
@@ -3866,7 +4109,7 @@ function renderContractFinanceFields(c){
       <div class="field" style="grid-column:span 2"><label>결제조건</label><input value="${(c.amzPay||'').replace(/"/g,'&quot;')}" oninput="cf('amzPay',this.value)"></div>
     </div>
     <div style="font-size:12px;font-weight:700;color:var(--gold);margin-top:8px">소계 ${won(sub)}원 + VAT ${won(vat)}원 = ${won(sub+vat)}원</div>
-    <div style="font-size:11px;color:var(--text3);margin-top:4px">기본 패키지에 AMS 광고비 60만원 포함 · 한글 5만자=영문 2만단어 기준 초과분 1,000단어당 33,000원 · KDP 등록 착수 후 환불 불가</div></div>`;
+    <div style="font-size:11px;color:var(--text3);margin-top:4px">기본 패키지에 AMS 광고비 60만원 포함 · 기본 영문 3만 단어(한글 약 7.5만 자)·시각자료 5개 이내 포함, 초과분 1,000단어 단위 누진(45,000/38,000/33,000) · KDP 등록 착수 후 환불 불가</div></div>`;
 }
 
 // ── 저장 / 삭제(2단계 확인) / 복제 ─────────────────────────────────
@@ -4117,11 +4360,11 @@ function defaultClauses(c){
       {h:'제28조 (2차적저작물 특약)', p:'발행사는 오디오북 제작 권리를 가지며, 오디오북 판매액의 '+(c.audioRate||15)+'%를 저작권사용료로 지급한다.'}
     ];
   }
-  const base=+c.amzBase||0, over=(+c.wordOver||0)*33000, sub=base+over, vat=Math.round(sub*0.1);
+  const base=+c.amzBase||0, over=amzExcessCost(+c.wordOver||0), sub=base+over, vat=Math.round(sub*0.1);
   return [
     {h:'제1조 (계약의 목적)', p:'본 계약은 저작자의 저작물을 아마존 KDP를 통해 글로벌 출간하기 위하여 출판사가 KDP 출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.'},
     {h:'제2조 (제공 서비스)', p:'기본 패키지: KDP 계정 설정·등록, 전자책 내지 제작(KDP 포맷 변환), 전자책 표지 제작(KDP 템플릿, 시안 3개·수정 1회), 기본 마케팅(메타데이터·키워드·도서 소개 최적화), 영문 메타데이터 작성, Kindle Previewer 품질 검수, 글로벌 출간·유통 등록, Author Central 구축 가이드(PDF), 유지보수 30일·수정 1회.'},
-    {h:'제3조 (비용)', p:'기본 패키지 '+won(base)+'원'+(over>0?(' + 초과 원고 '+c.wordOver+'단위 × 33,000원 = '+won(over)+'원'):'')+' (소계 '+won(sub)+'원, VAT '+won(vat)+'원, 합계 '+won(sub+vat)+'원). 한글 5만자=영문 2만단어 기준이며 초과분은 1,000단어 단위로 가산한다. 결제조건: '+(c.amzPay||'')+'.'},
+    {h:'제3조 (비용)', p:'기본 패키지 '+won(base)+'원'+(over>0?(' + 초과 원고 '+c.wordOver+'단위(누진) = '+won(over)+'원'):'')+' (소계 '+won(sub)+'원, VAT '+won(vat)+'원, 합계 '+won(sub+vat)+'원). 기본 영문 3만 단어(한글 약 7.5만 자) 및 시각자료 5개 이내를 포함하며, 초과분은 1,000단어 단위로 누진 가산(45,000/38,000/33,000원)한다. 결제조건: '+(c.amzPay||'')+'.'},
     {h:'제4조 (서비스 범위)', p:'견적·계약에 명시된 항목에 한하여 제공하며, 명시되지 않은 작업은 별도 비용이 발생한다. AMS 광고는 클릭당 과금(CPC) 방식으로 운영되며 광고비 60만 원이 포함된다. 이를 초과하는 광고비는 저작자가 부담하고, 출판사는 광고 성과를 보증하지 않는다.'},
     {h:'제5조 (원고 책임 및 환불)', p:'저작자가 제공한 원고의 오탈자·사실 오류·저작권 침해 등 내용에 관한 모든 책임은 저작자에게 있다. KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않는다.'},
     {h:'제6조 (저작권)', p:'원고 및 저작물의 저작권은 저작자에게 귀속하며, 출판사는 KDP 출간·유통 대행에 필요한 범위에서만 이를 이용한다.'}
