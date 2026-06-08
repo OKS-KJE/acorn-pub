@@ -540,6 +540,10 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div><h2>📋 기획안 목록</h2><div class="sub" id="list-label">총 0건</div></div>
     <div style="margin-left:auto"><button class="btn btn-primary" onclick="showView('new')">➕ 기획안 등록</button></div>
   </div>
+  <div class="list-tabs" style="display:flex;gap:6px;margin-bottom:10px">
+    <button id="ltab-active" class="btn btn-sm btn-primary" onclick="setListMode('active')">📋 진행 중</button>
+    <button id="ltab-archive" class="btn btn-sm btn-ghost" onclick="setListMode('archive')">🗄️ 보관함 (기각·종료)</button>
+  </div>
   <div class="list-filters">
     <input class="search-input" type="text" id="search" placeholder="🔍 도서명·저자명 검색..." oninput="filterChanged()">
     <select class="filter-select" id="f-filter-dec" onchange="filterChanged()">
@@ -790,6 +794,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <h3 id="modal-title">기획안 상세</h3>
       <div style="margin-left:auto;display:flex;gap:8px;">
         <button class="btn btn-ghost btn-sm" onclick="editFromModal()">✏️ 수정</button>
+        <button class="btn btn-ghost btn-sm" id="btn-close-toggle" onclick="toggleCloseFromModal()">🔚 종료</button>
         <button class="btn btn-danger btn-sm" onclick="deleteFromModal()">🗑️ 삭제</button>
       </div>
       <button class="modal-close" onclick="closeModal()">×</button>
@@ -1236,6 +1241,7 @@ async function init(){
   document.getElementById('f-reg-date').value = new Date().toISOString().slice(0,10);
   renderScoreReadout(getScores());
   await loadData();
+  if(autoCloseStale()){ try{ await saveData(); }catch(e){} }
   updateStats();
   renderDashboard();
   updateDbStatus();
@@ -2128,6 +2134,9 @@ function renderList(overrideFilter){
   const authorQ = gsAuthor;
 
   const filtered=proposals.filter(p=>{
+    const isArchived = p.closed || p.decision==='reject';
+    if(listMode==='archive'){ if(!isArchived) return false; }
+    else if(isArchived) return false;
     if(titleQ && !p.title.toLowerCase().includes(titleQ)) return false;
     if(authorQ && !p.author.toLowerCase().includes(authorQ)) return false;
     if(window._dashApproveCombo){ if(!['approve','conditional'].includes(p.decision)) return false; }
@@ -2173,7 +2182,7 @@ function renderList(overrideFilter){
         <td><div style="font-weight:700;font-size:12px">${p.title}</div><div style="font-size:11px;color:var(--text3)">${p.author}</div></td>
         <td style="font-size:11px">${gnDisp(p)||'-'}</td>
         <td style="text-align:center">${CRITERIA.map(cat=>catBadge(catPct(p.scores?.[cat.id], cat.items.length)?.pct??null)).join(' ')}</td>
-        <td style="text-align:center"><span class="decision-badge ${dm.cls}">${dm.label}</span></td>
+        <td style="text-align:center"><span class="decision-badge ${dm.cls}">${dm.label}</span>${p.closed?` <span class="decision-badge" style="background:#EFEAE1;color:#7A6A55;border:1px solid #D8CCB8">🔚 종료</span>`:''}${(listMode==='archive'&&p.closed&&p.closedReason)?`<div style="font-size:10px;color:var(--text3);margin-top:3px">${p.closedReason}</div>`:''}</td>
         ${corrCell(p)}
         <td style="text-align:center;font-size:11px">${p.reviewer||'-'}</td>
         <td style="text-align:center;font-size:11px">${p.date||'-'}</td>
@@ -2186,7 +2195,7 @@ function renderDashboard(){
   const dc={approve:0,conditional:0,selfpub:0,reject:0,pending:0};
   proposals.forEach(p=>dc[p.decision||'pending']++);
   document.getElementById('d-total').textContent=proposals.length;
-  document.getElementById('d-pending').textContent=dc.pending;
+  document.getElementById('d-pending').textContent=proposals.filter(p=>(p.decision==='pending'||!p.decision)&&!p.closed).length;
   document.getElementById('d-ok').textContent=dc.approve+dc.conditional;
   document.getElementById('d-self').textContent=dc.selfpub;
   document.getElementById('d-reject').textContent=dc.reject;
@@ -2330,6 +2339,7 @@ function openModal(id){
     </div>`:'';
 
   document.getElementById('modal-body').innerHTML=`
+    ${p.closed?`<div style="background:#F3EEE6;border:1px solid #D8CCB8;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#6B5B45;line-height:1.6"><strong>🔚 종료된 기획안</strong>${p.closedReason?(' · '+p.closedReason):''}${p.closedAt?(' ('+String(p.closedAt).slice(0,10)+')'):''}<br>상단 ‘↩ 복원’ 버튼으로 다시 진행 중으로 되돌릴 수 있습니다.</div>`:''}
     <div class="detail-section"><h4>기본 정보</h4>
       <div class="detail-grid">
         <div class="detail-item"><div class="di-label">도서명</div><div class="di-val" style="font-weight:700">${p.title}</div></div>
@@ -2367,6 +2377,8 @@ function openModal(id){
     ${quoteSectionHTML(p)}
     ${contractSectionHTML(p)}
     ${histHTML}`;
+  const _ct=document.getElementById('btn-close-toggle');
+  if(_ct) _ct.innerHTML = p.closed ? '↩ 복원' : '🔚 종료';
   document.getElementById('detail-modal').classList.add('open');
 }
 function copyModalRationale(){
@@ -2452,6 +2464,33 @@ function editFromModal(){
   onScoreChange();                       // 점수·readout·1차 자동 판정 재계산
   if(p.decision && p.decision!=='pending') selectDec(p.decision);  // 2차(최종) 판정 복원 + 조정 태그
 }
+async function toggleCloseFromModal(){
+  if(!currentModalId) return;
+  const p=proposals.find(x=>x.id===currentModalId); if(!p) return;
+  if(p.closed){
+    p.closed=false; p.closedAt=''; p.closedReason=''; p.closedAuto=false;
+  }else{
+    const reason=(prompt('종료 사유를 입력하세요 (선택).','수동 종료')||'수동 종료').trim()||'수동 종료';
+    p.closed=true; p.closedAt=new Date().toISOString(); p.closedReason=reason; p.closedAuto=false;
+  }
+  p.updatedAt=new Date().toISOString();
+  try{ await saveData(); }catch(e){ alert('저장 실패(로컬에는 저장됨)\n'+e.message); }
+  updateStats(); renderDashboard(); renderList();
+  openModal(currentModalId);   // 배너·버튼 라벨 갱신
+}
+// 접수 후 1개월(30일) 경과한 '검토 중' 기획안 자동 종료
+function autoCloseStale(){
+  const now=Date.now(), MS=30*864e5; let changed=false;
+  proposals.forEach(p=>{
+    if(p.closed) return;
+    if((p.decision||'pending')!=='pending') return;
+    const ref=p.regDate||p.date||(p.createdAt&&String(p.createdAt).slice(0,10));
+    if(!ref) return;
+    const t=Date.parse(ref); if(isNaN(t)) return;
+    if(now-t>MS){ p.closed=true; p.closedAt=new Date().toISOString(); p.closedReason='접수 후 1개월 경과 자동 종료'; p.closedAuto=true; changed=true; }
+  });
+  return changed;
+}
 async function deleteFromModal(){
   if(!currentModalId) return;
   const p=proposals.find(p=>p.id===currentModalId);
@@ -2475,9 +2514,18 @@ function dashGoto(key){
   const fd=document.getElementById('f-filter-dec');
   window._dashApproveCombo=(key==='ok');   // 승인 카드 = 승인+조건부
   if(fd){ fd.value=(key==='total'||key==='ok')?'':key; }
+  setListMode(key==='reject'?'archive':'active');
   showView('list');
 }
 // 목록 필터 직접 변경 시 콤보 해제 후 렌더
+let listMode='active';
+function setListMode(m){
+  listMode=(m==='archive')?'archive':'active';
+  const a=document.getElementById('ltab-active'), b=document.getElementById('ltab-archive');
+  if(a) a.className='btn btn-sm '+(listMode==='active'?'btn-primary':'btn-ghost');
+  if(b) b.className='btn btn-sm '+(listMode==='archive'?'btn-primary':'btn-ghost');
+  renderList();
+}
 function filterChanged(){ window._dashApproveCombo=false; renderList(); }
 // '적용' — 목록 필터만 반영. 이전 전역검색 잔존값이 결과를 가리지 않도록 해제
 function applyListFilter(){
@@ -2507,7 +2555,7 @@ function gnDisp(p){return (p.genre==='기타'&&p.genreOther)?p.genreOther:(p.gen
 // ── UTILS ─────────────────────────────────────────────────────────
 function updateStats(){
   document.getElementById('st-total').textContent=proposals.length;
-  document.getElementById('st-pending').textContent=proposals.filter(p=>p.decision==='pending'||!p.decision).length;
+  document.getElementById('st-pending').textContent=proposals.filter(p=>(p.decision==='pending'||!p.decision)&&!p.closed).length;
   document.getElementById('st-ok').textContent=proposals.filter(p=>['approve','conditional'].includes(p.decision)).length;
   document.getElementById('st-self').textContent=proposals.filter(p=>p.decision==='selfpub').length;
   document.getElementById('st-reject').textContent=proposals.filter(p=>p.decision==='reject').length;
@@ -3804,9 +3852,42 @@ async function deleteQuote(proposalId,quoteId){
   await saveData();
   renderQuotes();
 }
+// 견적 → 계약 초안 객체 생성
+function contractFromQuote(p,q){
+  const prov=getProvider();
+  const type=({self:'self',semi:'semi',amazon:'amazon'})[q.type]||'self';
+  let total=0; try{ const t=quoteTotals(q); total=t?t.total:0; }catch(e){ total=0; }
+  return {
+    id:'c'+Date.now().toString(36), proposalId:p.id, contractNo:newContractNo(),
+    date:new Date().toISOString().slice(0,10), place:prov.addr, type,
+    aName:q.cName||p.author||'', aRRN:'', aAddr:'', aTel:q.cTel||p.authorTel||'', aEmail:q.cEmail||p.authorEmail||'', aJob:q.cJob||p.authorJob||'',
+    title:q.title||p.title||'', pages:q.pages||250, genre:p.genre||'', pubDate:q.pubDate||'', trim:q.trim||'188*235mm', runCount:q.runCount||1000, format:'전자책(EPUB)',
+    listPrice:q.listPrice||p.price||'',
+    baseAmount: total||1000000, monthlyFee:30000, totalCost: total||0, authorShare:q.semiShare||50,
+    royaltyRate:10, settleRate:20, priceRate:80, advance:0, advContract:0, advMiddle:0, advBalance:0,
+    termYears:5, manuscriptDate:'',
+    korChars:q.korChars||0, engWords:0, wordOver:q.wordOver||0, amzBase: total||1350000, amzPay:'협의 후 결정',
+    audioRate:15, special:'견적서 '+(q.quoteNo||'')+' 수락에 따라 자동 생성된 계약 초안입니다.',
+    memo:'', status:'draft', fromQuote:q.id,
+    createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
+  };
+}
 async function setQuoteStatus(pid,qid,status){
   const p=proposals.find(x=>x.id===pid); if(!p) return;
   const q=(p.quotes||[]).find(x=>x.id===qid); if(!q) return;
+  if(status==='accepted' && q.status!=='accepted'){
+    const already=(p.contracts||[]).some(c=>c.fromQuote===q.id);
+    if(!already && !confirm('견적서를 ‘수락’으로 변경하면 계약 단계로 연결되어 계약서 초안이 자동 생성됩니다. 진행할까요?')){ renderQuotes(); return; }
+    q.status='accepted'; q.updatedAt=new Date().toISOString();
+    if(!already){ const c=contractFromQuote(p,q); (p.contracts=p.contracts||[]).push(c); syncContractToProject(p.id,c); }
+    else { ensureProject(p.id); saveProjects(); }
+    try{ await saveData(); }catch(e){ alert('클라우드 저장 실패(로컬에는 저장됨)\n'+e.message); }
+    renderQuotes();
+    if(document.getElementById('view-projects')?.classList.contains('active')) renderProjects();
+    if(document.getElementById('view-contracts')?.classList.contains('active')) renderContracts();
+    if(!already) alert('계약서 초안이 생성되어 ‘계약서 관리’에 추가되었고, 프로젝트가 계약 단계로 연결되었습니다.');
+    return;
+  }
   q.status=status; q.updatedAt=new Date().toISOString();
   try{ await saveData(); }catch(e){ alert('클라우드 저장 실패(로컬에는 저장됨)\n'+e.message); }
   renderQuotes();
@@ -3862,6 +3943,13 @@ function renderQuotes(){
     </tr>`;}).join('')}</tbody></table>`;
 }
 // 관리 페이지에서 신규: 기획안 선택 후 에디터
+// 견적 가능 기획안: 자비출판(selfpub)·반기획(conditional)만, 최신순
+function quotableProposals(){
+  return proposals
+    .filter(p=>(p.decision==='selfpub'||p.decision==='conditional') && !p.closed)
+    .slice()
+    .sort((a,b)=>String(b.createdAt||b.regDate||b.date||'').localeCompare(String(a.createdAt||a.regDate||a.date||'')));
+}
 function newQuoteFromManager(){
   if(!proposals.length){ alert('먼저 기획안을 등록하세요.'); return; }
   openQuoteEditor('', null);
@@ -3869,8 +3957,8 @@ function newQuoteFromManager(){
   const q=currentQuote;
   const sel=`<div class="detail-section" style="border-color:var(--gold)"><h4>🔗 연결 기획안 선택 (필수)</h4>
     <select id="q-link-proposal" class="filter-select" style="width:100%" onchange="linkProposalToQuote(this.value)">
-      <option value="">기획안 선택…</option>
-      ${proposals.map(p=>`<option value="${p.id}">${(p.title||'(제목없음)')} — ${p.author||''}</option>`).join('')}
+      <option value="">기획안 선택…(자비·반기획, 최신순)</option>
+      ${quotableProposals().map(p=>`<option value="${p.id}">${(p.title||'(제목없음)')} — ${p.author||''}</option>`).join('')}
     </select></div>`;
   const ed=document.getElementById('quote-editor');
   ed.insertAdjacentHTML('afterbegin',sel);
@@ -3889,7 +3977,7 @@ function newQuoteFromManager_relink(pid){
   const ed=document.getElementById('quote-editor');
   const sel=`<div class="detail-section" style="border-color:var(--ok)"><h4>🔗 연결 기획안</h4>
     <select id="q-link-proposal" class="filter-select" style="width:100%" onchange="linkProposalToQuote(this.value)">
-      ${proposals.map(p=>`<option value="${p.id}"${p.id===pid?' selected':''}>${(p.title||'(제목없음)')} — ${p.author||''}</option>`).join('')}
+      ${quotableProposals().map(p=>`<option value="${p.id}"${p.id===pid?' selected':''}>${(p.title||'(제목없음)')} — ${p.author||''}</option>`).join('')}
     </select></div>`;
   ed.insertAdjacentHTML('afterbegin',sel);
 }
