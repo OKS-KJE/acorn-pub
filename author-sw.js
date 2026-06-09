@@ -1,5 +1,5 @@
 /* ACORN 해양 저자 앱 — 서비스워커 (오프라인 우선) */
-const CACHE = 'acorn-maritime-v1';
+const CACHE = 'acorn-maritime-v2';
 const CORE = [
   './author-app.html',
   './author-app.webmanifest',
@@ -17,15 +17,17 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  // chrome-extension:, data:, blob: 등 비-http(s) 요청은 Cache API가 지원하지 않으므로 건드리지 않는다
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
   if (url.hostname.includes('supabase')) return; // API는 항상 네트워크
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     e.respondWith(
-      fetch(req).then(res => { const c = res.clone(); caches.open(CACHE).then(x => x.put(req, c)); return res; })
+      fetch(req).then(res => { const c = res.clone(); caches.open(CACHE).then(x => x.put(req, c)).catch(() => {}); return res; })
         .catch(() => caches.match(req).then(r => r || caches.match('./author-app.html')))
     );
     return;
   }
-  e.respondWith(caches.match(req).then(c => c || fetch(req).then(res => { const cp = res.clone(); caches.open(CACHE).then(x => x.put(req, cp)); return res; }).catch(() => c)));
+  e.respondWith(caches.match(req).then(c => c || fetch(req).then(res => { const cp = res.clone(); caches.open(CACHE).then(x => x.put(req, cp)).catch(() => {}); return res; }).catch(() => c)));
 });
 /* 서버 푸시(Web Push) 준비 — VAPID/푸시 서버 연동 시 사용
 self.addEventListener('push', e => {
