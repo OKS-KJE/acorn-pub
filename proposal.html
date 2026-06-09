@@ -1977,7 +1977,7 @@ async function loadData(){
   try{ proposals = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ proposals=[]; }
   if(!sbOn()) return;
   try{
-    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc&_=${Date.now()}`,
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc`,
       {headers:sbHeaders({'Cache-Control':'no-cache','Pragma':'no-cache'}),cache:'no-store'});
     if(res.ok){
       const rows=await res.json();
@@ -2075,7 +2075,7 @@ async function updateDbStatus(){
   el.className='db-status local';
   el.innerHTML='<div class="db-dot" style="background:#9aa0a6"></div>Supabase 확인 중…';
   try{
-    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id&limit=1&_=${Date.now()}`,{headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'});
+    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id&limit=1`,{headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'});
     if(res.ok){
       el.className='db-status cloud';
       el.innerHTML='<div class="db-dot" style="background:#50C878"></div>Supabase 연결됨';
