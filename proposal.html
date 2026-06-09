@@ -42,6 +42,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);border:none;cursor:pointer;font-size:12px;font-weight:700;font-family:'Pretendard',sans-serif;transition:.2s;}
 .btn-primary{background:var(--blue);color:#fff;}.btn-primary:hover{background:var(--blue2);}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2);}.btn-ghost:hover{background:var(--s3);}
+.modal-hdr .btn-ghost{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.40);color:#fff;}.modal-hdr .btn-ghost:hover{background:rgba(255,255,255,.24);color:#fff;}
 .btn-danger{background:var(--ex-bg);color:var(--ex);border:1px solid #F0B0B0;}
 .btn-sm{padding:5px 10px;font-size:11px;}
 /* cards */
@@ -2201,7 +2202,7 @@ function renderList(overrideFilter){
       <th style="width:70px;text-align:center;cursor:pointer;user-select:none" onclick="setListSort('reviewer')">담당${sortArrow('reviewer')}</th>
       <th style="width:80px;text-align:center;cursor:pointer;user-select:none" onclick="setListSort('date')">접수일${sortArrow('date')}</th>
     </tr></thead>
-    <tbody>${filtered.map(p=>{
+    <tbody>${filtered.map(p=>{ try{
       const dm=DEC_MAP[p.decision]||DEC_MAP.pending;
       return `<tr onclick="openModal('${p.id}')">
         <td style="color:var(--text3);font-size:11px">${proposals.indexOf(p)+1}</td>
@@ -2212,7 +2213,9 @@ function renderList(overrideFilter){
         ${corrCell(p)}
         <td style="text-align:center;font-size:11px">${p.reviewer||'-'}</td>
         <td style="text-align:center;font-size:11px">${p.date||'-'}</td>
-      </tr>`;}).join('')}</tbody>
+      </tr>`;
+    }catch(_e){ console.error('목록 행 렌더 오류', p&&p.id, _e); return `<tr onclick="openModal('${(p&&p.id)||''}')"><td colspan="7" style="padding:8px;color:var(--ex);font-size:11px">⚠ 이 기획안 표시 중 오류 — 클릭하여 상세 확인</td></tr>`; }
+    }).join('')}</tbody>
   </table>`;
 }
 
@@ -2595,23 +2598,21 @@ function openMarineApp(){
 function showView(id){
   const RENDER={list:renderList, analytics:renderAnalytics, dashboard:renderDashboard, guides:renderGuides,
                 projects:renderProjects, quotes:renderQuotes, contracts:renderContracts, sales:renderSales, comments:renderComments};
+  if(!document.getElementById(`view-${id}`)) id='dashboard';   // 없는 뷰면 대시보드로
+  // 1) 뷰 전환(표시)을 렌더링보다 먼저, 별도로 처리 — 렌더가 실패해도
+  //    화면 컨테이너(헤더·필터·탭)는 항상 보이므로 빈화면이 생기지 않는다.
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  const target=document.getElementById(`view-${id}`)||document.getElementById('view-dashboard');
+  if(target) target.classList.add('active');
+  document.getElementById(`mi-${id}`)?.classList.add('active');
+  // 2) 데이터 렌더링은 독립 try/catch — 한 화면의 렌더 오류가 페이지 전체를
+  //    비우지 않게 격리한다.
   try{
-    if(!document.getElementById(`view-${id}`)) id='dashboard';   // 없는 뷰면 대시보드로
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
-    document.getElementById(`view-${id}`).classList.add('active');
-    document.getElementById(`mi-${id}`)?.classList.add('active');
     if(RENDER[id]) RENDER[id]();
   }catch(err){
-    console.error(`화면 표시 오류(${id})`,err);
-    // 어떤 렌더 오류가 나도 빈 화면을 남기지 않고 대시보드로 안전 복귀
-    try{
-      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-      const dash=document.getElementById('view-dashboard');
-      if(dash) dash.classList.add('active');
-      renderDashboard();
-    }catch(e2){ console.error('대시보드 복귀 실패',e2); }
-    alert('화면을 표시하는 중 문제가 발생해 대시보드로 돌아왔습니다.\n(저장은 정상 처리되었습니다. 문제가 계속되면 알려주세요.)');
+    console.error(`렌더 오류(${id})`,err);
+    alert('목록을 표시하는 중 일부 항목에서 오류가 있었지만 화면은 정상적으로 열려 있습니다.\n(저장은 정상 처리되었습니다. 문제가 계속되면 알려주세요.)');
   }
 }
 // ── 참고자료(출판 가이드·Q&A) ──────────────────────────────────────
