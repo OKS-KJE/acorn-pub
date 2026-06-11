@@ -2712,18 +2712,72 @@ const GUIDE_COMMON = {
 };
 const GUIDES = [
   {key:'self', label:'자비출판', color:'var(--teal)',
-   summary:'제작·마케팅 비용을 저자가 부담하고 판매 수익은 저자에게 귀속됩니다. 시장 반응을 빠르게 확인하거나 출간 전 과정을 주도하고 싶을 때 적합합니다.',
+   summary:'저자가 제작·마케팅 비용을 부담하고 판매 수익은 저자에게 귀속됩니다. ISBN·유통·정산까지 에이콘온이 대행하며, 출간 전 과정을 저자가 주도합니다. 표준 패키지 100만 원(부가세 별도)부터 시작하며 편집·감수·표지·종이책 제작 등을 선택 추가할 수 있습니다.',
    guide:[
-     {h:'적합한 경우', items:['시장 반응을 빠르게 확인하고 싶을 때.','저자가 출간 일정·방향을 주도하고 싶을 때.','강의·커뮤니티 등 자체 판매 채널이 있을 때 특히 유리합니다.']},
-     {h:'수익·유통 구조', items:['판매 수익은 저자에게 귀속되며, 에이콘의 전국 유통·물류 채널을 그대로 활용합니다.','정식 ISBN을 발급해 일반 도서와 동일하게 서점·온라인에 유통합니다.','acornON POD(주문형 출판)로 초기 재고 부담 없이 소량 출간이 가능합니다.']},
-     {h:'비용 구조 유의', items:['표준 패키지에는 전자책 제작·등록·유통 대행이 포함됩니다.','전문 편집·전문 감수(2,000원/페이지)·커스텀 표지·종이책 제작·킨들 출간 등은 선택(별도 비용) 항목입니다.','전문 편집은 텍스트 중심(정리·교정·교열·표기 통일)이며 조판은 별도 항목입니다.']}
+     {h:'기본 서비스 (표준 패키지 · 100만 원, 부가세 별도)', items:[
+       '전자책 제작: 완성 원고를 주요 유통사 표준 규격에 맞는 전자책(PDF·ePub)으로 제작합니다.',
+       '출판·유통 대행: ISBN 발급 등 출판 행정 지원 및 국내 주요 전자책 서점 플랫폼에 유통 등록합니다.',
+       '정산 관리: 판매 데이터 기반의 투명한 인세 정산 및 증빙 서류를 제공합니다.',
+       '기본 마케팅: 에이콘 홈페이지 및 SNS 홍보가 포함됩니다.',
+       '전자책 인세: 플랫폼 수수료·유통 수수료 등 공제 후 순수익의 60%를 저자에게 지급합니다(분기 정산, 익월 25일 지급).'
+     ]},
+     {h:'선택 서비스 및 단가 (부가세 별도)', items:[
+       '전문 편집 — 페이지당 5,000원: 내용 편집·구성 개선·교정교열·용어 통일·표기법 정리. 초안 검토 → 1차 편집 → 저자 검토 → 2차 편집 → 최종본 제공 순서로 진행합니다.',
+       '전문 감수 — 페이지당 2,000원: IT·프로그래밍·경제경영·교육 등 분야별 내용 검증, 팩트 체크, 전문 용어 검토, 감수자 추천사 제공(선택). 기준은 조판 후 최종 편집본 페이지수입니다.',
+       '본문 디자인(조판) — 4도(컬러) 7,000원 / 2도 6,000원 / 1도(흑백) 5,000원 (페이지당): 레이아웃 구성 및 인디자인 작업.',
+       '표지 디자인 — 800,000원: 시안 3개 제작, 수정 2회 무료, 장르·콘셉트에 맞는 디자인, 서점별 사이즈 변환 파일 납품.',
+       '종이책 제작 — 별도 협의: 인쇄·후가공·제본·창고 보관·대형 온오프라인 서점 등록 포함. 종이책 인세는 정가의 50%(인쇄 부수 기준 정산, 납본·증정·홍보 부수 제외).',
+       '마케팅(프리미엄) — 별도 협의: SNS 마케팅, 보도자료, 온라인 서점 프로모션, 인플루언서 마케팅, 북트레일러 영상 제작, 출간 기념 이벤트 기획.',
+       '아마존 킨들 출간 — 별도 협의 (필요 시 추후 결정 가능).',
+       '사후 관리 서비스 — 월 30,000원(출간 익월부터, 최소 12개월): 저자 전용 대시보드(판매·정산·유통 현황), 분기 판매·인세 리포트, 월 1회 마케팅 컨설팅.'
+     ]},
+     {h:'지급 일정 (30·40·30 구조)', items:[
+       '계약금 30%: 계약 체결일로부터 7일 이내 납입.',
+       '중도금 40%: 최종 편집본 완료일로부터 7일 이내 납입.',
+       '잔금 30%: 최종 제작물 완료 후 출간·배포 전까지 납입.',
+       '※ 계약금은 계약 시점 견적 기준, 중도금·잔금은 편집 완료 후 확정 최종 금액 기준으로 재산정합니다.'
+     ]},
+     {h:'평균 제작 일정 (편집 가능 원고 제출 후 약 3개월)', items:[
+       '원고 기획 검토 — 약 2주: 기획 방향성 및 일정 확정.',
+       '편집 및 감수 — 약 4주: 선택 서비스에 따라 진행(미선택 시 생략).',
+       '디자인 및 레이아웃 — 약 3주: 템플릿 적용 또는 커스텀 디자인.',
+       '전자책 파일 제작 — 약 2주: 플랫폼별 최적화 파일 생성.',
+       '전자책 검수·출간·유통 — 약 2주: 검수 및 플랫폼 등록·유통.',
+       '종이책 인쇄·출간·유통 — 약 3주 추가 (종이책 선택 시).',
+       '⚠️ 실제 일정은 원고 분량·편집 범위·저자 검토 속도·인쇄 일정·유통사 등록 일정에 따라 달라질 수 있으며, 일부 단계는 병행 진행됩니다.'
+     ]},
+     {h:'종이책 제작 사양 주요 항목', items:[
+       '책 크기: 국판(148×210mm), 신국판(152×224mm), 46배판(188×235mm) 등 협의.',
+       '본문 인쇄: 양면 / 1도(흑백) · 2도 · 4도(컬러) 중 선택.',
+       '내지·표지 용지: 별도 협의.',
+       '면지: 앞뒤 장수 및 제물면지/색지 선택.',
+       '표지: 단면 4도(컬러) / 날개(유·무) / 코팅(엠보·유광·무광) / 후가공(협의).',
+       '제본 방식: 무선제본 또는 양장제본.'
+     ]},
+     {h:'AI 활용 고지 의무', items:[
+       '본문·이미지·도표 등에 생성형 AI를 일부 또는 전부 활용한 경우 계약 전 서면으로 고지해야 합니다.',
+       '고지 범위: 기획·원고 작성·이미지·도표 생성 등 활용 여부와 범위를 명시.',
+       'AI 생성물의 저작권·표절·사실 오류·명예훼손·초상권 문제는 저자가 책임집니다.',
+       '미고지 또는 허위 고지로 도서 등록 거절·판매 중지·분쟁 발생 시 출판사는 출간·유통 보류 또는 계약 해지가 가능합니다.'
+     ]},
+     {h:'계약 기간 및 해지', items:[
+       '배타적발행권 및 출판권 존속기간: 계약 체결일부터 최초 발행일 이후 2년(이후 자동 2년 연장, 만료 3개월 전 서면 통보로 종료 가능).',
+       '계약 종료 시 7영업일 이내 전자책 서비스 중지 요청, 종이책 재고는 1개월 내 저자 인수(미인수 시 60일 경과 후 폐기 가능).',
+       '해지 전 수행된 서비스 비용(편집·디자인·인쇄 등)은 환급되지 않습니다.'
+     ]}
    ],
    qa:[
-     {q:'전문 편집에 조판이 포함되나요?', a:'아니요. 전문 편집에는 원고 정리·교정·교열·표기 통일 등 텍스트 중심 편집만 포함되며, 조판(레이아웃·인디자인 작업)은 별도 항목으로 구분됩니다.'},
-     {q:'종이책 제작비는 어떻게 확정되나요?', a:'계약서의 견적 금액은 확정 금액이 아니라 예상 페이지 기준 예시입니다. 편집 완료 후 확정 페이지·인쇄 사양·표지 후가공·용지를 반영해 인쇄 발주 시점에 최종 금액을 확정하며, 모든 결정은 저자와 협의합니다.'},
-     {q:'표준 패키지와 기본 서비스는 다른가요?', a:'동일 개념입니다. 혼동을 막기 위해 “표준 패키지”로 명칭을 통일했습니다.'},
-     {q:'킨들 출간은 계약 후에 결정해도 되나요?', a:'계약 전·후 언제든 결정하셔도 괜찮습니다.'},
-     {q:'나중에 기획출판으로 전환할 수 있나요?', a:'가능합니다. 자비출판으로 시장 반응을 확인한 뒤 개정판을 기획출판으로 전환하는 전략을 권장합니다.'}
+     {q:'표준 패키지에 포함된 항목은 무엇인가요?', a:'전자책 제작·출판(ISBN 포함)·유통 대행·정산 관리·기본 마케팅(홈페이지·SNS)이 포함됩니다. 편집·감수·표지 디자인·종이책 제작은 별도 선택 항목입니다.'},
+     {q:'전문 편집에 조판(본문 디자인)이 포함되나요?', a:'아니요. 전문 편집은 텍스트 중심(교정·교열·구성 개선·용어 통일)이고, 조판(레이아웃·인디자인 작업)은 별도 항목(페이지당 5,000~7,000원)입니다.'},
+     {q:'비용은 언제 얼마씩 납입하나요?', a:'계약금 30%(계약 후 7일 이내) → 중도금 40%(최종 편집본 완료 후 7일 이내) → 잔금 30%(출간·배포 전) 순서입니다. 중도금·잔금은 최종 확정 금액 기준으로 재산정합니다.'},
+     {q:'종이책 제작비는 어떻게 확정되나요?', a:'인쇄 사양(판형·페이지수·도수·용지·후가공·제본 방식)에 따라 별도 협의로 확정합니다. 편집 완료 후 확정 페이지 기준으로 인쇄 발주 시 최종 금액을 결정하며, 모든 사양은 저자와 협의합니다.'},
+     {q:'전자책 인세는 얼마인가요?', a:'플랫폼 수수료·유통 수수료 등을 공제한 순수익의 60%입니다. 분기 정산 후 익월 25일에 지급되며, 10,000원 미만이면 다음 정산에 합산합니다.'},
+     {q:'종이책 인세는 어떻게 계산하나요?', a:'정가의 50%를 인세율로 적용하며, 실제 서점 판매 부수가 아닌 출고·반품·재고 정산 자료 기준 부수로 계산합니다. 납본·증정·홍보 부수는 제외됩니다.'},
+     {q:'제작 기간은 얼마나 걸리나요?', a:'편집 가능 원고 제출 후 평균 약 3개월입니다(기획 검토 2주 → 편집·감수 4주 → 디자인 3주 → 전자책 제작 2주 → 검수·출간 2주). 종이책은 3주 추가 소요되며, 저자 검토 속도와 선택 서비스에 따라 달라질 수 있습니다.'},
+     {q:'AI로 작성한 원고도 출간할 수 있나요?', a:'가능하지만 계약 전 AI 활용 사실과 범위를 반드시 서면 고지해야 합니다. AI 생성물의 저작권·표절·사실 오류 등 모든 책임은 저자에게 있으며, 미고지 또는 허위 고지 시 계약 해지 사유가 됩니다.'},
+     {q:'킨들 출간은 언제 결정해도 되나요?', a:'계약 전·후 언제든 결정하셔도 됩니다. 필요 시 아마존 KDP 대행 서비스를 별도 협의로 추가할 수 있습니다.'},
+     {q:'나중에 기획출판으로 전환할 수 있나요?', a:'가능합니다. 자비출판으로 시장 반응을 확인한 뒤 개정판을 기획출판으로 전환하는 전략을 권장합니다.'},
+     {q:'사후 관리 서비스는 꼭 가입해야 하나요?', a:'선택 사항입니다. 월 30,000원(출간 익월부터, 최소 12개월)으로 저자 전용 대시보드·정기 리포트·마케팅 컨설팅을 받을 수 있습니다. 미가입 시에도 기본 정산 리포트는 제공됩니다.'}
    ]},
   {key:'semi', label:'반기획출판', color:'var(--blue)',
    summary:'출판사와 저자가 제작·마케팅 비용과 수익을 나눠 분담하는 형태입니다. 가중 점수 60~69% 구간에서 보완 조건부로 제안됩니다.',
@@ -3679,7 +3733,23 @@ function genQuoteItems(type, spec){
     if(imgOver>0) items.push({name:'시각자료 5개 초과 (이미지 1개당)', qty:imgOver, unit:AMZ_IMG_UNIT});
     return items;
   }
-  // 자비/대행/반기획 — 국내 인쇄 제작
+  if(type==='self'){
+    // 자비출판 — 계약서 기준 서비스 항목
+    const colorLabel = color==='4'?'4도(컬러)':color==='2'?'2도':'1도(흑백)';
+    const typesetUnit = TYPESET_UNIT[color]||5000;
+    return [
+      {name:'표준 패키지 — 전자책 제작·ISBN 발급·유통 등록·정산 관리·기본 마케팅(홈페이지·SNS)', qty:1, unit:1000000},
+      {name:'전문 편집 — 내용 편집·구성 개선·교정교열·용어 통일·표기법 정리 (페이지당)', qty:pages, unit:EDIT_UNIT},
+      {name:'전문 감수 — 분야별 내용 검증·팩트 체크·전문 용어 검토 (페이지당)', qty:pages, unit:2000},
+      {name:`본문 디자인(조판) — ${colorLabel} (페이지당)`, qty:pages, unit:typesetUnit},
+      {name:'표지 디자인 — 시안 3개·수정 2회 무료·서점별 사이즈 변환 파일 납품', qty:1, unit:800000},
+      {name:'종이책 제작 — 인쇄·후가공·제본·창고 보관·온오프라인 서점 등록 (인쇄 부수당)', qty:run, unit:0},
+      {name:'마케팅(프리미엄) — SNS·보도자료·온라인 서점 프로모션·인플루언서·북트레일러 (별도 협의)', qty:1, unit:0},
+      {name:'아마존 킨들 출간 대행 (별도 협의)', qty:1, unit:0},
+      {name:'사후 관리 서비스 — 저자 대시보드·정기 리포트·마케팅 컨설팅 (월, 최소 12개월)', qty:12, unit:30000},
+    ];
+  }
+  // 반기획 — 국내 인쇄 제작
   return [
     {name:'표준 패키지(전자책)', qty:1, unit:1000000},
     {name:'전문편집', qty:pages, unit:EDIT_UNIT},
@@ -3704,7 +3774,8 @@ const AMAZON_OPTIONS = [
   {name:'CARE 패키지(출간 후 지속 관리)', unit:200000},
 ];
 
-const DEFAULT_TERMS = '1. 결제조건: 계약금 30%, 중도금 40%, 잔금 30%\n2. 편집 후 최종 페이지수와 제작 사양에 따라 편집료·조판료·인쇄비·용지비가 확정됩니다.\n3. 용지비는 인쇄 시점의 펄프 가격에 따라 조정될 수 있습니다.';
+const DEFAULT_TERMS = '1. 결제조건: 계약금 30%(계약 후 7일 이내) · 중도금 40%(편집 완료 후 7일 이내) · 잔금 30%(최종 제작물 완료 후 출간·배포 전)\n2. 편집 완료 후 확정 페이지수·사양에 따라 편집료·조판료·인쇄비·용지비가 재산정됩니다.\n3. 용지비는 인쇄 시점 펄프 가격에 따라 조정될 수 있습니다.';
+const DEFAULT_TERMS_SELF = '1. 결제조건: 계약금 30%(계약 체결일로부터 7일 이내) · 중도금 40%(최종 편집본 완료일로부터 7일 이내) · 잔금 30%(최종 제작물 완료 후 출간·배포 전)\n2. 계약금은 계약 시점 견적 기준, 중도금·잔금은 편집 완료 후 확정 금액 기준으로 재산정합니다.\n3. 표준 패키지: 전자책 제작·ISBN·유통 등록·정산 관리·기본 마케팅 포함.\n4. 전문 편집·감수·본문 디자인·표지·종이책 제작·마케팅(프리미엄)은 선택 항목이며, 금액이 0원인 항목은 미선택(제외) 또는 별도 협의 항목입니다.\n5. AI 활용 원고는 계약 전 서면 고지 의무가 있으며, 내용에 관한 모든 책임은 저자에게 있습니다.\n6. 해지 전 수행된 서비스 비용은 환급되지 않습니다.\n※ 상기 금액은 부가세 별도입니다.';
 const DEFAULT_TERMS_AMAZON = '1. 원고 책임\n저자가 제공한 원고의 오탈자, 사실 오류, 저작권 침해, 법적 문제 등 내용에 대한 모든 책임은 저자에게 있으며, 에이콘온은 원고의 내용을 검토하거나 보증하지 않는다.\n\n2. 서비스 범위\n에이콘온은 견적서에 명시된 항목에 한하여 아마존 KDP 출판 대행 서비스를 제공하며, 명시되지 않은 작업은 별도 비용이 발생한다. AMS 광고는 클릭당 과금(CPC) 방식으로 운영되며, 서비스 비용에 광고비 60만 원이 포함되어 있다. 이를 초과하여 발생하는 광고비는 저자가 부담하며, 에이콘온은 광고비 지출 결과에 대해 특정 성과를 보증하지 않는다.\n\n3. 환불\nKDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않는다.\n\n※ 상기 금액은 VAT 별도이며, 원고 분량에 따라 조정될 수 있습니다.';
 
 // ── 합계 계산 ───────────────────────────────────────────────────────
@@ -3754,7 +3825,7 @@ function openQuoteEditor(proposalId, quoteId){
       title:(p&&p.title)||'', pages:guessPages, listPrice:(p&&p.price)||'', color:'1', trim:'188*235mm',
       runCount:1000, pubDate:'원고 완성 후 3개월 이내', semiShare:50,
       wordOver:0, korChars:0, charts:0, figures:0,
-      vatRate:0.1, terms:DEFAULT_TERMS, memo:'', status:'draft',
+      vatRate:0.1, terms: type==='amazon' ? DEFAULT_TERMS_AMAZON : type==='self' ? DEFAULT_TERMS_SELF : DEFAULT_TERMS, memo:'', status:'draft',
       items: genQuoteItems(type,{pages:guessPages,runCount:1000,color:'1'}),
       createdAt:new Date().toISOString(), updatedAt:new Date().toISOString(),
     };
@@ -3772,7 +3843,7 @@ function qAddAmazonOpt(idx){ if(idx===''||idx==null)return; const o=AMAZON_OPTIO
 
 function onQuoteTypeChange(){
   const t=currentQuote.type;
-  currentQuote.terms = (t==='amazon')?DEFAULT_TERMS_AMAZON:DEFAULT_TERMS;
+  currentQuote.terms = t==='amazon' ? DEFAULT_TERMS_AMAZON : t==='self' ? DEFAULT_TERMS_SELF : DEFAULT_TERMS;
   // 출판 종류 변경 시 기본 항목을 해당 종류 기준으로 재생성
   currentQuote.items = genQuoteItems(t,currentQuote);
 }
@@ -3844,6 +3915,21 @@ function renderQuoteEditor(){
         <div class="field"><label>그림 수</label><input type="number" value="${q.figures||0}" oninput="qf('figures',this.value)"></div>
         <div class="field"><label>초과 원고 단위(1,000단어)</label><input type="number" value="${q.wordOver||0}" oninput="qf('wordOver',this.value)"></div>
         <div class="field" style="grid-column:span 2;justify-content:flex-end"><button class="btn btn-ghost btn-sm" style="align-self:flex-end" onclick="qAmzAutoWords()">🔢 자수 기준 초과 단위 자동 계산</button></div>
+      `:q.type==='self'?`
+        <div class="field"><label>예상 페이지</label><input type="number" value="${q.pages||0}" oninput="qf('pages',this.value)"></div>
+        <div class="field"><label>본문 도수</label><select onchange="qf('color',this.value)">${opt('1',q.color)}${opt('2',q.color)}${opt('4',q.color)}</select></div>
+        <div class="field"><label>예상 정가(원)</label><input type="number" value="${q.listPrice||''}" oninput="qf('listPrice',this.value)"></div>
+        <div class="field"><label>예상 출간일</label><input value="${q.pubDate||''}" oninput="qf('pubDate',this.value)" placeholder="원고 제출 후 약 3개월"></div>
+        <div class="field"><label>종이책 인쇄 부수</label><input type="number" value="${q.runCount||0}" oninput="qf('runCount',this.value)" placeholder="0이면 전자책만 제작"></div>
+        <div class="field"><label>판형</label><input value="${q.trim||''}" oninput="qf('trim',this.value)" placeholder="예: 신국판(152×224mm)"></div>
+        <div class="field" style="grid-column:span 2"><label>제본 방식 / 표지 코팅</label><input value="${q.binding||''}" oninput="qf('binding',this.value)" placeholder="예: 무선제본 / 무광 코팅"></div>
+        <div class="field" style="grid-column:span 2"><label>AI 활용 여부</label>
+          <select onchange="qf('aiUsage',this.value)">
+            <option value="none"${(q.aiUsage||'none')==='none'?' selected':''}>없음</option>
+            <option value="partial"${q.aiUsage==='partial'?' selected':''}>부분 활용 (AI 보조)</option>
+            <option value="full"${q.aiUsage==='full'?' selected':''}>전부 AI 생성</option>
+          </select>
+        </div>
       `:`
         <div class="field"><label>예상 페이지</label><input type="number" value="${q.pages||0}" oninput="qf('pages',this.value)"></div>
         <div class="field"><label>본문 도수</label><select onchange="qf('color',this.value)">${opt('1',q.color)}${opt('2',q.color)}${opt('4',q.color)}</select></div>
@@ -3855,7 +3941,10 @@ function renderQuoteEditor(){
       `}
     </div>
     ${q.type==='semi'?`<div style="font-size:11px;color:var(--rose);margin-top:8px">※ 반기획: 아래 항목 총 제작비 중 <strong>${q.semiShare||50}%</strong>를 저자가 부담합니다.</div>`:''}
-    ${isAmazon?`<div style="font-size:11px;color:var(--text3);margin-top:8px">※ 인쇄 항목 없음 · 결제조건 협의 후 결정. 기본 제공 영문 3만 단어(한글 약 7.5만 자)·시각자료 5개 이내 포함, 초과분만 가산(누진). 시각자료 5개 초과분은 1개당 ${won(AMZ_IMG_UNIT)}원. ‘패키지+옵션 10% 할인’ 적용 시 소계에서 10% 차감됩니다.</div>`:''}
+    ${q.type==='self'?`<div style="font-size:11px;color:#0A7860;margin-top:8px;padding:8px 10px;background:#E0F5EE;border-radius:6px;line-height:1.7"><strong>📋 자비출판 선택 항목 안내</strong><br>
+      표준 패키지(100만 원)는 기본 포함. 단가 0원 항목은 미선택 또는 별도 협의 항목입니다.<br>
+      단가 참고: 편집 5,000원/p · 감수 2,000원/p · 조판 흑백 5,000원/p · 2도 6,000원/p · 컬러 7,000원/p · 표지 800,000원 · 사후관리 30,000원/월(최소 12개월).</div>`:''}
+    ${isAmazon?`<div style="font-size:11px;color:var(--text3);margin-top:8px">※ 인쇄 항목 없음 · 결제조건 협의 후 결정. 기본 제공 영문 3만 단어(한글 약 7.5만 자)·시각자료 5개 이내 포함, 초과분만 가산(누진). 시각자료 5개 초과분은 1개당 ${won(AMZ_IMG_UNIT)}원. '패키지+옵션 10% 할인' 적용 시 소계에서 10% 차감됩니다.</div>`:''}
   </div>
 
   <div class="detail-section"><h4>🧾 견적 항목 <span style="font-weight:400;color:var(--text3);font-size:11px">(금액 = 수량 × 단가, 자동)</span></h4>
@@ -4153,6 +4242,14 @@ function printQuote(proposalId,quoteId){
        `페이지: ${q.pages||'-'}쪽`,
        (q.korChars?`한글 약 ${won(q.korChars)}자`:'')+((q.charts||q.figures)?` (도표 ${q.charts||0}개, 그림 ${q.figures||0}개)`:''),
        q.listPrice?`예상 정가: ${won(q.listPrice)}원`:'']
+    : q.type==='self'
+    ? [`제목: ${q.title||'-'}`,`저자: ${q.cName||'-'}`,q.cJob?`현 직업: ${q.cJob}`:'',
+       `예상 페이지: ${q.pages||'-'}페이지`, `본문: ${q.color}도`,
+       q.trim?`판형: ${q.trim}`:'', q.binding?`제본·코팅: ${q.binding}`:'',
+       q.runCount?`종이책 인쇄 부수: ${won(q.runCount)}부`:'전자책만 제작',
+       q.listPrice?`예상 정가: ${won(q.listPrice)}원`:'',
+       q.pubDate?`예상 출간: ${q.pubDate}`:'원고 제출 후 약 3개월',
+       q.aiUsage&&q.aiUsage!=='none'?`AI 활용: ${q.aiUsage==='partial'?'부분 활용':'전부 생성'}`:'']
     : [`제목: ${q.title||'-'}`,`저자: ${q.cName||'-'}`,q.cJob?`현 직업: ${q.cJob}`:'',
        `예상 페이지: ${q.pages||'-'}페이지`, q.listPrice?`예상 정가: ${won(q.listPrice)}원`:'',
        `본문 컬러: ${q.color}도`, `판형: ${q.trim||'-'}`, `인쇄 부수: ${won(q.runCount)}부`, q.pubDate?`예상 출간일: ${q.pubDate}`:'']
@@ -4217,7 +4314,7 @@ function printQuote(proposalId,quoteId){
         <tr><td>부가세 (${Math.round((q.vatRate??0.1)*100)}%)</td><td>${won(t.vat)}</td></tr>
         <tr class="total"><td>합계</td><td>${won(t.total)}</td></tr>
       </table>
-      ${q.type==='amazon'?'':`<div class="pq-pay"><div><span>계약금 30%</span><span>${won(t.deposit)}원</span></div><div><span>중도금 40%</span><span>${won(t.middle)}원</span></div><div><span>잔금 30%</span><span>${won(t.balance)}원</span></div></div>`}
+      ${q.type==='amazon'?'':`<div class="pq-pay"><div><span>계약금 30%</span><span>${won(t.deposit)}원</span></div><div><span>중도금 40%</span><span>${won(t.middle)}원</span></div><div><span>잔금 30%</span><span>${won(t.balance)}원</span></div>${q.type==='self'?`<div style="font-size:9.5px;color:#888;margin-top:3px">중도금·잔금은 편집 완료 후 확정 금액 기준 재산정</div>`:''}</div>`}
       ${q.pBank?`<div class="pq-bank">입금계좌: ${esc(q.pBank)}</div>`:''}
       </div>
     </div>
@@ -4241,7 +4338,7 @@ bindOverlayClose('provider-modal', function(){ document.getElementById('provider
 //  · 계약 저장 시 프로젝트 관리에 자동 동기화(계약 단계 반영)
 // ═══════════════════════════════════════════════════════════════════
 const CTYPES = {
-  self:   {label:'자비출판',        short:'자비',   cls:'qt-self',   color:'#0A7860', doc:'전자 자비출판 대행 계약서'},
+  self:   {label:'자비출판',        short:'자비',   cls:'qt-self',   color:'#0A7860', doc:'자비출판 서비스 계약서'},
   semi:   {label:'반기획출판',      short:'반기획', cls:'qt-semi',   color:'#8A1A2A', doc:'반기획 출판 계약서'},
   gihoek: {label:'기획출판',        short:'기획',   cls:'qt-agency', color:'#1560B8', doc:'전자출판 배타적발행권 및 출판권 설정계약서'},
   amazon: {label:'아마존 KDP 대행', short:'아마존', cls:'qt-amazon', color:'#D4943A', doc:'아마존 KDP 출판 대행 계약서'},
@@ -4385,14 +4482,60 @@ function renderContractEditor(){
 
 function renderContractFinanceFields(c){
   if(c.type==='self'){
-    return `<div class="detail-section"><h4>💵 비용 (자비출판 대행)</h4>
+    const editTotal = Math.round((+c.editPages||0)*5000);
+    const reviewTotal = Math.round((+c.reviewPages||0)*2000);
+    const typesetColor = String(c.typesetColor||'1');
+    const typesetUnit = typesetColor==='4'?7000:typesetColor==='2'?6000:5000;
+    const typesetTotal = Math.round((+c.typesetPages||0)*typesetUnit);
+    const coverAmt = +c.coverDesign||0;
+    const printAmt = +c.printCost||0;
+    const mktAmt = +c.mktPremium||0;
+    const kdpAmt = +c.kdpCost||0;
+    const afterSvcMonths = +c.afterSvcMonths||12;
+    const afterSvcUnit = +c.afterSvcUnit||30000;
+    const afterSvcTotal = afterSvcMonths * afterSvcUnit;
+    const selectedTotal = editTotal+reviewTotal+typesetTotal+coverAmt+printAmt+mktAmt+kdpAmt+afterSvcTotal;
+    const grandTotal = (+c.baseAmount||0) + selectedTotal;
+    const dep=Math.round(grandTotal*0.3), mid=Math.round(grandTotal*0.4), bal=grandTotal-dep-mid;
+    return `<div class="detail-section"><h4>💵 서비스 비용 (자비출판)</h4>
       <div class="q-spec">
-        <div class="field"><label>표준 패키지(원)</label><input type="number" value="${c.baseAmount||0}" oninput="cf('baseAmount',this.value)"></div>
-        <div class="field"><label>월 관리비(원)</label><input type="number" value="${c.monthlyFee||0}" oninput="cf('monthlyFee',this.value)"></div>
-        <div class="field"><label>제작 형식</label><input value="${c.format||''}" oninput="cf('format',this.value)"></div>
-        <div class="field"><label>총 소요기간</label><input value="원고 제출 후 3개월" disabled></div>
+        <div class="field"><label>표준 패키지(원)</label><input type="number" value="${c.baseAmount||1000000}" oninput="cf('baseAmount',this.value)"></div>
+        <div class="field"><label>AI 활용 여부</label>
+          <select onchange="cf('aiUsage',this.value)">
+            <option value="none"${(c.aiUsage||'none')==='none'?' selected':''}>없음</option>
+            <option value="partial"${c.aiUsage==='partial'?' selected':''}>부분 활용(AI 보조)</option>
+            <option value="full"${c.aiUsage==='full'?' selected':''}>전부 AI 생성</option>
+          </select>
+        </div>
+        <div class="field"><label>전문 편집 (페이지 수)</label><input type="number" value="${c.editPages||0}" oninput="cf('editPages',this.value)" placeholder="0이면 미선택"></div>
+        <div class="field" style="align-self:center;padding-top:20px;font-size:11px;color:var(--text3)">× 5,000원 = ${won(editTotal)}원</div>
+        <div class="field"><label>전문 감수 (페이지 수)</label><input type="number" value="${c.reviewPages||0}" oninput="cf('reviewPages',this.value)" placeholder="0이면 미선택"></div>
+        <div class="field" style="align-self:center;padding-top:20px;font-size:11px;color:var(--text3)">× 2,000원 = ${won(reviewTotal)}원</div>
+        <div class="field"><label>본문 디자인 (페이지 수)</label><input type="number" value="${c.typesetPages||0}" oninput="cf('typesetPages',this.value)" placeholder="0이면 미선택"></div>
+        <div class="field"><label>본문 도수</label>
+          <select onchange="cf('typesetColor',this.value)">
+            <option value="1"${typesetColor==='1'?' selected':''}>1도 흑백 (5,000원/p)</option>
+            <option value="2"${typesetColor==='2'?' selected':''}>2도 (6,000원/p)</option>
+            <option value="4"${typesetColor==='4'?' selected':''}>4도 컬러 (7,000원/p)</option>
+          </select>
+        </div>
+        <div class="field"><label>표지 디자인(원)</label><input type="number" value="${c.coverDesign||0}" oninput="cf('coverDesign',this.value)" placeholder="800,000 (시안 3개·수정 2회)"></div>
+        <div class="field" style="align-self:center;padding-top:20px;font-size:11px;color:var(--text3)">조판 소계: ${won(typesetTotal)}원</div>
+        <div class="field"><label>종이책 제작비(원)</label><input type="number" value="${c.printCost||0}" oninput="cf('printCost',this.value)" placeholder="0이면 미선택·별도협의"></div>
+        <div class="field"><label>마케팅(프리미엄, 원)</label><input type="number" value="${c.mktPremium||0}" oninput="cf('mktPremium',this.value)" placeholder="0이면 미선택·별도협의"></div>
+        <div class="field"><label>아마존 킨들 대행(원)</label><input type="number" value="${c.kdpCost||0}" oninput="cf('kdpCost',this.value)" placeholder="0이면 미선택·별도협의"></div>
+        <div class="field"><label>사후관리 월 단가(원)</label><input type="number" value="${c.afterSvcUnit||30000}" oninput="cf('afterSvcUnit',this.value)"></div>
+        <div class="field"><label>사후관리 개월 수</label><input type="number" value="${c.afterSvcMonths||12}" oninput="cf('afterSvcMonths',this.value)" placeholder="0이면 미선택, 최소 12개월"></div>
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-top:8px">지급: 계약금 30%(계약 후 7일 내) · 중도금 40%(완성 후) · 잔금 30%(판매 시작 후). 월 관리비 최소 12개월.</div></div>`;
+      <div style="margin-top:10px;padding:10px 12px;background:var(--nav);border-radius:8px;font-size:12px;color:#fff;display:flex;gap:16px;flex-wrap:wrap">
+        <span>기본 패키지: <b>${won(c.baseAmount||1000000)}원</b></span>
+        <span>선택 서비스 합계: <b>${won(selectedTotal)}원</b></span>
+        <span style="color:var(--gold2)">총액(부가세 별도): <b>${won(grandTotal)}원</b></span>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px;line-height:1.7">
+        지급: 계약금 30%(계약 후 7일 이내) = ${won(dep)}원 · 중도금 40%(편집 완료 후) = ${won(mid)}원 · 잔금 30%(출간·배포 전) = ${won(bal)}원<br>
+        ※ 중도금·잔금은 편집 완료 후 확정 금액 기준 재산정 / 사후관리 최소 12개월, 월말 지급
+      </div></div>`;
   }
   if(c.type==='semi'){
     const author=Math.round((+c.totalCost||0)*((+c.authorShare||50)/100));
@@ -4682,14 +4825,43 @@ function clausesHTML(c){
 function defaultClauses(c){
   const t=c.type;
   if(t==='self'){
+    const editPages=+c.editPages||0, reviewPages=+c.reviewPages||0, typesetPages=+c.typesetPages||0;
+    const typesetColor=String(c.typesetColor||'1');
+    const typesetUnit=typesetColor==='4'?7000:typesetColor==='2'?6000:5000;
+    const colorLabel=typesetColor==='4'?'4도(컬러)':typesetColor==='2'?'2도':'1도(흑백)';
+    const editAmt=editPages*5000, reviewAmt=reviewPages*2000, typesetAmt=typesetPages*typesetUnit;
+    const coverAmt=+c.coverDesign||0, printAmt=+c.printCost||0, mktAmt=+c.mktPremium||0, kdpAmt=+c.kdpCost||0;
+    const afterMonths=+c.afterSvcMonths||0, afterUnit=+c.afterSvcUnit||30000, afterAmt=afterMonths*afterUnit;
+    const selectedTotal=editAmt+reviewAmt+typesetAmt+coverAmt+printAmt+mktAmt+kdpAmt+afterAmt;
+    const grandTotal=(+c.baseAmount||1000000)+selectedTotal;
+    const dep=Math.round(grandTotal*0.3), mid=Math.round(grandTotal*0.4), bal=grandTotal-dep-mid;
+    const aiLabel={none:'없음',partial:'부분 활용(AI 보조)',full:'전부 AI 생성'}[c.aiUsage||'none']||'없음';
+    // 선택 서비스 목록 문자열
+    const svcItems=[];
+    svcItems.push(`기본 패키지(전자책 제작·ISBN·유통·정산·기본 마케팅): ${won(c.baseAmount||1000000)}원`);
+    if(editPages>0) svcItems.push(`전문 편집: ${editPages}페이지 × 5,000원 = ${won(editAmt)}원`);
+    if(reviewPages>0) svcItems.push(`전문 감수: ${reviewPages}페이지 × 2,000원 = ${won(reviewAmt)}원`);
+    if(typesetPages>0) svcItems.push(`본문 디자인(${colorLabel}): ${typesetPages}페이지 × ${won(typesetUnit)}원 = ${won(typesetAmt)}원`);
+    if(coverAmt>0) svcItems.push(`표지 디자인(시안 3개·수정 2회): ${won(coverAmt)}원`);
+    if(printAmt>0) svcItems.push(`종이책 제작(인쇄·제본·창고·서점등록): ${won(printAmt)}원`);
+    if(mktAmt>0) svcItems.push(`마케팅(프리미엄): ${won(mktAmt)}원`);
+    if(kdpAmt>0) svcItems.push(`아마존 킨들 출간 대행: ${won(kdpAmt)}원`);
+    if(afterMonths>0) svcItems.push(`사후 관리 서비스: 월 ${won(afterUnit)}원 × ${afterMonths}개월 = ${won(afterAmt)}원`);
+    const svcList=svcItems.join('\n· ');
+    const hasAfterSvc=afterMonths>0;
     return [
-      {h:'제1조 (계약의 목적)', p:'본 계약은 저작자의 저작물을 전자책(EPUB) 등으로 발행하기 위하여 출판사가 자비출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.'},
-      {h:'제2조 (제공 서비스 및 비용)', p:'표준 패키지: '+won(c.baseAmount)+'원 (전자책 제작·등록·유통 대행 포함) / 월 관리비 '+won(c.monthlyFee)+'원(저자 플랫폼 사용, 최소 12개월).\n선택 서비스(별도 비용): 전문 편집(페이지당), 전문 감수(2,000원/페이지), 커스텀 표지(800,000원), 아마존 킨들 출간(2,000,000원), 종이책 제작 등은 특약사항에 따른다.'},
-      {h:'제3조 (비용 및 지급 조건)', p:'계약금 30%(계약 후 7일 이내) · 중도금 40%(도서 완성 후) · 잔금 30%(판매 시작 후). 월 관리비는 매월 말일 지급.'},
-      {h:'제4조 (제작 일정)', p:'총 소요 기간은 원고 제출 후 3개월로 한다.'},
-      {h:'제5조 (사후 관리)', p:'저자 전용 대시보드(실시간 판매·인세 현황), 월간 판매·인세 리포트, 월 1회 마케팅 컨설팅을 제공한다.'},
-      {h:'제6조 (저작권·의무·해지·면책)', p:'원고의 모든 저작권은 저작자에게 귀속한다. 출판사는 약정 서비스의 충실한 이행과 일정(3개월)·품질을 보장하며, 원고 내용으로 인한 법적 분쟁·시장 상황·플랫폼 정책 변경·불가항력에 대하여는 면책된다. 손해배상 책임은 계약 금액 범위 내로 제한한다.'},
-      {h:'제7조 (기타)', p:'비밀유지·권리양도 금지·개인정보 보호를 준수하며, 분쟁은 서울중앙지방법원을 관할로 한다. 명시되지 아니한 사항은 양 당사자가 협의하여 정한다.'}
+      {h:'제1조 (계약의 목적)', p:'본 계약은 저작자의 창작한 저작물에 대하여 출판사(주식회사 에이콘온)가 자비출판에 필요한 제반 서비스를 제공하고, 이에 따른 양 당사자의 권리와 의무를 명확히 정함을 목적으로 한다.'},
+      {h:'제2조 (대상 도서 정보)', p:`도서명(가제): ${c.title||'___________'}\n형식: ${c.format||'전자책(PDF·ePub) / 종이책'}\nAI 활용 여부: ${aiLabel}`},
+      {h:'제3조 (서비스의 내용 및 비용)', p:`출판사는 저작자에게 아래 서비스를 제공한다.\n· ${svcList}\n\n총 계약금액: ${won(grandTotal)}원 (부가세 별도)\n\n비고: 본문 디자인·인쇄 단가는 편집 완료 후 확정 페이지수 기준으로 재산정하며, 용지비는 인쇄 시점 펄프 가격에 따라 조정될 수 있다.`},
+      {h:'제4조 (비용 및 지급 조건)', p:`① 계약금 30%: ${won(dep)}원 — 계약 체결일로부터 7일 이내 지급\n② 중도금 40%: ${won(mid)}원 — 최종 편집본 완료일로부터 7일 이내 지급\n③ 잔금 30%: ${won(bal)}원 — 최종 제작물 완료 후 출간·배포 전까지 지급\n※ 계약금은 계약 시점 견적 기준이며, 중도금·잔금은 편집 완료 후 확정 최종 금액 기준으로 재산정한다.`+(hasAfterSvc?`\n④ 사후 관리 서비스 월 이용료: ${won(afterUnit)}원 (출간 익월부터, 최소 ${afterMonths}개월, 매월 말일 지급)`:'')+'\n\n전체 일정, 업무 범위 및 최종 금액은 제출한 제안서(견적번호 참조)를 기준으로 확정한다.'},
+      {h:'제5조 (저작권 및 인세)', p:'① 위 저작물에 대한 저작권은 저작자에게 귀속된다. 저작자는 본 계약 기간 동안 출판사에게 전자책 발행을 위한 배타적발행권 및 종이책 발행을 위한 출판권을 허락한다.\n② 전자책 인세: 플랫폼 수수료·유통 수수료 등 공제 후 순수익의 60%를 저작자에게 지급한다.\n③ 종이책 인세(종이책 제작 선택 시): 정가의 50%를 인세율로 적용하며, 출고·반품·재고 정산 자료 기준 부수로 산정한다. 납본·증정·홍보 부수는 제외한다.\n④ 인세 정산: 분기별 정산, 정산 분기 익월 25일 지급. 지급 총액이 10,000원 미만이면 다음 정산에 합산한다.'},
+      {h:'제6조 (평균 제작 일정)', p:'총 예상 소요 기간: 편집 가능 원고 제출 후 약 3개월\n· 원고 기획 검토: 약 2주 (기획 방향성 및 일정 확정)\n· 편집 및 감수: 약 4주 (선택 서비스에 따라 진행, 미선택 시 생략)\n· 디자인 및 레이아웃: 약 3주 (템플릿 적용 또는 커스텀 디자인)\n· 전자책 파일 제작: 약 2주 (플랫폼별 최적화 파일 생성)\n· 전자책 검수·출간·유통: 약 2주 (검수 및 플랫폼 등록)\n· 종이책 인쇄·출간·유통: 약 3주 추가 (종이책 선택 시)\n※ 실제 일정은 원고 분량·편집 범위·저자 검토 속도·인쇄 일정·유통사 등록 일정에 따라 달라질 수 있으며, 일부 단계는 병행 진행된다.'},
+      {h:'제7조 (저작자의 의무)', p:'① 저작자는 완성된 최종 원고를 출판사가 지정하는 형식에 맞추어 제공하여야 한다.\n② 저작자는 본 계약 제4조에서 정한 서비스 비용을 약정된 일정에 따라 지급하여야 한다.\n③ 저작자는 원고 검토·디자인 확인 등 출판사의 확인 및 검토 요청에 지체 없이 성실하게 협조하여야 한다.\n④ 저작자는 제공한 저작물이 제3자의 저작권·초상권·명예 등 어떠한 권리도 침해하지 않는 독창적인 창작물임을 보증한다.\n⑤ AI 활용 고지: 생성형 AI를 활용한 경우 계약 체결 전 서면으로 고지하여야 하며, AI 생성물의 저작권·표절·사실 오류 등 모든 책임은 저작자에게 있다.'},
+      {h:'제8조 (출판사의 의무)', p:'① 약정된 서비스를 충실하게 이행하여야 한다.\n② 합의된 제작 일정(기본 3개월)을 준수하여야 한다.\n③ 업계 표준에 부합하도록 제작물 품질을 보장한다.\n④ 확인 가능한 판매 및 정산 자료를 기준으로 인세 정산 자료를 제공하여야 한다.'},
+      {h:'제9조 (배타적발행권 및 출판권 존속기간)', p:'① 출판사가 설정받은 위 저작물의 배타적발행권 및 출판권은 계약 체결일부터 최초 발행일 이후 2년이 되는 날까지 효력을 가진다.\n② 저작자 또는 출판사는 계약기간 만료일 3개월 전까지 서면으로 계약 종료를 통보할 수 있으며, 통보가 없는 경우 동일한 조건으로 2년 자동 연장된다.'},
+      {h:'제10조 (계약 종료·해지 시 처리)', p:'① 계약 종료 또는 해지 시, 출판사는 7영업일 이내에 각 전자책 서비스 플랫폼에 서비스 중지를 요청하여야 한다.\n② 종이책 재고는 계약 종료일로부터 1개월 이내에 저작자가 인수하여야 하며, 운반비는 저작자 부담이다. 60일 초과 미인수 시 출판사가 폐기할 수 있다.\n③ 해지 전 수행된 서비스 비용(편집·감수·디자인·인쇄 등)은 환급하지 않는다.'},
+      {h:'제11조 (손해배상 및 면책)', p:'① 출판사의 면책 사항: 원고 내용으로 인한 법적 분쟁, 시장 상황에 따른 판매 부진, 플랫폼 정책 변경, 천재지변 등 불가항력 사유.\n② 손해배상 책임은 원칙적으로 본 계약 금액 범위 내로 제한한다. 다만 고의·중대한 과실, 저작권·초상권·개인정보 침해, AI 활용 사실의 허위 고지로 인한 손해는 그러하지 아니하다.'},
+      {h:'제12조 (기타)', p:'① 출판사는 저작자의 원고 및 개인정보를 계약 목적 외에 사용하지 않으며, 출간 전까지 원고 내용의 비밀을 유지한다.\n② 본 계약상의 권리·의무는 상대방의 서면 동의 없이 제3자에게 양도할 수 없다.\n③ 본 계약과 관련된 분쟁은 서울중앙지방법원을 관할 법원으로 한다.\n④ 명시되지 아니한 사항은 양 당사자가 협의하여 정한다.'}
     ];
   }
   if(t==='semi'){
