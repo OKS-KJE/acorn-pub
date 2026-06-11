@@ -259,6 +259,27 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .ctab-panel{display:none;padding:0;}
 .ctab-panel.active{display:block;}
 .ctab-score-summary{display:flex;gap:6px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--s2);}
+/* ── RIGHTS ── */
+.rights-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);margin-bottom:14px;overflow:hidden;}
+.rights-card-hdr{padding:13px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:var(--s2);}
+.rights-card-body{padding:16px 18px;}
+.rights-stage-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;}
+.rights-stat{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;cursor:pointer;transition:.15s;min-width:80px;}
+.rights-stat:hover{border-color:var(--blue);transform:translateY(-1px);}
+.rights-stat-n{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--blue);}
+.rights-stat-l{font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;}
+.spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:760px){.spec-grid{grid-template-columns:1fr 1fr;}}
+.spec-section{background:var(--s2);border-radius:var(--r);padding:13px 15px;border-left:3px solid var(--blue);}
+.spec-section h5{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:9px;}
+.spec-row{display:flex;flex-direction:column;gap:4px;margin-bottom:9px;}
+.spec-row label{font-size:10px;font-weight:700;color:var(--text3);}
+.spec-row select,.spec-row input,.spec-row textarea{border:1.5px solid var(--border);border-radius:5px;padding:6px 9px;font-family:'Pretendard',sans-serif;font-size:12px;color:var(--text);background:#fff;width:100%;}
+.spec-row select:focus,.spec-row input:focus,.spec-row textarea:focus{outline:none;border-color:var(--blue);}
+.rights-sched-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.rights-sched-row:last-child{border-bottom:none;}
+.rights-sched-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;font-size:10px;}
+.rights-sched-check.done{background:var(--ok);border-color:var(--ok);color:#fff;}
 
 </style>
 </head>
@@ -295,6 +316,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="menu-item" onclick="showView('quotes')" id="mi-quotes">🧾 견적서 관리</div>
     <div class="menu-item" onclick="showView('contracts')" id="mi-contracts">📜 계약서 관리</div>
     <div class="menu-item" onclick="showView('projects')" id="mi-projects">📅 프로젝트 관리</div>
+    <div class="menu-item" onclick="showView('rights')" id="mi-rights">©️ 판권 관리</div>
     <div class="menu-item" onclick="showView('sales')" id="mi-sales">💰 판매·손익 관리</div>
     <div class="menu-divider"></div>
     <div class="menu-item" onclick="showView('guides')" id="mi-guides">📚 참고자료 · 가이드</div>
@@ -616,6 +638,48 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
       <button class="modal-close" onclick="closeProjModal()">×</button>
     </div>
     <div class="modal-body" id="pm-body"></div>
+  </div>
+</div>
+
+<!-- ══ RIGHTS (판권 관리) ══ -->
+<div class="view" id="view-rights">
+  <div class="page-hdr">
+    <div><h2>©️ 판권 관리</h2><div class="sub">출판 계약 도서의 판권 진행 현황 및 도서 사양 관리</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button class="btn btn-ghost btn-sm" onclick="renderRights()">🔄 새로고침</button>
+    </div>
+  </div>
+
+  <!-- 현황 요약 -->
+  <div id="rights-overview"></div>
+
+  <!-- 필터·검색 -->
+  <div class="list-filters" style="margin-bottom:12px">
+    <input class="search-input" type="text" id="rights-search" placeholder="🔍 도서명·저자명 검색..." oninput="renderRights()">
+    <select class="filter-select" id="rights-filter-stage" onchange="renderRights()">
+      <option value="">전체 진행 단계</option>
+      <option value="negotiation">협의중</option>
+      <option value="contracted">계약완료</option>
+      <option value="editing">편집중</option>
+      <option value="production">제작중</option>
+      <option value="published">출간완료</option>
+    </select>
+    <span id="rights-count" style="font-size:12px;color:var(--text3);margin-left:auto"></span>
+  </div>
+
+  <!-- 도서 목록 -->
+  <div id="rights-wrap"></div>
+</div>
+
+<!-- RIGHTS DETAIL MODAL -->
+<div class="modal-overlay" id="rights-modal">
+  <div class="modal" style="width:min(1020px,97vw)">
+    <div class="modal-hdr">
+      <h3 id="rm-title">판권 관리 — 도서 사양</h3>
+      <button class="btn btn-primary btn-sm" onclick="saveRightsData()" style="margin-left:auto;margin-right:8px;">💾 저장</button>
+      <button class="modal-close" onclick="closeRightsModal()">×</button>
+    </div>
+    <div class="modal-body" id="rm-body"></div>
   </div>
 </div>
 
@@ -2626,7 +2690,14 @@ const GUIDE_COMMON = {
     {h:'분량·구성', items:['A4 환산 100~120매(단행본 약 250~300페이지)가 기준입니다.','페이지 수보다 내용 충실도가 우선이며, 300~500쪽 내에서 균형을 맞춥니다.','각 장마다 요약 또는 인용을 삽입할 수 있습니다.']},
     {h:'문장·표기', items:['간결하고 주어·서술어가 명확한 문장. 과도한 수식어·중복은 피합니다.','외래어: 한글 표기 후 괄호 병기 — 마케팅(marketing).','약어: 첫 사용 시 풀네임과 함께 — AIDD(Artificial Intelligence for Drug Discovery), 이후 약어만 사용.','강조는 큰따옴표 또는 진한 글씨(이탤릭·밑줄 자제). 4~6줄마다 단락 구분, 시제는 현재 시제 원칙.']},
     {h:'이미지·코드·인용', items:['사진·표는 별도 첨부하고 본문에는 “그림 1-1”, “표 2-1”로 표기.','이미지 원본은 고해상도(JPG·PNG, 300dpi 이상)로 별도 제출 필수.','인용은 (저자명, 연도) 또는 각주 방식, 참고문헌은 별도 문서로 정리.','소스코드는 에이콘 홈페이지·깃허브로 제공(필요 시 다른 방식 협의 가능).']},
-    {h:'제출·일정·색인', items:['제출: 이메일 또는 구글 드라이브 폴더(제공 링크).','전체 원고 마감일과 장당 중간 점검 일정을 협의해 확정합니다.','찾아보기(색인)는 조판이 끝나 페이지가 확정된 뒤 편집자 안내에 따라 정리합니다(처음부터 작성하면 페이지 수정 부담이 큼).']}
+    {h:'제출·일정·색인', items:['제출: 이메일 또는 구글 드라이브 폴더(제공 링크).','전체 원고 마감일과 장당 중간 점검 일정을 협의해 확정합니다.','찾아보기(색인)는 조판이 끝나 페이지가 확정된 뒤 편집자 안내에 따라 정리합니다(처음부터 작성하면 페이지 수정 부담이 큼).']},
+    {h:'📌 무료 서체 안내 (원고·편집 시 활용)', items:[
+      '<strong>교보문고 손글씨 서체</strong> — 교보문고에서 무료 제공하는 손글씨 서체. <a href="https://www.kyobobook.co.kr/handwriting/font" target="_blank" style="color:var(--blue)">kyobobook.co.kr/handwriting/font</a>',
+      '<strong>KoPub 서체</strong> — 한국출판인회의에서 무료 제공. 출판물 본문·제목 사용 최적화. <a href="https://www.kopus.org/biz-electronic-font2" target="_blank" style="color:var(--blue)">kopus.org/biz-electronic-font2</a>',
+      '<strong>네이버 한글 글꼴</strong> — 네이버에서 무료 제공(나눔·마루부리 등). <a href="https://hangeul.naver.com/font" target="_blank" style="color:var(--blue)">hangeul.naver.com/font</a>',
+      '<strong>카페24 무료폰트</strong> — 카페24에서 제공하는 다양한 무료 폰트. <a href="https://fonts.cafe24.com" target="_blank" style="color:var(--blue)">fonts.cafe24.com</a>',
+      '※ 모든 서체는 사용 전 라이선스(상업적 이용 허용 여부)를 반드시 확인하세요.'
+    ]}
   ],
   qa:[
     {q:'원고는 어떤 파일 형식으로 보내나요?', a:'MS Word(.docx) 또는 한글(.hwp)을 권장합니다. 이미지는 300dpi 이상 원본을 본문과 별도로 제출해 주세요.'},
@@ -3251,7 +3322,9 @@ function calcBEP(sd){
 }
 
 function renderSales(){
-  const published = getApprovedProposals().filter(p=>{
+  // 판매·손익 관리: 계약서가 1건 이상 있는(프로젝트에 연결된) 도서만 표시
+  const projectLinked = getProjectProposals();
+  const published = projectLinked.filter(p=>{
     const proj = projectData[p.id];
     return proj?.stages?.published?.done || salesData[p.id];
   });
@@ -3275,14 +3348,14 @@ function renderSales(){
 
   const wrap = document.getElementById('sales-list-wrap');
   if(!published.length){
-    // Show all approved books even without sales data
-    const allApproved = getApprovedProposals();
-    if(!allApproved.length){
-      wrap.innerHTML=`<div class="empty-state"><div class="es-icon">💰</div><h3>출간 완료 도서가 없습니다</h3><p>프로젝트 관리에서 '출간' 단계를 완료 처리하거나, 도서를 클릭해 판매 데이터를 입력하세요.</p></div>`;
+    // 프로젝트 연결 도서 중 판매 데이터가 있는 도서 포함
+    const withSales = projectLinked.filter(p=>salesData[p.id]);
+    if(withSales.length){ renderSalesList(withSales, wrap); return; }
+    if(!projectLinked.length){
+      wrap.innerHTML=`<div class="empty-state"><div class="es-icon">💰</div><h3>등록된 프로젝트 도서가 없습니다</h3><p>계약서 관리에서 계약서를 작성하면 해당 도서가 판매·손익 관리에 표시됩니다.</p></div>`;
       return;
     }
-    // Show all approved as well
-    renderSalesList(allApproved, wrap);
+    renderSalesList(projectLinked, wrap);
     return;
   }
   renderSalesList(published, wrap);
@@ -3531,6 +3604,7 @@ showView = function(id){
   if(id==='analytics') renderAnalytics();
   if(id==='dashboard') renderDashboard();
   if(id==='projects') renderProjects();
+  if(id==='rights') renderRights();
   if(id==='sales') renderSales();
   if(id==='quotes') renderQuotes();
   if(id==='contracts') renderContracts();
@@ -4254,10 +4328,10 @@ function renderContractEditor(){
         </div>
       </div>
     </div>
-    <div class="detail-section"><h4>👤 저작자 정보</h4>
+    <div class="detail-section"><h4>👤 ${c.type==='amazon'?'의뢰인 정보':'저작자 정보'}</h4>
       <div class="q-fields">
-        <div class="field"><label>성명</label><input value="${c.aName||''}" oninput="cf('aName',this.value)"></div>
-        <div class="field"><label>주민등록번호</label><input value="${c.aRRN||''}" oninput="cf('aRRN',this.value)" placeholder="______-_______"></div>
+        <div class="field"><label>${c.type==='amazon'?'의뢰인명 / 법인명':'성명'}</label><input value="${c.aName||''}" oninput="cf('aName',this.value)"></div>
+        <div class="field"><label>${c.type==='amazon'?'생년월일 또는 사업자번호':'주민등록번호'}</label><input value="${c.aRRN||''}" oninput="cf('aRRN',this.value)" placeholder="${c.type==='amazon'?'사업자번호 또는 생년월일':'______-_______'}"></div>
         <div class="field" style="grid-column:span 2"><label>주소</label><input value="${(c.aAddr||'').replace(/"/g,'&quot;')}" oninput="cf('aAddr',this.value)"></div>
         <div class="field"><label>전화</label><input value="${c.aTel||''}" oninput="cf('aTel',this.value)"></div>
         <div class="field"><label>이메일</label><input value="${c.aEmail||''}" oninput="cf('aEmail',this.value)"></div>
@@ -4555,7 +4629,11 @@ function buildContractBody(c,prov,ty){
   const bookInfo=`<h2>대상 도서 정보</h2>
     <p>· 도서명(가제): ${blank(c.title)} &nbsp; · 예상 페이지수: ${c.pages||'____'}페이지 &nbsp; · 장르/분야: ${blank(c.genre)}</p>
     <p>${c.type!=='amazon'?`· 판형: ${blank(c.trim)} &nbsp; `:''}${(c.type==='semi'||c.type==='gihoek')?`· 인쇄 부수: ${c.runCount||'____'}부 &nbsp; `:''}${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원 &nbsp; `:''}· 예상 출간일: ${blank(c.pubDate)}</p>`;
-  const amzInfo=`<h2>대상 도서 정보</h2><p>· 제목: ${blank(c.title)} &nbsp; · 페이지: ${c.pages||'____'}쪽 &nbsp; ${c.korChars?`· 한글 약 ${won(c.korChars)}자 (영문 추정 ${won(c.engWords||Math.round(c.korChars*0.4))}단어)`:''} &nbsp; ${c.listPrice?`· 예상 정가: ${won(c.listPrice)}원`:''}</p>`;
+  const amzInfo=`<h2>저작물의 표시</h2>
+    <p>· 제호(가제): ${blank(c.title)}</p>
+    <p>· 저자명: ${blank(c.aName)} &nbsp;${c.pages?`· 예상 페이지: ${c.pages}쪽`:''} &nbsp;${c.korChars?`· 한글 약 ${won(c.korChars)}자 (영문 추정 ${won(c.engWords||Math.round(c.korChars*0.4))}단어)`:''}</p>
+    ${c.listPrice?`<p>· 예상 정가: ${won(c.listPrice)}원</p>`:''}
+    <p style="margin-top:8px;font-size:10.5px;color:#555">위 저작물의 저작권자 또는 적법한 이용 권한을 보유한 의뢰인(이하 '의뢰인')과 위 저작물을 Amazon KDP를 통하여 출판하기 위한 제작 및 등록 대행 업무를 수행하는 ${E(prov.company)}(이하 '대행사')은 다음과 같이 아마존 KDP 출판 대행 업무위탁계약(이하 '본 계약')을 체결한다.</p>`;
   const special = c.special?`<h2>특약사항</h2><div class="ct-note">${E(c.special)}</div>`:'';
   const sign=`<div class="ct-date">계약일자: ${c.date?E(c.date):'________년 ___월 ___일'}</div>
     <div class="ct-sign">
@@ -4572,7 +4650,23 @@ function buildContractBody(c,prov,ty){
     return head+intro+bookInfo+clauses+special+sign;
   }
   if(c.type==='amazon'){
-    return head+amzInfo+clauses+special+sign;
+    const amzSign=`<div class="ct-date">계약일자: ${c.date?E(c.date):'________년 ___월 ___일'}</div>
+      <div class="ct-sign">
+        <div class="col">
+          <b>의뢰인의 표시</b>
+          <div class="ln">주소: ${blank(c.aAddr)}</div>
+          <div class="ln">의뢰인 또는 회사명: ${blank(c.aName)}</div>
+          <div class="ln">대표자 성명: ${blank(c.aName)} (인)</div>
+        </div>
+        <div class="col">
+          <b>대행사의 표시</b>
+          <div class="ln">주소: ${E(prov.addr)}</div>
+          <div class="ln">대행사명: ${E(prov.company)} &nbsp; 사업자등록번호: ${E(prov.bizno||'454-87-03049')}</div>
+          <div class="ln">대표자 성명: ${E(prov.ceo)} (인)</div>
+        </div>
+      </div>
+      <p style="margin-top:14px;font-size:10.5px;color:#555">본 계약을 증명하기 위하여 계약서 2통을 작성하여 의뢰인과 대행사가 날인 또는 서명한 다음 각 1통씩 보관한다. 전자계약으로 체결하는 경우 전자서명 또는 전자문서의 교환으로 서명·날인을 갈음할 수 있다.</p>`;
+    return head+amzInfo+clauses+special+amzSign;
   }
   return head+bookInfo+clauses+special+sign;
 }
@@ -4649,13 +4743,28 @@ function defaultClauses(c){
     ];
   }
   const base=+c.amzBase||0, over=amzExcessCost(+c.wordOver||0), sub=base+over, vat=Math.round(sub*0.1);
+  const _pay=c.amzPay||'협의 후 결정';
+  const _title=c.title||'(도서명 미입력)';
+  // 결제 단계 금액 산출 (계약 30%·중도 30%·잔금 40% = VAT포함 총액 기준)
+  const total_amt = sub+vat;
+  const dep=Math.round(total_amt*0.3), mid=Math.round(total_amt*0.3), bal=total_amt-dep-mid;
   return [
-    {h:'제1조 (계약의 목적)', p:'본 계약은 저작자의 저작물을 아마존 KDP를 통해 글로벌 출간하기 위하여 출판사가 KDP 출판 대행 서비스를 제공함에 관하여 당사자 간의 권리·의무를 정함을 목적으로 한다.'},
-    {h:'제2조 (제공 서비스)', p:'기본 패키지: KDP 계정 설정·등록, 전자책 내지 제작(KDP 포맷 변환), 전자책 표지 제작(KDP 템플릿, 시안 3개·수정 1회), 기본 마케팅(메타데이터·키워드·도서 소개 최적화), 영문 메타데이터 작성, Kindle Previewer 품질 검수, 글로벌 출간·유통 등록, Author Central 구축 가이드(PDF), 유지보수 30일·수정 1회.'},
-    {h:'제3조 (비용)', p:'기본 패키지 '+won(base)+'원'+(over>0?(' + 초과 원고 '+c.wordOver+'단위(누진) = '+won(over)+'원'):'')+' (소계 '+won(sub)+'원, VAT '+won(vat)+'원, 합계 '+won(sub+vat)+'원). 기본 영문 3만 단어(한글 약 7.5만 자) 및 시각자료 5개 이내를 포함하며, 초과분은 1,000단어 단위로 누진 가산(45,000/38,000/33,000원)한다. 결제조건: '+(c.amzPay||'')+'.'},
-    {h:'제4조 (서비스 범위)', p:'견적·계약에 명시된 항목에 한하여 제공하며, 명시되지 않은 작업은 별도 비용이 발생한다. AMS 광고는 클릭당 과금(CPC) 방식으로 운영되며 광고비 60만 원이 포함된다. 이를 초과하는 광고비는 저작자가 부담하고, 출판사는 광고 성과를 보증하지 않는다.'},
-    {h:'제5조 (원고 책임 및 환불)', p:'저작자가 제공한 원고의 오탈자·사실 오류·저작권 침해 등 내용에 관한 모든 책임은 저작자에게 있다. KDP 등록 작업 착수 후에는 대행 서비스 비용을 환불하지 않는다.'},
-    {h:'제6조 (저작권)', p:'원고 및 저작물의 저작권은 저작자에게 귀속하며, 출판사는 KDP 출간·유통 대행에 필요한 범위에서만 이를 이용한다.'}
+    {h:'제1조 (계약의 목적)', p:'본 계약은 의뢰인이 저작권 또는 적법한 이용 권한을 보유한 위 저작물을 의뢰인 명의의 Amazon KDP 계정을 통하여 전자책 또는 종이책 형태로 출간하기 위하여, 대행사(주식회사 에이콘온)가 KDP 계정 개설 지원, 세금 정보 입력 보조, 전자책 파일 제작, 표지 제작 또는 조정, 메타데이터 등록, 업로드 및 검수 등 출판 대행 업무를 수행하는 데 필요한 권리·의무 및 제반 사항을 정함을 목적으로 한다.'},
+    {h:'제2조 (계약의 성격)', p:'· 본 계약은 의뢰인 명의의 KDP 계정을 통한 출판 대행 업무위탁계약이다.\n· 위 저작물의 저작권, KDP 계정 소유권, 판매 수익 및 로열티 수령권은 의뢰인에게 귀속된다.\n· 대행사는 본 계약의 업무 수행에 필요한 범위에서만 위 저작물을 복제·변환·편집·업로드·등록·수정할 수 있다.\n· 대행사는 Amazon 또는 KDP의 공식 대리인이 아니며, 의뢰인의 요청에 따라 KDP 출판 관련 제작 및 등록 업무를 대행하는 독립된 사업자이다.'},
+    {h:'제3조 (대행 업무 범위)', p:'대행사는 별첨에서 정한 범위에 따라 다음 업무를 성실히 수행한다.\n· KDP 출판 절차 안내\n· KDP 계정 개설 지원\n· Tax Profile·W-8BEN·W-8BEN-E 입력 보조\n· Kindle 전자책 파일 제작 또는 변환(목차·링크·기본 서식 포함)\n· 표지 파일 제작, 조정 또는 규격 검토\n· 도서 제목·부제·저자명·도서 소개·키워드·카테고리 등 메타데이터 정리\n· 판매가·로열티 옵션·판매 지역 설정 보조\n· KDP 업로드 및 출판 신청 대행\n· Kindle Previewer 또는 KDP 미리보기 기본 검수\n· Author Central 설정 또는 이용 가이드 제공\n· 출판 승인 후 판매 페이지 확인\n· POD 등록용 인쇄 PDF 변환 및 아마존 POD 등록 지원\n· 사후 지원 30일 (기본 패키지 기준)'},
+    {h:'제4조 (기본 업무에 미포함 항목)', p:'다음 항목은 별도 합의가 없는 한 기본 업무에 포함되지 않으며, 별도 비용이 발생한다.\n· 원고 집필·대필·교정·교열·번역·원어민 감수·표절 검토\n· 사실 확인 또는 법률 검토\n· ISBN 발급 또는 등록 대행\n· 전문 일러스트·삽화·도표·지도·사진 제작\n· 프리미엄 표지 디자인·하드커버 제작\n· 광고 계정 운영·광고비 집행·광고 성과 관리·리뷰 확보\n· POD 실물 인쇄비·Proof Copy 주문비·배송비·수입세·저자 구매 비용\n· KDP 계정의 장기 관리·계약 종료 후 지속적 판매 관리\n· 세무 신고·세무 자문·해외 송금·외화 계좌 개설'},
+    {h:'제5조 (대행 수수료 및 지급)', p:'① 의뢰인은 대행사에게 다음의 대행 수수료를 지급한다.\n  · 총 계약금액: 금 '+won(total_amt)+'원 (소계 '+won(sub)+'원, VAT '+won(vat)+'원, VAT 포함 합계)\n  · 계약금 30%: 금 '+won(dep)+'원 — 계약 체결 후 5영업일 이내 지급\n  · 중도금 30%: 금 '+won(mid)+'원 — 1차 산출물(전자책 파일·표지 파일) 제공 시 지급\n  · 잔금 40%: 금 '+won(bal)+'원 — KDP 업로드 전 또는 최종 산출물 제공 전 지급\n  · 결제조건: '+_pay+'\n② 대행사는 계약금 입금 및 필요 자료 제공 완료 후 업무에 착수한다.\n③ 외주 디자인·번역·원어민 감수·유료 이미지·폰트·광고비 등 실비 및 별도 옵션 비용은 별도 청구한다.'},
+    {h:'제6조 (기본 수정 범위 및 추가 비용)', p:'· 기본 수정 범위: 출간 전 파일 오류 수정 1회, 표지 규격 오류 수정 1회, 메타데이터 오기 수정 1회, KDP 심사상 형식 오류에 따른 수정 1회.\n· 추가 비용 발생 항목: 원고 교체·분량 초과, 이미지·도표 수량 초과, 표지 콘셉트 변경, 하드커버 추가 제작, 광고 설정·번역·원어민 감수, 출간 후 본문 수정, 사후 지원기간 이후 수정, 의뢰인 오기재 또는 승인 후 변경 요청.'},
+    {h:'제7조 (검수 및 승인)', p:'① 대행사는 산출물을 의뢰인에게 제공하고, 의뢰인은 수령일로부터 5영업일 이내에 검수 의견을 전달하여야 한다.\n② 기간 내 검수 의견이 없는 경우 해당 산출물은 승인된 것으로 본다.\n③ 의뢰인은 제목·도서 소개·키워드·카테고리·판매가·로열티 옵션·KDP Select 가입 여부에 대하여 최종 검토 및 승인 책임을 진다.'},
+    {h:'제8조 (KDP 계정 개설 및 관리)', p:'① KDP 계정은 원칙적으로 의뢰인 명의로 개설·운영하며, 계정 소유권·관리 권한·판매 수익 및 로열티 수령권은 의뢰인에게 귀속된다.\n② 의뢰인이 대행사에게 KDP 계정 접근 권한을 제공하는 경우, 대행사는 본 계약의 목적 범위 내에서만 사용하며, 가능한 경우 화면 공유·의뢰인 동석 입력·임시 접근 등 보안 위험을 최소화하는 방식으로 진행한다.\n③ KDP 계정의 보안 및 관리 책임은 의뢰인에게 있다.'},
+    {h:'제9조 (저작권 및 이용 허락)', p:'① 위 저작물의 저작권은 의뢰인 또는 의뢰인이 지정한 권리자에게 귀속된다.\n② 본 계약은 저작권, 출판권, 배타적발행권 또는 기타 독점적 권리를 이전하거나 설정하는 계약이 아니다.\n③ 의뢰인은 대행사가 본 계약의 대행 업무 수행에 필요한 범위에서 위 저작물을 복제·변환·편집·저장·전송·업로드·등록·수정할 수 있는 비독점적·일시적 이용 권한을 대행사에게 부여한다.'},
+    {h:'제10조 (저작물 내용에 따른 책임)', p:'① 위 저작물의 내용이 제3자의 저작권·상표권·초상권·개인정보권 등 법적 권리를 침해하여 손해를 끼칠 경우 의뢰인이 그 책임을 진다.\n② 원고 오탈자·사실 오류·저작권 침해 등 내용에 관한 모든 책임은 의뢰인에게 있으며, 대행사의 검수는 KDP 등록을 위한 형식·파일·서식·업로드 가능성에 관한 검수에 한정된다.'},
+    {h:'제11조 (AI 생성물)', p:'① 위 저작물에 AI 생성물이 포함된 경우 의뢰인은 대행사에게 사전에 고지하여야 한다.\n② AI 생성물의 저작권·표절·상표권·KDP 정책 위반 등과 관련하여 발생하는 책임은 의뢰인에게 있다.\n③ 고지 누락으로 KDP 심사 거절·판매 중단·계정 제재·제3자 분쟁이 발생한 경우 대행사는 책임을 지지 않는다.'},
+    {h:'제12조 (KDP 심사·승인·판매 보증 불가)', p:'대행사는 다음 사항을 보장하지 않으며 이에 대하여 책임을 지지 않는다.\n· KDP 출판 승인·특정 승인일·판매 개시일·판매량·로열티 금액\n· 검색 노출 순위·베스트셀러 순위·리뷰 수 또는 평점\n· 광고 성과·KDP Select 성과\n· KDP 정책 변경·계정 정지·판매 중단의 부재\n· 세금 원천징수율 또는 세금 신고 결과'},
+    {h:'제13조 (환불)', p:'① 대행사가 KDP 파일 제작·표지 제작·메타데이터 작성·계정 설정·KDP 업로드 등 실질적 업무에 착수한 이후에는 이미 수행한 업무량과 투입 비용을 고려하여 계약금의 전부 또는 일부를 환불하지 않을 수 있다.\n② 최종 산출물 제공 후 또는 KDP 업로드 후에는 의뢰인의 단순 변심에 따른 환불은 불가하다.\n③ KDP 심사 거절·승인 지연·판매 중단·계정 검토 등 Amazon 또는 KDP의 정책과 판단에 따른 사유만으로는 환불 사유가 되지 않는다.'},
+    {h:'제14조 (계약의 해지 또는 해제)', p:'① 의뢰인 또는 대행사가 본 계약에서 정한 사항을 위반한 경우 그 상대방은 14일의 기간을 정하여 이행 또는 시정을 요구할 수 있다.\n② 제1항의 조치에도 불구하고 이를 이행하지 않는 경우 해지 또는 해제할 수 있고 손해배상을 청구할 수 있다.\n③ 의뢰인이 저작권·이용 권한 미보유, 허위 자료 제공, KDP 정책 위반, 대금 미지급, 장기 검수 지연 등의 경우 대행사는 즉시 계약을 해지하거나 업무를 중단할 수 있다.'},
+    {h:'제15조 (개인정보 및 비밀 유지)', p:'① 의뢰인과 대행사는 본 계약 이행 과정에서 알게 된 상대방의 개인정보·계정 정보·영업 비밀을 사전 서면 동의 없이 제3자에게 누설하여서는 아니 된다.\n② 대행사는 의뢰인의 원고·계정 정보·세금 정보·지급 계정 정보를 본 계약의 목적 범위 내에서만 처리한다.\n③ 본 조항은 계약 종료 후에도 유효하다.'},
+    {h:'제16조 (분쟁의 해결)', p:'① 본 계약과 관련하여 분쟁이 발생한 경우 의뢰인과 대행사는 성실히 협의하여 해결한다.\n② 협의가 이루어지지 않는 경우 한국저작권위원회 또는 대한상사중재원의 조정을 받을 수 있다.\n③ 소송의 경우 민사소송법에 따른 관할법원에 제기하며, 당사자가 합의하는 경우 대행사의 본점 소재지 관할법원을 합의관할로 할 수 있다. 본 계약의 준거법은 대한민국 법으로 한다.'}
   ];
 }
 
@@ -4673,17 +4782,428 @@ function contractSectionHTML(p){
     (cs.length?`<div class="quote-list-mini">${rows}</div>`:`<div style="font-size:12px;color:var(--text3)">작성된 계약서가 없습니다. ‘계약서 작성’으로 자비·반기획·기획·아마존 계약을 자동 생성하세요.</div>`)+`</div>`;
 }
 
-// 모달 오버레이 닫기
-// 모달 오버레이 닫기 — 드래그(텍스트/필드 복사)로 폼 밖에서 마우스를 떼도
-// 닫히지 않도록, mousedown 과 mouseup 이 모두 오버레이 자신에서 일어난
-// '진짜 배경 클릭'일 때만 닫는다.
+// ═══════════════════════════════════════════════════════════════════
+// 판권 관리 모듈
+// ═══════════════════════════════════════════════════════════════════
+const RIGHTS_KEY = 'acorn_rights_v1';
+let rightsData = {}; // {proposalId: rightsObj}
+try { rightsData = JSON.parse(localStorage.getItem(RIGHTS_KEY) || '{}'); } catch(e) { rightsData = {}; }
+let currentRightsId = null;
+
+function saveRightsAll(){ localStorage.setItem(RIGHTS_KEY, JSON.stringify(rightsData)); }
+
+// 판형 옵션
+const TRIM_OPTIONS = {
+  '날개제본': [
+    {v:'46배판_날개', l:'46배판 (188×254mm)'},
+    {v:'크라운판_날개', l:'크라운판 (176×248mm)'},
+    {v:'신국판_날개', l:'신국판 (152×225mm)'},
+    {v:'A5국판_날개', l:'A5국판 (148×210mm)'},
+    {v:'46판_날개', l:'46판 (128×188mm)'},
+    {v:'국반판_날개', l:'국반판 (105×148mm)'},
+    {v:'변형신국판_날개', l:'변형신국판 (152×210mm)'},
+  ],
+  '무선제본': [
+    {v:'A4국배판_무선', l:'A4국배판 (210×297mm)'},
+    {v:'46배판_무선', l:'46배판 (188×254mm)'},
+    {v:'크라운판_무선', l:'크라운판 (176×248mm)'},
+    {v:'신국판_무선', l:'신국판 (152×225mm)'},
+    {v:'A5국판_무선', l:'A5국판 (148×210mm)'},
+    {v:'46판_무선', l:'46판 (128×188mm)'},
+    {v:'국반판_무선', l:'국반판 (105×148mm)'},
+    {v:'변형신국판_무선', l:'변형신국판 (152×210mm)'},
+  ],
+  '양장제본': [
+    {v:'A4국배판_양장', l:'A4국배판 (210×297mm)'},
+    {v:'46배판_양장', l:'46배판 (188×254mm)'},
+    {v:'크라운판_양장', l:'크라운판 (176×248mm)'},
+    {v:'신국판_양장', l:'신국판 (152×225mm)'},
+    {v:'A5국판_양장', l:'A5국판 (148×210mm)'},
+    {v:'46판_양장', l:'46판 (128×188mm)'},
+    {v:'국반판_양장', l:'국반판 (105×148mm)'},
+    {v:'변형신국판_양장', l:'변형신국판 (152×210mm)'},
+  ]
+};
+const BINDING_OPTIONS = ['무선제본','날개제본','양장제본'];
+const COLOR_OPTIONS = [
+  {v:'bw',      l:'흑백 (본문)'},
+  {v:'color2',  l:'2도 컬러 (본문)'},
+  {v:'color4',  l:'4도 컬러 (본문)'},
+  {v:'partial', l:'부분 컬러'},
+];
+const COVER_PAPER_OPTIONS = [
+  {v:'art150', l:'아트지 150g (양장제본 전용)'},
+  {v:'arte210', l:'아르떼 210g'},
+  {v:'snow250', l:'스노우 250g'},
+  {v:'art250', l:'아트지 250g'},
+];
+const COVER_COATING_OPTIONS = ['무광','유광'];
+const INNER_PAPER_OPTIONS = [
+  {v:'white150', l:'백색모조 150g'},
+  {v:'white100', l:'백색모조 100g'},
+  {v:'white80', l:'백색모조 80g'},
+  {v:'elight80', l:'이라이트 80g'},
+  {v:'cream100', l:'미색모조 100g'},
+  {v:'cream80', l:'미색모조 80g'},
+  {v:'snow100', l:'스노우 100g'},
+];
+
+const RIGHTS_STAGES = [
+  {id:'negotiation', label:'협의중', color:'#B87030', bg:'#FFF3E0'},
+  {id:'contracted',  label:'계약완료', color:'#1560B8', bg:'#EBF3FD'},
+  {id:'editing',     label:'편집중',  color:'#4A1A7C', bg:'#F0E8FF'},
+  {id:'production',  label:'제작중',  color:'#0A7860', bg:'#E0F5EE'},
+  {id:'published',   label:'출간완료', color:'#1A7A1A', bg:'#E8F5E8'},
+];
+
+const RIGHTS_SCHED_ITEMS = [
+  {id:'contractDate',   label:'계약 체결일'},
+  {id:'manuscriptDate', label:'원고 납품일'},
+  {id:'editingEnd',     label:'편집 완료일'},
+  {id:'designEnd',      label:'디자인 완료일'},
+  {id:'printOrder',     label:'인쇄 발주일'},
+  {id:'publishDate',    label:'출간(납본)일'},
+  {id:'isbnDate',       label:'ISBN 신청일'},
+];
+
+function ensureRights(propId){
+  if(!rightsData[propId]){
+    const p = proposals.find(x=>x.id===propId);
+    const proj = projectData[propId];
+    rightsData[propId] = {
+      id: propId,
+      stage: 'contracted',
+      // 도서 사양
+      binding: '무선제본',
+      trim: '신국판_무선',
+      colorMode: 'bw',
+      partialColorPages: '',
+      coverPaper: 'snow250',
+      coverCoating: '무광',
+      innerPaper: 'white100',
+      pages: '',
+      printQty: '',
+      isbn: '',
+      // 일정
+      sched: {},
+      // 비고
+      specNote: '',
+      updatedAt: new Date().toISOString(),
+    };
+  }
+  return rightsData[propId];
+}
+
+function rightsStageInfo(stageId){
+  return RIGHTS_STAGES.find(x=>x.id===stageId) || RIGHTS_STAGES[0];
+}
+
+function renderRights(){
+  const q = (document.getElementById('rights-search')?.value||'').toLowerCase();
+  const sf = document.getElementById('rights-filter-stage')?.value||'';
+
+  const list = getProjectProposals(); // 계약서 있는 도서만
+  const cnt = document.getElementById('rights-count');
+
+  // 개요
+  const overviewEl = document.getElementById('rights-overview');
+  if(overviewEl){
+    const stageCnt = {};
+    RIGHTS_STAGES.forEach(s=>{ stageCnt[s.id]=0; });
+    list.forEach(p=>{ const r=ensureRights(p.id); stageCnt[r.stage]=(stageCnt[r.stage]||0)+1; });
+    const tiles = RIGHTS_STAGES.map(s=>
+      `<div class="rights-stat" onclick="document.getElementById('rights-filter-stage').value='${s.id}';renderRights()" style="border-top:3px solid ${s.color}">
+        <div class="rights-stat-n" style="color:${s.color}">${stageCnt[s.id]}</div>
+        <div class="rights-stat-l">${s.label}</div>
+      </div>`
+    ).join('');
+    overviewEl.innerHTML = `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <div class="rights-stat" onclick="document.getElementById('rights-filter-stage').value='';renderRights()" style="border-top:3px solid var(--nav)">
+        <div class="rights-stat-n" style="color:var(--nav)">${list.length}</div>
+        <div class="rights-stat-l">전체</div>
+      </div>${tiles}</div>`;
+  }
+
+  let filtered = list;
+  if(q) filtered = filtered.filter(p=>p.title.toLowerCase().includes(q)||p.author.toLowerCase().includes(q));
+  if(sf) filtered = filtered.filter(p=>(rightsData[p.id]?.stage||'negotiation')===sf);
+
+  if(cnt) cnt.textContent = `표시 ${filtered.length}건 / 전체 ${list.length}건`;
+
+  const wrap = document.getElementById('rights-wrap');
+  if(!wrap) return;
+  if(!list.length){
+    wrap.innerHTML = `<div class="empty-state"><div class="es-icon">©️</div><h3>등록된 프로젝트 도서가 없습니다</h3><p>계약서 관리에서 계약서를 작성하면 이 목록에 도서가 표시됩니다.</p></div>`;
+    return;
+  }
+  if(!filtered.length){
+    wrap.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><h3>조건에 맞는 도서가 없습니다</h3></div>`;
+    return;
+  }
+
+  wrap.innerHTML = filtered.map(p=>{
+    const r = ensureRights(p.id);
+    const si = rightsStageInfo(r.stage);
+    const contract = (p.contracts||[]).find(c=>c.status==='signed') || (p.contracts||[])[0];
+    const proj = projectData[p.id];
+    const pubDate = proj?.stages?.published?.date || r.sched?.publishDate || '';
+    return `<div class="rights-card">
+      <div class="rights-card-hdr">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:var(--text)">${p.title}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">${p.author} · ${p.genre||'-'} · ${contract?'계약번호: '+contract.contractNo:'계약서 없음'}</div>
+        </div>
+        <span class="rights-stage-badge" style="background:${si.bg};color:${si.color}">${si.label}</span>
+        ${pubDate?`<span style="font-size:11px;color:var(--text3);margin-left:8px">출간예정: ${pubDate}</span>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="openRightsModal('${p.id}')">📋 사양 편집</button>
+      </div>
+      <div class="rights-card-body">
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text2);">
+          <span>📐 ${r.trim?r.trim.replace(/_/g,' '):'-'}</span>
+          <span>📎 ${r.binding||'-'}</span>
+          <span>🖨️ ${COLOR_OPTIONS.find(x=>x.v===r.colorMode)?.l||'-'}</span>
+          <span>📄 표지: ${COVER_PAPER_OPTIONS.find(x=>x.v===r.coverPaper)?.l||'-'} · ${r.coverCoating||'-'}</span>
+          <span>📃 내지: ${INNER_PAPER_OPTIONS.find(x=>x.v===r.innerPaper)?.l||'-'}</span>
+          ${r.pages?`<span>쪽수: ${r.pages}p</span>`:''}
+          ${r.printQty?`<span>인쇄: ${parseInt(r.printQty).toLocaleString()}부</span>`:''}
+          ${r.isbn?`<span>ISBN: ${r.isbn}</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openRightsModal(propId){
+  currentRightsId = propId;
+  const p = proposals.find(x=>x.id===propId);
+  const r = ensureRights(propId);
+  document.getElementById('rm-title').textContent = `©️ ${p.title} — 판권 관리`;
+
+  const stageOpts = RIGHTS_STAGES.map(s=>
+    `<option value="${s.id}"${r.stage===s.id?' selected':''}>${s.label}</option>`
+  ).join('');
+
+  // 판형 옵션 동적 생성 (제본방식 선택에 따라)
+  function trimOptsHTML(binding, curTrim){
+    const opts = TRIM_OPTIONS[binding] || TRIM_OPTIONS['무선제본'];
+    return opts.map(o=>`<option value="${o.v}"${curTrim===o.v?' selected':''}>${o.l}</option>`).join('');
+  }
+
+  // 표지지종 — 양장이 아니면 아트지150g 비활성
+  const coverPaperOpts = COVER_PAPER_OPTIONS.map(o=>{
+    const disabled = (o.v==='art150' && r.binding!=='양장제본') ? ' disabled' : '';
+    return `<option value="${o.v}"${r.coverPaper===o.v?' selected':''}${disabled}>${o.l}</option>`;
+  }).join('');
+
+  const schedRows = RIGHTS_SCHED_ITEMS.map(item=>{
+    const val = r.sched?.[item.id] || '';
+    const done = !!(r.sched?.[item.id+'_done']);
+    return `<div class="rights-sched-row">
+      <div class="rights-sched-check ${done?'done':''}" onclick="toggleRightsSched('${item.id}')">${done?'✓':''}</div>
+      <span style="flex:1;font-weight:600">${item.label}</span>
+      <input type="date" value="${val}" onchange="setRightsSched('${item.id}',this.value)"
+        style="border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:11px;font-family:'Pretendard',sans-serif;cursor:pointer;">
+    </div>`;
+  }).join('');
+
+  document.getElementById('rm-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+      <!-- 진행 현황 -->
+      <div class="detail-section">
+        <h4>📊 진행 현황</h4>
+        <div class="spec-row">
+          <label>현재 단계</label>
+          <select onchange="rd_set('stage',this.value)">${stageOpts}</select>
+        </div>
+        <div class="spec-row">
+          <label>ISBN</label>
+          <input type="text" value="${r.isbn||''}" placeholder="979-11-..." onchange="rd_set('isbn',this.value)">
+        </div>
+        <div class="spec-row">
+          <label>비고 / 특이사항</label>
+          <textarea rows="3" onchange="rd_set('specNote',this.value)" placeholder="판권 관련 메모, 특이사항 등...">${r.specNote||''}</textarea>
+        </div>
+      </div>
+
+      <!-- 일정 관리 -->
+      <div class="detail-section">
+        <h4>📅 일정 관리</h4>
+        ${schedRows}
+      </div>
+    </div>
+
+    <!-- 도서 사양 -->
+    <div class="detail-section">
+      <h4>📐 도서 사양</h4>
+      <div class="spec-grid">
+
+        <!-- 제본방식 -->
+        <div class="spec-section" style="border-left-color:#0A7860">
+          <h5>📎 제본방식</h5>
+          <div class="spec-row">
+            <label>제본방식 선택</label>
+            <select id="rd-binding" onchange="rd_onBindingChange(this.value)">
+              ${BINDING_OPTIONS.map(b=>`<option value="${b}"${r.binding===b?' selected':''}>${b}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+        <!-- 판형 -->
+        <div class="spec-section" style="border-left-color:#1560B8">
+          <h5>📐 판형</h5>
+          <div class="spec-row">
+            <label>판형 선택</label>
+            <select id="rd-trim" onchange="rd_set('trim',this.value)">
+              ${trimOptsHTML(r.binding, r.trim)}
+            </select>
+          </div>
+        </div>
+
+        <!-- 쪽수·인쇄부수 -->
+        <div class="spec-section" style="border-left-color:#8A3A1A">
+          <h5>🔢 기본 수치</h5>
+          <div class="spec-row">
+            <label>예상 쪽수 (p)</label>
+            <input type="number" value="${r.pages||''}" placeholder="예: 320" onchange="rd_set('pages',this.value)">
+          </div>
+          <div class="spec-row">
+            <label>인쇄 부수</label>
+            <input type="number" value="${r.printQty||''}" placeholder="예: 1000" onchange="rd_set('printQty',this.value)">
+          </div>
+        </div>
+
+        <!-- 인쇄 컬러 -->
+        <div class="spec-section" style="border-left-color:#4A1A7C">
+          <h5>🖨️ 인쇄 컬러 방식</h5>
+          <div class="spec-row">
+            <label>본문 인쇄</label>
+            <select onchange="rd_onColorChange(this.value)">
+              ${COLOR_OPTIONS.map(o=>`<option value="${o.v}"${r.colorMode===o.v?' selected':''}>${o.l}</option>`).join('')}
+            </select>
+          </div>
+          <div class="spec-row" style="font-size:11px;color:var(--text3);background:var(--s2);padding:7px 9px;border-radius:5px;line-height:1.7">
+            ※ 표지는 항상 4도(컬러) 인쇄<br>
+            ※ 2도: 흑백+1색 별색, 4도: 전체 컬러(CMYK)
+          </div>
+          <div id="rd-partial-area" style="display:${r.colorMode==='partial'?'block':'none'}">
+            <div class="spec-row" style="margin-top:8px">
+              <label>부분 컬러 페이지 지정</label>
+              <textarea rows="3" id="rd-partial-pages" onchange="rd_set('partialColorPages',this.value)"
+                placeholder="예) p.3(홀수)~p.12(짝수) 부분 컬러 적용&#10;예) p.45, p.67, p.89 개별 페이지 지정">${r.partialColorPages||''}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 표지 지종 -->
+        <div class="spec-section" style="border-left-color:var(--gold)">
+          <h5>📄 표지 종이</h5>
+          <div class="spec-row">
+            <label>표지 지종</label>
+            <select id="rd-cover-paper" onchange="rd_set('coverPaper',this.value)">
+              ${coverPaperOpts}
+            </select>
+          </div>
+          <div class="spec-row">
+            <label>표지 코팅</label>
+            <select onchange="rd_set('coverCoating',this.value)">
+              ${COVER_COATING_OPTIONS.map(c=>`<option value="${c}"${r.coverCoating===c?' selected':''}>${c}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+        <!-- 내지 지종 -->
+        <div class="spec-section" style="border-left-color:var(--teal)">
+          <h5>📃 내지 종이</h5>
+          <div class="spec-row">
+            <label>내지 지종 선택</label>
+            <select onchange="rd_set('innerPaper',this.value)">
+              ${INNER_PAPER_OPTIONS.map(o=>`<option value="${o.v}"${r.innerPaper===o.v?' selected':''}>${o.l}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+
+  document.getElementById('rights-modal').classList.add('open');
+}
+
+function rd_set(field, val){
+  if(!currentRightsId) return;
+  const r = ensureRights(currentRightsId);
+  r[field] = val;
+  r.updatedAt = new Date().toISOString();
+}
+
+function rd_onBindingChange(val){
+  rd_set('binding', val);
+  // 판형 드롭다운 갱신
+  const trimSel = document.getElementById('rd-trim');
+  if(trimSel){
+    const opts = TRIM_OPTIONS[val] || TRIM_OPTIONS['무선제본'];
+    trimSel.innerHTML = opts.map(o=>`<option value="${o.v}">${o.l}</option>`).join('');
+    rd_set('trim', opts[0]?.v || '');
+  }
+  // 양장이 아닌 경우 아트지150g 비활성
+  const coverSel = document.getElementById('rd-cover-paper');
+  if(coverSel){
+    Array.from(coverSel.options).forEach(opt=>{
+      if(opt.value==='art150'){ opt.disabled=(val!=='양장제본'); if(opt.selected&&opt.disabled){ coverSel.value='snow250'; rd_set('coverPaper','snow250'); } }
+    });
+  }
+}
+
+function rd_onColorChange(val){
+  rd_set('colorMode', val);
+  const area = document.getElementById('rd-partial-area');
+  if(area) area.style.display = val==='partial'?'block':'none';
+}
+
+function setRightsSched(itemId, val){
+  if(!currentRightsId) return;
+  const r = ensureRights(currentRightsId);
+  if(!r.sched) r.sched = {};
+  r.sched[itemId] = val;
+}
+
+function toggleRightsSched(itemId){
+  if(!currentRightsId) return;
+  const r = ensureRights(currentRightsId);
+  if(!r.sched) r.sched = {};
+  const key = itemId+'_done';
+  r.sched[key] = !r.sched[key];
+  // UI 갱신
+  openRightsModal(currentRightsId);
+}
+
+function saveRightsData(){
+  if(!currentRightsId) return;
+  ensureRights(currentRightsId).updatedAt = new Date().toISOString();
+  saveRightsAll();
+  closeRightsModal();
+  renderRights();
+  alert('판권 정보가 저장되었습니다.');
+}
+
+function closeRightsModal(){
+  document.getElementById('rights-modal').classList.remove('open');
+  currentRightsId = null;
+}
+
+bindOverlayClose('rights-modal', function(){ saveRightsAll(); closeRightsModal(); });
+
+// showView 확장에 rights 추가
+(function(){ const _prev=showView; showView=function(id){ _prev(id); if(id==='rights') renderRights(); }; })();
+
+
+// 모달 오버레이 닫기 — 드래그로 폼 밖에서 마우스를 떼도 닫히지 않도록
+// mousedown과 mouseup이 모두 오버레이 자신에서 일어난 '진짜 배경 클릭'일 때만 닫는다.
 function bindOverlayClose(id, fn){
   var ov=document.getElementById(id); if(!ov) return;
   var downOnSelf=false;
   ov.addEventListener('mousedown',function(e){ downOnSelf=(e.target===ov); });
   ov.addEventListener('mouseup',function(e){ var ok=downOnSelf && e.target===ov; downOnSelf=false; if(ok) fn(); });
 }
-bindOverlayClose('contract-modal', closeContractEditor);
 
 // showView 확장 — 계약서 페이지 + 프로젝트는 계약 포함 목록으로
 (function(){ const _prev=showView; showView=function(id){ _prev(id); if(id==='contracts') renderContracts(); }; })();
