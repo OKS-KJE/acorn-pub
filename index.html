@@ -2452,7 +2452,78 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div>
   <div class="content">
 
-    <!-- ── 3개월 마일스톤 진행 대시보드 ── -->
+    <!-- ── Supabase 연동 설정 (항상 노출) ── -->
+    <details id="sb-config-panel" open style="margin-bottom:18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:var(--rL);overflow:hidden;">
+      <summary style="background:linear-gradient(90deg,#1a3a5c,#0a3e5a);padding:11px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;list-style:none;user-select:none;">
+        <div style="font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;">
+          <span>🗄</span> Supabase 연동 설정
+          <span style="font-size:10px;font-weight:400;color:rgba(255,255,255,.5);">proposal.html 동일 프로젝트</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div id="sb-status-badge-2">
+            <span style="font-size:11px;padding:2px 9px;border-radius:100px;background:rgba(184,114,10,.25);color:#fbbf24;border:1px solid rgba(184,114,10,.4);">🟡 확인 중…</span>
+          </div>
+          <span style="color:rgba(255,255,255,.4);font-size:12px;">▲</span>
+        </div>
+      </summary>
+      <div style="padding:14px 18px;">
+        <!-- 연동 스위치 -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--s2);border-radius:var(--r);margin-bottom:12px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);">Supabase 활성화</div>
+            <div style="font-size:11px;color:var(--text3);">비활성 시 localStorage 모드로 전환됩니다</div>
+          </div>
+          <button onclick="sbToggleEnabled()" id="sb-toggle-btn"
+            style="padding:5px 16px;border-radius:100px;border:1.5px solid var(--border2);background:var(--surface);font-size:12px;font-weight:700;cursor:pointer;color:var(--text3);transition:all .2s;">
+            비활성
+          </button>
+        </div>
+        <!-- URL / Key -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">Supabase Project URL</div>
+            <input id="sb-url-input" type="url" placeholder="https://xxxx.supabase.co"
+              style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--s2);color:var(--text);outline:none;"
+              onchange="sbSaveConfig()" onblur="sbSaveConfig()">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">Anon (Public) Key</div>
+            <input id="sb-key-input" type="password" placeholder="eyJhbGciOiJIUzI1NiIs…"
+              style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--s2);color:var(--text);outline:none;"
+              onchange="sbSaveConfig()" onblur="sbSaveConfig()">
+          </div>
+        </div>
+        <!-- 버튼 + SQL -->
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">
+          <button onclick="sbTestConnection()" style="padding:6px 14px;background:var(--teal2);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;">🔌 연결 테스트</button>
+          <button onclick="sbInitTable()" style="padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;">🛠 테이블 생성</button>
+          <button onclick="sbPushAll()" style="padding:6px 14px;background:var(--blue2);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;">⬆ localStorage→DB</button>
+          <button onclick="sbPullAll()" style="padding:6px 14px;background:var(--steel);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;">⬇ DB→localStorage</button>
+          <span id="sb-test-result" style="font-size:11.5px;font-family:'JetBrains Mono',monospace;color:var(--text3);"></span>
+        </div>
+        <!-- SQL 스키마 (접힌 상태) -->
+        <details style="margin-top:4px;">
+          <summary style="font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;padding:4px 0;">📋 pilot_milestones 테이블 SQL 보기 (직접 실행 시)</summary>
+          <div style="margin-top:8px;background:#0f172a;border-radius:var(--r);padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#94a3b8;line-height:1.75;overflow-x:auto;position:relative;">
+            <button onclick="sbCopySQL()" style="position:absolute;top:7px;right:7px;padding:2px 9px;background:rgba(255,255,255,.08);color:#94a3b8;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-size:10px;cursor:pointer;">복사</button>
+<span style="color:#7dd3fc;">CREATE TABLE IF NOT EXISTS</span> <span style="color:#fde68a;">pilot_milestones</span> (<br>
+&nbsp;&nbsp;id         uuid <span style="color:#7dd3fc;">PRIMARY KEY DEFAULT</span> gen_random_uuid(),<br>
+&nbsp;&nbsp;user_id    text <span style="color:#7dd3fc;">NOT NULL</span>,<br>
+&nbsp;&nbsp;item_key   text <span style="color:#7dd3fc;">NOT NULL</span>,<br>
+&nbsp;&nbsp;done       boolean <span style="color:#7dd3fc;">NOT NULL DEFAULT false</span>,<br>
+&nbsp;&nbsp;updated_at timestamptz <span style="color:#7dd3fc;">DEFAULT</span> now(),<br>
+&nbsp;&nbsp;<span style="color:#7dd3fc;">UNIQUE</span>(user_id, item_key)<br>
+);<br>
+<span style="color:#7dd3fc;">ALTER TABLE</span> pilot_milestones <span style="color:#7dd3fc;">ENABLE ROW LEVEL SECURITY</span>;<br>
+<span style="color:#7dd3fc;">CREATE POLICY</span> <span style="color:#fde68a;">"pilot_own_rows"</span> <span style="color:#7dd3fc;">ON</span> pilot_milestones<br>
+&nbsp;&nbsp;<span style="color:#7dd3fc;">USING</span> (user_id = (current_setting(<span style="color:#fde68a;">'request.headers'</span>)::json)->><span style="color:#fde68a;">'x-user-id'</span>)<br>
+&nbsp;&nbsp;<span style="color:#7dd3fc;">WITH CHECK</span> (user_id = (current_setting(<span style="color:#fde68a;">'request.headers'</span>)::json)->><span style="color:#fde68a;">'x-user-id'</span>);
+          </div>
+        </details>
+      </div>
+    </details>
+
+        <!-- ── 3개월 마일스톤 진행 대시보드 ── -->
     <div id="pilot-dashboard" style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:28px;box-shadow:var(--shadow);">
 
       <!-- 헤더 -->
@@ -2702,78 +2773,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <strong>핵심 원칙:</strong> Designrr는 콘텐츠 변환·제작 레이어로 한정합니다. 저자/독자 데이터베이스·커뮤니티·결제·인세 정산은 에이콘온 자체 플랫폼이 독립 운영합니다.
       </div>
 
-      <!-- Supabase 연동 설정 — proposal.html 동일 패턴 -->
-      <div style="margin-top:20px;background:var(--surface);border:1.5px solid var(--border2);border-radius:var(--rL);overflow:hidden;">
-        <div style="background:linear-gradient(90deg,#1a3a5c,#0a3e5a);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-          <div style="font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;">
-            <span style="font-size:16px;">🗄</span> Supabase 연동 설정
-            <span style="font-size:10.5px;font-weight:400;color:rgba(255,255,255,.5);">proposal.html 과 동일 프로젝트</span>
-          </div>
-          <div id="sb-status-badge-2">
-            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(184,114,10,.25);color:#fbbf24;border:1px solid rgba(184,114,10,.4);">🟡 비활성</span>
-          </div>
-        </div>
-        <div style="padding:16px 18px;">
-
-          <!-- 연동 스위치 -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--s2);border-radius:var(--r);margin-bottom:14px;">
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--text);">Supabase 활성화</div>
-              <div style="font-size:11px;color:var(--text3);">proposal.html 과 동일한 프로젝트·키 자동 사용 가능</div>
-            </div>
-            <button onclick="sbToggleEnabled()" id="sb-toggle-btn"
-              style="padding:6px 18px;border-radius:100px;border:1.5px solid var(--border2);background:var(--surface);font-size:12px;font-weight:700;cursor:pointer;color:var(--text3);transition:all .2s;">
-              비활성
-            </button>
-          </div>
-
-          <!-- URL / Key 입력 -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">Supabase Project URL</div>
-              <input id="sb-url-input" type="url" placeholder="https://xxxx.supabase.co"
-                style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--s2);color:var(--text);outline:none;"
-                onchange="sbSaveConfig()" onblur="sbSaveConfig()">
-            </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">Anon (Public) Key</div>
-              <input id="sb-key-input" type="password" placeholder="eyJhbGciOiJIUzI1NiIs…"
-                style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--s2);color:var(--text);outline:none;"
-                onchange="sbSaveConfig()" onblur="sbSaveConfig()">
-            </div>
-          </div>
-
-          <!-- SQL 스키마 -->
-          <div style="margin-bottom:14px;">
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;">📋 Supabase SQL Editor에서 실행 — pilot_milestones 테이블 생성</div>
-            <div style="background:#0f172a;border-radius:var(--r);padding:13px 15px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#94a3b8;line-height:1.75;overflow-x:auto;position:relative;">
-              <button onclick="sbCopySQL()" style="position:absolute;top:8px;right:8px;padding:3px 10px;background:rgba(255,255,255,.08);color:#94a3b8;border:1px solid rgba(255,255,255,.12);border-radius:4px;font-size:10px;cursor:pointer;">복사</button>
-<span style="color:#7dd3fc;">CREATE TABLE IF NOT EXISTS</span> <span style="color:#fde68a;">pilot_milestones</span> (<br>
-&nbsp;&nbsp;<span style="color:#86efac;">id</span>         uuid <span style="color:#7dd3fc;">PRIMARY KEY DEFAULT</span> gen_random_uuid(),<br>
-&nbsp;&nbsp;<span style="color:#86efac;">user_id</span>    text <span style="color:#7dd3fc;">NOT NULL</span>,<br>
-&nbsp;&nbsp;<span style="color:#86efac;">item_key</span>   text <span style="color:#7dd3fc;">NOT NULL</span>,<br>
-&nbsp;&nbsp;<span style="color:#86efac;">done</span>       boolean <span style="color:#7dd3fc;">NOT NULL DEFAULT</span> <span style="color:#fb923c;">false</span>,<br>
-&nbsp;&nbsp;<span style="color:#86efac;">updated_at</span> timestamptz <span style="color:#7dd3fc;">DEFAULT</span> now(),<br>
-&nbsp;&nbsp;<span style="color:#7dd3fc;">UNIQUE</span>(user_id, item_key)<br>
-);<br>
-<span style="color:#7dd3fc;">ALTER TABLE</span> pilot_milestones <span style="color:#7dd3fc;">ENABLE ROW LEVEL SECURITY</span>;<br>
-<span style="color:#7dd3fc;">CREATE POLICY</span> <span style="color:#fde68a;">"pilot_own_rows"</span> <span style="color:#7dd3fc;">ON</span> pilot_milestones<br>
-&nbsp;&nbsp;<span style="color:#7dd3fc;">USING</span>  (user_id = (current_setting(<span style="color:#fde68a;">'request.headers'</span>)::json)->><span style="color:#fde68a;">'x-user-id'</span>)<br>
-&nbsp;&nbsp;<span style="color:#7dd3fc;">WITH CHECK</span> (user_id = (current_setting(<span style="color:#fde68a;">'request.headers'</span>)::json)->><span style="color:#fde68a;">'x-user-id'</span>);
-            </div>
-          </div>
-
-          <!-- 버튼 -->
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <button onclick="sbTestConnection()" style="padding:7px 16px;background:var(--teal2);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">🔌 연결 테스트</button>
-            <button onclick="sbPushAll()" style="padding:7px 16px;background:var(--blue2);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">⬆ localStorage → DB</button>
-            <button onclick="sbPullAll()" style="padding:7px 16px;background:var(--steel);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:700;cursor:pointer;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">⬇ DB → localStorage</button>
-            <span id="sb-test-result" style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text3);"></span>
-          </div>
-        </div>
-      </div>
-
-            <!-- ROI 측정 기준 -->
+      <!-- ROI 측정 기준 -->
       <div style="font-size:13px;font-weight:700;color:var(--text);margin:20px 0 10px;">ROI 측정 기준</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
         <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
@@ -3982,6 +3982,11 @@ async function SB_loadAll() {
       +'?user_id=eq.'+SB_getUserId()+'&select=item_key,done',
       {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
     );
+    if(res.status === 404){
+      console.warn('[Pilot SB] pilot_milestones 테이블 없음 — Supabase SQL Editor에서 테이블 생성 필요');
+      sbSetResult('⚠ pilot_milestones 테이블 없음 — [🛠 테이블 생성] 버튼을 클릭하세요.','#B45309');
+      return null;
+    }
     if(!res.ok) return null;
     return await res.json();
   } catch(e){ console.warn('[Pilot SB] loadAll 실패 (offline):', e.message); return null; }
@@ -4236,6 +4241,34 @@ CREATE POLICY "pilot_own_rows" ON pilot_milestones
   navigator.clipboard.writeText(sql).then(()=>{
     sbSetResult('✅ SQL 복사 완료 — Supabase SQL Editor에 붙여넣기 하세요','#0D9488');
   }).catch(()=>{ sbSetResult('복사 실패 — 수동 복사하세요','#B45309'); });
+}
+
+// ── 테이블 자동 생성 (RPC 방식 — service_role 없이 anon key로 가능한 범위) ──
+// Supabase에서 anon key로는 DDL 직접 실행 불가 → SQL 복사 안내 + 연결만 확인
+async function sbInitTable(){
+  sbSaveConfig();
+  if(!sbOn()){ sbSetResult('⚠ 먼저 Supabase를 활성화하세요.','#B45309'); return; }
+  sbSetResult('🛠 테이블 존재 확인 중…','#9aa0a6');
+  try {
+    const res = await fetch(
+      SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
+      {headers: sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+    );
+    if(res.ok || res.status===406){
+      sbSetResult('✅ 테이블 존재 확인 — 정상 사용 가능합니다.','#0D9488');
+      await updatePilotDbStatus();
+    } else if(res.status===404){
+      sbSetResult('❌ pilot_milestones 테이블 없음 — 아래 SQL을 Supabase SQL Editor에서 실행하세요.','#e57373');
+      // SQL 패널 자동 오픈
+      const sqlDetails = document.querySelector('#sb-config-panel details');
+      if(sqlDetails) sqlDetails.open = true;
+      sbCopySQL();
+    } else {
+      sbSetResult('⚠ HTTP '+res.status+' — URL/Key를 확인하세요.','#B45309');
+    }
+  } catch(e){
+    sbSetResult('❌ 네트워크 오류 — CORS 또는 인터넷 연결 확인','#e57373');
+  }
 }
 
 // ── pilotInit: s9 진입 시 호출 ────────────────────────
