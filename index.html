@@ -3878,7 +3878,7 @@ var PT_PHASE_LABELS = ['1단계 · PRO (7월)','2단계 · Premium (8월)','3단
 // SUPABASE 설정 — proposal.html 과 동일한 패턴
 // ══════════════════════════════════════════════════════════
 const SUPABASE_CONFIG = {
-  enabled : false,                         // ← Supabase 연동 시 true
+  enabled : true,
   url     : 'https://edwfljyybrrccbxccvdh.supabase.co',
   key     : 'sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl',
   table   : 'pilot_milestones',
@@ -4122,10 +4122,13 @@ function sbSaveConfig(){
 function sbLoadConfig(){
   const url = localStorage.getItem('pilot_sb_url');
   const key = localStorage.getItem('pilot_sb_key');
-  const on  = localStorage.getItem('pilot_sb_enabled') === '1';
+  // pilot_sb_enabled 키가 없으면(최초) true로 초기화 — proposal.html 동일 운영 모드
+  const storedEnabled = localStorage.getItem('pilot_sb_enabled');
+  if(storedEnabled === null) localStorage.setItem('pilot_sb_enabled','1');
+  const on = localStorage.getItem('pilot_sb_enabled') !== '0';
   if(url){ SUPABASE_CONFIG.url = url; const e=document.getElementById('sb-url-input'); if(e) e.value=url; }
   if(key){ SUPABASE_CONFIG.key = key; const e=document.getElementById('sb-key-input'); if(e) e.value=key; }
-  if(on && url && key) SUPABASE_CONFIG.enabled = true;
+  SUPABASE_CONFIG.enabled = on;
   sbUpdateToggleUI();
   updatePilotDbStatus();
 }
