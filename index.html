@@ -409,6 +409,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <div style="display:flex;gap:6px;padding:10px 18px 10px;border-bottom:1px solid rgba(255,255,255,.1);">
     <button id="btn-ko" onclick="setLang('ko')" style="flex:1;padding:7px 0;border-radius:6px;border:1.5px solid var(--gold3);background:var(--gold3);color:#07213E;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;letter-spacing:.5px">KO</button>
     <button id="btn-en" onclick="setLang('en')" style="flex:1;padding:7px 0;border-radius:6px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.45);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;letter-spacing:.5px">EN</button>
+    <button id="btn-refresh" onclick="hardRefresh()" title="캐시 삭제 후 최신 버전으로 새로고침"
+      style="width:34px;flex-shrink:0;padding:7px 0;border-radius:6px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.45);font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;"
+      onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.borderColor='rgba(255,255,255,.5)';this.style.color='#fff'"
+      onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,255,255,.2)';this.style.color='rgba(255,255,255,.45)'">
+      ↺
+    </button>
   </div>
   <div class="sidebar-nav">
     <div class="nav-item active" onclick="nav('s1')"><span class="nav-icon">🏢</span><span data-i18n="nav_co">회사</span></div>
@@ -2766,101 +2772,302 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
         <div class="pill-content" id="pt1">
-      <div class="timeline">
 
+      <!-- ── 3단계 흐름 인포그래픽 헤더 ── -->
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:center;margin-bottom:28px;">
         <!-- 1단계 -->
-        <div class="tl-item">
-          <div class="tl-dot" style="background:var(--blue);"></div>
-          <div class="tl-period" style="color:var(--blue);">1단계 · 7월 (W1~W4) — Designrr PRO · $97/년</div>
-          <div class="tl-title">기능 적합성 검증</div>
-          <div class="tl-box">
-            <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;">핵심 과제</div>
-            <ul class="tl-list">
-              <li><strong>[기획자]</strong> 블로그·칼럼 3건 → eBook(PDF·플립북·라이브 eBook) 변환</li>
-              <li><strong>[디자이너]</strong> 기출간 원고 일부 Word → 샘플 eBook + 3D 커버 제작</li>
-              <li><strong>[기획자]</strong> 한국어·이중언어 콘텐츠 → Kindle/ePub 내보내기 품질 확인</li>
-              <li><strong>[마케터]</strong> 리드마그넷 PDF 2종 제작 및 배포 채널 테스트</li>
-              <li><strong>[PM]</strong> 워크플로 표준 절차(SOP) 초안 작성</li>
-            </ul>
-            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(10,62,132,.1);color:var(--blue);font-weight:600;">✓ 변환 3건 완료</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(10,120,96,.1);color:var(--teal);font-weight:600;">✓ 품질 4.0점</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(184,114,10,.1);color:var(--gold);font-weight:600;">✓ 한국어 이슈 0건</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(74,26,124,.1);color:var(--purple);font-weight:600;">✓ 팀 만족도 4.0점</span>
-            </div>
+        <div style="background:linear-gradient(135deg,#0A3E84,#1560B8);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 4px 20px rgba(10,62,132,.3);">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:6px;">MONTH 01 · JULY</div>
+          <div style="font-size:28px;margin-bottom:6px;">📄</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">Designrr PRO</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px;">기능 적합성 검증</div>
+          <div style="background:rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;display:inline-block;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">$97 <span style="font-size:10px;opacity:.7">/ 년</span></span>
           </div>
         </div>
-
+        <!-- 화살표 -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 12px;">
+          <div style="width:40px;height:2px;background:linear-gradient(90deg,#1560B8,#0D9488);"></div>
+          <div style="font-size:18px;color:var(--ink-m);margin:-4px 0;">→</div>
+          <div style="font-size:9px;color:var(--text3);white-space:nowrap;">Gate 1</div>
+        </div>
         <!-- 2단계 -->
-        <div class="tl-item">
-          <div class="tl-dot" style="background:var(--teal);"></div>
-          <div class="tl-period" style="color:var(--teal);">2단계 · 8월 (W5~W8) — Designrr Premium · $297/년</div>
-          <div class="tl-title">오디오·비디오 출판 모델 검증</div>
-          <div class="tl-box">
-            <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;">핵심 과제</div>
-            <ul class="tl-list">
-              <li><strong>[마케터]</strong> 저자 강의/세미나 영상 → 자동 트랜스크립션 → eBook 2케이스</li>
-              <li><strong>[디자이너]</strong> 오디오북 생성 + 표지·모크업 제작</li>
-              <li><strong>[기획자]</strong> 강의+전자책+오디오북 Multi-Revenue 패키지 구성안 작성</li>
-              <li><strong>[PM]</strong> 원고 준비→출판 총 소요시간 측정 기록</li>
-              <li><strong>[마케터]</strong> Multi-Revenue 패키지 랜딩페이지 초안 제작·배포</li>
-            </ul>
-            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(10,120,96,.1);color:var(--teal);font-weight:600;">✓ 트랜스크립션 85%+</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(10,62,132,.1);color:var(--blue);font-weight:600;">✓ 오디오북 1종</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(184,114,10,.1);color:var(--gold);font-weight:600;">✓ 소요시간 3일↓</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(74,26,124,.1);color:var(--purple);font-weight:600;">✓ ROI 기준치 산정</span>
-            </div>
+        <div style="background:linear-gradient(135deg,#0A7060,#0D9488);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 4px 20px rgba(13,148,136,.3);">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:6px;">MONTH 02 · AUG</div>
+          <div style="font-size:28px;margin-bottom:6px;">🎧</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">Designrr Premium</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px;">오디오·비디오 출판 검증</div>
+          <div style="background:rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;display:inline-block;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">$297 <span style="font-size:10px;opacity:.7">/ 년</span></span>
           </div>
         </div>
-
+        <!-- 화살표 -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 12px;">
+          <div style="width:40px;height:2px;background:linear-gradient(90deg,#0D9488,#B8860B);"></div>
+          <div style="font-size:18px;color:var(--ink-m);margin:-4px 0;">→</div>
+          <div style="font-size:9px;color:var(--text3);white-space:nowrap;">Gate 2</div>
+        </div>
         <!-- 3단계 -->
-        <div class="tl-item">
-          <div class="tl-dot" style="background:var(--gold2);"></div>
-          <div class="tl-period" style="color:var(--gold2);">3단계 · 9월 (W9~W12) — Agency Premium · $497/년</div>
-          <div class="tl-title">Agency 모델 검증 + 종합 평가</div>
-          <div class="tl-box">
-            <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;">핵심 과제</div>
-            <ul class="tl-list">
-              <li><strong>[PM]</strong> 저자·출판사 클라이언트 5명 대상 Agency PoC 운영</li>
-              <li><strong>[마케터]</strong> 멀티유저·Dropbox 대량 임포트 팀 작업 구조 설계</li>
-              <li><strong>[기획자]</strong> BEP 산정: 월 저자 수용량 vs 플랜 비용 손익분기점</li>
-              <li><strong>[디자이너]</strong> 한국어 브랜드 템플릿 키트 1세트 완성</li>
-              <li><strong>[PM]</strong> 글로벌 확장 로드맵 초안 (KDP 영문 워크플로 포함)</li>
-            </ul>
-            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(184,114,10,.1);color:var(--gold);font-weight:600;">✓ 5명 동시 관리</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(10,62,132,.1);color:var(--blue);font-weight:600;">✓ BEP 산출</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(10,120,96,.1);color:var(--teal);font-weight:600;">✓ 브랜드 키트</span>
-              <span style="font-size:11px;padding:3px 9px;border-radius:100px;background:rgba(74,26,124,.1);color:var(--purple);font-weight:600;">✓ 글로벌 로드맵</span>
+        <div style="background:linear-gradient(135deg,#8B6300,#B8860B);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 4px 20px rgba(184,134,11,.3);">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:6px;">MONTH 03 · SEP</div>
+          <div style="font-size:28px;margin-bottom:6px;">🏢</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">Agency Premium</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px;">Agency 모델 검증</div>
+          <div style="background:rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;display:inline-block;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">$497 <span style="font-size:10px;opacity:.7">/ 년</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 1단계 상세 인포그래픽 ── -->
+      <div style="background:var(--surface);border:2px solid rgba(10,62,132,.2);border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="background:linear-gradient(90deg,rgba(10,62,132,.08),rgba(10,62,132,.03));padding:14px 20px;border-bottom:1px solid rgba(10,62,132,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0A3E84,#1560B8);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📄</div>
+          <div style="flex:1;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;margin-bottom:2px;">1단계 · 7월 W1~W4 · Designrr PRO</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">기능 적합성 검증 — 텍스트 기반 변환</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:10px;color:var(--text3);">목표 비용</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--blue);">₩130,000</div>
+          </div>
+        </div>
+        <div style="padding:18px 20px;">
+          <!-- 워크플로 흐름 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">WORKFLOW</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:18px;flex-wrap:wrap;">
+            <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">📝 블로그·칼럼·Word</div>
+            <div style="color:var(--text3);font-size:18px;font-weight:300;">→</div>
+            <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">⚙ Designrr PRO 변환</div>
+            <div style="color:var(--text3);font-size:18px;font-weight:300;">→</div>
+            <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">📚 eBook · 플립북</div>
+            <div style="color:var(--text3);font-size:18px;font-weight:300;">→</div>
+            <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">📱 Kindle · ePub</div>
+          </div>
+          <!-- 담당자별 과제 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">TASKS BY ROLE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
+              <span style="font-size:18px;flex-shrink:0;">📋</span>
+              <div><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px;">기획자</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">블로그·칼럼 3건 → eBook<br>한국어/이중언어 Kindle·ePub 품질 검증</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
+              <span style="font-size:18px;flex-shrink:0;">🎨</span>
+              <div><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">디자이너</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">Word 원고 → 샘플 eBook<br>3D 커버 제작 · 품질 평가</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
+              <span style="font-size:18px;flex-shrink:0;">📣</span>
+              <div><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px;">마케터</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">리드마그넷 PDF 2종 제작<br>배포 채널 테스트 · 클릭률 측정</div></div>
+            </div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
+              <span style="font-size:18px;flex-shrink:0;">📊</span>
+              <div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:3px;">PM</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">워크플로 SOP 초안 작성<br>PRO 단계 평가 보고서 (W4)</div></div>
+            </div>
+          </div>
+          <!-- KPI 게이지 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 1 KPI</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);">3건</div>
+              <div style="font-size:10.5px;color:var(--text3);">변환 케이스 완료</div>
+            </div>
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);">4.0점</div>
+              <div style="font-size:10.5px;color:var(--text3);">품질 평가 기준</div>
+            </div>
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);">0건</div>
+              <div style="font-size:10.5px;color:var(--text3);">한국어 이슈</div>
+            </div>
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);">3/5</div>
+              <div style="font-size:10.5px;color:var(--text3);">충족 시 Gate 1 통과</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- 비용 -->
-        <div class="tl-item">
-          <div class="tl-dot" style="background:var(--text3);"></div>
-          <div class="tl-period" style="color:var(--text3);">비용 계획</div>
-          <div class="tl-title">총 예산 ~₩670,000 (3개월)</div>
-          <div class="tl-box">
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">
-              <div style="text-align:center;padding:10px;background:var(--s2);border-radius:var(--r);">
-                <div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:3px;">7월 · PRO</div>
-                <div style="font-size:14px;font-weight:700;color:var(--text);">$97</div>
-                <div style="font-size:11px;color:var(--text3);">약 ₩130,000</div>
+      <!-- ── 2단계 상세 인포그래픽 ── -->
+      <div style="background:var(--surface);border:2px solid rgba(13,148,136,.2);border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="background:linear-gradient(90deg,rgba(13,148,136,.08),rgba(13,148,136,.03));padding:14px 20px;border-bottom:1px solid rgba(13,148,136,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0A7060,#0D9488);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎧</div>
+          <div style="flex:1;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin-bottom:2px;">2단계 · 8월 W5~W8 · Designrr Premium</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">오디오·비디오 출판 모델 검증</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:10px;color:var(--text3);">누적 비용</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--teal);">₩400,000</div>
+          </div>
+        </div>
+        <div style="padding:18px 20px;">
+          <!-- 워크플로 흐름 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">WORKFLOW — 멀티 포맷 출판 파이프라인</div>
+          <div style="position:relative;margin-bottom:18px;">
+            <!-- 소스 -->
+            <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:0;align-items:center;">
+              <div style="padding:10px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.2);border-radius:8px;text-align:center;">
+                <div style="font-size:20px;margin-bottom:4px;">🎥</div>
+                <div style="font-size:10.5px;font-weight:600;color:var(--teal);">강의·세미나<br>영상·팟캐스트</div>
               </div>
-              <div style="text-align:center;padding:10px;background:var(--s2);border-radius:var(--r);">
-                <div style="font-size:11px;color:var(--teal);font-weight:700;margin-bottom:3px;">8월 · Premium</div>
-                <div style="font-size:14px;font-weight:700;color:var(--text);">$200 추가</div>
-                <div style="font-size:11px;color:var(--text3);">약 ₩270,000</div>
+              <div style="color:var(--text3);font-size:16px;padding:0 6px;">→</div>
+              <div style="padding:10px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.2);border-radius:8px;text-align:center;">
+                <div style="font-size:20px;margin-bottom:4px;">✍️</div>
+                <div style="font-size:10.5px;font-weight:600;color:var(--teal);">자동<br>트랜스크립션</div>
               </div>
-              <div style="text-align:center;padding:10px;background:var(--s2);border-radius:var(--r);">
-                <div style="font-size:11px;color:var(--gold2);font-weight:700;margin-bottom:3px;">9월 · Agency</div>
-                <div style="font-size:14px;font-weight:700;color:var(--text);">$200 추가</div>
-                <div style="font-size:11px;color:var(--text3);">약 ₩270,000</div>
+              <div style="color:var(--text3);font-size:16px;padding:0 6px;">→</div>
+              <div style="padding:10px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.2);border-radius:8px;text-align:center;">
+                <div style="font-size:20px;margin-bottom:4px;">📚</div>
+                <div style="font-size:10.5px;font-weight:600;color:var(--teal);">eBook<br>자동 생성</div>
+              </div>
+              <div style="color:var(--text3);font-size:16px;padding:0 6px;">→</div>
+              <div style="padding:10px;background:rgba(13,148,136,.12);border:2px solid rgba(13,148,136,.35);border-radius:8px;text-align:center;">
+                <div style="font-size:20px;margin-bottom:4px;">🎧</div>
+                <div style="font-size:10.5px;font-weight:700;color:var(--teal);">오디오북<br>패키지</div>
               </div>
             </div>
-            <div class="info-box blue" style="margin:0;">인건비(4명 × 3개월)는 내부 업무 시간으로 처리하며 별도 산정합니다. 환율 기준 1 USD = 1,350원 적용.</div>
+          </div>
+          <!-- Multi-Revenue 채널 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">OUTPUT — Multi-Revenue 채널</div>
+          <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">📱</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">전자책</div></div>
+            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">🎧</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">오디오북</div></div>
+            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">🌍</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">KDP 글로벌</div></div>
+            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">🎓</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">강의 패키지</div></div>
+          </div>
+          <!-- KPI 게이지 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 2 KPI</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--teal);">85%↑</div>
+              <div style="font-size:10.5px;color:var(--text3);">트랜스크립션 정확도</div>
+            </div>
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--teal);">1종</div>
+              <div style="font-size:10.5px;color:var(--text3);">오디오북 완성</div>
+            </div>
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--teal);">3일↓</div>
+              <div style="font-size:10.5px;color:var(--text3);">준비→출판 소요시간</div>
+            </div>
+            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--teal);">전 항목</div>
+              <div style="font-size:10.5px;color:var(--text3);">충족 시 Gate 2 통과</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3단계 상세 인포그래픽 ── -->
+      <div style="background:var(--surface);border:2px solid rgba(184,134,11,.2);border-radius:14px;overflow:hidden;margin-bottom:20px;">
+        <div style="background:linear-gradient(90deg,rgba(184,134,11,.08),rgba(184,134,11,.03));padding:14px 20px;border-bottom:1px solid rgba(184,134,11,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#8B6300,#B8860B);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏢</div>
+          <div style="flex:1;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--gold2);text-transform:uppercase;margin-bottom:2px;">3단계 · 9월 W9~W12 · Agency Premium</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">Agency 모델 검증 + 종합 평가</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:10px;color:var(--text3);">누적 비용</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--gold2);">₩670,000</div>
+          </div>
+        </div>
+        <div style="padding:18px 20px;">
+          <!-- 구조도 — Agency 운영 모델 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">AGENCY 운영 구조</div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;margin-bottom:18px;">
+            <!-- 허브 -->
+            <div style="padding:14px 16px;background:linear-gradient(135deg,rgba(184,134,11,.12),rgba(184,134,11,.06));border:2px solid rgba(184,134,11,.3);border-radius:10px;text-align:center;min-width:100px;">
+              <div style="font-size:22px;margin-bottom:4px;">🏢</div>
+              <div style="font-size:11px;font-weight:800;color:var(--gold2);">에이콘온</div>
+              <div style="font-size:10px;color:var(--text3);">Agency 계정</div>
+            </div>
+            <!-- 저자 5명 -->
+            <div>
+              <div style="font-size:10.5px;color:var(--text3);margin-bottom:6px;">동시 관리 저자 5명 PoC</div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <div style="width:3px;height:26px;background:rgba(184,134,11,.4);border-radius:2px;flex-shrink:0;"></div>
+                  <div style="flex:1;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:11.5px;color:var(--text);display:flex;justify-content:space-between;">
+                    <span>저자 A · 기술서 eBook</span><span style="font-size:10.5px;color:var(--gold2);">Dropbox 임포트 →</span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <div style="width:3px;height:26px;background:rgba(184,134,11,.4);border-radius:2px;flex-shrink:0;"></div>
+                  <div style="flex:1;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:11.5px;color:var(--text);display:flex;justify-content:space-between;">
+                    <span>저자 B · 강의 → 오디오북</span><span style="font-size:10.5px;color:var(--gold2);">트랜스크립션 →</span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <div style="width:3px;height:26px;background:rgba(184,134,11,.3);border-radius:2px;flex-shrink:0;"></div>
+                  <div style="flex:1;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:11.5px;color:var(--text2);">저자 C·D·E · 다중 Draft 병합 테스트</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- BEP 공식 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">BEP 손익분기 산정</div>
+          <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:4px;align-items:center;padding:12px 16px;background:rgba(184,134,11,.05);border:1px solid rgba(184,134,11,.18);border-radius:8px;margin-bottom:16px;">
+            <div style="text-align:center;padding:8px;">
+              <div style="font-size:13px;font-weight:800;color:var(--gold2);">$497</div>
+              <div style="font-size:10px;color:var(--text3);">Agency 연간 비용</div>
+            </div>
+            <div style="font-size:18px;color:var(--text3);">÷</div>
+            <div style="text-align:center;padding:8px;">
+              <div style="font-size:13px;font-weight:800;color:var(--gold2);">저자당 순수익</div>
+              <div style="font-size:10px;color:var(--text3);">대행 수수료 + 채널 수익</div>
+            </div>
+            <div style="font-size:18px;color:var(--text3);">=</div>
+            <div style="text-align:center;padding:8px;background:rgba(184,134,11,.1);border-radius:6px;">
+              <div style="font-size:13px;font-weight:800;color:var(--gold2);">BEP 저자 수</div>
+              <div style="font-size:10px;color:var(--text3);">W11 산출 목표</div>
+            </div>
+          </div>
+          <!-- KPI 게이지 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 3 KPI</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--gold2);">5명</div>
+              <div style="font-size:10.5px;color:var(--text3);">동시 관리 검증</div>
+            </div>
+            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--gold2);">BEP</div>
+              <div style="font-size:10.5px;color:var(--text3);">손익분기 산출</div>
+            </div>
+            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--gold2);">1세트</div>
+              <div style="font-size:10.5px;color:var(--text3);">브랜드 키트</div>
+            </div>
+            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--gold2);">4.0점</div>
+              <div style="font-size:10.5px;color:var(--text3);">저자 만족도</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 비용 요약 인포그래픽 ── -->
+      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px 20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:12px;">BUDGET SUMMARY — 3개월 총 예산</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center;">
+          <div style="padding:12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:4px;">7월 · PRO</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--blue);">$97</div>
+            <div style="font-size:11px;color:var(--text3);">₩130,000</div>
+          </div>
+          <div style="padding:12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--teal);margin-bottom:4px;">8월 · Premium 업그레이드</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--teal);">+$200</div>
+            <div style="font-size:11px;color:var(--text3);">₩270,000</div>
+          </div>
+          <div style="padding:12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--gold2);margin-bottom:4px;">9월 · Agency 업그레이드</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gold2);">+$200</div>
+            <div style="font-size:11px;color:var(--text3);">₩270,000</div>
+          </div>
+          <div style="padding:14px 18px;background:linear-gradient(135deg,#1a3a5c,#0a3e5a);border-radius:10px;text-align:center;min-width:110px;">
+            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:4px;">3개월 합계</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;color:#fff;">~₩670K</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.5);">인건비 별도</div>
           </div>
         </div>
       </div>
@@ -3352,19 +3559,41 @@ function nav(id, subTabId) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const clicked = document.querySelector(`.nav-item[onclick*="'${id}'"]`);
   if(clicked) clicked.classList.add('active');
-  // activate sub-tab if specified
-  if(subTabId) {
-    setTimeout(() => {
+
+  // ── 서브탭 활성화 ──────────────────────────────────────
+  setTimeout(() => {
+    const sec = document.getElementById(id);
+    if(!sec) return;
+
+    const panels = sec.querySelectorAll('.tab-panel');
+    const bars   = sec.querySelectorAll('.tab-bar');
+
+    if(subTabId) {
+      // 지정된 탭 활성화
+      panels.forEach(p => p.classList.remove('active'));
       const panel = document.getElementById(id + '-' + subTabId);
-      const bar = document.querySelector('#' + id + ' .tab-bar');
-      if(panel && bar) {
-        document.querySelectorAll('#' + id + ' .tab-panel').forEach(p => p.classList.remove('active'));
-        panel.classList.add('active');
-        const tabIdx = ['t0','t1','t2','t3','t4'].indexOf(subTabId);
-        bar.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===tabIdx));
+      if(panel) panel.classList.add('active');
+      bars.forEach(bar => {
+        bar.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.toggle('active', b.getAttribute('onclick')?.includes(`'${subTabId}'`));
+        });
+      });
+    } else {
+      // 지정 없으면 첫 번째 탭 자동 활성화 (이미 active 없을 때만)
+      const alreadyActive = sec.querySelector('.tab-panel.active');
+      if(!alreadyActive && panels.length > 0) {
+        panels[0].classList.add('active');
+        bars.forEach(bar => {
+          const firstBtn = bar.querySelector('.tab-btn');
+          if(firstBtn) {
+            bar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            firstBtn.classList.add('active');
+          }
+        });
       }
-    }, 0);
-  }
+    }
+  }, 0);
+
   window.scrollTo(0,0);
   buildChecklist();
   if (id === 's9') { setTimeout(function(){ if(typeof pilotInit==='function') pilotInit(); }, 50); }
@@ -4235,6 +4464,56 @@ async function pilotInit(){
 document.addEventListener('DOMContentLoaded', function(){
   sbLoadConfig();
 });
+
+
+// ════════════════════════════════════════════════════════
+// 최신화 (Hard Refresh) — 모든 브라우저 캐시 완전 삭제 후 강제 리로드
+// ════════════════════════════════════════════════════════
+async function hardRefresh() {
+  const btn = document.getElementById('btn-refresh');
+
+  // 1) 버튼 스피너 표시
+  if (btn) {
+    btn.textContent = '…';
+    btn.style.opacity = '.5';
+    btn.disabled = true;
+  }
+
+  try {
+    // 2) Service Worker 전체 등록 해제
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+
+    // 3) Cache API (CacheStorage) 전체 삭제
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+
+    // 4) localStorage pilot 캐시 플래그 초기화 (설정 키는 보존)
+    const KEEP = ['pilot_user_id','pilot_sb_url','pilot_sb_key','pilot_sb_enabled'];
+    Object.keys(localStorage)
+      .filter(k => !KEEP.includes(k) && (k.startsWith('pt_') || k.startsWith('dash_')))
+      .forEach(k => localStorage.removeItem(k));
+
+    // 5) URL에 타임스탬프 쿼리 추가 → 브라우저가 서버에서 반드시 새 파일 요청
+    //    (모든 브라우저에서 Ctrl+Shift+R 과 동일한 효과)
+    const url = new URL(location.href);
+    url.searchParams.set('_v', Date.now().toString(36));
+    // 기존 캐시 버전 파라미터 제거
+    url.searchParams.delete('v');
+    url.searchParams.delete('_nocache');
+
+    // 6) location.replace — 히스토리 스택 오염 없이 강제 리로드
+    location.replace(url.toString());
+
+  } catch (e) {
+    // 에러 시 단순 강제 리로드 (fallback)
+    location.reload(true);
+  }
+}
 
 </script>
 </body>
