@@ -2481,24 +2481,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 <div id="s9" class="section">
   <div class="page-header" style="background:linear-gradient(135deg,#07213E 0%,#0A3E5A 50%,#05302A 100%);">
     <div class="ph-eyebrow">DESIGNRR PARTNERSHIP · 2026</div>
-    <h1 class="ph-title">Pilot Test 계획 <span style="font-size:.6em;font-weight:400;opacity:.75">3개월 파일럿</span></h1>
-    <p class="ph-sub">Publisher-On · Author-On · Reader-On 3개 플랫폼 콘텐츠 자동화 파이프라인 검증 — 2026.07 ~ 09</p>
+    <h1 class="ph-title">Pilot Test <span style="font-size:.6em;font-weight:400;opacity:.75">3개월 운영 계획</span></h1>
+    <p class="ph-sub">Publisher-On · Author-On · Reader-On 3개 플랫폼 콘텐츠 자동화 파이프라인 검증 — 2026.07 ~ 09 · Agency Premium 운영 중</p>
   </div>
   <div class="content">
 
-        <!-- ── 3개월 마일스톤 진행 대시보드 ── -->
+    <!-- ── 진행 대시보드 ── -->
     <div id="pilot-dashboard" style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);overflow:hidden;margin-bottom:28px;box-shadow:var(--shadow);">
-
-      <!-- 헤더 -->
       <div style="background:var(--nav-bg);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
         <div>
           <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:rgba(184,212,234,.7);text-transform:uppercase;margin-bottom:3px;">3-MONTH PILOT DASHBOARD</div>
-          <div style="font-size:15px;font-weight:700;color:#fff;">진행 상황 모니터</div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">업무 진행 현황</div>
         </div>
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <div id="sb-status-badge">
-            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(184,114,10,.18);color:var(--gold2);border:1px solid rgba(184,114,10,.3);">🟡 localStorage 모드</span>
-          </div>
+          <div id="sb-status-badge"><span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(184,114,10,.18);color:var(--gold2);border:1px solid rgba(184,114,10,.3);">🟡 localStorage 모드</span></div>
           <div style="text-align:right;">
             <div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:2px;">전체 진행률</div>
             <div id="dash-pct-txt" style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#fff;">0%</div>
@@ -2506,12 +2502,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <div style="width:64px;height:64px;position:relative;">
             <svg viewBox="0 0 36 36" style="width:64px;height:64px;transform:rotate(-90deg);">
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="3"/>
-              <circle id="dash-ring" cx="18" cy="18" r="15.9" fill="none" stroke="url(#pg)" stroke-width="3"
-                stroke-dasharray="0 100" stroke-linecap="round" style="transition:stroke-dasharray .6s ease;"/>
-              <defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#0D9488"/>
-                <stop offset="100%" stop-color="#1560B8"/>
-              </linearGradient></defs>
+              <circle id="dash-ring" cx="18" cy="18" r="15.9" fill="none" stroke="url(#pg)" stroke-width="3" stroke-dasharray="0 100" stroke-linecap="round" style="transition:stroke-dasharray .6s ease;"/>
+              <defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0D9488"/><stop offset="100%" stop-color="#1560B8"/></linearGradient></defs>
             </svg>
           </div>
         </div>
@@ -2519,14 +2511,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
       <!-- 3개월 트랙 -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);">
-
-        <!-- 7월 PRO -->
+        <!-- 7월 -->
         <div style="padding:16px 18px;border-right:1px solid var(--border);">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div>
               <div style="font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.08em;margin-bottom:2px;">7월 · W1~W4</div>
-              <div style="font-size:13px;font-weight:700;color:var(--text);">Designrr PRO</div>
-              <div style="font-size:11px;color:var(--text3);">기능 적합성 검증 · $97/년</div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">기능 검증</div>
+              <div style="font-size:11px;color:var(--text3);">텍스트 변환 · 품질 확인</div>
             </div>
             <div id="phase1-status" style="font-size:20px;">⏳</div>
           </div>
@@ -2534,32 +2525,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <div id="phase1-bar" style="height:100%;width:0%;background:var(--blue);border-radius:100px;transition:width .5s;"></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:4px;" id="phase1-checks">
-            <div class="dash-check" data-phase="1" data-idx="0" onclick="dashToggle(1,0,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W1 환경 셋업 &amp; 기능 탐색</span>
-            </div>
-            <div class="dash-check" data-phase="1" data-idx="1" onclick="dashToggle(1,1,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W2 텍스트 변환 Case A·B</span>
-            </div>
-            <div class="dash-check" data-phase="1" data-idx="2" onclick="dashToggle(1,2,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W3 Kindle/ePub 품질 검증</span>
-            </div>
-            <div class="dash-check" data-phase="1" data-idx="3" onclick="dashToggle(1,3,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W4 리드마그넷 + PRO 평가 ⭐</span>
-            </div>
+            <div class="dash-check" data-phase="1" data-idx="0" onclick="dashToggle(1,0)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W1 환경 셋업 &amp; 기능 탐색</span></div>
+            <div class="dash-check" data-phase="1" data-idx="1" onclick="dashToggle(1,1)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W2 텍스트 변환 Case A·B</span></div>
+            <div class="dash-check" data-phase="1" data-idx="2" onclick="dashToggle(1,2)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W3 Kindle/ePub 품질 검증</span></div>
+            <div class="dash-check" data-phase="1" data-idx="3" onclick="dashToggle(1,3)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W4 리드마그넷 + 평가 보고서 ⭐</span></div>
           </div>
         </div>
-
-        <!-- 8월 Premium -->
+        <!-- 8월 -->
         <div style="padding:16px 18px;border-right:1px solid var(--border);">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div>
               <div style="font-size:10px;font-weight:700;color:var(--teal);letter-spacing:.08em;margin-bottom:2px;">8월 · W5~W8</div>
-              <div style="font-size:13px;font-weight:700;color:var(--text);">Designrr Premium</div>
-              <div style="font-size:11px;color:var(--text3);">오디오·비디오 검증 · $297/년</div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">편집 병행 테스트</div>
+              <div style="font-size:11px;color:var(--text3);">기존 방식 vs Designrr 비교</div>
             </div>
             <div id="phase2-status" style="font-size:20px;">⏳</div>
           </div>
@@ -2567,32 +2545,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <div id="phase2-bar" style="height:100%;width:0%;background:var(--teal);border-radius:100px;transition:width .5s;"></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:4px;" id="phase2-checks">
-            <div class="dash-check" data-phase="2" data-idx="0" onclick="dashToggle(2,0,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W5 Premium 업그레이드 &amp; 저자 킥오프</span>
-            </div>
-            <div class="dash-check" data-phase="2" data-idx="1" onclick="dashToggle(2,1,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W6 트랜스크립션 파일럿</span>
-            </div>
-            <div class="dash-check" data-phase="2" data-idx="2" onclick="dashToggle(2,2,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W7 오디오북 + Multi-Revenue 패키지</span>
-            </div>
-            <div class="dash-check" data-phase="2" data-idx="3" onclick="dashToggle(2,3,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W8 파일럿 저자 완전 출판 ⭐</span>
-            </div>
+            <div class="dash-check" data-phase="2" data-idx="0" onclick="dashToggle(2,0)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W5 편집자 도서 A — 병행 작업 시작</span></div>
+            <div class="dash-check" data-phase="2" data-idx="1" onclick="dashToggle(2,1)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W6 오디오·영상 트랜스크립션 검증</span></div>
+            <div class="dash-check" data-phase="2" data-idx="2" onclick="dashToggle(2,2)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W7 편집자 도서 B — 병행 작업 시작</span></div>
+            <div class="dash-check" data-phase="2" data-idx="3" onclick="dashToggle(2,3)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W8 소요시간 · 품질 비교 측정 ⭐</span></div>
           </div>
         </div>
-
-        <!-- 9월 Agency -->
+        <!-- 9월 -->
         <div style="padding:16px 18px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div>
               <div style="font-size:10px;font-weight:700;color:var(--gold2);letter-spacing:.08em;margin-bottom:2px;">9월 · W9~W12</div>
-              <div style="font-size:13px;font-weight:700;color:var(--text);">Agency Premium</div>
-              <div style="font-size:11px;color:var(--text3);">Agency 모델 검증 · $497/년</div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">종합 평가</div>
+              <div style="font-size:11px;color:var(--text3);">워크플로 확정 · 로드맵 수립</div>
             </div>
             <div id="phase3-status" style="font-size:20px;">⏳</div>
           </div>
@@ -2600,31 +2565,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <div id="phase3-bar" style="height:100%;width:0%;background:var(--gold2);border-radius:100px;transition:width .5s;"></div>
           </div>
           <div style="display:flex;flex-direction:column;gap:4px;" id="phase3-checks">
-            <div class="dash-check" data-phase="3" data-idx="0" onclick="dashToggle(3,0,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W9 Agency PoC 설계</span>
-            </div>
-            <div class="dash-check" data-phase="3" data-idx="1" onclick="dashToggle(3,1,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W10 저자 5명 동시 관리</span>
-            </div>
-            <div class="dash-check" data-phase="3" data-idx="2" onclick="dashToggle(3,2,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W11 BEP 산정 + 브랜드 키트</span>
-            </div>
-            <div class="dash-check" data-phase="3" data-idx="3" onclick="dashToggle(3,3,this)">
-              <span class="dash-dot" style="background:var(--border2);"></span>
-              <span style="font-size:11.5px;color:var(--text2);">W12 최종 보고서 + 글로벌 로드맵 ⭐</span>
-            </div>
+            <div class="dash-check" data-phase="3" data-idx="0" onclick="dashToggle(3,0)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W9 Multi-Revenue 채널 설계 검토</span></div>
+            <div class="dash-check" data-phase="3" data-idx="1" onclick="dashToggle(3,1)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W10 브랜드 템플릿 키트 완성</span></div>
+            <div class="dash-check" data-phase="3" data-idx="2" onclick="dashToggle(3,2)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W11 표준 SOP 확정</span></div>
+            <div class="dash-check" data-phase="3" data-idx="3" onclick="dashToggle(3,3)"><span class="dash-dot" style="background:var(--border2);"></span><span style="font-size:11.5px;color:var(--text2);">W12 최종 보고서 + 글로벌 로드맵 ⭐</span></div>
           </div>
         </div>
       </div>
 
-      <!-- 푸터 요약 -->
       <div style="padding:12px 22px;background:var(--s2);display:flex;gap:24px;flex-wrap:wrap;">
         <div style="font-size:12px;color:var(--text3);">👥 참가자 4명 (PM·디자이너·마케터·기획자)</div>
-        <div style="font-size:12px;color:var(--text3);">💰 총 예산 ~₩670,000</div>
-        <div style="font-size:12px;color:var(--text3);">⭐ W4·W8·W12 Gate 평가</div>
+        <div style="font-size:12px;color:var(--text3);">✏️ 내부 편집자 진행 도서 2건 병행 테스트</div>
+        <div style="font-size:12px;color:var(--text3);">⭐ W4·W8·W12 단계 평가</div>
         <div style="font-size:12px;color:var(--teal);font-weight:600;">클릭하여 완료 표시</div>
       </div>
     </div>
@@ -2632,7 +2584,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <!-- ── 탭 ── -->
     <div class="pill-tabs" id="pilot-tabs">
       <button class="pill-tab active" onclick="pilotTab(0)">📋 개요 &amp; 역할</button>
-      <button class="pill-tab" onclick="pilotTab(1)">📅 단계별 계획</button>
+      <button class="pill-tab" onclick="pilotTab(1)">📅 업무 계획</button>
       <button class="pill-tab" onclick="pilotTab(2)">🗓 주차별 마일스톤</button>
       <button class="pill-tab" onclick="pilotTab(3)">✅ 진행 체크리스트</button>
       <button class="pill-tab" onclick="pilotTab(4)">⚠️ 리스크 &amp; Gate</button>
@@ -2640,34 +2592,30 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <button class="pill-tab" onclick="pilotTab(6)" style="background:linear-gradient(135deg,rgba(30,95,173,.15),rgba(13,148,136,.1));border-color:rgba(30,95,173,.35);color:var(--blue);font-weight:700;">📖 eBook 제작 가이드</button>
     </div>
 
-    <!-- ─────────────────────────────────────────
-         탭 0: 개요 & 역할
-    ───────────────────────────────────────── -->
+    <!-- ─── 탭 0: 개요 & 역할 ─── -->
     <div class="pill-content active" id="pt0">
 
-      <!-- 테스트 개요 & 목적 -->
-      <div style="background:linear-gradient(135deg,rgba(10,62,132,.07),rgba(10,120,96,.05));border:1.5px solid rgba(10,62,132,.18);border-radius:var(--rL);padding:22px 24px;margin-bottom:22px;">
+      <!-- 테스트 개요 -->
+      <div style="background:linear-gradient(135deg,rgba(10,62,132,.07),rgba(13,148,136,.05));border:1.5px solid rgba(10,62,132,.18);border-radius:var(--rL);padding:22px 24px;margin-bottom:22px;">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
           <div>
             <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">테스트 개요 &amp; 목적</div>
-            <div style="font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:10px;">Designrr 파트너십 3개월 파일럿</div>
+            <div style="font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:10px;">Designrr Agency Premium 3개월 파일럿</div>
           </div>
-          <a href="https://app.designrr.io/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:var(--blue);color:#fff;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;transition:opacity .15s;white-space:nowrap;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">
-            🔗 Designrr 바로가기 ↗
-          </a>
+          <a href="https://app.designrr.io/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:var(--blue);color:#fff;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">🔗 Designrr 바로가기 ↗</a>
         </div>
         <p style="font-size:13px;color:var(--text2);line-height:1.85;margin-bottom:16px;">
-          에이콘온은 <strong>Publisher-On(출판사) · Author-On(저자) · Reader-On(독자)</strong> 3개 플랫폼의 콘텐츠 자동화 파이프라인을 검증하기 위해 Designrr를 3개월 파일럿 파트너로 테스트합니다.<br>
-          1차 목표는 <strong>국내 저자·출판사·독자 대상 워크플로 완성</strong>이며, 이후 <strong>아마존 KDP 글로벌 출간</strong>으로 확장합니다.
+          에이콘온은 <strong>Publisher-On(출판사) · Author-On(저자) · Reader-On(독자)</strong> 3개 플랫폼의 콘텐츠 자동화 파이프라인을 검증하기 위해 Designrr를 3개월 파일럿으로 운영합니다.<br>
+          1차 목표는 <strong>국내 편집 업무에 Designrr를 실제 적용하여 워크플로를 완성</strong>하는 것이며, 이후 <strong>아마존 KDP 글로벌 출간</strong>으로 확장합니다.
         </p>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
           <div style="background:var(--surface);border-radius:var(--r);padding:12px 14px;border:1px solid var(--border);">
             <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:5px;">🎯 1차 목표</div>
-            <div style="font-size:12px;color:var(--text2);line-height:1.6;">국내 3플랫폼 워크플로 완성 및 품질 검증</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.6;">편집 실무에 Designrr 적용 · 워크플로 표준화</div>
           </div>
           <div style="background:var(--surface);border-radius:var(--r);padding:12px 14px;border:1px solid var(--border);">
             <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:5px;">📊 2차 목표</div>
-            <div style="font-size:12px;color:var(--text2);line-height:1.6;">ROI 기준치 산정 및 Agency 운영 가능성 확인</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.6;">기존 편집 방식 대비 품질·시간 비교 검증</div>
           </div>
           <div style="background:var(--surface);border-radius:var(--r);padding:12px 14px;border:1px solid var(--border);">
             <div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:5px;">🌏 3차 목표</div>
@@ -2676,443 +2624,268 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
 
-      <!-- Designrr 핵심 기능 요약 -->
+      <!-- Designrr 핵심 기능 -->
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:22px;">
-        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;">DESIGNRR 핵심 기능</div>
+        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;">DESIGNRR AGENCY PREMIUM 핵심 기능</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(10,62,132,.09);color:var(--blue);border:1px solid rgba(10,62,132,.2);">📄 블로그·Word·PDF → eBook 자동 변환</span>
           <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(10,120,96,.09);color:var(--teal);border:1px solid rgba(10,120,96,.2);">🎧 오디오·영상 자동 트랜스크립션</span>
-          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(184,114,10,.09);color:var(--gold);border:1px solid rgba(184,114,10,.2);">📱 ePub·Kindle·플립북 내보내기</span>
-          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(74,26,124,.09);color:var(--purple);border:1px solid rgba(74,26,124,.2);">🏢 Agency 멀티유저·Dropbox 대량 임포트</span>
-          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(140,26,46,.09);color:var(--rose);border:1px solid rgba(140,26,46,.2);">🎨 3D 커버·모크업·300+ 템플릿</span>
-          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(10,62,132,.09);color:var(--blue);border:1px solid rgba(10,62,132,.2);">🤖 Wordgenie AI 원고 보강</span>
+          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(184,114,10,.09);color:var(--gold2);border:1px solid rgba(184,114,10,.2);">📱 ePub · Kindle · 플립북 내보내기</span>
+          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(74,26,124,.09);color:var(--purple);border:1px solid rgba(74,26,124,.2);">🏢 멀티유저 · Dropbox 대량 임포트</span>
+          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(239,68,68,.09);color:#DC2626;border:1px solid rgba(239,68,68,.2);">🤖 Wordgenie AI 원고 보강</span>
+          <span style="font-size:12px;padding:4px 11px;border-radius:100px;background:rgba(10,62,132,.09);color:var(--blue);border:1px solid rgba(10,62,132,.2);">🎨 300+ 템플릿 · 3D 커버</span>
         </div>
       </div>
 
       <!-- 플랫폼별 역할 -->
-      <div style="font-size:12px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase;">플랫폼별 담당 역할</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase;">팀원별 담당 역할</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;">
         <div class="card" style="border-top:4px solid var(--blue);">
           <div class="card-icon">🏛</div>
           <div class="card-title" style="color:var(--blue);">Publisher-On — 출판사 플랫폼</div>
-          <div class="card-body">
-            <strong>담당: 기획자</strong><br>
-            기획안·원고·칼럼 → eBook·플립북 자동 변환<br>
-            Kindle/ePub 내보내기 · 한국어 품질 검증<br>
-            <span style="color:var(--teal);font-weight:600;">Designrr 역할:</span> 변환·편집·포맷 (제작 레이어)
-          </div>
+          <div class="card-body"><strong>담당: 기획자</strong><br>기획안·원고 → eBook·플립북 변환<br>Kindle/ePub 내보내기 · 한국어 품질 검증<br><span style="color:var(--teal);font-weight:600;">핵심:</span> 기존 편집 방식과 병행 비교</div>
         </div>
         <div class="card" style="border-top:4px solid var(--teal);">
           <div class="card-icon">✍️</div>
           <div class="card-title" style="color:var(--teal);">Author-On — 저자 플랫폼</div>
-          <div class="card-body">
-            <strong>담당: 마케터</strong><br>
-            강의·웨비나·팟캐스트 → 트랜스크립션 → 전자책<br>
-            리드마그넷·PDF 제작 · ROI 측정<br>
-            <span style="color:var(--teal);font-weight:600;">Designrr 역할:</span> 콘텐츠 변환 백오피스
-          </div>
+          <div class="card-body"><strong>담당: 마케터</strong><br>강의·영상 → 트랜스크립션 → 전자책<br>리드마그넷 · Multi-Revenue 패키지<br><span style="color:var(--teal);font-weight:600;">핵심:</span> 내부 콘텐츠 자산 재활용</div>
         </div>
         <div class="card" style="border-top:4px solid var(--purple);">
           <div class="card-icon">📖</div>
           <div class="card-title" style="color:var(--purple);">Reader-On — 독자 플랫폼</div>
-          <div class="card-body">
-            <strong>담당: 디자이너</strong><br>
-            라이브 eBook·플립북 · 3D 모크업·커버 제작<br>
-            마케팅 배너·썸네일 · 독자 테스트 랜딩<br>
-            <span style="color:var(--teal);font-weight:600;">Designrr 역할:</span> 마케팅 에셋 제작
-          </div>
+          <div class="card-body"><strong>담당: 디자이너</strong><br>라이브 eBook · 플립북 · 3D 커버<br>마케팅 배너 · 독자 대상 랜딩<br><span style="color:var(--teal);font-weight:600;">핵심:</span> 디자인 에셋 제작 효율화</div>
         </div>
         <div class="card" style="border-top:4px solid var(--gold2);">
           <div class="card-icon">📊</div>
           <div class="card-title" style="color:var(--gold2);">전체 조율 — PM</div>
-          <div class="card-body">
-            <strong>담당: 프로젝트 매니저</strong><br>
-            워크플로 설계 · KPI 추적 · 보고서 작성<br>
-            단계별 업그레이드 결정 (Gate 1·2·3)<br>
-            <span style="color:var(--teal);font-weight:600;">주간:</span> 월 킥오프 30분 · 금 리뷰 30분
-          </div>
+          <div class="card-body"><strong>담당: 프로젝트 매니저</strong><br>워크플로 설계 · KPI 추적 · 보고서<br>단계별 평가 결정 (W4·W8·W12)<br><span style="color:var(--teal);font-weight:600;">주간:</span> 월 킥오프 · 금 리뷰 각 30분</div>
         </div>
       </div>
-      <div class="info-box teal">
-        <strong>핵심 원칙:</strong> Designrr는 콘텐츠 변환·제작 레이어로 한정합니다. 저자/독자 데이터베이스·커뮤니티·결제·인세 정산은 에이콘온 자체 플랫폼이 독립 운영합니다.
+
+      <!-- 병행 테스트 방식 -->
+      <div style="background:linear-gradient(135deg,rgba(13,148,136,.07),rgba(10,62,132,.05));border:1.5px solid rgba(13,148,136,.2);border-radius:var(--rL);padding:20px 22px;margin-bottom:22px;">
+        <div style="font-size:13px;font-weight:700;color:var(--teal);margin-bottom:12px;">✏️ 내부 편집 업무 병행 테스트 방식</div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:14px;">
+          <div style="padding:14px;background:var(--surface);border-radius:10px;border:1.5px solid var(--border);text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px;">📝</div>
+            <div style="font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:4px;">기존 편집 방식</div>
+            <div style="font-size:11.5px;color:var(--text3);line-height:1.6;">InDesign · Word · 수동 조판<br>기존 출판 워크플로 유지</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:24px;color:var(--text3);">⇄</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:4px;white-space:nowrap;">같은 도서<br>2가지 방법</div>
+          </div>
+          <div style="padding:14px;background:linear-gradient(135deg,rgba(13,148,136,.1),rgba(10,62,132,.07));border-radius:10px;border:1.5px solid rgba(13,148,136,.3);text-align:center;">
+            <div style="font-size:22px;margin-bottom:6px;">🤖</div>
+            <div style="font-size:12.5px;font-weight:700;color:var(--teal);margin-bottom:4px;">Designrr 방식</div>
+            <div style="font-size:11.5px;color:var(--text3);line-height:1.6;">Word 임포트 → 템플릿 → 편집<br>ePub · PDF · Kindle 자동 출력</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div style="padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px;">📚 도서 A</div>
+            <div style="font-size:12px;color:var(--text);font-weight:600;">담당 편집자 1</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">진행 중인 실제 편집 도서</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);">
+            <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">📚 도서 B</div>
+            <div style="font-size:12px;color:var(--text);font-weight:600;">담당 편집자 2</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">진행 중인 실제 편집 도서</div>
+          </div>
+          <div style="padding:10px 12px;background:rgba(13,148,136,.06);border-radius:8px;border:1px solid rgba(13,148,136,.2);">
+            <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">📊 측정 항목</div>
+            <div style="font-size:11px;color:var(--text2);line-height:1.6;">소요시간 · 품질 점수<br>한국어 이슈 · 만족도</div>
+          </div>
+        </div>
       </div>
 
       <!-- ROI 측정 기준 -->
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin:20px 0 10px;">ROI 측정 기준</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">ROI 측정 기준</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px;">콘텐츠 제작 속도</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">3일 이내</div>
-          <div style="font-size:11px;color:var(--text3);">원고 준비→출판 완료</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:4px;">eBook 품질 점수</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">4.0 / 5점</div>
-          <div style="font-size:11px;color:var(--text3);">팀 내부 평가 기준</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px;">트랜스크립션 정확도</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">85% 이상</div>
-          <div style="font-size:11px;color:var(--text3);">100문장 샘플 검수</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:4px;">한국어 품질 이슈</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">0건</div>
-          <div style="font-size:11px;color:var(--text3);">eBook 1종 기준</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--rose);margin-bottom:4px;">파일럿 저자 만족도</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">4.0 / 5점</div>
-          <div style="font-size:11px;color:var(--text3);">5개 항목 설문</div>
-        </div>
-        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--teal2);margin-bottom:4px;">투자 회수</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);">6개월 이내</div>
-          <div style="font-size:11px;color:var(--text3);">저자 1명 순수익 기여</div>
-        </div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px;">편집 소요시간</div><div style="font-size:14px;font-weight:700;color:var(--text);">기존 대비 ↓</div><div style="font-size:11px;color:var(--text3);">실측 비교</div></div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:4px;">eBook 품질 점수</div><div style="font-size:14px;font-weight:700;color:var(--text);">4.0 / 5점</div><div style="font-size:11px;color:var(--text3);">팀 내부 평가</div></div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px;">한국어 이슈</div><div style="font-size:14px;font-weight:700;color:var(--text);">0건</div><div style="font-size:11px;color:var(--text3);">eBook 1종 기준</div></div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:4px;">트랜스크립션 정확도</div><div style="font-size:14px;font-weight:700;color:var(--text);">85% 이상</div><div style="font-size:11px;color:var(--text3);">100문장 검수</div></div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:4px;">편집자 만족도</div><div style="font-size:14px;font-weight:700;color:var(--text);">4.0 / 5점</div><div style="font-size:11px;color:var(--text3);">5개 항목 설문</div></div>
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px;">도입 권고 기준</div><div style="font-size:14px;font-weight:700;color:var(--text);">3개월 후</div><div style="font-size:11px;color:var(--text3);">종합 평가 후 결정</div></div>
       </div>
     </div>
-        <div class="pill-content" id="pt1">
 
-      <!-- ── 3단계 흐름 인포그래픽 헤더 ── -->
+    <!-- ─── 탭 1: 업무 계획 ─── -->
+    <div class="pill-content" id="pt1">
+
+      <!-- 3단계 흐름 -->
       <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:center;margin-bottom:28px;">
-        <!-- 1단계 -->
         <div style="background:linear-gradient(135deg,#0A3E84,#1560B8);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 4px 20px rgba(10,62,132,.3);">
           <div style="font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:6px;">MONTH 01 · JULY</div>
-          <div style="font-size:28px;margin-bottom:6px;">📄</div>
-          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">Designrr PRO</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px;">기능 적합성 검증</div>
-          <div style="background:rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;display:inline-block;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">$97 <span style="font-size:10px;opacity:.7">/ 년</span></span>
-          </div>
+          <div style="font-size:28px;margin-bottom:6px;">🔍</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">기능 검증</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);">텍스트 변환 · 품질 확인</div>
         </div>
-        <!-- 화살표 -->
         <div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 12px;">
           <div style="width:40px;height:2px;background:linear-gradient(90deg,#1560B8,#0D9488);"></div>
           <div style="font-size:18px;color:var(--ink-m);margin:-4px 0;">→</div>
-          <div style="font-size:9px;color:var(--text3);white-space:nowrap;">Gate 1</div>
+          <div style="font-size:9px;color:var(--text3);white-space:nowrap;">Gate 1 · W4</div>
         </div>
-        <!-- 2단계 -->
         <div style="background:linear-gradient(135deg,#0A7060,#0D9488);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 4px 20px rgba(13,148,136,.3);">
           <div style="font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:6px;">MONTH 02 · AUG</div>
-          <div style="font-size:28px;margin-bottom:6px;">🎧</div>
-          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">Designrr Premium</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px;">오디오·비디오 출판 검증</div>
-          <div style="background:rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;display:inline-block;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">$297 <span style="font-size:10px;opacity:.7">/ 년</span></span>
-          </div>
+          <div style="font-size:28px;margin-bottom:6px;">✏️</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">편집 병행 테스트</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);">기존 vs Designrr 비교</div>
         </div>
-        <!-- 화살표 -->
         <div style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 12px;">
           <div style="width:40px;height:2px;background:linear-gradient(90deg,#0D9488,#B8860B);"></div>
           <div style="font-size:18px;color:var(--ink-m);margin:-4px 0;">→</div>
-          <div style="font-size:9px;color:var(--text3);white-space:nowrap;">Gate 2</div>
+          <div style="font-size:9px;color:var(--text3);white-space:nowrap;">Gate 2 · W8</div>
         </div>
-        <!-- 3단계 -->
         <div style="background:linear-gradient(135deg,#8B6300,#B8860B);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 4px 20px rgba(184,134,11,.3);">
           <div style="font-size:9px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.6);text-transform:uppercase;margin-bottom:6px;">MONTH 03 · SEP</div>
-          <div style="font-size:28px;margin-bottom:6px;">🏢</div>
-          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">Agency Premium</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:10px;">Agency 모델 검증</div>
-          <div style="background:rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;display:inline-block;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;">$497 <span style="font-size:10px;opacity:.7">/ 년</span></span>
-          </div>
+          <div style="font-size:28px;margin-bottom:6px;">🚀</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">종합 평가</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);">SOP 확정 · 로드맵 수립</div>
         </div>
       </div>
 
-      <!-- ── 1단계 상세 인포그래픽 ── -->
-      <div style="background:var(--surface);border:2px solid rgba(10,62,132,.2);border-radius:14px;overflow:hidden;margin-bottom:20px;">
-        <div style="background:linear-gradient(90deg,rgba(10,62,132,.08),rgba(10,62,132,.03));padding:14px 20px;border-bottom:1px solid rgba(10,62,132,.12);display:flex;align-items:center;gap:12px;">
-          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0A3E84,#1560B8);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📄</div>
+      <!-- 1단계 업무 상세 -->
+      <div style="background:var(--surface);border:2px solid rgba(10,62,132,.2);border-radius:14px;overflow:hidden;margin-bottom:16px;">
+        <div style="background:rgba(10,62,132,.06);padding:14px 20px;border-bottom:1px solid rgba(10,62,132,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0A3E84,#1560B8);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🔍</div>
           <div style="flex:1;">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;margin-bottom:2px;">1단계 · 7월 W1~W4 · Designrr PRO</div>
-            <div style="font-size:15px;font-weight:800;color:var(--text);">기능 적합성 검증 — 텍스트 기반 변환</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0;">
-            <div style="font-size:10px;color:var(--text3);">목표 비용</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--blue);">₩130,000</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;margin-bottom:2px;">1단계 · 7월 W1~W4</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">기능 검증 — 텍스트 기반 변환 · 품질 확인</div>
           </div>
         </div>
         <div style="padding:18px 20px;">
-          <!-- 워크플로 흐름 -->
           <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">WORKFLOW</div>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:18px;flex-wrap:wrap;">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:18px;">
             <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">📝 블로그·칼럼·Word</div>
-            <div style="color:var(--text3);font-size:18px;font-weight:300;">→</div>
-            <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">⚙ Designrr PRO 변환</div>
-            <div style="color:var(--text3);font-size:18px;font-weight:300;">→</div>
+            <div style="color:var(--text3);font-size:18px;">→</div>
+            <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">⚙ Designrr 변환</div>
+            <div style="color:var(--text3);font-size:18px;">→</div>
             <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">📚 eBook · 플립북</div>
-            <div style="color:var(--text3);font-size:18px;font-weight:300;">→</div>
+            <div style="color:var(--text3);font-size:18px;">→</div>
             <div style="padding:8px 14px;background:rgba(10,62,132,.08);border:1.5px solid rgba(10,62,132,.2);border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);">📱 Kindle · ePub</div>
           </div>
-          <!-- 담당자별 과제 -->
           <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">TASKS BY ROLE</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
-              <span style="font-size:18px;flex-shrink:0;">📋</span>
-              <div><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px;">기획자</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">블로그·칼럼 3건 → eBook<br>한국어/이중언어 Kindle·ePub 품질 검증</div></div>
-            </div>
-            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
-              <span style="font-size:18px;flex-shrink:0;">🎨</span>
-              <div><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">디자이너</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">Word 원고 → 샘플 eBook<br>3D 커버 제작 · 품질 평가</div></div>
-            </div>
-            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
-              <span style="font-size:18px;flex-shrink:0;">📣</span>
-              <div><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px;">마케터</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">리드마그넷 PDF 2종 제작<br>배포 채널 테스트 · 클릭률 측정</div></div>
-            </div>
-            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;align-items:flex-start;">
-              <span style="font-size:18px;flex-shrink:0;">📊</span>
-              <div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:3px;">PM</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">워크플로 SOP 초안 작성<br>PRO 단계 평가 보고서 (W4)</div></div>
-            </div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">📋</span><div><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px;">기획자</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">블로그·칼럼 3건 → eBook 변환<br>한국어·이중언어 Kindle·ePub 검증</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">🎨</span><div><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">디자이너</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">Word 원고 → 샘플 eBook<br>3D 커버 제작 · 품질 평가</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">📣</span><div><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px;">마케터</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">리드마그넷 PDF 2종 제작<br>배포 채널 테스트 · 클릭률 측정</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">📊</span><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:3px;">PM</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">워크플로 SOP 초안 작성<br>W4 평가 보고서 작성</div></div></div>
           </div>
-          <!-- KPI 게이지 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 1 KPI</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 1 기준</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--blue);">3건</div>
-              <div style="font-size:10.5px;color:var(--text3);">변환 케이스 완료</div>
-            </div>
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--blue);">4.0점</div>
-              <div style="font-size:10.5px;color:var(--text3);">품질 평가 기준</div>
-            </div>
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--blue);">0건</div>
-              <div style="font-size:10.5px;color:var(--text3);">한국어 이슈</div>
-            </div>
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--blue);">3/5</div>
-              <div style="font-size:10.5px;color:var(--text3);">충족 시 Gate 1 통과</div>
-            </div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--blue);">3건</div><div style="font-size:10.5px;color:var(--text3);">변환 케이스 완료</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--blue);">4.0점</div><div style="font-size:10.5px;color:var(--text3);">품질 평가</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--blue);">0건</div><div style="font-size:10.5px;color:var(--text3);">한국어 이슈</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--blue);">SOP 초안</div><div style="font-size:10.5px;color:var(--text3);">작성 완료</div></div>
           </div>
         </div>
       </div>
 
-      <!-- ── 2단계 상세 인포그래픽 ── -->
-      <div style="background:var(--surface);border:2px solid rgba(13,148,136,.2);border-radius:14px;overflow:hidden;margin-bottom:20px;">
-        <div style="background:linear-gradient(90deg,rgba(13,148,136,.08),rgba(13,148,136,.03));padding:14px 20px;border-bottom:1px solid rgba(13,148,136,.12);display:flex;align-items:center;gap:12px;">
-          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0A7060,#0D9488);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🎧</div>
+      <!-- 2단계 업무 상세 -->
+      <div style="background:var(--surface);border:2px solid rgba(13,148,136,.2);border-radius:14px;overflow:hidden;margin-bottom:16px;">
+        <div style="background:rgba(13,148,136,.06);padding:14px 20px;border-bottom:1px solid rgba(13,148,136,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0A7060,#0D9488);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">✏️</div>
           <div style="flex:1;">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin-bottom:2px;">2단계 · 8월 W5~W8 · Designrr Premium</div>
-            <div style="font-size:15px;font-weight:800;color:var(--text);">오디오·비디오 출판 모델 검증</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0;">
-            <div style="font-size:10px;color:var(--text3);">누적 비용</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--teal);">₩400,000</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin-bottom:2px;">2단계 · 8월 W5~W8</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">편집 병행 테스트 — 기존 방식 vs Designrr 실전 비교</div>
           </div>
         </div>
         <div style="padding:18px 20px;">
-          <!-- 워크플로 흐름 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">WORKFLOW — 멀티 포맷 출판 파이프라인</div>
-          <div style="position:relative;margin-bottom:18px;">
-            <!-- 소스 -->
-            <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:0;align-items:center;">
-              <div style="padding:10px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.2);border-radius:8px;text-align:center;">
-                <div style="font-size:20px;margin-bottom:4px;">🎥</div>
-                <div style="font-size:10.5px;font-weight:600;color:var(--teal);">강의·세미나<br>영상·팟캐스트</div>
-              </div>
-              <div style="color:var(--text3);font-size:16px;padding:0 6px;">→</div>
-              <div style="padding:10px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.2);border-radius:8px;text-align:center;">
-                <div style="font-size:20px;margin-bottom:4px;">✍️</div>
-                <div style="font-size:10.5px;font-weight:600;color:var(--teal);">자동<br>트랜스크립션</div>
-              </div>
-              <div style="color:var(--text3);font-size:16px;padding:0 6px;">→</div>
-              <div style="padding:10px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.2);border-radius:8px;text-align:center;">
-                <div style="font-size:20px;margin-bottom:4px;">📚</div>
-                <div style="font-size:10.5px;font-weight:600;color:var(--teal);">eBook<br>자동 생성</div>
-              </div>
-              <div style="color:var(--text3);font-size:16px;padding:0 6px;">→</div>
-              <div style="padding:10px;background:rgba(13,148,136,.12);border:2px solid rgba(13,148,136,.35);border-radius:8px;text-align:center;">
-                <div style="font-size:20px;margin-bottom:4px;">🎧</div>
-                <div style="font-size:10.5px;font-weight:700;color:var(--teal);">오디오북<br>패키지</div>
-              </div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">WORKFLOW — 병행 편집 파이프라인</div>
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:18px;">
+            <div style="padding:14px;background:rgba(100,100,100,.06);border:1.5px solid var(--border);border-radius:10px;text-align:center;">
+              <div style="font-size:20px;margin-bottom:6px;">📝</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;">기존 편집 방식</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.6;">원고 → InDesign/Word 조판<br>PDF 출력 · 수동 서식</div>
+            </div>
+            <div style="text-align:center;"><div style="font-size:22px;color:var(--teal);">⇄</div><div style="font-size:10px;color:var(--text3);white-space:nowrap;">도서 A·B<br>동일 원고</div></div>
+            <div style="padding:14px;background:rgba(13,148,136,.08);border:1.5px solid rgba(13,148,136,.25);border-radius:10px;text-align:center;">
+              <div style="font-size:20px;margin-bottom:6px;">🤖</div><div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:3px;">Designrr 방식</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.6;">Word → 임포트 → 템플릿<br>ePub · PDF · Kindle 자동</div>
             </div>
           </div>
-          <!-- Multi-Revenue 채널 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">OUTPUT — Multi-Revenue 채널</div>
-          <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">📱</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">전자책</div></div>
-            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">🎧</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">오디오북</div></div>
-            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">🌍</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">KDP 글로벌</div></div>
-            <div style="flex:1;min-width:90px;padding:8px 10px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:7px;text-align:center;"><div style="font-size:15px;">🎓</div><div style="font-size:10.5px;color:var(--teal);font-weight:600;margin-top:3px;">강의 패키지</div></div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">TASKS BY ROLE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">✏️</span><div><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">내부 편집자 (도서 A)</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">진행 중인 편집 도서에<br>기존 방식·Designrr 병행 적용</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">✏️</span><div><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">내부 편집자 (도서 B)</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">진행 중인 편집 도서에<br>기존 방식·Designrr 병행 적용</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">🎧</span><div><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px;">마케터</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">오디오·영상 트랜스크립션 2케이스<br>Multi-Revenue 패키지 구성안</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">📊</span><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:3px;">PM</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">소요시간 · 품질 측정 기록<br>W8 비교 평가 보고서 작성</div></div></div>
           </div>
-          <!-- KPI 게이지 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 2 KPI</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 2 기준</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--teal);">85%↑</div>
-              <div style="font-size:10.5px;color:var(--text3);">트랜스크립션 정확도</div>
-            </div>
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--teal);">1종</div>
-              <div style="font-size:10.5px;color:var(--text3);">오디오북 완성</div>
-            </div>
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--teal);">3일↓</div>
-              <div style="font-size:10.5px;color:var(--text3);">준비→출판 소요시간</div>
-            </div>
-            <div style="flex:1;min-width:130px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--teal);">전 항목</div>
-              <div style="font-size:10.5px;color:var(--text3);">충족 시 Gate 2 통과</div>
-            </div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--teal);">2건</div><div style="font-size:10.5px;color:var(--text3);">편집 도서 병행 완료</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--teal);">85%↑</div><div style="font-size:10.5px;color:var(--text3);">트랜스크립션 정확도</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--teal);">시간↓</div><div style="font-size:10.5px;color:var(--text3);">기존 대비 단축 확인</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--teal);">4.0점</div><div style="font-size:10.5px;color:var(--text3);">편집자 만족도</div></div>
           </div>
         </div>
       </div>
 
-      <!-- ── 3단계 상세 인포그래픽 ── -->
-      <div style="background:var(--surface);border:2px solid rgba(184,134,11,.2);border-radius:14px;overflow:hidden;margin-bottom:20px;">
-        <div style="background:linear-gradient(90deg,rgba(184,134,11,.08),rgba(184,134,11,.03));padding:14px 20px;border-bottom:1px solid rgba(184,134,11,.12);display:flex;align-items:center;gap:12px;">
-          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#8B6300,#B8860B);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏢</div>
+      <!-- 3단계 업무 상세 -->
+      <div style="background:var(--surface);border:2px solid rgba(184,134,11,.2);border-radius:14px;overflow:hidden;">
+        <div style="background:rgba(184,134,11,.06);padding:14px 20px;border-bottom:1px solid rgba(184,134,11,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#8B6300,#B8860B);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🚀</div>
           <div style="flex:1;">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--gold2);text-transform:uppercase;margin-bottom:2px;">3단계 · 9월 W9~W12 · Agency Premium</div>
-            <div style="font-size:15px;font-weight:800;color:var(--text);">Agency 모델 검증 + 종합 평가</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0;">
-            <div style="font-size:10px;color:var(--text3);">누적 비용</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--gold2);">₩670,000</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--gold2);text-transform:uppercase;margin-bottom:2px;">3단계 · 9월 W9~W12</div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">종합 평가 — SOP 확정 · 글로벌 로드맵 수립</div>
           </div>
         </div>
         <div style="padding:18px 20px;">
-          <!-- 구조도 — Agency 운영 모델 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:10px;">AGENCY 운영 구조</div>
-          <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;margin-bottom:18px;">
-            <!-- 허브 -->
-            <div style="padding:14px 16px;background:linear-gradient(135deg,rgba(184,134,11,.12),rgba(184,134,11,.06));border:2px solid rgba(184,134,11,.3);border-radius:10px;text-align:center;min-width:100px;">
-              <div style="font-size:22px;margin-bottom:4px;">🏢</div>
-              <div style="font-size:11px;font-weight:800;color:var(--gold2);">에이콘온</div>
-              <div style="font-size:10px;color:var(--text3);">Agency 계정</div>
-            </div>
-            <!-- 저자 5명 -->
-            <div>
-              <div style="font-size:10.5px;color:var(--text3);margin-bottom:6px;">동시 관리 저자 5명 PoC</div>
-              <div style="display:flex;flex-direction:column;gap:5px;">
-                <div style="display:flex;gap:6px;align-items:center;">
-                  <div style="width:3px;height:26px;background:rgba(184,134,11,.4);border-radius:2px;flex-shrink:0;"></div>
-                  <div style="flex:1;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:11.5px;color:var(--text);display:flex;justify-content:space-between;">
-                    <span>저자 A · 기술서 eBook</span><span style="font-size:10.5px;color:var(--gold2);">Dropbox 임포트 →</span>
-                  </div>
-                </div>
-                <div style="display:flex;gap:6px;align-items:center;">
-                  <div style="width:3px;height:26px;background:rgba(184,134,11,.4);border-radius:2px;flex-shrink:0;"></div>
-                  <div style="flex:1;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:11.5px;color:var(--text);display:flex;justify-content:space-between;">
-                    <span>저자 B · 강의 → 오디오북</span><span style="font-size:10.5px;color:var(--gold2);">트랜스크립션 →</span>
-                  </div>
-                </div>
-                <div style="display:flex;gap:6px;align-items:center;">
-                  <div style="width:3px;height:26px;background:rgba(184,134,11,.3);border-radius:2px;flex-shrink:0;"></div>
-                  <div style="flex:1;padding:6px 10px;background:var(--s2);border-radius:6px;font-size:11.5px;color:var(--text2);">저자 C·D·E · 다중 Draft 병합 테스트</div>
-                </div>
-              </div>
-            </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">🔄</span><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:3px;">PM + 기획자</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">Multi-Revenue 채널 설계 검토<br>표준 SOP 확정 문서화</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">🎨</span><div><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;">디자이너</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">한국어 브랜드 템플릿 키트 완성<br>재사용 가능 표준 세트</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">🌏</span><div><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px;">기획자</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">KDP 영문 출간 워크플로 초안<br>글로벌 확장 파이프라인</div></div></div>
+            <div style="display:flex;gap:10px;padding:10px 12px;background:var(--s2);border-radius:8px;"><span style="font-size:18px;flex-shrink:0;">📋</span><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:3px;">PM</div><div style="font-size:11.5px;color:var(--text2);line-height:1.6;">3개월 종합 평가 보고서<br>Designrr 도입 권고안 작성</div></div></div>
           </div>
-          <!-- BEP 공식 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">BEP 손익분기 산정</div>
-          <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:4px;align-items:center;padding:12px 16px;background:rgba(184,134,11,.05);border:1px solid rgba(184,134,11,.18);border-radius:8px;margin-bottom:16px;">
-            <div style="text-align:center;padding:8px;">
-              <div style="font-size:13px;font-weight:800;color:var(--gold2);">$497</div>
-              <div style="font-size:10px;color:var(--text3);">Agency 연간 비용</div>
-            </div>
-            <div style="font-size:18px;color:var(--text3);">÷</div>
-            <div style="text-align:center;padding:8px;">
-              <div style="font-size:13px;font-weight:800;color:var(--gold2);">저자당 순수익</div>
-              <div style="font-size:10px;color:var(--text3);">대행 수수료 + 채널 수익</div>
-            </div>
-            <div style="font-size:18px;color:var(--text3);">=</div>
-            <div style="text-align:center;padding:8px;background:rgba(184,134,11,.1);border-radius:6px;">
-              <div style="font-size:13px;font-weight:800;color:var(--gold2);">BEP 저자 수</div>
-              <div style="font-size:10px;color:var(--text3);">W11 산출 목표</div>
-            </div>
-          </div>
-          <!-- KPI 게이지 -->
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 3 KPI</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:8px;">GATE 3 기준 (W12)</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--gold2);">5명</div>
-              <div style="font-size:10.5px;color:var(--text3);">동시 관리 검증</div>
-            </div>
-            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--gold2);">BEP</div>
-              <div style="font-size:10.5px;color:var(--text3);">손익분기 산출</div>
-            </div>
-            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--gold2);">1세트</div>
-              <div style="font-size:10.5px;color:var(--text3);">브랜드 키트</div>
-            </div>
-            <div style="flex:1;min-width:110px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
-              <div style="font-size:18px;font-weight:800;color:var(--gold2);">4.0점</div>
-              <div style="font-size:10.5px;color:var(--text3);">저자 만족도</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 비용 요약 인포그래픽 ── -->
-      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px 20px;">
-        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;margin-bottom:12px;">BUDGET SUMMARY — 3개월 총 예산</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center;">
-          <div style="padding:12px;background:rgba(10,62,132,.06);border:1px solid rgba(10,62,132,.15);border-radius:8px;text-align:center;">
-            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:4px;">7월 · PRO</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--blue);">$97</div>
-            <div style="font-size:11px;color:var(--text3);">₩130,000</div>
-          </div>
-          <div style="padding:12px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;text-align:center;">
-            <div style="font-size:10px;font-weight:700;color:var(--teal);margin-bottom:4px;">8월 · Premium 업그레이드</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--teal);">+$200</div>
-            <div style="font-size:11px;color:var(--text3);">₩270,000</div>
-          </div>
-          <div style="padding:12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;">
-            <div style="font-size:10px;font-weight:700;color:var(--gold2);margin-bottom:4px;">9월 · Agency 업그레이드</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gold2);">+$200</div>
-            <div style="font-size:11px;color:var(--text3);">₩270,000</div>
-          </div>
-          <div style="padding:14px 18px;background:linear-gradient(135deg,#1a3a5c,#0a3e5a);border-radius:10px;text-align:center;min-width:110px;">
-            <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:4px;">3개월 합계</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:800;color:#fff;">~₩670K</div>
-            <div style="font-size:10px;color:rgba(255,255,255,.5);">인건비 별도</div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--gold2);">SOP</div><div style="font-size:10.5px;color:var(--text3);">표준 절차 확정</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--gold2);">1세트</div><div style="font-size:10.5px;color:var(--text3);">브랜드 템플릿 키트</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--gold2);">로드맵</div><div style="font-size:10.5px;color:var(--text3);">KDP 글로벌 초안</div></div>
+            <div style="flex:1;min-width:120px;padding:10px 12px;background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.15);border-radius:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--gold2);">권고안</div><div style="font-size:10.5px;color:var(--text3);">도입 최종 결정</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ─────────────────────────────────────────
-         탭 2: 주차별 마일스톤
-    ───────────────────────────────────────── -->
+    <!-- ─── 탭 2: 주차별 마일스톤 ─── -->
     <div class="pill-content" id="pt2">
       <div style="overflow-x:auto;">
         <table style="width:100%;border-collapse:collapse;font-size:12px;">
           <thead>
             <tr style="background:var(--nav-bg);color:#fff;">
               <th style="padding:10px 12px;text-align:left;border-radius:var(--r) 0 0 0;">주차</th>
-              <th style="padding:10px 12px;text-align:left;">주요 과제</th>
+              <th style="padding:10px 12px;text-align:left;">주요 업무</th>
               <th style="padding:10px 12px;text-align:left;">담당</th>
-              <th style="padding:10px 12px;text-align:left;border-radius:0 var(--r) 0 0;">산출물 / 완료 기준</th>
+              <th style="padding:10px 12px;text-align:left;border-radius:0 var(--r) 0 0;">완료 기준</th>
             </tr>
           </thead>
           <tbody>
-            <tr style="background:#EEF4FB;"><td colspan="4" style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.06em;">1단계 · 7월 — Designrr PRO</td></tr>
-            <tr><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W1</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">환경 셋업 &amp; 기능 탐색</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 전원</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Designrr PRO 계정 4개 활성화 · 기본 기능 탐색 완료</td></tr>
-            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W2</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">텍스트 변환 Case A·B</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">기획자 + 디자이너</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">블로그/칼럼 3건 → eBook(PDF·플립북·라이브 eBook) · 3D 커버 1종</td></tr>
-            <tr><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W3</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Kindle/ePub 품질 검증</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">기획자 + 디자이너</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">한국어 폰트·레이아웃 검증 리포트 · 이슈 목록 · Case C 완료</td></tr>
-            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W4</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">리드마그넷 &amp; PRO 평가 ⭐</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">디자이너 + 마케터 + PM</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">리드마그넷 2종 · 배포 초기 데이터 · <strong>PRO 단계 평가 보고서</strong></td></tr>
-            <tr style="background:#EDF9F5;"><td colspan="4" style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.06em;">2단계 · 8월 — Designrr Premium</td></tr>
-            <tr><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W5</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Premium 업그레이드 &amp; 파일럿 저자 킥오프</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 마케터</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Premium 계정 전환 · 파일럿 저자 1명 온보딩 완료</td></tr>
-            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W6</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">오디오·비디오 트랜스크립션</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">마케터</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">영상/오디오 2케이스 → eBook 초안 · 트랜스크립션 정확도 데이터</td></tr>
-            <tr><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W7</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">오디오북 + Multi-Revenue 패키지</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">디자이너 + 기획자</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">오디오북 1종 · 강의+전자책+오디오북 패키지 구성안</td></tr>
-            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W8</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">파일럿 저자 전체 워크플로 ⭐</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">마케터 + PM</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">저자 1명 완전 출판 완료 · 소요시간 기록 · ROI 기준치 · <strong>Premium 평가 보고서</strong></td></tr>
-            <tr style="background:#FBF3E0;"><td colspan="4" style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--gold2);letter-spacing:.06em;">3단계 · 9월 — Agency Premium</td></tr>
-            <tr><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--border);">W9</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Agency Premium &amp; PoC 설계</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 전원</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Agency 계정 전환 · 5명 동시 관리 구조 설계</td></tr>
-            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--border);">W10</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Agency PoC — 저자 5명 관리</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 전원</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">5명 병렬 콘텐츠 변환 · 멀티유저·Dropbox 검증</td></tr>
-            <tr><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--border);">W11</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">BEP 산정 &amp; 브랜드 키트</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">기획자 + 디자이너</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">BEP 저자 수 · 브랜드 템플릿 키트 1세트 · 글로벌 워크플로 초안</td></tr>
-            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;">W12</td><td style="padding:9px 12px;">종합 평가 &amp; 최종 보고서 ⭐</td><td style="padding:9px 12px;color:var(--text3);">PM + 전원</td><td style="padding:9px 12px;"><strong>최종 보고서</strong> · Agency 도입 권고안 · <strong>글로벌 확장 로드맵 확정</strong></td></tr>
+            <tr style="background:#EEF4FB;"><td colspan="4" style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.06em;">1단계 · 7월 — 기능 검증</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W1</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">환경 셋업 · Designrr 기능 탐색</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 전원</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">계정 활성화 · 기본 기능 숙지 완료</td></tr>
+            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W2</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">텍스트 변환 Case A·B 실행</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">기획자 + 디자이너</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">블로그/칼럼 3건 → eBook(PDF·플립북) + 3D 커버</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W3</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Kindle/ePub 한국어 품질 검증</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">기획자 + 디자이너</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">폰트·레이아웃 검증 리포트 · 이슈 0건</td></tr>
+            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--blue);white-space:nowrap;border-bottom:1px solid var(--border);">W4 ⭐</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">리드마그넷 2종 제작 + Gate 1 평가</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">마케터 + PM</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);"><strong>Gate 1 평가 보고서</strong> · 2단계 진입 결정</td></tr>
+
+            <tr style="background:#EDF9F5;"><td colspan="4" style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.06em;">2단계 · 8월 — 편집 병행 테스트</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W5</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">도서 A — 기존 방식 · Designrr 병행 시작</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">내부 편집자 1 + 기획자</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">두 방식 동시 착수 · 시간 측정 시작</td></tr>
+            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W6</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">오디오·영상 트랜스크립션 2케이스</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">마케터</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">트랜스크립션 정확도 측정 데이터</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W7</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">도서 B — 기존 방식 · Designrr 병행 시작</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">내부 편집자 2 + 기획자</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">두 방식 동시 착수 · Multi-Revenue 패키지 구성안</td></tr>
+            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--teal);white-space:nowrap;border-bottom:1px solid var(--border);">W8 ⭐</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">소요시간·품질 비교 측정 + Gate 2 평가</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 편집자</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);"><strong>Gate 2 비교 평가 보고서</strong> · 3단계 진입 결정</td></tr>
+
+            <tr style="background:#FBF3E0;"><td colspan="4" style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--gold2);letter-spacing:.06em;">3단계 · 9월 — 종합 평가 · 확정</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--border);">W9</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">Multi-Revenue 채널 설계 검토</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 기획자</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">채널별 확장 우선순위 결정</td></tr>
+            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--border);">W10</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">한국어 브랜드 템플릿 키트 완성</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">디자이너</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">재사용 가능한 표준 템플릿 1세트</td></tr>
+            <tr><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;border-bottom:1px solid var(--border);">W11</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">표준 SOP 확정 · KDP 워크플로 초안</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text3);">PM + 기획자</td><td style="padding:9px 12px;border-bottom:1px solid var(--border);">SOP 문서 확정 · KDP 글로벌 파이프라인 초안</td></tr>
+            <tr style="background:var(--s2);"><td style="padding:9px 12px;font-weight:700;color:var(--gold2);white-space:nowrap;">W12 ⭐</td><td style="padding:9px 12px;">3개월 종합 평가 + 최종 보고서</td><td style="padding:9px 12px;color:var(--text3);">PM + 전원</td><td style="padding:9px 12px;"><strong>최종 보고서</strong> · Designrr 도입 권고안 · 글로벌 로드맵</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="info-box" style="margin-top:14px;">⭐ W4 · W8 · W12는 PM이 평가 보고서를 작성하고 다음 단계 진입(Gate) 여부를 결정하는 주차입니다.</div>
+      <div class="info-box" style="margin-top:14px;">⭐ W4 · W8 · W12는 PM이 평가 보고서를 작성하고 다음 단계 진입 여부를 결정하는 주차입니다.</div>
     </div>
 
-    <!-- ─────────────────────────────────────────
-         탭 3: 진행 체크리스트 (인터랙티브)
-    ───────────────────────────────────────── -->
+    <!-- ─── 탭 3: 체크리스트 ─── -->
     <div class="pill-content" id="pt3">
       <div style="margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -3123,90 +2896,43 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <div id="pt-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--teal2),var(--blue));border-radius:100px;transition:width .4s ease;"></div>
         </div>
       </div>
-
       <div id="pilot-checklist" style="display:flex;flex-direction:column;gap:8px;"></div>
       <button onclick="ptResetChecklist()" style="margin-top:16px;padding:7px 18px;background:none;border:1px solid var(--border);border-radius:100px;font-size:12px;color:var(--text3);cursor:pointer;">↺ 초기화</button>
     </div>
 
-    <!-- ─────────────────────────────────────────
-         탭 4: 리스크 & Gate Criteria
-    ───────────────────────────────────────── -->
+    <!-- ─── 탭 4: 리스크 & Gate ─── -->
     <div class="pill-content" id="pt4">
-
-      <!-- 리스크 -->
       <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;">리스크 및 대응 방안</div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
-        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;">
-          <span style="font-size:18px;padding-top:2px;">🟡</span>
-          <div><div class="card-title">한국어 트랜스크립션 품질 저하</div><div class="card-body">영어 콘텐츠 병행 테스트 · 수동 편집 시간 측정 · Clova Note 등 대안 툴 병렬 비교</div></div>
-        </div>
-        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;">
-          <span style="font-size:18px;padding-top:2px;">🟢</span>
-          <div><div class="card-title">Designrr UI 한국어 미지원</div><div class="card-body">팀 내부 한국어 사용 가이드 자체 제작 · 저자 대상 튜토리얼 영상 에이콘온 제공</div></div>
-        </div>
-        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;">
-          <span style="font-size:18px;padding-top:2px;">🟡</span>
-          <div><div class="card-title">핵심 워크플로 외부 SaaS 의존</div><div class="card-body">Designrr를 제작 레이어로 한정 · 저자·독자 DB·커뮤니티·결제는 에이콘온 자체 플랫폼 독립 개발 유지</div></div>
-        </div>
-        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;">
-          <span style="font-size:18px;padding-top:2px;">🔴</span>
-          <div><div class="card-title">Agency BEP 미달 (저자 수 부족)</div><div class="card-body">2단계 종료 시 파일럿 저자 5명 확보 여부로 3단계 진입 조건 사전 설정 · 미충족 시 1개월 연장 재평가</div></div>
-        </div>
-        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;">
-          <span style="font-size:18px;padding-top:2px;">🟡</span>
-          <div><div class="card-title">파일럿 저자 중도 이탈</div><div class="card-body">사전 참여 동의서 작성 · 대체 저자 1명 예비 확보</div></div>
-        </div>
+        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;"><span style="font-size:18px;padding-top:2px;">🟡</span><div><div class="card-title">한국어 트랜스크립션 품질 저하</div><div class="card-body">영어 콘텐츠 병행 테스트 · Clova Note 등 대안 툴 병렬 비교 · 수동 편집 시간 측정</div></div></div>
+        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;"><span style="font-size:18px;padding-top:2px;">🟢</span><div><div class="card-title">Designrr UI 한국어 미지원</div><div class="card-body">팀 내부 한국어 사용 가이드 자체 제작 · 편집자 대상 튜토리얼 제공</div></div></div>
+        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;"><span style="font-size:18px;padding-top:2px;">🟡</span><div><div class="card-title">편집 병행 작업 부담</div><div class="card-body">기존 업무에 추가 부담이 없도록 동일 도서에 두 방식을 동시에 적용 — 별도 추가 작업 최소화</div></div></div>
+        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;"><span style="font-size:18px;padding-top:2px;">🟡</span><div><div class="card-title">핵심 워크플로 외부 SaaS 의존</div><div class="card-body">Designrr를 제작 레이어로 한정 · 저자·독자 DB·커뮤니티·결제는 에이콘온 자체 플랫폼 독립 유지</div></div></div>
       </div>
 
-      <!-- Gate Criteria -->
       <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;">단계 진입 기준 (Gate Criteria)</div>
       <div style="display:flex;flex-direction:column;gap:12px;">
         <div style="background:var(--s2);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:var(--r);padding:14px 16px;">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;">Gate 1 — PRO → Premium 전환 (W4 종료 · PM 결정)</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.9;">
-            □ 텍스트 기반 변환 케이스 3건 완료<br>
-            □ 한국어/이중언어 ePub·Kindle 품질 이슈 없음<br>
-            □ 팀 직관성 만족도 평균 4.0점/5점 이상<br>
-            □ 리드마그넷 배포 후 초기 데이터 확보<br>
-            □ 워크플로 SOP 초안 완료<br>
-            <span style="color:var(--teal);font-weight:600;">→ 5개 중 3개 이상 충족 시 Premium 업그레이드 승인</span>
-          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px;">Gate 1 — 2단계 진입 (W4 종료 · PM 결정)</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.9;">□ 텍스트 변환 케이스 3건 완료<br>□ 한국어 ePub·Kindle 품질 이슈 없음<br>□ 팀 만족도 평균 4.0점 이상<br>□ 워크플로 SOP 초안 완료<br><span style="color:var(--teal);font-weight:600;">→ 4개 중 3개 이상 충족 시 2단계 진입</span></div>
         </div>
         <div style="background:var(--s2);border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:var(--r);padding:14px 16px;">
-          <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:8px;">Gate 2 — Premium → Agency 전환 (W8 종료 · PM 결정)</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.9;">
-            □ 트랜스크립션 정확도 85% 이상 달성<br>
-            □ 파일럿 저자 1명 eBook 완전 완성 (오디오북 포함)<br>
-            □ ROI 기준치 산정 완료 (소요시간 + 추가 매출)<br>
-            □ 파일럿 저자 추가 지원 의향 2명 이상 확보<br>
-            <span style="color:var(--teal);font-weight:600;">→ 4개 전 항목 충족 시 Agency Premium 업그레이드 승인</span>
-          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:8px;">Gate 2 — 3단계 진입 (W8 종료 · PM 결정)</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.9;">□ 내부 편집 도서 2건 병행 완료<br>□ 트랜스크립션 정확도 85% 이상<br>□ 기존 대비 소요시간 단축 확인<br>□ 편집자 만족도 4.0점 이상<br><span style="color:var(--teal);font-weight:600;">→ 전 항목 충족 시 3단계 진입</span></div>
         </div>
         <div style="background:var(--s2);border:1px solid var(--border);border-left:4px solid var(--gold2);border-radius:var(--r);padding:14px 16px;">
-          <div style="font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:8px;">Gate 3 — Agency 도입 최종 결정 (W12 종료 · 팀 전체)</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.9;">
-            □ BEP 저자 수가 에이콘온 연간 목표 내 달성 가능<br>
-            □ 한국어 브랜드 템플릿 키트 완성<br>
-            □ 글로벌 워크플로 초안 검토 완료 (KDP 포함)<br>
-            □ 파일럿 저자 만족도 평균 4.0점 이상<br>
-          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--gold2);margin-bottom:8px;">Gate 3 — 도입 최종 결정 (W12 · 팀 전체)</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.9;">□ 표준 SOP 완성 및 팀 적용 가능<br>□ 한국어 브랜드 템플릿 키트 1세트 완성<br>□ KDP 글로벌 워크플로 초안 완료<br>□ 편집자 만족도 4.0점 이상</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;">
-            <div style="text-align:center;padding:8px;background:var(--surface);border-radius:var(--r);border:1px solid var(--teal);">
-              <div style="font-size:11px;color:var(--teal);font-weight:700;">✅ 정식 도입</div>
-              <div style="font-size:10px;color:var(--text3);margin-top:2px;">전 항목 충족</div>
-            </div>
-            <div style="text-align:center;padding:8px;background:var(--surface);border-radius:var(--r);border:1px solid var(--gold2);">
-              <div style="font-size:11px;color:var(--gold2);font-weight:700;">⏸ 조건부 도입</div>
-              <div style="font-size:10px;color:var(--text3);margin-top:2px;">3개월 추가 검토</div>
-            </div>
-            <div style="text-align:center;padding:8px;background:var(--surface);border-radius:var(--r);border:1px solid var(--rose);">
-              <div style="font-size:11px;color:var(--rose);font-weight:700;">⏹ 보류</div>
-              <div style="font-size:10px;color:var(--text3);margin-top:2px;">자체 파이프라인 검토</div>
-            </div>
+            <div style="text-align:center;padding:8px;background:var(--surface);border-radius:var(--r);border:1px solid var(--teal);"><div style="font-size:11px;color:var(--teal);font-weight:700;">✅ 정식 도입</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">전 항목 충족</div></div>
+            <div style="text-align:center;padding:8px;background:var(--surface);border-radius:var(--r);border:1px solid var(--gold2);"><div style="font-size:11px;color:var(--gold2);font-weight:700;">⏸ 조건부 도입</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">추가 검토</div></div>
+            <div style="text-align:center;padding:8px;background:var(--surface);border-radius:var(--r);border:1px solid var(--rose);"><div style="font-size:11px;color:var(--rose);font-weight:700;">⏹ 보류</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">자체 파이프라인</div></div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- ─── 탭 5: 글로벌 로드맵 ─── -->
     <!-- ─────────────────────────────────────────
          탭 5: 글로벌 확장 로드맵
     ───────────────────────────────────────── -->
@@ -3241,7 +2967,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
                   <li>Publisher-On · Author-On · Reader-On 워크플로 완성</li>
                   <li>한국어 eBook/ePub/Kindle 품질 검증</li>
                   <li>트랜스크립션 정확도 측정 (85% 기준)</li>
-                  <li>Agency BEP 산정 및 운영 가능성 확인</li>
+                  <li>Designrr 도입 효과 종합 평가</li>
                 </ul>
               </div>
               <div>
@@ -3249,7 +2975,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
                 <div style="display:flex;flex-direction:column;gap:5px;">
                   <div style="padding:7px 10px;background:rgba(10,62,132,.08);border-radius:6px;font-size:12px;color:var(--blue);">PRO → Premium → Agency Premium</div>
                   <div style="padding:7px 10px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--text3);">국내 브랜드 템플릿 키트 완성</div>
-                  <div style="padding:7px 10px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--text3);">파일럿 저자 5명 Agency PoC</div>
+                  <div style="padding:7px 10px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--text3);">내부 편집자 2건 병행 PoC</div>
                 </div>
               </div>
             </div>
@@ -3277,7 +3003,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
                 <div style="display:flex;flex-direction:column;gap:5px;">
                   <div style="padding:7px 10px;background:rgba(10,120,96,.08);border-radius:6px;font-size:12px;color:var(--teal);">KDP 출간 소요시간 3일 이내</div>
                   <div style="padding:7px 10px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--text3);">영문 트랜스크립션 정확도 90%+</div>
-                  <div style="padding:7px 10px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--text3);">KDP 파일럿 저자 3명 확보</div>
+                  <div style="padding:7px 10px;background:var(--s2);border-radius:6px;font-size:12px;color:var(--text3);">KDP 내부 테스트 도서 확보</div>
                 </div>
               </div>
             </div>
@@ -3361,6 +3087,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
     
+
 
     <!-- ─────────────────────────────────────────
          탭 6: eBook 제작 가이드 (Designrr 시작 가이드)
@@ -3563,7 +3290,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
 
     </div><!-- /pt6 -->
-
 
   </div><!-- /content -->
 </div><!-- /s9 -->
@@ -4247,22 +3973,22 @@ function pilotTab(idx) {
 // Pilot Test 체크리스트
 // ══════════════════════════════════════
 var PT_ITEMS = [
-  { w:'W1', label:'환경 셋업 & 기능 탐색', owner:'PM + 전원', phase:0 },
-  { w:'W2', label:'텍스트 변환 Case A·B 완료', owner:'기획자 + 디자이너', phase:0 },
-  { w:'W3', label:'Kindle/ePub 한국어 품질 검증', owner:'기획자 + 디자이너', phase:0 },
-  { w:'W4', label:'리드마그넷 2종 + PRO 평가 보고서', owner:'디자이너 + 마케터 + PM', phase:0 },
-  { w:'W5', label:'Premium 업그레이드 & 파일럿 저자 온보딩', owner:'PM + 마케터', phase:1 },
-  { w:'W6', label:'오디오·비디오 트랜스크립션 2케이스', owner:'마케터', phase:1 },
-  { w:'W7', label:'오디오북 1종 + Multi-Revenue 패키지 구성안', owner:'디자이너 + 기획자', phase:1 },
-  { w:'W8', label:'파일럿 저자 완전 출판 + Premium 평가 보고서', owner:'마케터 + PM', phase:1 },
-  { w:'W9', label:'Agency Premium 업그레이드 & PoC 구조 설계', owner:'PM + 전원', phase:2 },
-  { w:'W10', label:'Agency PoC — 저자 5명 동시 관리', owner:'PM + 전원', phase:2 },
-  { w:'W11', label:'BEP 산정 + 한국어 브랜드 템플릿 키트', owner:'기획자 + 디자이너', phase:2 },
-  { w:'W12', label:'최종 보고서 + Agency 도입 권고안 + 글로벌 로드맵', owner:'PM + 전원', phase:2 },
+  { w:'W1',  label:'환경 셋업 & 기능 탐색',                    owner:'PM + 전원',              phase:0 },
+  { w:'W2',  label:'텍스트 변환 Case A·B 실행',                 owner:'기획자 + 디자이너',      phase:0 },
+  { w:'W3',  label:'Kindle/ePub 한국어 품질 검증',              owner:'기획자 + 디자이너',      phase:0 },
+  { w:'W4',  label:'리드마그넷 2종 + Gate 1 평가 보고서',       owner:'마케터 + PM',            phase:0 },
+  { w:'W5',  label:'도서 A — 기존 방식·Designrr 병행 시작',    owner:'내부 편집자 1 + 기획자', phase:1 },
+  { w:'W6',  label:'오디오·영상 트랜스크립션 2케이스',          owner:'마케터',                 phase:1 },
+  { w:'W7',  label:'도서 B — 기존 방식·Designrr 병행 시작',    owner:'내부 편집자 2 + 기획자', phase:1 },
+  { w:'W8',  label:'소요시간·품질 비교 측정 + Gate 2 평가 보고서', owner:'PM + 편집자',        phase:1 },
+  { w:'W9',  label:'Multi-Revenue 채널 설계 검토',              owner:'PM + 기획자',            phase:2 },
+  { w:'W10', label:'한국어 브랜드 템플릿 키트 완성',            owner:'디자이너',               phase:2 },
+  { w:'W11', label:'표준 SOP 확정 + KDP 워크플로 초안',        owner:'PM + 기획자',            phase:2 },
+  { w:'W12', label:'3개월 종합 평가 + 최종 보고서 + 글로벌 로드맵', owner:'PM + 전원',         phase:2 },
 ];
 
 var PT_PHASE_COLORS = ['var(--blue)','var(--teal)','var(--gold2)'];
-var PT_PHASE_LABELS = ['1단계 · PRO (7월)','2단계 · Premium (8월)','3단계 · Agency (9월)'];
+var PT_PHASE_LABELS = ['1단계 · 기능 검증 (7월)','2단계 · 편집 병행 테스트 (8월)','3단계 · 종합 평가 (9월)'];
 
 // ══════════════════════════════════════════════════════════
 // SUPABASE 설정 — proposal.html 과 동일한 패턴
