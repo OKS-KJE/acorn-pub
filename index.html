@@ -2637,6 +2637,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <button class="pill-tab" onclick="pilotTab(3)">✅ 진행 체크리스트</button>
       <button class="pill-tab" onclick="pilotTab(4)">⚠️ 리스크 &amp; Gate</button>
       <button class="pill-tab" onclick="pilotTab(5)">🌏 글로벌 로드맵</button>
+      <button class="pill-tab" onclick="pilotTab(6)" style="background:linear-gradient(135deg,rgba(30,95,173,.15),rgba(13,148,136,.1));border-color:rgba(30,95,173,.35);color:var(--blue);font-weight:700;">📖 eBook 제작 가이드</button>
     </div>
 
     <!-- ─────────────────────────────────────────
@@ -3361,6 +3362,209 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div>
     
 
+    <!-- ─────────────────────────────────────────
+         탭 6: eBook 제작 가이드 (Designrr 시작 가이드)
+    ───────────────────────────────────────── -->
+    <div class="pill-content" id="pt6">
+
+      <!-- 헤더 배너 -->
+      <div style="background:linear-gradient(135deg,#07213E 0%,#0A3E5A 55%,#0A2E1A 100%);border-radius:var(--rL);padding:22px 26px;margin-bottom:24px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-40px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(30,95,173,.1);pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px;">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,212,234,.6);margin-bottom:6px;">DESIGNRR · FIRST eBOOK GUIDE</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:#F6F1E6;margin-bottom:4px;">첫 eBook 제작 시작 가이드</div>
+              <div style="font-size:12.5px;color:rgba(255,255,255,.6);line-height:1.7;">Designrr Premium으로 첫 번째 eBook을 만드는 4단계 워크플로 — 팀원 누구나 따라할 수 있는 실전 가이드입니다.</div>
+            </div>
+            <a href="https://app.designrr.io/" target="_blank" rel="noopener"
+              style="display:inline-flex;align-items:center;gap:7px;padding:10px 20px;background:rgba(30,95,173,.6);color:#fff;border:1.5px solid rgba(30,95,173,.8);border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;"
+              onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">🔗 Designrr 열기 ↗</a>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(30,95,173,.25);color:#93C5FD;border:1px solid rgba(30,95,173,.4);">350,000+ 고객</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(13,148,136,.2);color:#6EE7B7;border:1px solid rgba(13,148,136,.35);">세계 1위 eBook 플랫폼</span>
+            <span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(184,134,11,.2);color:#FCD34D;border:1px solid rgba(184,134,11,.35);">PDF · Kindle · ePub · 플립북</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4단계 워크플로 개요 -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;">
+        <div style="background:linear-gradient(135deg,#0A3E84,#1560B8);border-radius:12px;padding:16px 14px;text-align:center;position:relative;box-shadow:0 4px 16px rgba(10,62,132,.25);">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0A3E84;">1</div>
+          <div style="font-size:26px;margin:10px 0 8px;">📥</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">Import</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,.7);line-height:1.5;">URL · Word · Google Docs · PDF 또는 Wordgenie AI</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#0A6B5A,#0D9488);border-radius:12px;padding:16px 14px;text-align:center;position:relative;box-shadow:0 4px 16px rgba(13,148,136,.25);">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0D9488;">2</div>
+          <div style="font-size:26px;margin:10px 0 8px;">✏️</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">Draft 편집</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,.7);line-height:1.5;">자동 저장 Draft에서 내용 검토 · 수정 후 템플릿 선택</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#6B21A8,#7C3AED);border-radius:12px;padding:16px 14px;text-align:center;position:relative;box-shadow:0 4px 16px rgba(124,58,237,.25);">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#7C3AED;">3</div>
+          <div style="font-size:26px;margin:10px 0 8px;">🎨</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">템플릿 · 디자인</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,.7);line-height:1.5;">원하는 템플릿 선택 — 표지·레이아웃 자유롭게 변경</div>
+        </div>
+        <div style="background:linear-gradient(135deg,#8B6300,#B8860B);border-radius:12px;padding:16px 14px;text-align:center;position:relative;box-shadow:0 4px 16px rgba(184,134,11,.25);">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#8B6300;">4</div>
+          <div style="font-size:26px;margin:10px 0 8px;">🚀</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">Publish</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,.7);line-height:1.5;">PDF · Kindle · ePub · 플립북 · 라이브 eBook 내보내기</div>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div style="background:var(--surface);border:2px solid rgba(10,62,132,.18);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+        <div style="background:rgba(10,62,132,.06);padding:13px 20px;border-bottom:1px solid rgba(10,62,132,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0A3E84,#1560B8);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;margin-bottom:1px;">Step 1</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);">Import — 콘텐츠 가져오기 또는 Wordgenie로 시작</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px;">
+          <p style="font-size:13px;color:var(--text2);line-height:1.85;margin-bottom:14px;">콘텐츠를 가져오는 방법은 4가지입니다. <strong>빠른 결과물의 핵심은 원본 콘텐츠 품질</strong>입니다 — Word나 Google Docs에서 가져올 경우 서식이 올바른지 먼저 확인하세요.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div style="padding:12px 14px;background:var(--s2);border-radius:8px;border-left:3px solid var(--blue);">
+              <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px;">📄 텍스트 기반 가져오기</div>
+              <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--text2);line-height:1.9;">
+                <li><strong>Webpage URL</strong> — 웹페이지 주소 직접 입력</li>
+                <li><strong>MS Word (.docx)</strong> — 서식 확인 후 업로드</li>
+                <li><strong>Google Docs</strong> — 구글 문서 연동</li>
+                <li><strong>PDF</strong> — 기존 PDF 변환</li>
+              </ul>
+            </div>
+            <div style="padding:12px 14px;background:linear-gradient(135deg,rgba(10,62,132,.07),rgba(13,148,136,.05));border-radius:8px;border-left:3px solid var(--teal);">
+              <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:6px;">🤖 Wordgenie AI — 콘텐츠가 없을 때</div>
+              <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px;">처음부터 시작한다면 Wordgenie AI가 주제·키워드로 초안을 자동 생성합니다.</p>
+              <a href="https://www.youtube.com/watch?v=XjPcYJTIWTo" target="_blank" rel="noopener"
+                style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--teal);text-decoration:none;padding:5px 10px;background:rgba(13,148,136,.1);border-radius:6px;border:1px solid rgba(13,148,136,.25);">
+                ▶ Wordgenie 시작 영상 ↗
+              </a>
+            </div>
+          </div>
+          <div style="padding:10px 14px;background:rgba(255,193,7,.08);border:1px solid rgba(255,193,7,.25);border-radius:8px;font-size:12px;color:var(--text2);display:flex;gap:8px;">
+            <span style="font-size:15px;flex-shrink:0;">💡</span>
+            <div><strong style="color:var(--gold2);">Word 서식 가이드:</strong> docx 가져오기 전 <a href="https://intercom.help/designrr/en/articles/2391519-how-to-format-a-word-docx" target="_blank" rel="noopener" style="color:var(--blue);font-weight:600;">Word 파일 서식 설정 방법</a>을 먼저 확인하세요.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div style="background:var(--surface);border:2px solid rgba(13,148,136,.18);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+        <div style="background:rgba(13,148,136,.06);padding:13px 20px;border-bottom:1px solid rgba(13,148,136,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0A6B5A,#0D9488);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin-bottom:1px;">Step 2</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);">Draft 검토 — 자동 저장 초안 편집</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px;">
+          <p style="font-size:13px;color:var(--text2);line-height:1.85;margin-bottom:12px;">콘텐츠를 가져오면 왼쪽 메뉴 <strong>DOCs 섹션</strong>에 자동으로 Draft가 저장됩니다. 디자인 편집기로 넘어가기 전에 이 단계에서 내용을 검토하고 수정하세요.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+            <div style="padding:12px;background:var(--s2);border-radius:8px;text-align:center;">
+              <div style="font-size:22px;margin-bottom:5px;">💾</div>
+              <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:3px;">자동 저장</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.5;">임포트 즉시 DOCs에 저장 — 언제든 되돌릴 수 있음</div>
+            </div>
+            <div style="padding:12px;background:var(--s2);border-radius:8px;text-align:center;">
+              <div style="font-size:22px;margin-bottom:5px;">⚡</div>
+              <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:3px;">빠른 편집</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.5;">대량 수정은 Draft 편집기가 훨씬 빠름</div>
+            </div>
+            <div style="padding:12px;background:var(--s2);border-radius:8px;text-align:center;">
+              <div style="font-size:22px;margin-bottom:5px;">🔄</div>
+              <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:3px;">반복 작업</div>
+              <div style="font-size:11px;color:var(--text3);line-height:1.5;">수정 완료 후 템플릿 선택해 디자인 편집기로 이동</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div style="background:var(--surface);border:2px solid rgba(124,58,237,.18);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+        <div style="background:rgba(124,58,237,.06);padding:13px 20px;border-bottom:1px solid rgba(124,58,237,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--purple);text-transform:uppercase;margin-bottom:1px;">Step 3</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);">템플릿 선택 → Designrr 편집기에서 디자인</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px;">
+          <p style="font-size:13px;color:var(--text2);line-height:1.85;margin-bottom:12px;"><strong>어떤 템플릿을 선택해도 괜찮습니다</strong> — 편집기 안에서 모든 것을 자유롭게 변경할 수 있습니다. 표지가 마음에 들지 않으면 편집기에서 교체하면 됩니다.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--s2);border-radius:7px;"><span style="font-size:15px;">🖼</span><span style="font-size:12px;color:var(--text2);">이미지 검색 · 업로드</span></div>
+            <div style="display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--s2);border-radius:7px;"><span style="font-size:15px;">📝</span><span style="font-size:12px;color:var(--text2);">헤더 · 푸터 설정</span></div>
+            <div style="display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--s2);border-radius:7px;"><span style="font-size:15px;">🔤</span><span style="font-size:12px;color:var(--text2);">폰트 · 색상 · 레이아웃</span></div>
+            <div style="display:flex;gap:8px;align-items:center;padding:8px 12px;background:var(--s2);border-radius:7px;"><span style="font-size:15px;">📐</span><span style="font-size:12px;color:var(--text2);">표지 · 페이지 사이즈</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 Publish -->
+      <div style="background:var(--surface);border:2px solid rgba(184,134,11,.18);border-radius:14px;overflow:hidden;margin-bottom:22px;">
+        <div style="background:rgba(184,134,11,.06);padding:13px 20px;border-bottom:1px solid rgba(184,134,11,.12);display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B6300,#B8860B);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0;">4</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--gold2);text-transform:uppercase;margin-bottom:1px;">Step 4</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);">Publish — 다양한 포맷으로 내보내기</div>
+          </div>
+        </div>
+        <div style="padding:16px 20px;">
+          <p style="font-size:13px;color:var(--text2);line-height:1.85;margin-bottom:12px;">Publish 버튼을 클릭하면 여러 포맷으로 내보낼 수 있습니다. 수정 후 재발행도 언제든 가능합니다.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:90px;padding:12px;background:rgba(10,62,132,.07);border:1px solid rgba(10,62,132,.18);border-radius:8px;text-align:center;"><div style="font-size:20px;margin-bottom:5px;">📄</div><div style="font-size:12px;font-weight:700;color:var(--blue);">PDF</div><div style="font-size:10.5px;color:var(--text3);margin-top:2px;">인쇄·배포용</div></div>
+            <div style="flex:1;min-width:90px;padding:12px;background:rgba(184,134,11,.07);border:1px solid rgba(184,134,11,.18);border-radius:8px;text-align:center;"><div style="font-size:20px;margin-bottom:5px;">📱</div><div style="font-size:12px;font-weight:700;color:var(--gold2);">Kindle</div><div style="font-size:10.5px;color:var(--text3);margin-top:2px;">Amazon KDP</div></div>
+            <div style="flex:1;min-width:90px;padding:12px;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.18);border-radius:8px;text-align:center;"><div style="font-size:20px;margin-bottom:5px;">📚</div><div style="font-size:12px;font-weight:700;color:var(--purple);">ePub</div><div style="font-size:10.5px;color:var(--text3);margin-top:2px;">교보·리디</div></div>
+            <div style="flex:1;min-width:90px;padding:12px;background:rgba(13,148,136,.07);border:1px solid rgba(13,148,136,.18);border-radius:8px;text-align:center;"><div style="font-size:20px;margin-bottom:5px;">🌐</div><div style="font-size:12px;font-weight:700;color:var(--teal);">라이브 eBook</div><div style="font-size:10.5px;color:var(--text3);margin-top:2px;">웹 링크 공유</div></div>
+            <div style="flex:1;min-width:90px;padding:12px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);border-radius:8px;text-align:center;"><div style="font-size:20px;margin-bottom:5px;">📖</div><div style="font-size:12px;font-weight:700;color:#DC2626;">플립북</div><div style="font-size:10.5px;color:var(--text3);margin-top:2px;">페이지 넘기기</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 리소스 링크 모음 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:var(--s2);border:1.5px solid var(--border);border-radius:12px;padding:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">📝 콘텐츠가 없을 때</div>
+          <p style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px;">Designrr의 7단계 eBook 작성 가이드를 참고하세요.</p>
+          <a href="https://designrr.io/how-to-write-an-ebook-in-7-steps/" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue);color:#fff;border-radius:7px;font-size:12px;font-weight:700;text-decoration:none;"
+            onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">📖 7단계 eBook 작성 가이드 ↗</a>
+        </div>
+        <div style="background:var(--s2);border:1.5px solid var(--border);border-radius:12px;padding:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">🔗 공식 학습 리소스</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <a href="https://intercom.help/designrr/en/collections/1858612-start-here" target="_blank" rel="noopener"
+              style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-size:12px;font-weight:600;color:var(--blue);text-decoration:none;"
+              onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+              <span>📚</span><span>Getting Started 공식 가이드</span><span style="margin-left:auto;opacity:.5;">↗</span>
+            </a>
+            <a href="https://www.youtube.com/playlist?list=PLxCa7E5WYTiB10kWHSDuQ9ezrijJLiltI" target="_blank" rel="noopener"
+              style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-size:12px;font-weight:600;color:#DC2626;text-decoration:none;"
+              onmouseover="this.style.borderColor='#DC2626'" onmouseout="this.style.borderColor='var(--border)'">
+              <span>▶</span><span>YouTube 시작 가이드 재생목록</span><span style="margin-left:auto;opacity:.5;">↗</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=XjPcYJTIWTo" target="_blank" rel="noopener"
+              style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-size:12px;font-weight:600;color:var(--teal);text-decoration:none;"
+              onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+              <span>🤖</span><span>Wordgenie AI 시작 영상</span><span style="margin-left:auto;opacity:.5;">↗</span>
+            </a>
+            <a href="https://app.designrr.io/" target="_blank" rel="noopener"
+              style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:linear-gradient(135deg,rgba(10,62,132,.1),rgba(13,148,136,.08));border:1.5px solid rgba(10,62,132,.3);border-radius:7px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;"
+              onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">
+              <span>🔗</span><span>Designrr 앱 바로가기</span><span style="margin-left:auto;opacity:.5;">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pt6 -->
+
+
   </div><!-- /content -->
 </div><!-- /s9 -->
 
@@ -4033,7 +4237,7 @@ function setLang(lang) {
 // ══════════════════════════════════════
 function pilotTab(idx) {
   document.querySelectorAll('#pilot-tabs .pill-tab').forEach((b,i) => b.classList.toggle('active', i===idx));
-  ['pt0','pt1','pt2','pt3','pt4','pt5'].forEach((id,i) => {
+  ['pt0','pt1','pt2','pt3','pt4','pt5','pt6'].forEach((id,i) => {
     var el = document.getElementById(id);
     if (el) el.classList.toggle('active', i===idx);
   });
