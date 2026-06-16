@@ -4927,6 +4927,7 @@ function mnFilter() {
     const tags = (n.tags||[]).map(t =>
       '<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:' + tagStyle(t) + ';border:1px solid rgba(0,0,0,.06);">' + t + '</span>'
     ).join('');
+    const nid      = n.id;
     const bodyPrev = (n.body||'').split('\n').join(' ').slice(0,120);
     const actions  = n.actions ? '<div style="margin-top:10px;padding:10px 12px;background:rgba(13,148,136,.06);border-left:3px solid var(--teal);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.7;white-space:pre-line;">' + n.actions.slice(0,200) + '</div>' : '';
     return '<div class="card" style="cursor:default;">' +
@@ -4997,44 +4998,59 @@ function mnToggleTag(btn, tag) {
 }
 
 async function mnSave() {
-  const title   = document.getElementById('mn-f-title').value.trim();
-  const date    = document.getElementById('mn-f-date').value.trim();
-  const author  = document.getElementById('mn-f-author').value.trim();
-  const body    = document.getElementById('mn-f-body').value.trim();
+  const title     = (document.getElementById('mn-f-title')?.value  || '').trim();
+  const date      = (document.getElementById('mn-f-date')?.value   || '').trim();
+  const author    = (document.getElementById('mn-f-author')?.value || '').trim();
+  const body      = (document.getElementById('mn-f-body')?.value   || '').trim();
+  const attendees = (document.getElementById('mn-f-attendees')?.value || '').trim();
+  const actions   = (document.getElementById('mn-f-actions')?.value  || '').trim();
+  const msgEl     = document.getElementById('mn-save-msg');
+  const btn       = document.getElementById('mn-save-btn');
 
+  // 필수 항목 검증
   if (!title || !date || !author || !body) {
-    document.getElementById('mn-save-msg').textContent = '⚠ 제목·날짜·작성자·내용은 필수입니다.';
-    document.getElementById('mn-save-msg').style.color = 'var(--rose)';
+    if (msgEl) { msgEl.textContent = '⚠ 제목·날짜·작성자·내용은 필수입니다.'; msgEl.style.color = '#EF4444'; }
     return;
   }
 
-  const btn = document.getElementById('mn-save-btn');
-  btn.textContent = '저장 중…';
-  btn.disabled = true;
+  // 저장 중 표시
+  if (btn) { btn.textContent = '저장 중…'; btn.disabled = true; }
+  if (msgEl) { msgEl.textContent = ''; }
 
-  const note = {
-    id         : MN_EDIT_ID || 'mn_' + Date.now().toString(36),
-    title,
-    date,
-    author,
-    attendees  : document.getElementById('mn-f-attendees').value.trim(),
-    tags       : [...MN_SELECTED_TAGS],
-    body,
-    actions    : document.getElementById('mn-f-actions').value.trim(),
-    updated_at : new Date().toISOString(),
-    created_at : MN_EDIT_ID ? (MN_ALL.find(n=>n.id===MN_EDIT_ID)?.created_at || new Date().toISOString()) : new Date().toISOString(),
-  };
+  try {
+    const now = new Date().toISOString();
+    const note = {
+      id         : MN_EDIT_ID || ('mn_' + Date.now().toString(36)),
+      title, date, author, attendees,
+      tags       : [...MN_SELECTED_TAGS],
+      body, actions,
+      updated_at : now,
+      created_at : MN_EDIT_ID
+        ? (MN_ALL.find(function(n){ return n.id === MN_EDIT_ID; })?.created_at || now)
+        : now,
+    };
 
-  await mnUpsert(note);
-  // ── 알림 발생 ──
-  if (typeof notifCreate === 'function') {
-    await notifCreate('meeting', note.title, note.author,
-      (MN_EDIT_ID ? '회의록이 수정되었습니다.' : '새 회의록이 작성되었습니다.') + ' (' + note.date + ')');
+    // 저장
+    await mnUpsert(note);
+
+    // 알림 발생
+    if (typeof notifCreate === 'function') {
+      notifCreate('meeting', note.title, note.author,
+        (MN_EDIT_ID ? '회의록이 수정되었습니다.' : '새 회의록이 작성되었습니다.') + ' (' + note.date + ')');
+    }
+
+    // 목록 새로고침
+    await mnLoad();
+
+    // ✅ 모달 닫기 + 버튼 복원
+    mnCloseModal();
+
+  } catch(err) {
+    console.error('[mnSave]', err);
+    if (msgEl) { msgEl.textContent = '❌ 저장 중 오류가 발생했습니다: ' + (err.message || err); msgEl.style.color = '#EF4444'; }
+  } finally {
+    if (btn) { btn.textContent = '저장'; btn.disabled = false; }
   }
-  await mnLoad();
-  mnCloseModal();
-  btn.textContent = '저장';
-  btn.disabled = false;
 }
 
 async function mnEdit(id) {
