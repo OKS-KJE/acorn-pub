@@ -3445,6 +3445,61 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
 
+    <!-- 회의록 보기 모달 -->
+    <div id="mn-view-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:660px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+        <!-- 모달 헤더 -->
+        <div style="padding:20px 24px 0;flex-shrink:0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+            <div style="flex:1;padding-right:12px;">
+              <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);text-transform:uppercase;margin-bottom:6px;">📝 회의록</div>
+              <div id="mnv-title" style="font-size:18px;font-weight:800;color:var(--text);line-height:1.3;"></div>
+            </div>
+            <button onclick="mnCloseView()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:4px;flex-shrink:0;">✕</button>
+          </div>
+          <!-- 메타 정보 -->
+          <div style="display:flex;gap:16px;flex-wrap:wrap;padding:10px 14px;background:var(--s2);border-radius:8px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">📅</span>
+              <div>
+                <div style="font-size:10px;color:var(--text3);font-weight:600;">작성일</div>
+                <div id="mnv-date" style="font-size:13px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace;"></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">✍️</span>
+              <div>
+                <div style="font-size:10px;color:var(--text3);font-weight:600;">작성자</div>
+                <div id="mnv-author" style="font-size:13px;font-weight:700;color:var(--text);"></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:14px;">👥</span>
+              <div>
+                <div style="font-size:10px;color:var(--text3);font-weight:600;">참석자</div>
+                <div id="mnv-attendees" style="font-size:13px;font-weight:700;color:var(--text);"></div>
+              </div>
+            </div>
+          </div>
+          <!-- 태그 -->
+          <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;"></div>
+          <div style="height:1px;background:var(--border);"></div>
+        </div>
+        <!-- 스크롤 본문 -->
+        <div style="flex:1;overflow-y:auto;padding:16px 24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;">회의 내용</div>
+          <div id="mnv-body" style="font-size:13.5px;line-height:1.85;"></div>
+          <div id="mnv-actions"></div>
+        </div>
+        <!-- 푸터 -->
+        <div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:var(--s2);">
+          <button onclick="mnCloseView()" style="padding:8px 20px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">닫기</button>
+          <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)" style="padding:8px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
+            onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">✏️ 수정</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div><!-- /s10 -->
 
@@ -4919,7 +4974,7 @@ function mnFilter() {
   const author = document.getElementById('mn-filter-author')?.value||'';
   const tag    = document.getElementById('mn-filter-tag')?.value||'';
 
-  const filtered = MN_ALL.filter(n => {
+  const filtered = MN_ALL.filter(function(n) {
     const matchQ = !q || (n.title||'').toLowerCase().includes(q) ||
                    (n.body||'').toLowerCase().includes(q) ||
                    (n.author||'').toLowerCase().includes(q);
@@ -4939,43 +4994,96 @@ function mnFilter() {
   }
   empty.style.display = 'none';
 
-  const TAG_COLORS = {
-    '편집':'rgba(10,62,132,.1);color:var(--blue)', '기획':'rgba(13,148,136,.1);color:var(--teal)',
-    '마케팅':'rgba(124,58,237,.1);color:var(--purple)', '디자인':'rgba(239,68,68,.1);color:#DC2626',
-    '플랫폼':'rgba(184,134,11,.1);color:var(--gold2)', 'KPI':'rgba(10,120,96,.1);color:var(--teal)',
-    '경영':'rgba(30,58,138,.1);color:#1E3A8A', '기타':'rgba(100,100,100,.1);color:var(--text3)',
+  // ── 태그 색상 ──
+  var TAG_COLORS = {
+    '편집':   { bg:'rgba(10,62,132,.1)',  color:'var(--blue)'   },
+    '기획':   { bg:'rgba(13,148,136,.1)', color:'var(--teal)'   },
+    '마케팅': { bg:'rgba(124,58,237,.1)', color:'var(--purple)' },
+    '디자인': { bg:'rgba(239,68,68,.1)',  color:'#DC2626'        },
+    '플랫폼': { bg:'rgba(184,134,11,.1)', color:'var(--gold2)'  },
+    'KPI':    { bg:'rgba(10,120,96,.1)',  color:'var(--teal)'   },
+    '경영':   { bg:'rgba(30,58,138,.1)',  color:'#1E3A8A'        },
+    '기타':   { bg:'rgba(100,100,100,.1)','color':'var(--text3)' },
   };
-  function tagStyle(t) {
-    return TAG_COLORS[t] || 'rgba(100,100,100,.1);color:var(--text3)';
+  function tagBadge(t) {
+    var c = TAG_COLORS[t] || { bg:'rgba(100,100,100,.1)', color:'var(--text3)' };
+    return '<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:' + c.bg + ';color:' + c.color + ';border:1px solid rgba(0,0,0,.06);font-weight:600;">' + t + '</span>';
   }
 
-  list.innerHTML = filtered.map(n => {
-    const tags = (n.tags||[]).map(t =>
-      '<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:' + tagStyle(t) + ';border:1px solid rgba(0,0,0,.06);">' + t + '</span>'
-    ).join('');
-    const nid      = n.id;
-    const bodyPrev = (n.body||'').split('\n').join(' ').slice(0,120);
-    const actions  = n.actions ? '<div style="margin-top:10px;padding:10px 12px;background:rgba(13,148,136,.06);border-left:3px solid var(--teal);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.7;white-space:pre-line;">' + n.actions.slice(0,200) + '</div>' : '';
-    return '<div class="card" style="cursor:default;">' +
-      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;">' +
-        '<div style="flex:1;">' +
-          '<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;">' + (n.title||'(제목 없음)') + '</div>' +
-          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">' +
-            '<span style="font-size:11.5px;color:var(--text3);">📅 ' + (n.date||'') + '</span>' +
-            '<span style="font-size:11.5px;color:var(--text3);">✍️ ' + (n.author||'') + '</span>' +
-            (n.attendees ? '<span style="font-size:11.5px;color:var(--text3);">👥 ' + n.attendees + '</span>' : '') +
-          '</div>' +
-          '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">' + tags + '</div>' +
-        '</div>' +
-        '<div style="display:flex;gap:6px;flex-shrink:0;">' +
-          '<button onclick="mnEdit(this.dataset.id)" data-id="' + nid + '" style="padding:5px 12px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);">수정</button>' +
-          '<button onclick="mnRemove(this.dataset.id)" data-id="' + nid + '" style="padding:5px 12px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);">삭제</button>' +
-        '</div>' +
-      '</div>' +
-      '<div style="font-size:12.5px;color:var(--text2);line-height:1.7;">' + bodyPrev + (n.body.length>120?'…':'') + '</div>' +
-      actions +
+  // ── 월별 그룹핑 ──
+  var groups = {};
+  var groupOrder = [];
+  filtered.forEach(function(n) {
+    var ym = (n.date||'').slice(0,7) || '날짜 없음'; // 'YYYY-MM'
+    if (!groups[ym]) { groups[ym] = []; groupOrder.push(ym); }
+    groups[ym].push(n);
+  });
+  groupOrder.sort(function(a,b){ return b.localeCompare(a); }); // 최신 월 먼저
+
+  // ── 렌더링 ──
+  var html = '';
+  groupOrder.forEach(function(ym) {
+    // 월 헤더
+    var label = ym === '날짜 없음' ? '날짜 없음' : (function(){
+      var parts = ym.split('-');
+      return parts[0] + '년 ' + parseInt(parts[1]) + '월';
+    })();
+    var cnt = groups[ym].length;
+    html += '<div style="display:flex;align-items:center;gap:10px;margin:20px 0 10px;">' +
+      '<div style="font-size:13px;font-weight:800;color:var(--text);">' + label + '</div>' +
+      '<div style="font-size:11px;padding:2px 8px;border-radius:100px;background:rgba(124,58,237,.1);color:var(--purple);font-weight:700;">' + cnt + '건</div>' +
+      '<div style="flex:1;height:1px;background:var(--border);"></div>' +
     '</div>';
-  }).join('');
+
+    // 카드 그리드 (4열)
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:4px;">';
+    groups[ym].forEach(function(n) {
+      var nid  = n.id;
+      var tags = (n.tags||[]).map(tagBadge).join('');
+      var dayStr = (n.date||'').slice(5).replace('-','/'); // MM/DD
+      html +=
+        '<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 15px;' +
+              'display:flex;flex-direction:column;gap:8px;transition:border-color .15s,box-shadow .15s;" ' +
+              'onmouseover="this.style.borderColor=\'var(--purple)\';this.style.boxShadow=\'0 4px 16px rgba(124,58,237,.1)\'" ' +
+              'onmouseout="this.style.borderColor=\'var(--border)\';this.style.boxShadow=\'none\'">' +
+
+          // 날짜 + 작성자
+          '<div style="display:flex;align-items:center;justify-content:space-between;">' +
+            '<span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3);font-weight:600;">📅 ' + dayStr + '</span>' +
+            '<span style="font-size:11px;color:var(--text3);">✍️ ' + (n.author||'') + '</span>' +
+          '</div>' +
+
+          // 제목
+          '<div style="font-size:13.5px;font-weight:700;color:var(--text);line-height:1.4;' +
+               'overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' +
+            (n.title||'(제목 없음)') +
+          '</div>' +
+
+          // 태그
+          (tags ? '<div style="display:flex;flex-wrap:wrap;gap:4px;">' + tags + '</div>' : '') +
+
+          // 버튼 행
+          '<div style="display:flex;gap:5px;margin-top:auto;padding-top:6px;border-top:1px solid var(--border);">' +
+            '<button onclick="mnView(this.dataset.id)" data-id="' + nid + '" ' +
+              'style="flex:1;padding:5px 0;background:rgba(124,58,237,.08);border:1.5px solid rgba(124,58,237,.25);border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--purple);" ' +
+              'onmouseover="this.style.background=\'var(--purple)\';this.style.color=\'#fff\'" ' +
+              'onmouseout="this.style.background=\'rgba(124,58,237,.08)\';this.style.color=\'var(--purple)\'">보기</button>' +
+            '<button onclick="mnEdit(this.dataset.id)" data-id="' + nid + '" ' +
+              'style="flex:1;padding:5px 0;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);" ' +
+              'onmouseover="this.style.borderColor=\'var(--blue)\';this.style.color=\'var(--blue)\'" ' +
+              'onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--text3)\'">수정</button>' +
+            '<button onclick="mnRemove(this.dataset.id)" data-id="' + nid + '" ' +
+              'style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);" ' +
+              'onmouseover="this.style.borderColor=\'#DC2626\';this.style.color=\'#DC2626\'" ' +
+              'onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--text3)\'">삭제</button>' +
+          '</div>' +
+
+        '</div>';
+    });
+    html += '</div>';
+  });
+
+  list.innerHTML = html;
 }
 
 // ── 모달 ─────────────────────────────────────────────
@@ -5080,13 +5188,59 @@ async function mnSave() {
 }
 
 async function mnEdit(id) {
-  const note = MN_ALL.find(n => n.id === id);
+  var note = MN_ALL.find(function(n){ return n.id === id; });
   if (note) mnOpenModal(note);
 }
 async function mnRemove(id) {
   if (!confirm('이 회의록을 삭제하시겠습니까?')) return;
   mnDelete(id);
   await mnLoad();
+}
+
+// ── 보기 모달 ─────────────────────────────────────────
+function mnView(id) {
+  var n = MN_ALL.find(function(x){ return x.id === id; });
+  if (!n) return;
+  var TC = {
+    '편집':{ bg:'rgba(10,62,132,.12)', c:'var(--blue)' },
+    '기획':{ bg:'rgba(13,148,136,.12)', c:'var(--teal)' },
+    '마케팅':{ bg:'rgba(124,58,237,.12)', c:'var(--purple)' },
+    '디자인':{ bg:'rgba(239,68,68,.12)', c:'#DC2626' },
+    '플랫폼':{ bg:'rgba(184,134,11,.12)', c:'var(--gold2)' },
+    'KPI':{ bg:'rgba(10,120,96,.12)', c:'var(--teal)' },
+    '경영':{ bg:'rgba(30,58,138,.12)', c:'#1E3A8A' },
+    '기타':{ bg:'rgba(100,100,100,.12)', c:'var(--text3)' },
+  };
+  var tags = (n.tags||[]).map(function(t){
+    var c = TC[t] || { bg:'rgba(100,100,100,.1)', c:'var(--text3)' };
+    return '<span style="font-size:12px;padding:3px 11px;border-radius:100px;background:' + c.bg + ';color:' + c.c + ';border:1px solid rgba(0,0,0,.08);font-weight:600;">' + t + '</span>';
+  }).join('');
+  var bodyHtml = (n.body||'').split('\n').map(function(line){
+    return '<p style="margin:0 0 8px;line-height:1.85;color:var(--text2);">' + (line||'&nbsp;') + '</p>';
+  }).join('');
+  var actHtml = n.actions
+    ? '<div style="margin-top:16px;padding:14px 16px;background:rgba(13,148,136,.06);border-left:3px solid var(--teal);border-radius:8px;">' +
+        '<div style="font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.06em;margin-bottom:8px;">✅ 액션 아이템</div>' +
+        '<div style="font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-line;">' + n.actions + '</div></div>'
+    : '';
+
+  var m = document.getElementById('mn-view-modal');
+  if (!m) return;
+  document.getElementById('mnv-title').textContent     = n.title||'(제목 없음)';
+  document.getElementById('mnv-date').textContent      = n.date||'';
+  document.getElementById('mnv-author').textContent    = n.author||'';
+  document.getElementById('mnv-attendees').textContent = n.attendees||'—';
+  document.getElementById('mnv-tags').innerHTML        = tags||'<span style="color:var(--text3);font-size:12px;">없음</span>';
+  document.getElementById('mnv-body').innerHTML        = bodyHtml;
+  document.getElementById('mnv-actions').innerHTML     = actHtml;
+  document.getElementById('mnv-edit-btn').dataset.id   = n.id;
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function mnCloseView() {
+  var m = document.getElementById('mn-view-modal');
+  if(m) m.style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 // s10 진입 시 로드
