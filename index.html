@@ -4816,16 +4816,17 @@ var MN_ALL = [];
 
 // ── Supabase 헬퍼 (SUPABASE_CONFIG 공유) ─────────────
 async function mnFetchAll() {
-  if (!sbOn()) {
-    // localStorage fallback
-    try { return JSON.parse(localStorage.getItem('mn_notes') || '[]'); } catch(e){ return []; }
-  }
+  if (!sbOn()) return mnLocalAll();
   try {
-    const res = await fetch(
+    const ctrl = new AbortController();
+    const tid  = setTimeout(function(){ ctrl.abort(); }, 3000);
+    const res  = await fetch(
       SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE +
       '?select=*&order=date.desc,created_at.desc',
-      { headers: sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store' }
+      { headers: sbHeaders({'Cache-Control':'no-cache'}),
+        cache: 'no-store', signal: ctrl.signal }
     );
+    clearTimeout(tid);
     if (!res.ok) return mnLocalAll();
     return await res.json();
   } catch(e) { return mnLocalAll(); }
@@ -4837,34 +4838,35 @@ function mnLocalSave(notes) {
   localStorage.setItem('mn_notes', JSON.stringify(notes));
 }
 
-async function mnUpsert(note) {
-  // localStorage 항상 저장
+function mnUpsert(note) {
+  // ① localStorage 즉시 저장 (동기, 항상 성공)
   const all = mnLocalAll();
-  const idx = all.findIndex(n => n.id === note.id);
+  const idx = all.findIndex(function(n){ return n.id === note.id; });
   if (idx >= 0) all[idx] = note; else all.unshift(note);
-  all.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  all.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
   mnLocalSave(all);
 
+  // ② Supabase fire-and-forget (3초 타임아웃, await 없음)
   if (!sbOn()) return;
-  try {
-    await fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE, {
-      method: 'POST',
-      headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-      body: JSON.stringify(note)
-    });
-  } catch(e) { console.warn('[MN] upsert 실패:', e.message); }
+  var ctrl = new AbortController();
+  setTimeout(function(){ ctrl.abort(); }, 3000);
+  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE, {
+    method : 'POST',
+    headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body   : JSON.stringify(note),
+    signal : ctrl.signal,
+  }).catch(function(){});
 }
 
-async function mnDelete(id) {
-  const all = mnLocalAll().filter(n => n.id !== id);
+function mnDelete(id) {
+  const all = mnLocalAll().filter(function(n){ return n.id !== id; });
   mnLocalSave(all);
   if (!sbOn()) return;
-  try {
-    await fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE + '?id=eq.' + id, {
-      method: 'DELETE',
-      headers: sbHeaders()
-    });
-  } catch(e) { console.warn('[MN] delete 실패:', e.message); }
+  var ctrl = new AbortController();
+  setTimeout(function(){ ctrl.abort(); }, 3000);
+  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE + '?id=eq.' + id, {
+    method: 'DELETE', headers: sbHeaders(), signal: ctrl.signal,
+  }).catch(function(){});
 }
 
 // ── 화면 렌더링 ───────────────────────────────────────
@@ -5031,7 +5033,7 @@ async function mnSave() {
     };
 
     // 저장
-    await mnUpsert(note);
+    mnUpsert(note);
 
     // 알림 발생
     if (typeof notifCreate === 'function') {
@@ -5059,7 +5061,7 @@ async function mnEdit(id) {
 }
 async function mnRemove(id) {
   if (!confirm('이 회의록을 삭제하시겠습니까?')) return;
-  await mnDelete(id);
+  mnDelete(id);
   await mnLoad();
 }
 
