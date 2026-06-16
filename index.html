@@ -3349,9 +3349,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <!-- 상단 액션 바 -->
     <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px;">
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
-          style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:220px;"
-          oninput="mnFilter()">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
+            style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:220px;"
+            oninput="mnFilter()" onkeydown="if(event.key==='Enter')mnFilter()">
+          <button onclick="mnFilter()" style="padding:8px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;"
+            onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">검색</button>
+          <button onclick="document.getElementById('mn-search').value='';mnFilter()" style="padding:8px 10px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text3);cursor:pointer;"
+            title="검색어 초기화">✕</button>
+        </div>
         <select id="mn-filter-author" onchange="mnFilter()"
           style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
           <option value="">👤 작성자 전체</option>
@@ -4871,9 +4877,27 @@ function mnDelete(id) {
 
 // ── 화면 렌더링 ───────────────────────────────────────
 async function mnLoad() {
-  MN_ALL = await mnFetchAll();
+  // localStorage 먼저 표시 (즉시 렌더) → Supabase 후 병합
+  MN_ALL = mnLocalAll();
   mnRebuildFilters();
   mnFilter();
+
+  // Supabase 데이터가 있으면 병합 (백그라운드)
+  if (sbOn()) {
+    try {
+      const remote = await mnFetchAll();
+      if (remote && remote.length > 0) {
+        // remote 우선, local only 항목 병합
+        const remoteIds = new Set(remote.map(function(n){ return n.id; }));
+        const localOnly = MN_ALL.filter(function(n){ return !remoteIds.has(n.id); });
+        MN_ALL = remote.concat(localOnly);
+        MN_ALL.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+        mnLocalSave(MN_ALL); // 병합 결과를 localStorage에도 동기화
+        mnRebuildFilters();
+        mnFilter();
+      }
+    } catch(e) { /* Supabase 실패 — localStorage로 이미 표시됨 */ }
+  }
 }
 
 function mnRebuildFilters() {
@@ -5086,11 +5110,11 @@ async function mnRemove(id) {
 var NOTIF_OPEN = false;
 
 var NOTIF_META = {
-  meeting:  { icon:'📝', color:'#A78BFA', label:'회의록' },
-  proposal: { icon:'📋', color:'#F59E0B', label:'기획안' },
-  estimate: { icon:'💰', color:'#10B981', label:'견적서' },
-  contract: { icon:'📜', color:'#3B82F6', label:'계약서' },
-  project:  { icon:'🚀', color:'#EF4444', label:'프로젝트' },
+  meeting:  { icon:'📝', color:'#A78BFA', label:'회의록',  nav:'s10' },
+  proposal: { icon:'📋', color:'#F59E0B', label:'기획안',  nav:'proposal' },
+  estimate: { icon:'💰', color:'#10B981', label:'견적서',  nav:'s10' },
+  contract: { icon:'📜', color:'#3B82F6', label:'계약서',  nav:'proposal' },
+  project:  { icon:'🚀', color:'#EF4444', label:'프로젝트', nav:'s10' },
 };
 
 // ── 로컬 알림 데이터 ──────────────────────────────────
@@ -5182,7 +5206,8 @@ function notifRender() {
   list.innerHTML = all.slice(0, 30).map(n => {
     const meta = NOTIF_META[n.type] || { icon:'🔔', color:'#6B7280', label:'알림' };
     const time = notifTimeAgo(n.created_at);
-    return '<div class="notif-item' + (n.is_read ? '' : ' unread') + '" onclick="notifMarkRead(this.dataset.id)" data-id="' + n.id + '">' +
+    const dest = meta.nav === 'proposal' ? '기획안 관리로 이동' : (meta.nav ? '해당 페이지로 이동' : '');
+    return '<div class="notif-item' + (n.is_read ? '' : ' unread') + '" onclick="notifMarkRead(this.dataset.id)" data-id="' + n.id + '" title="' + dest + '" style="cursor:pointer;">' +
       '<div class="notif-dot" style="background:' + meta.color + ';' + (n.is_read ? 'opacity:.3' : '') + ';"></div>' +
       '<div style="flex:1;min-width:0;">' +
         '<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">' +
@@ -5200,10 +5225,25 @@ function notifRender() {
 // ── 읽음 처리 ────────────────────────────────────────
 function notifMarkRead(id) {
   const all = notifGetAll();
-  const n   = all.find(x => x.id === id);
+  const n   = all.find(function(x){ return x.id === id; });
   if (n) { n.is_read = true; notifSaveAll(all); }
   notifUpdateBadge();
   notifRender();
+
+  // ── 관련 페이지로 이동 ──────────────────────────────
+  if (n) {
+    const meta = NOTIF_META[n.type] || {};
+    const target = meta.nav || '';
+    if (target === 'proposal') {
+      // 기획안 관리는 별도 페이지
+      window.location.href = 'proposal.html';
+    } else if (target) {
+      // s10, s9 등 내부 섹션
+      NOTIF_OPEN = false;
+      document.getElementById('notif-panel')?.classList.remove('open');
+      if (typeof nav === 'function') nav(target);
+    }
+  }
 
   if (sbOn() && id) {
     fetch(SUPABASE_CONFIG.url + '/rest/v1/notifications?id=eq.' + id, {
