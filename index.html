@@ -72,6 +72,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   font-size:9px;font-weight:700;color:rgba(184,212,234,.5);
   letter-spacing:1.5px;text-transform:uppercase;padding:12px 20px 4px;
 }
+/* ── 알림 시스템 ─────────────────────────────────────── */
+.notif-btn{position:relative;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.55);font-size:16px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.notif-btn:hover{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.5);}
+.notif-badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;border-radius:100px;background:#EF4444;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--nav-bg);line-height:1;animation:notifPop .3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(20px);}}
+@keyframes notifPop{0%{transform:scale(0);}70%{transform:scale(1.2);}100%{transform:scale(1);}}
+.notif-panel{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:500;overflow:hidden;max-height:420px;overflow-y:auto;}
+.notif-panel.open{display:block;animation:fadeIn .2s ease;}
+.notif-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.notif-item{display:flex;align-items:flex-start;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.notif-item:hover{background:var(--s2);}
+.notif-item.unread{background:rgba(124,58,237,.04);border-left:3px solid var(--purple);}
+.notif-item.unread:hover{background:rgba(124,58,237,.08);}
+.notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.notif-empty{padding:28px 16px;text-align:center;color:var(--text3);font-size:12px;}
+
 .nav-item{
   display:flex;align-items:center;gap:10px;padding:9px 20px;
   cursor:pointer;transition:all .2s;font-size:12px;color:var(--nav-text);
@@ -209,6 +226,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .tl-list li{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;}
 .tl-list li:last-child{border-bottom:none;}
 /* db-status badge — proposal.html 동일 */
+.ref-link{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s,box-shadow .15s;}
+.ref-link:hover{border-color:var(--rc,var(--blue));transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.ref-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
+.ref-name{font-size:12.5px;font-weight:700;color:var(--text);line-height:1.3;}
+.ref-url{font-size:10.5px;color:var(--text3);margin-top:1px;font-family:'JetBrains Mono',monospace;}
 .db-status{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .db-status.local{background:rgba(255,200,80,.15);color:var(--gold2);}
 .db-status.cloud{background:rgba(80,200,120,.15);color:#50C878;}
@@ -416,11 +438,28 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       ↺
     </button>
   </div>
+  <!-- 알림 버튼 -->
+  <div style="position:relative;padding:0 18px 10px;">
+    <button id="notif-btn" class="notif-btn" style="width:100%;" onclick="notifToggle()" title="알림">
+      🔔
+      <span id="notif-badge" class="notif-badge" style="display:none;">0</span>
+    </button>
+    <div id="notif-panel" class="notif-panel">
+      <div class="notif-header">
+        <span style="font-size:12px;font-weight:700;color:var(--text);">알림</span>
+        <button onclick="notifMarkAllRead()" style="font-size:11px;color:var(--blue);background:none;border:none;cursor:pointer;padding:2px 6px;">모두 읽음</button>
+      </div>
+      <div id="notif-list"></div>
+    </div>
+  </div>
   <div class="sidebar-nav">
     <div class="nav-item active" onclick="nav('s1')"><span class="nav-icon">🏢</span><span data-i18n="nav_co">회사</span></div>
     <div class="nav-item" onclick="nav('s3')"><span class="nav-icon">📚</span><span data-i18n="nav_wk">업무</span></div>
     <div class="nav-item" onclick="nav('s4')"><span class="nav-icon">📋</span><span data-i18n="nav_rg">복무 규정</span></div>
     <div class="nav-item" onclick="nav('s8')"><span class="nav-icon">📊</span><span data-i18n="nav_kp">KPI</span></div>
+    <div class="nav-item" onclick="nav('s10')" style="color:#A78BFA;border-left:2px solid rgba(167,139,250,.4);">
+      <span class="nav-icon">📝</span>회의록
+    </div>
     <div class="nav-divider" style="height:1px;background:rgba(255,255,255,.1);margin:8px 16px;"></div>
     <a href="proposal.html" style="text-decoration:none;">
       <div class="nav-item" style="color:var(--gold3);border-left:3px solid var(--gold3);">
@@ -429,6 +468,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </a>
     <div class="nav-item" onclick="nav('s9')" style="color:#5DD6B3;border-left:2px solid rgba(93,214,179,.4);">
       <span class="nav-icon">🧪</span>Pilot Test
+    </div>
+    <div class="nav-item" onclick="nav('s11')" style="color:#60A5FA;border-left:2px solid rgba(96,165,250,.4);">
+      <span class="nav-icon">🔗</span>참고 사이트
     </div>
   </div>
   <div class="sidebar-footer">
@@ -3294,6 +3336,308 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div><!-- /content -->
 </div><!-- /s9 -->
 
+
+<!-- ══ S10: 회의록 ══ -->
+<div id="s10" class="section">
+  <div class="page-header" style="background:linear-gradient(135deg,#1E1040 0%,#2D1B69 60%,#0F172A 100%);">
+    <div class="ph-eyebrow">MEETING NOTES · 에이콘출판사</div>
+    <h1 class="ph-title">회의록 <span style="font-size:.55em;font-weight:400;opacity:.7">Meeting Notes</span></h1>
+    <p class="ph-sub">팀 회의 내용을 기록하고 작성자·날짜·주제별로 조회합니다.</p>
+  </div>
+  <div class="content">
+
+    <!-- 상단 액션 바 -->
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
+          style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:220px;"
+          oninput="mnFilter()">
+        <select id="mn-filter-author" onchange="mnFilter()"
+          style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">👤 작성자 전체</option>
+        </select>
+        <select id="mn-filter-tag" onchange="mnFilter()"
+          style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">🏷 주제 전체</option>
+        </select>
+      </div>
+      <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;"
+        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        ✏️ 새 회의록 작성
+      </button>
+    </div>
+
+    <!-- 회의록 목록 -->
+    <div id="mn-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <div id="mn-empty" style="display:none;text-align:center;padding:48px 0;color:var(--text3);">
+      <div style="font-size:40px;margin-bottom:12px;">📋</div>
+      <div style="font-size:14px;">아직 작성된 회의록이 없습니다.</div>
+      <div style="font-size:12px;margin-top:6px;">위의 버튼을 클릭해 첫 회의록을 작성해 보세요.</div>
+    </div>
+
+    <!-- 회의록 작성/편집 모달 -->
+    <div id="mn-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface);border-radius:16px;padding:28px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div style="font-size:16px;font-weight:700;color:var(--text);" id="mn-modal-title">📝 새 회의록 작성</div>
+          <button onclick="mnCloseModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:4px;">✕</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">제목 *</div>
+              <input id="mn-f-title" type="text" placeholder="회의 제목을 입력하세요"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">날짜 *</div>
+              <input id="mn-f-date" type="date"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">작성자 *</div>
+              <input id="mn-f-author" type="text" placeholder="이름"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">참석자</div>
+              <input id="mn-f-attendees" type="text" placeholder="쉼표로 구분 (예: 황영주, 강승훈)"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">주제 태그</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;" id="mn-tag-btns">
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'편집')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">편집</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기획')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기획</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'마케팅')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">마케팅</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'디자인')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">디자인</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'플랫폼')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">플랫폼</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'KPI')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">KPI</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'경영')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">경영</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기타')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기타</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">회의 내용 *</div>
+            <textarea id="mn-f-body" rows="10" placeholder="회의 내용을 자유롭게 작성하세요.&#10;&#10;예) 안건 / 논의 내용 / 결정 사항 / 다음 액션 아이템"
+              style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">액션 아이템</div>
+            <textarea id="mn-f-actions" rows="3" placeholder="예) - 홍길동: 기획안 수정 (6/30까지)&#10;- 김철수: 디자인 시안 제출 (7/5까지)"
+              style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <div id="mn-save-msg" style="font-size:12px;color:var(--teal);font-family:'JetBrains Mono',monospace;"></div>
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="mnCloseModal()" style="padding:9px 20px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+            <button onclick="mnSave()" id="mn-save-btn" style="padding:9px 24px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /s10 -->
+
+<!-- ══ S11: 참고 사이트 ══ -->
+<div id="s11" class="section">
+  <div class="page-header" style="background:linear-gradient(135deg,#0C1F3A 0%,#0A3E5A 60%,#091A0A 100%);">
+    <div class="ph-eyebrow">REFERENCE SITES · 에이콘출판사</div>
+    <h1 class="ph-title">참고 사이트 <span style="font-size:.55em;font-weight:400;opacity:.7">Quick Links</span></h1>
+    <p class="ph-sub">업무에 자주 사용하는 사이트를 카테고리별로 모아 빠르게 접근합니다.</p>
+  </div>
+  <div class="content">
+
+    <div style="display:flex;flex-direction:column;gap:22px;">
+
+      <!-- A. 회사 업무 -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(30,95,173,.2);">
+          <span style="font-size:20px;">🏢</span>
+          <div style="font-size:14px;font-weight:800;color:var(--blue);">A. 회사 업무</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;">
+          <a href="https://www.acornpub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);">
+            <span class="ref-icon">🌐</span><div><div class="ref-name">홈페이지</div><div class="ref-url">acornpub.co.kr</div></div>
+          </a>
+          <a href="https://login.ecount.com/Login/KR/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);">
+            <span class="ref-icon">📊</span><div><div class="ref-name">이카운트 ERP</div><div class="ref-url">ecount.com</div></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- B. 유통사 -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(13,148,136,.2);">
+          <span style="font-size:20px;">🛒</span>
+          <div style="font-size:14px;font-weight:800;color:var(--teal);">B. 유통사</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
+          <a href="https://www.kyobobook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📚</span><div><div class="ref-name">교보문고</div><div class="ref-url">kyobobook.co.kr</div></div>
+          </a>
+          <a href="https://aladin.co.kr/home/welcome.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📚</span><div><div class="ref-name">알라딘</div><div class="ref-url">aladin.co.kr</div></div>
+          </a>
+          <a href="https://www.ypbooks.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📚</span><div><div class="ref-name">영풍문고</div><div class="ref-url">ypbooks.co.kr</div></div>
+          </a>
+          <a href="https://www.yes24.com/Main/default.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📚</span><div><div class="ref-name">예스24</div><div class="ref-url">yes24.com</div></div>
+          </a>
+          <a href="http://www.booxen.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📦</span><div><div class="ref-name">북센</div><div class="ref-url">booxen.com</div></div>
+          </a>
+          <a href="https://www.bookcube.com/main.asp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📱</span><div><div class="ref-name">북큐브</div><div class="ref-url">bookcube.com</div></div>
+          </a>
+          <a href="https://play.google.com/store/books?hl=ko" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">▶</span><div><div class="ref-name">구글 플레이</div><div class="ref-url">play.google.com</div></div>
+          </a>
+          <a href="https://www.apple.com/kr/apple-books/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">🍎</span><div><div class="ref-name">애플 북스</div><div class="ref-url">apple.com/kr</div></div>
+          </a>
+          <a href="https://bsearch.interpark.com/dsearch/book.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">🛍</span><div><div class="ref-name">인터파크</div><div class="ref-url">interpark.com</div></div>
+          </a>
+          <a href="https://search.shopping.naver.com/book/home" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">🟢</span><div><div class="ref-name">네이버 북</div><div class="ref-url">naver.com/book</div></div>
+          </a>
+          <a href="https://ridibooks.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📖</span><div><div class="ref-name">리디북스</div><div class="ref-url">ridibooks.com</div></div>
+          </a>
+          <a href="https://www.y2books.com/product/productTotalList?cateDepth1=10000000&cateDepth2=10000023" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📚</span><div><div class="ref-name">Y2BOOKS</div><div class="ref-url">y2books.com</div></div>
+          </a>
+          <a href="https://www.readingrak.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📚</span><div><div class="ref-name">리딩락</div><div class="ref-url">readingrak.com</div></div>
+          </a>
+          <a href="https://www.amazon.com/books-used-books-textbooks/b?node=283155" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
+            <span class="ref-icon">📦</span><div><div class="ref-name">아마존</div><div class="ref-url">amazon.com</div></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- C. 외국 출판사 -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(124,58,237,.2);">
+          <span style="font-size:20px;">🌍</span>
+          <div style="font-size:14px;font-weight:800;color:var(--purple);">C. 외국 출판사</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
+          <a href="https://www.edelweiss.plus/#dashboard" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">🌸</span><div><div class="ref-name">Edelweiss</div><div class="ref-url">edelweiss.plus</div></div>
+          </a>
+          <a href="https://www.oreilly.com/publisher/addison-wesley-professional/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">🦦</span><div><div class="ref-name">O'Reilly</div><div class="ref-url">oreilly.com</div></div>
+          </a>
+          <a href="https://nostarch.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">⭐</span><div><div class="ref-name">No Starch</div><div class="ref-url">nostarch.com</div></div>
+          </a>
+          <a href="https://mitpress.mit.edu/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">🎓</span><div><div class="ref-name">MIT Press</div><div class="ref-url">mitpress.mit.edu</div></div>
+          </a>
+          <a href="https://www.wiley.com/en-kr" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">📘</span><div><div class="ref-name">Wiley</div><div class="ref-url">wiley.com</div></div>
+          </a>
+          <a href="https://docs.google.com/spreadsheets/d/1-miJAMk_MfZ_zrT6YbU-jUN06Cm4Hpaw0ctB7hdThXg/edit" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">📊</span><div><div class="ref-name">O'Reilly 정리</div><div class="ref-url">Google Sheets</div></div>
+          </a>
+          <a href="https://www.manning.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">📗</span><div><div class="ref-name">Manning</div><div class="ref-url">manning.com</div></div>
+          </a>
+          <a href="https://www.packtpub.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">📙</span><div><div class="ref-name">Packt</div><div class="ref-url">packtpub.com</div></div>
+          </a>
+          <a href="https://www.penguin.co.in/books/non-fiction/computing-internet-digital-media/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
+            <span class="ref-icon">🐧</span><div><div class="ref-name">Penguin</div><div class="ref-url">penguin.co.in</div></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- D. 국내 출판사 -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(184,134,11,.2);">
+          <span style="font-size:20px;">🏛</span>
+          <div style="font-size:14px;font-weight:800;color:var(--gold2);">D. 국내 출판사</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
+          <a href="https://jpub.tistory.com/notice/1074" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">제이펍</div><div class="ref-url">jpub.tistory.com</div></div>
+          </a>
+          <a href="https://www.onlybook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">책만</div><div class="ref-url">onlybook.co.kr</div></div>
+          </a>
+          <a href="https://ebook.insightbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">인사이트</div><div class="ref-url">insightbook.co.kr</div></div>
+          </a>
+          <a href="https://www.easyspub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">이지스퍼블리싱</div><div class="ref-url">easyspub.co.kr</div></div>
+          </a>
+          <a href="https://www.hanbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">한빛미디어</div><div class="ref-url">hanbit.co.kr</div></div>
+          </a>
+          <a href="https://www.gilbut.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">길벗</div><div class="ref-url">gilbut.co.kr</div></div>
+          </a>
+          <a href="https://wikibook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">위키북스</div><div class="ref-url">wikibook.co.kr</div></div>
+          </a>
+          <a href="https://bjpublic.tistory.com/373" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">비제이퍼블릭</div><div class="ref-url">bjpublic.tistory.com</div></div>
+          </a>
+          <a href="https://www.booksr.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">생능출판사</div><div class="ref-url">booksr.co.kr</div></div>
+          </a>
+          <a href="https://www.smartbooks21.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
+            <span class="ref-icon">📕</span><div><div class="ref-name">스마트북스</div><div class="ref-url">smartbooks21.com</div></div>
+          </a>
+        </div>
+      </div>
+
+      <!-- E. 출판 관련 기관 -->
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(239,68,68,.2);">
+          <span style="font-size:20px;">🏛</span>
+          <div style="font-size:14px;font-weight:800;color:#DC2626;">E. 출판 관련 기관</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;">
+          <a href="https://www.mcst.go.kr/site/main.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">🏛</span><div><div class="ref-name">문화체육관광부</div><div class="ref-url">mcst.go.kr</div></div>
+          </a>
+          <a href="https://www.kocca.kr/kocca/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">🎨</span><div><div class="ref-name">한국콘텐츠진흥원</div><div class="ref-url">kocca.kr</div></div>
+          </a>
+          <a href="https://bookapply.kpipa.or.kr/front/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">📋</span><div><div class="ref-name">출판문화사업진흥원</div><div class="ref-url">kpipa.or.kr</div></div>
+          </a>
+          <a href="https://www.kopus.org/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">🤝</span><div><div class="ref-name">한국출판인회의</div><div class="ref-url">kopus.org</div></div>
+          </a>
+          <a href="https://bnk.kpipa.or.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">🗄</span><div><div class="ref-name">출판전산망</div><div class="ref-url">bnk.kpipa.or.kr</div></div>
+          </a>
+          <a href="https://baro.kpipa.or.kr/front/login/loginPage.do?gubun=1" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">📱</span><div><div class="ref-name">전자책바로</div><div class="ref-url">baro.kpipa.or.kr</div></div>
+          </a>
+          <a href="https://www.epage.co.kr/home/home.page?cmd=home-service" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">🔗</span><div><div class="ref-name">한국전자출판협동조합</div><div class="ref-url">epage.co.kr</div></div>
+          </a>
+          <a href="http://e-kpc.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">📊</span><div><div class="ref-name">한국출판콘텐츠</div><div class="ref-url">e-kpc.co.kr</div></div>
+          </a>
+          <a href="https://www.biznavi.co.kr/taskManage/page2" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
+            <span class="ref-icon">🧭</span><div><div class="ref-name">비즈나비</div><div class="ref-url">biznavi.co.kr</div></div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /s11 -->
 </div><!-- .main -->
 
 <script>
@@ -3478,7 +3822,7 @@ function tab(section, tabId, btn) {
 const SECTIONS = ['s1','s3','s4','s8'];
 function nav(id, subTabId) {
   // hide all sections
-  ['s1','s3','s4','s8','s9'].forEach(s => {
+  ['s1','s3','s4','s8','s9','s10','s11'].forEach(s => {
     const el = document.getElementById(s);
     if(el) { el.classList.remove('active'); }
   });
@@ -3527,6 +3871,7 @@ function nav(id, subTabId) {
   window.scrollTo(0,0);
   buildChecklist();
   if (id === 's9') { setTimeout(function(){ if(typeof pilotInit==='function') pilotInit(); }, 50); }
+  if (id === 's10') { setTimeout(function(){ if(typeof mnLoad==='function') mnLoad(); }, 50); }
 }
 
 // ── LANGUAGE SYSTEM ──────────────────────────────────────────
@@ -4444,6 +4789,547 @@ async function hardRefresh() {
     location.reload(true);
   }
 }
+
+
+// ════════════════════════════════════════════════════════
+// 회의록 (Meeting Notes) — Supabase + localStorage
+// ════════════════════════════════════════════════════════
+// 테이블: meeting_notes
+//   id uuid PK default gen_random_uuid()
+//   title text NOT NULL
+//   date  date NOT NULL
+//   author text NOT NULL
+//   attendees text
+//   tags  text[]  default '{}'
+//   body  text NOT NULL
+//   actions text
+//   created_at timestamptz default now()
+//   updated_at timestamptz default now()
+//
+// RLS: anon key로 read/insert/update/delete 허용
+// (개발 중) RLS disabled 또는 public policy
+
+var MN_TABLE = 'meeting_notes';
+var MN_EDIT_ID = null;
+var MN_SELECTED_TAGS = [];
+var MN_ALL = [];
+
+// ── Supabase 헬퍼 (SUPABASE_CONFIG 공유) ─────────────
+async function mnFetchAll() {
+  if (!sbOn()) {
+    // localStorage fallback
+    try { return JSON.parse(localStorage.getItem('mn_notes') || '[]'); } catch(e){ return []; }
+  }
+  try {
+    const res = await fetch(
+      SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE +
+      '?select=*&order=date.desc,created_at.desc',
+      { headers: sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store' }
+    );
+    if (!res.ok) return mnLocalAll();
+    return await res.json();
+  } catch(e) { return mnLocalAll(); }
+}
+function mnLocalAll() {
+  try { return JSON.parse(localStorage.getItem('mn_notes') || '[]'); } catch(e){ return []; }
+}
+function mnLocalSave(notes) {
+  localStorage.setItem('mn_notes', JSON.stringify(notes));
+}
+
+async function mnUpsert(note) {
+  // localStorage 항상 저장
+  const all = mnLocalAll();
+  const idx = all.findIndex(n => n.id === note.id);
+  if (idx >= 0) all[idx] = note; else all.unshift(note);
+  all.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  mnLocalSave(all);
+
+  if (!sbOn()) return;
+  try {
+    await fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE, {
+      method: 'POST',
+      headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+      body: JSON.stringify(note)
+    });
+  } catch(e) { console.warn('[MN] upsert 실패:', e.message); }
+}
+
+async function mnDelete(id) {
+  const all = mnLocalAll().filter(n => n.id !== id);
+  mnLocalSave(all);
+  if (!sbOn()) return;
+  try {
+    await fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE + '?id=eq.' + id, {
+      method: 'DELETE',
+      headers: sbHeaders()
+    });
+  } catch(e) { console.warn('[MN] delete 실패:', e.message); }
+}
+
+// ── 화면 렌더링 ───────────────────────────────────────
+async function mnLoad() {
+  MN_ALL = await mnFetchAll();
+  mnRebuildFilters();
+  mnFilter();
+}
+
+function mnRebuildFilters() {
+  const authors = [...new Set(MN_ALL.map(n => n.author).filter(Boolean))].sort();
+  const tags    = [...new Set(MN_ALL.flatMap(n => n.tags||[]).filter(Boolean))].sort();
+
+  const fa = document.getElementById('mn-filter-author');
+  const ft = document.getElementById('mn-filter-tag');
+  if (!fa || !ft) return;
+
+  fa.innerHTML = '<option value="">👤 작성자 전체</option>' +
+    authors.map(a => '<option value="' + a + '">' + a + '</option>').join('');
+  ft.innerHTML = '<option value="">🏷 주제 전체</option>' +
+    tags.map(t => '<option value="' + t + '">' + t + '</option>').join('');
+}
+
+function mnFilter() {
+  const q      = (document.getElementById('mn-search')?.value||'').toLowerCase();
+  const author = document.getElementById('mn-filter-author')?.value||'';
+  const tag    = document.getElementById('mn-filter-tag')?.value||'';
+
+  const filtered = MN_ALL.filter(n => {
+    const matchQ = !q || (n.title||'').toLowerCase().includes(q) ||
+                   (n.body||'').toLowerCase().includes(q) ||
+                   (n.author||'').toLowerCase().includes(q);
+    const matchA = !author || n.author === author;
+    const matchT = !tag    || (n.tags||[]).includes(tag);
+    return matchQ && matchA && matchT;
+  });
+
+  const list  = document.getElementById('mn-list');
+  const empty = document.getElementById('mn-empty');
+  if (!list || !empty) return;
+
+  if (!filtered.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const TAG_COLORS = {
+    '편집':'rgba(10,62,132,.1);color:var(--blue)', '기획':'rgba(13,148,136,.1);color:var(--teal)',
+    '마케팅':'rgba(124,58,237,.1);color:var(--purple)', '디자인':'rgba(239,68,68,.1);color:#DC2626',
+    '플랫폼':'rgba(184,134,11,.1);color:var(--gold2)', 'KPI':'rgba(10,120,96,.1);color:var(--teal)',
+    '경영':'rgba(30,58,138,.1);color:#1E3A8A', '기타':'rgba(100,100,100,.1);color:var(--text3)',
+  };
+  function tagStyle(t) {
+    return TAG_COLORS[t] || 'rgba(100,100,100,.1);color:var(--text3)';
+  }
+
+  list.innerHTML = filtered.map(n => {
+    const tags = (n.tags||[]).map(t =>
+      '<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:' + tagStyle(t) + ';border:1px solid rgba(0,0,0,.06);">' + t + '</span>'
+    ).join('');
+    const bodyPrev = (n.body||'').split('\n').join(' ').slice(0,120);
+    const actions  = n.actions ? '<div style="margin-top:10px;padding:10px 12px;background:rgba(13,148,136,.06);border-left:3px solid var(--teal);border-radius:6px;font-size:12px;color:var(--text2);line-height:1.7;white-space:pre-line;">' + n.actions.slice(0,200) + '</div>' : '';
+    return '<div class="card" style="cursor:default;">' +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;">' +
+        '<div style="flex:1;">' +
+          '<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;">' + (n.title||'(제목 없음)') + '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">' +
+            '<span style="font-size:11.5px;color:var(--text3);">📅 ' + (n.date||'') + '</span>' +
+            '<span style="font-size:11.5px;color:var(--text3);">✍️ ' + (n.author||'') + '</span>' +
+            (n.attendees ? '<span style="font-size:11.5px;color:var(--text3);">👥 ' + n.attendees + '</span>' : '') +
+          '</div>' +
+          '<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">' + tags + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:6px;flex-shrink:0;">' +
+          '<button onclick="mnEdit(this.dataset.id)" data-id="' + nid + '" style="padding:5px 12px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);">수정</button>' +
+          '<button onclick="mnRemove(this.dataset.id)" data-id="' + nid + '" style="padding:5px 12px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);">삭제</button>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:12.5px;color:var(--text2);line-height:1.7;">' + bodyPrev + (n.body.length>120?'…':'') + '</div>' +
+      actions +
+    '</div>';
+  }).join('');
+}
+
+// ── 모달 ─────────────────────────────────────────────
+function mnOpenModal(note) {
+  MN_EDIT_ID = note ? note.id : null;
+  MN_SELECTED_TAGS = note ? [...(note.tags||[])] : [];
+
+  document.getElementById('mn-modal-title').textContent = note ? '✏️ 회의록 수정' : '✏️ 새 회의록 작성';
+  document.getElementById('mn-f-title').value     = note?.title     || '';
+  document.getElementById('mn-f-date').value      = note?.date      || new Date().toISOString().slice(0,10);
+  document.getElementById('mn-f-author').value    = note?.author    || '';
+  document.getElementById('mn-f-attendees').value = note?.attendees || '';
+  document.getElementById('mn-f-body').value      = note?.body      || '';
+  document.getElementById('mn-f-actions').value   = note?.actions   || '';
+  document.getElementById('mn-save-msg').textContent = '';
+
+  // 태그 버튼 상태 리셋
+  document.querySelectorAll('.mn-tag-opt').forEach(btn => {
+    const active = MN_SELECTED_TAGS.includes(btn.textContent.trim());
+    btn.style.background = active ? 'var(--purple)' : 'var(--surface)';
+    btn.style.color      = active ? '#fff' : 'var(--text3)';
+    btn.style.borderColor= active ? 'var(--purple)' : 'var(--border)';
+  });
+
+  const modal = document.getElementById('mn-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function mnCloseModal() {
+  document.getElementById('mn-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function mnToggleTag(btn, tag) {
+  const i = MN_SELECTED_TAGS.indexOf(tag);
+  if (i >= 0) {
+    MN_SELECTED_TAGS.splice(i, 1);
+    btn.style.background  = 'var(--surface)';
+    btn.style.color       = 'var(--text3)';
+    btn.style.borderColor = 'var(--border)';
+  } else {
+    MN_SELECTED_TAGS.push(tag);
+    btn.style.background  = 'var(--purple)';
+    btn.style.color       = '#fff';
+    btn.style.borderColor = 'var(--purple)';
+  }
+}
+
+async function mnSave() {
+  const title   = document.getElementById('mn-f-title').value.trim();
+  const date    = document.getElementById('mn-f-date').value.trim();
+  const author  = document.getElementById('mn-f-author').value.trim();
+  const body    = document.getElementById('mn-f-body').value.trim();
+
+  if (!title || !date || !author || !body) {
+    document.getElementById('mn-save-msg').textContent = '⚠ 제목·날짜·작성자·내용은 필수입니다.';
+    document.getElementById('mn-save-msg').style.color = 'var(--rose)';
+    return;
+  }
+
+  const btn = document.getElementById('mn-save-btn');
+  btn.textContent = '저장 중…';
+  btn.disabled = true;
+
+  const note = {
+    id         : MN_EDIT_ID || 'mn_' + Date.now().toString(36),
+    title,
+    date,
+    author,
+    attendees  : document.getElementById('mn-f-attendees').value.trim(),
+    tags       : [...MN_SELECTED_TAGS],
+    body,
+    actions    : document.getElementById('mn-f-actions').value.trim(),
+    updated_at : new Date().toISOString(),
+    created_at : MN_EDIT_ID ? (MN_ALL.find(n=>n.id===MN_EDIT_ID)?.created_at || new Date().toISOString()) : new Date().toISOString(),
+  };
+
+  await mnUpsert(note);
+  // ── 알림 발생 ──
+  if (typeof notifCreate === 'function') {
+    await notifCreate('meeting', note.title, note.author,
+      (MN_EDIT_ID ? '회의록이 수정되었습니다.' : '새 회의록이 작성되었습니다.') + ' (' + note.date + ')');
+  }
+  await mnLoad();
+  mnCloseModal();
+  btn.textContent = '저장';
+  btn.disabled = false;
+}
+
+async function mnEdit(id) {
+  const note = MN_ALL.find(n => n.id === id);
+  if (note) mnOpenModal(note);
+}
+async function mnRemove(id) {
+  if (!confirm('이 회의록을 삭제하시겠습니까?')) return;
+  await mnDelete(id);
+  await mnLoad();
+}
+
+// s10 진입 시 로드
+
+
+// ════════════════════════════════════════════════════════
+// 알림 시스템 (Notification System)
+// ════════════════════════════════════════════════════════
+// 알림 발생 시점:
+//   - 회의록 저장/수정  → notifCreate('meeting',  제목, 작성자)
+//   - 기획안 저장/수정  → notifCreate('proposal',  제목, 작성자)
+//   - 견적서 생성       → notifCreate('estimate',  제목, 작성자)
+//   - 계약서 생성       → notifCreate('contract',  제목, 작성자)
+//   - 프로젝트 생성     → notifCreate('project',   제목, 작성자)
+//
+// Supabase 테이블: notifications
+//   id uuid PK, type text, title text, description text,
+//   actor text, is_read boolean default false,
+//   created_at timestamptz default now()
+
+var NOTIF_OPEN = false;
+
+var NOTIF_META = {
+  meeting:  { icon:'📝', color:'#A78BFA', label:'회의록' },
+  proposal: { icon:'📋', color:'#F59E0B', label:'기획안' },
+  estimate: { icon:'💰', color:'#10B981', label:'견적서' },
+  contract: { icon:'📜', color:'#3B82F6', label:'계약서' },
+  project:  { icon:'🚀', color:'#EF4444', label:'프로젝트' },
+};
+
+// ── 로컬 알림 데이터 ──────────────────────────────────
+function notifGetAll() {
+  try { return JSON.parse(localStorage.getItem('app_notifications') || '[]'); }
+  catch(e) { return []; }
+}
+function notifSaveAll(list) {
+  localStorage.setItem('app_notifications', JSON.stringify(list));
+}
+
+// ── 알림 생성 (외부 호출용 공개 함수) ─────────────────
+async function notifCreate(type, title, actor, description) {
+  const meta = NOTIF_META[type] || { icon:'🔔', color:'#6B7280', label:'알림' };
+  const notif = {
+    id         : 'n_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,6),
+    type,
+    title      : title || '(제목 없음)',
+    description: description || (meta.label + ' ' + (actor ? '— ' + actor : '') + '에 의해 작성되었습니다.'),
+    actor      : actor || '',
+    is_read    : false,
+    created_at : new Date().toISOString(),
+  };
+
+  // localStorage 즉시 저장
+  const all = notifGetAll();
+  all.unshift(notif);
+  if (all.length > 100) all.splice(100); // 최대 100개
+  notifSaveAll(all);
+
+  // Supabase fire-and-forget
+  if (sbOn()) {
+    try {
+      await fetch(SUPABASE_CONFIG.url + '/rest/v1/notifications', {
+        method: 'POST',
+        headers: sbHeaders({ 'Prefer': 'return=minimal' }),
+        body: JSON.stringify(notif),
+      });
+    } catch(e) { /* offline fallback: localStorage만 사용 */ }
+  }
+
+  // 배지 업데이트 + 토스트 표시
+  notifUpdateBadge();
+  notifToast(meta.icon, meta.label + ' 알림', notif.title);
+}
+
+// ── 배지 카운트 ──────────────────────────────────────
+function notifUpdateBadge() {
+  const unread = notifGetAll().filter(n => !n.is_read).length;
+  const badge  = document.getElementById('notif-badge');
+  if (!badge) return;
+  if (unread > 0) {
+    badge.style.display = 'flex';
+    badge.textContent   = unread > 99 ? '99+' : String(unread);
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ── 패널 토글 ─────────────────────────────────────────
+function notifToggle() {
+  NOTIF_OPEN = !NOTIF_OPEN;
+  const panel = document.getElementById('notif-panel');
+  if (!panel) return;
+  panel.classList.toggle('open', NOTIF_OPEN);
+  if (NOTIF_OPEN) notifRender();
+}
+
+// 패널 외부 클릭 시 닫기
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('notif-btn')?.parentElement;
+  if (wrap && !wrap.contains(e.target) && NOTIF_OPEN) {
+    NOTIF_OPEN = false;
+    document.getElementById('notif-panel')?.classList.remove('open');
+  }
+});
+
+// ── 패널 렌더링 ──────────────────────────────────────
+function notifRender() {
+  const list = document.getElementById('notif-list');
+  if (!list) return;
+  const all = notifGetAll();
+
+  if (!all.length) {
+    list.innerHTML = '<div class="notif-empty">🔔<br><br>새 알림이 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = all.slice(0, 30).map(n => {
+    const meta = NOTIF_META[n.type] || { icon:'🔔', color:'#6B7280', label:'알림' };
+    const time = notifTimeAgo(n.created_at);
+    return '<div class="notif-item' + (n.is_read ? '' : ' unread') + '" onclick="notifMarkRead(this.dataset.id)" data-id="' + n.id + '">' +
+      '<div class="notif-dot" style="background:' + meta.color + ';' + (n.is_read ? 'opacity:.3' : '') + ';"></div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">' +
+          '<span style="font-size:14px;">' + meta.icon + '</span>' +
+          '<span style="font-size:11px;font-weight:700;color:' + meta.color + ';">' + meta.label + '</span>' +
+          '<span style="font-size:10.5px;color:var(--text3);margin-left:auto;white-space:nowrap;">' + time + '</span>' +
+        '</div>' +
+        '<div style="font-size:12.5px;font-weight:' + (n.is_read ? '400' : '600') + ';color:var(--text);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;">' + (n.title||'') + '</div>' +
+        (n.description ? '<div style="font-size:11px;color:var(--text3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + n.description.slice(0,50) + '</div>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── 읽음 처리 ────────────────────────────────────────
+function notifMarkRead(id) {
+  const all = notifGetAll();
+  const n   = all.find(x => x.id === id);
+  if (n) { n.is_read = true; notifSaveAll(all); }
+  notifUpdateBadge();
+  notifRender();
+
+  if (sbOn() && id) {
+    fetch(SUPABASE_CONFIG.url + '/rest/v1/notifications?id=eq.' + id, {
+      method : 'PATCH',
+      headers: sbHeaders({ 'Prefer': 'return=minimal' }),
+      body   : JSON.stringify({ is_read: true }),
+    }).catch(() => {});
+  }
+}
+function notifMarkAllRead() {
+  const all = notifGetAll().map(n => ({ ...n, is_read: true }));
+  notifSaveAll(all);
+  notifUpdateBadge();
+  notifRender();
+
+  if (sbOn()) {
+    fetch(SUPABASE_CONFIG.url + '/rest/v1/notifications?is_read=eq.false', {
+      method : 'PATCH',
+      headers: sbHeaders({ 'Prefer': 'return=minimal' }),
+      body   : JSON.stringify({ is_read: true }),
+    }).catch(() => {});
+  }
+}
+
+// ── 토스트 알림 ──────────────────────────────────────
+function notifToast(icon, label, title) {
+  // 기존 토스트 제거
+  document.querySelectorAll('.notif-toast').forEach(t => t.remove());
+
+  const toast = document.createElement('div');
+  toast.className = 'notif-toast';
+  toast.style.cssText = [
+    'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
+    'background:var(--surface)', 'border:1.5px solid var(--border)',
+    'border-radius:12px', 'padding:14px 18px',
+    'box-shadow:0 8px 32px rgba(0,0,0,.2)',
+    'display:flex', 'align-items:center', 'gap:12px',
+    'min-width:280px', 'max-width:360px',
+    'animation:toastIn .3s ease',
+    'cursor:pointer',
+  ].join(';');
+
+  toast.innerHTML =
+    '<span style="font-size:22px;flex-shrink:0;">' + icon + '</span>' +
+    '<div style="flex:1;min-width:0;">' +
+      '<div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:2px;">' + label + '</div>' +
+      '<div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + title + '</div>' +
+    '</div>' +
+    '<button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:2px;flex-shrink:0;">✕</button>';
+
+  // 토스트 클릭 시 알림 패널 열기
+  toast.addEventListener('click', function(e) {
+    if (e.target.tagName !== 'BUTTON') {
+      NOTIF_OPEN = false;
+      notifToggle();
+      toast.remove();
+    }
+  });
+
+  document.body.appendChild(toast);
+
+  // 5초 후 자동 제거
+  setTimeout(() => {
+    toast.style.animation = 'toastOut .3s ease forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 5000);
+}
+
+// ── 시간 포맷 ─────────────────────────────────────────
+function notifTimeAgo(iso) {
+  if (!iso) return '';
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (diff < 60)     return '방금 전';
+  if (diff < 3600)   return Math.floor(diff/60) + '분 전';
+  if (diff < 86400)  return Math.floor(diff/3600) + '시간 전';
+  if (diff < 604800) return Math.floor(diff/86400) + '일 전';
+  return new Date(iso).toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
+}
+
+// ── 페이지 로드 시 배지 초기화 ───────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  notifUpdateBadge();
+});
+
+
+// ════════════════════════════════════════════════════════
+// 문서 알림 훅 — 견적서·계약서·프로젝트·기획안 저장 시 호출
+// 외부 함수: notifDoc(type, title, author)
+// ════════════════════════════════════════════════════════
+function notifDoc(type, title, author) {
+  if (typeof notifCreate === 'function') {
+    const labels = {
+      proposal: '기획안',
+      estimate: '견적서',
+      contract: '계약서',
+      project:  '프로젝트',
+    };
+    const label = labels[type] || '문서';
+    notifCreate(type, title, author, label + '이(가) 저장되었습니다.');
+  }
+}
+
+// postMessage 수신 — proposal.html 등 외부 페이지에서 알림 전달
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.source !== 'acornon') return;
+  const { type, title, actor } = e.data;
+  if (type && title) {
+    notifDoc(type, title, actor || '');
+  }
+});
+
+// ── 기획안 관리 페이지(proposal.html) 저장 후 postMessage 예시 ──
+// proposal.html에서 저장 성공 시 아래 코드 추가:
+//   window.opener?.postMessage(
+//     { source:'acornon', type:'proposal', title: proposalTitle, actor: author }, '*'
+//   );
+//   또는 localStorage 이벤트 방식:
+//   localStorage.setItem('notif_queue', JSON.stringify({type:'proposal', title, actor, ts: Date.now()}));
+//
+// localStorage 이벤트 방식 수신 (같은 origin 탭 간)
+window.addEventListener('storage', function(e) {
+  if (e.key !== 'notif_queue') return;
+  try {
+    const data = JSON.parse(e.newValue);
+    if (data && data.type && data.title) {
+      notifDoc(data.type, data.title, data.actor || '');
+      localStorage.removeItem('notif_queue');
+    }
+  } catch(err) {}
+});
+
+// ── 초기 로드 시 큐에 남은 알림 처리 ──
+(function() {
+  try {
+    const q = localStorage.getItem('notif_queue');
+    if (q) {
+      const data = JSON.parse(q);
+      if (data && data.type && data.title && Date.now() - data.ts < 30000) {
+        setTimeout(() => notifDoc(data.type, data.title, data.actor || ''), 800);
+      }
+      localStorage.removeItem('notif_queue');
+    }
+  } catch(err) {}
+})();
 
 </script>
 </body>
