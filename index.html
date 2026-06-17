@@ -226,6 +226,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .tl-list li{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;}
 .tl-list li:last-child{border-bottom:none;}
 /* db-status badge — proposal.html 동일 */
+.ref-tab.active{color:var(--blue)!important;border-bottom-color:var(--blue)!important;font-weight:700!important;}
+.ref-tab:hover:not(.active){color:var(--text)!important;background:var(--s2);}
 .ref-link{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s,box-shadow .15s;}
 .ref-link:hover{border-color:var(--rc,var(--blue));transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1);}
 .ref-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
@@ -3520,222 +3522,101 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div>
   <div class="content">
 
-    <div style="display:flex;flex-direction:column;gap:22px;">
-
-      <!-- A. 회사 업무 -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(30,95,173,.2);">
-          <span style="font-size:20px;">🏢</span>
-          <div style="font-size:14px;font-weight:800;color:var(--blue);">A. 회사 업무</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;">
-          <a href="https://www.acornpub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);">
-            <span class="ref-icon">🌐</span><div><div class="ref-name">홈페이지</div><div class="ref-url">acornpub.co.kr</div></div>
-          </a>
-          <a href="https://login.ecount.com/Login/KR/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);">
-            <span class="ref-icon">📊</span><div><div class="ref-name">이카운트 ERP</div><div class="ref-url">ecount.com</div></div>
-          </a>
-        </div>
-        <!-- SNS 소제목 -->
-        <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin:14px 0 8px;">SNS &amp; 채널</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
-          <a href="https://www.linkedin.com/in/booktori42/" target="_blank" rel="noopener" class="ref-link" style="--rc:#0077B5;">
-            <span class="ref-icon" style="color:#0077B5;">💼</span><div><div class="ref-name">LinkedIn</div><div class="ref-url">linkedin.com</div></div>
-          </a>
-          <a href="https://www.acornpub.co.kr/blog" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);">
-            <span class="ref-icon">✍️</span><div><div class="ref-name">에이콘 블로그</div><div class="ref-url">acornpub.co.kr/blog</div></div>
-          </a>
-          <a href="https://www.youtube.com/@booktory_acornon" target="_blank" rel="noopener" class="ref-link" style="--rc:#FF0000;">
-            <span class="ref-icon" style="color:#FF0000;">▶</span><div><div class="ref-name">YouTube</div><div class="ref-url">@booktory_acornon</div></div>
-          </a>
-          <a href="https://x.com/acornpublisher" target="_blank" rel="noopener" class="ref-link" style="--rc:#000;">
-            <span class="ref-icon">𝕏</span><div><div class="ref-name">X (Twitter)</div><div class="ref-url">x.com/acornpublisher</div></div>
-          </a>
-          <a href="https://www.facebook.com/acornpub" target="_blank" rel="noopener" class="ref-link" style="--rc:#1877F2;">
-            <span class="ref-icon" style="color:#1877F2;">f</span><div><div class="ref-name">Facebook</div><div class="ref-url">facebook.com/acornpub</div></div>
-          </a>
-          <a href="https://www.instagram.com/acorn_pub" target="_blank" rel="noopener" class="ref-link" style="--rc:#E1306C;">
-            <span class="ref-icon" style="color:#E1306C;">📷</span><div><div class="ref-name">Instagram</div><div class="ref-url">@acorn_pub</div></div>
-          </a>
-          <a href="https://www.acornpub.co.kr/contact/newsletter" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📧</span><div><div class="ref-name">뉴스레터</div><div class="ref-url">acornpub.co.kr</div></div>
-          </a>
-        </div>
-      </div>
-
-      <!-- B. 유통사 -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(13,148,136,.2);">
-          <span style="font-size:20px;">🛒</span>
-          <div style="font-size:14px;font-weight:800;color:var(--teal);">B. 유통사</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
-          <a href="https://www.kyobobook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📚</span><div><div class="ref-name">교보문고</div><div class="ref-url">kyobobook.co.kr</div></div>
-          </a>
-          <a href="https://aladin.co.kr/home/welcome.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📚</span><div><div class="ref-name">알라딘</div><div class="ref-url">aladin.co.kr</div></div>
-          </a>
-          <a href="https://www.ypbooks.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📚</span><div><div class="ref-name">영풍문고</div><div class="ref-url">ypbooks.co.kr</div></div>
-          </a>
-          <a href="https://www.yes24.com/Main/default.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📚</span><div><div class="ref-name">예스24</div><div class="ref-url">yes24.com</div></div>
-          </a>
-          <a href="http://www.booxen.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📦</span><div><div class="ref-name">북센</div><div class="ref-url">booxen.com</div></div>
-          </a>
-          <a href="https://www.bookcube.com/main.asp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📱</span><div><div class="ref-name">북큐브</div><div class="ref-url">bookcube.com</div></div>
-          </a>
-          <a href="https://play.google.com/store/books?hl=ko" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">▶</span><div><div class="ref-name">구글 플레이</div><div class="ref-url">play.google.com</div></div>
-          </a>
-          <a href="https://www.apple.com/kr/apple-books/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">🍎</span><div><div class="ref-name">애플 북스</div><div class="ref-url">apple.com/kr</div></div>
-          </a>
-          <a href="https://bsearch.interpark.com/dsearch/book.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">🛍</span><div><div class="ref-name">인터파크</div><div class="ref-url">interpark.com</div></div>
-          </a>
-          <a href="https://search.shopping.naver.com/book/home" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">🟢</span><div><div class="ref-name">네이버 북</div><div class="ref-url">naver.com/book</div></div>
-          </a>
-          <a href="https://ridibooks.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📖</span><div><div class="ref-name">리디북스</div><div class="ref-url">ridibooks.com</div></div>
-          </a>
-          <a href="https://www.y2books.com/product/productTotalList?cateDepth1=10000000&cateDepth2=10000023" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📚</span><div><div class="ref-name">Y2BOOKS</div><div class="ref-url">y2books.com</div></div>
-          </a>
-          <a href="https://www.readingrak.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📚</span><div><div class="ref-name">리딩락</div><div class="ref-url">readingrak.com</div></div>
-          </a>
-          <a href="https://www.amazon.com/books-used-books-textbooks/b?node=283155" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);">
-            <span class="ref-icon">📦</span><div><div class="ref-name">아마존</div><div class="ref-url">amazon.com</div></div>
-          </a>
-        </div>
-      </div>
-
-      <!-- C. 외국 출판사 -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(124,58,237,.2);">
-          <span style="font-size:20px;">🌍</span>
-          <div style="font-size:14px;font-weight:800;color:var(--purple);">C. 외국 출판사</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
-          <a href="https://www.edelweiss.plus/#dashboard" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">🌸</span><div><div class="ref-name">Edelweiss</div><div class="ref-url">edelweiss.plus</div></div>
-          </a>
-          <a href="https://www.oreilly.com/publisher/addison-wesley-professional/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">🦦</span><div><div class="ref-name">O'Reilly</div><div class="ref-url">oreilly.com</div></div>
-          </a>
-          <a href="https://nostarch.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">⭐</span><div><div class="ref-name">No Starch</div><div class="ref-url">nostarch.com</div></div>
-          </a>
-          <a href="https://mitpress.mit.edu/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">🎓</span><div><div class="ref-name">MIT Press</div><div class="ref-url">mitpress.mit.edu</div></div>
-          </a>
-          <a href="https://www.wiley.com/en-kr" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">📘</span><div><div class="ref-name">Wiley</div><div class="ref-url">wiley.com</div></div>
-          </a>
-          <a href="https://docs.google.com/spreadsheets/d/1-miJAMk_MfZ_zrT6YbU-jUN06Cm4Hpaw0ctB7hdThXg/edit" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">📊</span><div><div class="ref-name">O'Reilly 정리</div><div class="ref-url">Google Sheets</div></div>
-          </a>
-          <a href="https://www.manning.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">📗</span><div><div class="ref-name">Manning</div><div class="ref-url">manning.com</div></div>
-          </a>
-          <a href="https://www.packtpub.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">📙</span><div><div class="ref-name">Packt</div><div class="ref-url">packtpub.com</div></div>
-          </a>
-          <a href="https://www.penguin.co.in/books/non-fiction/computing-internet-digital-media/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);">
-            <span class="ref-icon">🐧</span><div><div class="ref-name">Penguin</div><div class="ref-url">penguin.co.in</div></div>
-          </a>
-        </div>
-      </div>
-
-      <!-- D. 국내 출판사 -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(184,134,11,.2);">
-          <span style="font-size:20px;">🏛</span>
-          <div style="font-size:14px;font-weight:800;color:var(--gold2);">D. 국내 출판사</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">
-          <a href="https://jpub.tistory.com/notice/1074" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">제이펍</div><div class="ref-url">jpub.tistory.com</div></div>
-          </a>
-          <a href="https://www.onlybook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">책만</div><div class="ref-url">onlybook.co.kr</div></div>
-          </a>
-          <a href="https://ebook.insightbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">인사이트</div><div class="ref-url">insightbook.co.kr</div></div>
-          </a>
-          <a href="https://www.easyspub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">이지스퍼블리싱</div><div class="ref-url">easyspub.co.kr</div></div>
-          </a>
-          <a href="https://www.hanbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">한빛미디어</div><div class="ref-url">hanbit.co.kr</div></div>
-          </a>
-          <a href="https://www.gilbut.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">길벗</div><div class="ref-url">gilbut.co.kr</div></div>
-          </a>
-          <a href="https://wikibook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">위키북스</div><div class="ref-url">wikibook.co.kr</div></div>
-          </a>
-          <a href="https://festbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">페스트북</div><div class="ref-url">festbook.co.kr</div></div>
-          </a>
-          <a href="https://goldenrabbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">🐰</span><div><div class="ref-name">골드래빗</div><div class="ref-url">goldenrabbit.co.kr</div></div>
-          </a>
-          <a href="https://bjpublic.tistory.com/373" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">비제이퍼블릭</div><div class="ref-url">bjpublic.tistory.com</div></div>
-          </a>
-          <a href="https://www.booksr.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">생능출판사</div><div class="ref-url">booksr.co.kr</div></div>
-          </a>
-          <a href="https://www.smartbooks21.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);">
-            <span class="ref-icon">📕</span><div><div class="ref-name">스마트북스</div><div class="ref-url">smartbooks21.com</div></div>
-          </a>
-        </div>
-      </div>
-
-      <!-- E. 출판 관련 기관 -->
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid rgba(239,68,68,.2);">
-          <span style="font-size:20px;">🏛</span>
-          <div style="font-size:14px;font-weight:800;color:#DC2626;">E. 출판 관련 기관</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;">
-          <a href="https://www.mcst.go.kr/site/main.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">🏛</span><div><div class="ref-name">문화체육관광부</div><div class="ref-url">mcst.go.kr</div></div>
-          </a>
-          <a href="https://www.kocca.kr/kocca/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">🎨</span><div><div class="ref-name">한국콘텐츠진흥원</div><div class="ref-url">kocca.kr</div></div>
-          </a>
-          <a href="https://bookapply.kpipa.or.kr/front/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">📋</span><div><div class="ref-name">출판문화사업진흥원</div><div class="ref-url">kpipa.or.kr</div></div>
-          </a>
-          <a href="https://www.kopus.org/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">🤝</span><div><div class="ref-name">한국출판인회의</div><div class="ref-url">kopus.org</div></div>
-          </a>
-          <a href="https://bnk.kpipa.or.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">🗄</span><div><div class="ref-name">출판전산망</div><div class="ref-url">bnk.kpipa.or.kr</div></div>
-          </a>
-          <a href="https://baro.kpipa.or.kr/front/login/loginPage.do?gubun=1" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">📱</span><div><div class="ref-name">전자책바로</div><div class="ref-url">baro.kpipa.or.kr</div></div>
-          </a>
-          <a href="https://www.epage.co.kr/home/home.page?cmd=home-service" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">🔗</span><div><div class="ref-name">한국전자출판협동조합</div><div class="ref-url">epage.co.kr</div></div>
-          </a>
-          <a href="http://e-kpc.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">📊</span><div><div class="ref-name">한국출판콘텐츠</div><div class="ref-url">e-kpc.co.kr</div></div>
-          </a>
-          <a href="https://www.biznavi.co.kr/taskManage/page2" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;">
-            <span class="ref-icon">🧭</span><div><div class="ref-name">비즈나비</div><div class="ref-url">biznavi.co.kr</div></div>
-          </a>
-        </div>
-      </div>
-
+    <!-- 가로 탭 -->
+    <div style="display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:22px;overflow-x:auto;">
+      <button class="ref-tab active" onclick="refTab(0,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:700;color:var(--blue);border-bottom:2.5px solid var(--blue);margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🏢 회사 &amp; SNS</button>
+      <button class="ref-tab" onclick="refTab(1,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🛒 유통사</button>
+      <button class="ref-tab" onclick="refTab(2,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🌍 외국 출판사</button>
+      <button class="ref-tab" onclick="refTab(3,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🏛 국내 출판사</button>
+      <button class="ref-tab" onclick="refTab(4,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📋 출판 기관</button>
     </div>
+
+    <!-- 탭 0: 회사 & SNS -->
+    <div class="ref-panel" id="rp0">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;margin-bottom:20px;">
+        <a href="https://www.acornpub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);"><span class="ref-icon">🌐</span><div><div class="ref-name">홈페이지</div><div class="ref-url">acornpub.co.kr</div></div></a>
+        <a href="https://login.ecount.com/Login/KR/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);"><span class="ref-icon">📊</span><div><div class="ref-name">이카운트 ERP</div><div class="ref-url">ecount.com</div></div></a>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;">SNS &amp; 채널</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;">
+        <a href="https://www.linkedin.com/in/booktori42/" target="_blank" rel="noopener" class="ref-link" style="--rc:#0077B5;"><span class="ref-icon" style="color:#0077B5;">💼</span><div><div class="ref-name">LinkedIn</div><div class="ref-url">linkedin.com</div></div></a>
+        <a href="https://www.acornpub.co.kr/blog" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);"><span class="ref-icon">✍️</span><div><div class="ref-name">에이콘 블로그</div><div class="ref-url">acornpub.co.kr/blog</div></div></a>
+        <a href="https://www.youtube.com/@booktory_acornon" target="_blank" rel="noopener" class="ref-link" style="--rc:#FF0000;"><span class="ref-icon" style="color:#FF0000;">▶</span><div><div class="ref-name">YouTube</div><div class="ref-url">@booktory_acornon</div></div></a>
+        <a href="https://x.com/acornpublisher" target="_blank" rel="noopener" class="ref-link" style="--rc:#000;"><span class="ref-icon">𝕏</span><div><div class="ref-name">X (Twitter)</div><div class="ref-url">x.com/acornpublisher</div></div></a>
+        <a href="https://www.facebook.com/acornpub" target="_blank" rel="noopener" class="ref-link" style="--rc:#1877F2;"><span class="ref-icon" style="color:#1877F2;">f</span><div><div class="ref-name">Facebook</div><div class="ref-url">facebook.com/acornpub</div></div></a>
+        <a href="https://www.instagram.com/acorn_pub" target="_blank" rel="noopener" class="ref-link" style="--rc:#E1306C;"><span class="ref-icon" style="color:#E1306C;">📷</span><div><div class="ref-name">Instagram</div><div class="ref-url">@acorn_pub</div></div></a>
+        <a href="https://www.acornpub.co.kr/contact/newsletter" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📧</span><div><div class="ref-name">뉴스레터</div><div class="ref-url">acornpub.co.kr</div></div></a>
+      </div>
+    </div>
+
+    <!-- 탭 1: 유통사 -->
+    <div class="ref-panel" id="rp1" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+        <a href="https://www.kyobobook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">교보문고</div><div class="ref-url">kyobobook.co.kr</div></div></a>
+        <a href="https://aladin.co.kr/home/welcome.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">알라딘</div><div class="ref-url">aladin.co.kr</div></div></a>
+        <a href="https://www.ypbooks.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">영풍문고</div><div class="ref-url">ypbooks.co.kr</div></div></a>
+        <a href="https://www.yes24.com/Main/default.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">예스24</div><div class="ref-url">yes24.com</div></div></a>
+        <a href="http://www.booxen.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📦</span><div><div class="ref-name">북센</div><div class="ref-url">booxen.com</div></div></a>
+        <a href="https://www.bookcube.com/main.asp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📱</span><div><div class="ref-name">북큐브</div><div class="ref-url">bookcube.com</div></div></a>
+        <a href="https://play.google.com/store/books?hl=ko" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">▶</span><div><div class="ref-name">구글 플레이</div><div class="ref-url">play.google.com</div></div></a>
+        <a href="https://www.apple.com/kr/apple-books/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">🍎</span><div><div class="ref-name">애플 북스</div><div class="ref-url">apple.com/kr</div></div></a>
+        <a href="https://bsearch.interpark.com/dsearch/book.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">🛍</span><div><div class="ref-name">인터파크</div><div class="ref-url">interpark.com</div></div></a>
+        <a href="https://search.shopping.naver.com/book/home" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">🟢</span><div><div class="ref-name">네이버 북</div><div class="ref-url">naver.com/book</div></div></a>
+        <a href="https://ridibooks.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📖</span><div><div class="ref-name">리디북스</div><div class="ref-url">ridibooks.com</div></div></a>
+        <a href="https://www.y2books.com/product/productTotalList?cateDepth1=10000000&cateDepth2=10000023" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">Y2BOOKS</div><div class="ref-url">y2books.com</div></div></a>
+        <a href="https://www.readingrak.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">리딩락</div><div class="ref-url">readingrak.com</div></div></a>
+        <a href="https://www.amazon.com/books-used-books-textbooks/b?node=283155" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📦</span><div><div class="ref-name">아마존</div><div class="ref-url">amazon.com</div></div></a>
+      </div>
+    </div>
+
+    <!-- 탭 2: 외국 출판사 -->
+    <div class="ref-panel" id="rp2" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+        <a href="https://www.edelweiss.plus/#dashboard" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🌸</span><div><div class="ref-name">Edelweiss</div><div class="ref-url">edelweiss.plus</div></div></a>
+        <a href="https://www.oreilly.com/publisher/addison-wesley-professional/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🦦</span><div><div class="ref-name">O'Reilly</div><div class="ref-url">oreilly.com</div></div></a>
+        <a href="https://nostarch.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">⭐</span><div><div class="ref-name">No Starch</div><div class="ref-url">nostarch.com</div></div></a>
+        <a href="https://mitpress.mit.edu/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🎓</span><div><div class="ref-name">MIT Press</div><div class="ref-url">mitpress.mit.edu</div></div></a>
+        <a href="https://www.wiley.com/en-kr" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📘</span><div><div class="ref-name">Wiley</div><div class="ref-url">wiley.com</div></div></a>
+        <a href="https://docs.google.com/spreadsheets/d/1-miJAMk_MfZ_zrT6YbU-jUN06Cm4Hpaw0ctB7hdThXg/edit" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📊</span><div><div class="ref-name">O'Reilly 정리</div><div class="ref-url">Google Sheets</div></div></a>
+        <a href="https://www.manning.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📗</span><div><div class="ref-name">Manning</div><div class="ref-url">manning.com</div></div></a>
+        <a href="https://www.packtpub.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📙</span><div><div class="ref-name">Packt</div><div class="ref-url">packtpub.com</div></div></a>
+        <a href="https://www.penguin.co.in/books/non-fiction/computing-internet-digital-media/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🐧</span><div><div class="ref-name">Penguin</div><div class="ref-url">penguin.co.in</div></div></a>
+      </div>
+    </div>
+
+    <!-- 탭 3: 국내 출판사 -->
+    <div class="ref-panel" id="rp3" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
+        <a href="https://jpub.tistory.com/notice/1074" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">제이펍</div><div class="ref-url">jpub.tistory.com</div></div></a>
+        <a href="https://www.onlybook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">책만</div><div class="ref-url">onlybook.co.kr</div></div></a>
+        <a href="https://ebook.insightbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">인사이트</div><div class="ref-url">insightbook.co.kr</div></div></a>
+        <a href="https://www.easyspub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">이지스퍼블리싱</div><div class="ref-url">easyspub.co.kr</div></div></a>
+        <a href="https://www.hanbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">한빛미디어</div><div class="ref-url">hanbit.co.kr</div></div></a>
+        <a href="https://www.gilbut.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">길벗</div><div class="ref-url">gilbut.co.kr</div></div></a>
+        <a href="https://wikibook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">위키북스</div><div class="ref-url">wikibook.co.kr</div></div></a>
+        <a href="https://festbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">페스트북</div><div class="ref-url">festbook.co.kr</div></div></a>
+        <a href="https://goldenrabbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">🐰</span><div><div class="ref-name">골드래빗</div><div class="ref-url">goldenrabbit.co.kr</div></div></a>
+        <a href="https://bjpublic.tistory.com/373" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">비제이퍼블릭</div><div class="ref-url">bjpublic.tistory.com</div></div></a>
+        <a href="https://www.booksr.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">생능출판사</div><div class="ref-url">booksr.co.kr</div></div></a>
+        <a href="https://www.smartbooks21.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">스마트북스</div><div class="ref-url">smartbooks21.com</div></div></a>
+      </div>
+    </div>
+
+    <!-- 탭 4: 출판 기관 -->
+    <div class="ref-panel" id="rp4" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;">
+        <a href="https://www.mcst.go.kr/site/main.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🏛</span><div><div class="ref-name">문화체육관광부</div><div class="ref-url">mcst.go.kr</div></div></a>
+        <a href="https://www.kocca.kr/kocca/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🎨</span><div><div class="ref-name">한국콘텐츠진흥원</div><div class="ref-url">kocca.kr</div></div></a>
+        <a href="https://bookapply.kpipa.or.kr/front/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">📋</span><div><div class="ref-name">출판문화사업진흥원</div><div class="ref-url">kpipa.or.kr</div></div></a>
+        <a href="https://www.kopus.org/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🤝</span><div><div class="ref-name">한국출판인회의</div><div class="ref-url">kopus.org</div></div></a>
+        <a href="https://bnk.kpipa.or.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🗄</span><div><div class="ref-name">출판전산망</div><div class="ref-url">bnk.kpipa.or.kr</div></div></a>
+        <a href="https://baro.kpipa.or.kr/front/login/loginPage.do?gubun=1" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">📱</span><div><div class="ref-name">전자책바로</div><div class="ref-url">baro.kpipa.or.kr</div></div></a>
+        <a href="https://www.epage.co.kr/home/home.page?cmd=home-service" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🔗</span><div><div class="ref-name">한국전자출판협동조합</div><div class="ref-url">epage.co.kr</div></div></a>
+        <a href="http://e-kpc.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">📊</span><div><div class="ref-name">한국출판콘텐츠</div><div class="ref-url">e-kpc.co.kr</div></div></a>
+        <a href="https://www.biznavi.co.kr/taskManage/page2" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🧭</span><div><div class="ref-name">비즈나비</div><div class="ref-url">biznavi.co.kr</div></div></a>
+      </div>
+    </div>
+
   </div>
 </div><!-- /s11 -->
 </div><!-- .main -->
@@ -3972,6 +3853,7 @@ function nav(id, subTabId) {
   buildChecklist();
   if (id === 's9') { setTimeout(function(){ if(typeof pilotInit==='function') pilotInit(); }, 50); }
   if (id === 's10') { setTimeout(function(){ if(typeof mnLoad==='function') mnLoad(); }, 50); }
+  if (id === 's11') { setTimeout(function(){ if(typeof refTab==='function') refTab(0, document.querySelector('#s11 .ref-tab')); }, 50); }
 }
 
 // ── LANGUAGE SYSTEM ──────────────────────────────────────────
@@ -5282,6 +5164,18 @@ function mnCloseView() {
   document.body.style.overflow = '';
 }
 
+
+function refTab(idx, btn) {
+  // 패널 전환
+  [0,1,2,3,4].forEach(function(i){
+    var p = document.getElementById('rp'+i);
+    if(p) p.style.display = i===idx ? 'block' : 'none';
+  });
+  // 탭 버튼 active
+  document.querySelectorAll('#s11 .ref-tab').forEach(function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+}
+// s11 진입 시 첫 탭 활성화
 // s10 진입 시 로드
 
 
