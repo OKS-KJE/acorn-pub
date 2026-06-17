@@ -2193,10 +2193,10 @@ function bumpCorr(id, who, ev){
 }
 
 // ── 목록 정렬 ─────────────────────────────────────────────────────
-let listSort = { key:'date', dir:'desc' };   // 기본: 접수일 최신순
+let listSort = { key:'createdAt', dir:'desc' };   // 기본: 등록 시각 최신순
 function setListSort(key){
   if(listSort.key===key){ listSort.dir = (listSort.dir==='asc'?'desc':'asc'); }
-  else { listSort.key=key; listSort.dir='asc'; }
+  else { listSort.key=key; listSort.dir='desc'; }  // 새 키는 항상 최신순(desc) 기본
   renderList();
 }
 function sortArrow(key){
@@ -2206,7 +2206,8 @@ function sortArrow(key){
 function sortVal(p,key){
   if(key==='genre') return (gnDisp(p)||'').toLowerCase();
   if(key==='reviewer') return (p.reviewer||'').toLowerCase();
-  if(key==='date') return (p.date||'');
+  if(key==='date') return p.date || (p.createdAt?p.createdAt.slice(0,10):'') || p.id||'';
+  if(key==='createdAt') return p.createdAt || (p.date?p.date+'T00:00:00':'') || p.id||'';
   return '';
 }
 
