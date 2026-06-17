@@ -407,6 +407,14 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
           <input type="file" id="ms-file-input" multiple style="display:none" onchange="handleManuscriptUpload(this.files)">
           <button class="btn btn-ghost btn-sm" id="ms-add-btn" type="button" onclick="document.getElementById('ms-file-input').click()" style="align-self:flex-start">＋ 원고 파일 추가</button>
           <button class="btn btn-sm" id="ai-eval-btn" type="button" onclick="runAiEval()" style="align-self:flex-start;margin-left:8px;background:linear-gradient(135deg,#6C3FA0,#1560B8);color:#fff;border:none;display:flex;align-items:center;gap:5px;">🤖 AI 자동 평가</button>
+          <!-- 주의사항 인라인 안내 -->
+          <div style="margin-top:8px;background:#fffbe6;border:1px solid #ffe082;border-radius:7px;padding:9px 13px;font-size:11px;line-height:1.75;color:#5a4a00;width:100%;box-sizing:border-box;">
+            <div style="font-weight:700;color:#b8860b;margin-bottom:3px;">⚠ AI 자동 평가 사용 전 확인</div>
+            <div>① <b>PDF·DOCX 파일</b>은 브라우저에서 텍스트를 직접 추출할 수 없습니다. 아래 <b>「기획안 요약」</b> 텍스트 박스에 저자 소개·기획 의도·목차 등 핵심 내용을 직접 붙여넣어야 정확한 분석이 가능합니다.</div>
+            <div>② <b>TXT 파일</b>은 자동 텍스트 추출이 지원됩니다(파일당 최대 4,000자).</div>
+            <div>③ AI 결과는 <b>참고용 출발점</b>입니다. 「평가 결과 적용」 후 체크리스트를 수동으로 세부 조정하세요.</div>
+            <div>④ 도서명·저자명·기획안 요약 중 <b>하나 이상 입력</b> 후 버튼을 누르세요.</div>
+          </div>
         </div>
         <!-- AI 자동 평가 결과 패널 -->
         <div id="ai-eval-panel" style="display:none;margin-top:14px;border:1.5px solid #6C3FA0;border-radius:10px;overflow:hidden;">
