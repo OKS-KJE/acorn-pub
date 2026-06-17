@@ -406,31 +406,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
           <div id="ms-files-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
           <input type="file" id="ms-file-input" multiple style="display:none" onchange="handleManuscriptUpload(this.files)">
           <button class="btn btn-ghost btn-sm" id="ms-add-btn" type="button" onclick="document.getElementById('ms-file-input').click()" style="align-self:flex-start">＋ 원고 파일 추가</button>
-          <button class="btn btn-sm" id="ai-eval-btn" type="button" onclick="runAiEval()" style="align-self:flex-start;margin-left:8px;background:linear-gradient(135deg,#6C3FA0,#1560B8);color:#fff;border:none;display:flex;align-items:center;gap:5px;">🤖 AI 자동 평가</button>
-          <!-- 주의사항 인라인 안내 -->
-          <div style="margin-top:8px;background:#fffbe6;border:1px solid #ffe082;border-radius:7px;padding:9px 13px;font-size:11px;line-height:1.75;color:#5a4a00;width:100%;box-sizing:border-box;">
-            <div style="font-weight:700;color:#b8860b;margin-bottom:3px;">⚠ AI 자동 평가 사용 전 확인</div>
-            <div>① <b>PDF·DOCX 파일</b>은 브라우저에서 텍스트를 직접 추출할 수 없습니다. 아래 <b>「기획안 요약」</b> 텍스트 박스에 저자 소개·기획 의도·목차 등 핵심 내용을 직접 붙여넣어야 정확한 분석이 가능합니다.</div>
-            <div>② <b>TXT 파일</b>은 자동 텍스트 추출이 지원됩니다(파일당 최대 4,000자).</div>
-            <div>③ AI 결과는 <b>참고용 출발점</b>입니다. 「평가 결과 적용」 후 체크리스트를 수동으로 세부 조정하세요.</div>
-            <div>④ 도서명·저자명·기획안 요약 중 <b>하나 이상 입력</b> 후 버튼을 누르세요.</div>
-          </div>
         </div>
-        <!-- AI 자동 평가 결과 패널 -->
-        <div id="ai-eval-panel" style="display:none;margin-top:14px;border:1.5px solid #6C3FA0;border-radius:10px;overflow:hidden;">
-          <div style="background:linear-gradient(135deg,#6C3FA0,#1560B8);padding:10px 16px;display:flex;align-items:center;gap:8px;">
-            <span style="font-size:13px;font-weight:700;color:#fff;">🤖 AI 자동 평가 결과</span>
-            <span id="ai-eval-status" style="font-size:11px;color:rgba(255,255,255,.7);margin-left:4px;"></span>
-            <button id="ai-apply-btn" onclick="applyAiEval()" style="display:none;margin-left:auto;background:#F5EEE1;color:#1C2028;border:none;border-radius:5px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer;">✅ 평가 결과 적용 →</button>
-          </div>
-          <div style="padding:14px 16px;background:#faf8ff;">
-            <!-- 4개 항목 점수 카드 -->
-            <div id="ai-score-cards" style="display:none;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;"></div>
-            <!-- 스트리밍 분석 텍스트 -->
-            <div id="ai-eval-output" style="font-size:12px;line-height:1.8;color:#1C2028;white-space:pre-wrap;min-height:60px;"></div>
-          </div>
-        </div>
-      </div>
       </div>
       <div class="form-row">
         <div class="field"><label>기획안 요약</label><textarea id="f-summary" placeholder="저자가 제출한 기획안의 핵심 내용, 저자 소개, 주요 내용 등..."></textarea></div>
@@ -1721,235 +1697,6 @@ function selectDec(d){
 
 function autoDecide(){ applyAutoDecision(); }
 
-// ── AI 자동 평가 ──────────────────────────────────────────────────
-let _aiEvalResult = null; // 마지막 AI 평가 결과 저장
-
-async function runAiEval(){
-  const btn = document.getElementById('ai-eval-btn');
-  const panel = document.getElementById('ai-eval-panel');
-  const output = document.getElementById('ai-eval-output');
-  const status = document.getElementById('ai-eval-status');
-  const applyBtn = document.getElementById('ai-apply-btn');
-  const scoreCards = document.getElementById('ai-score-cards');
-
-  // 입력 컨텍스트 수집
-  const title   = document.getElementById('f-title').value.trim();
-  const author  = document.getElementById('f-author').value.trim();
-  const job     = document.getElementById('f-author-job').value.trim();
-  const genre   = document.getElementById('f-genre').value || document.getElementById('f-genre-other').value.trim();
-  const summary = document.getElementById('f-summary').value.trim();
-  const channel = (()=>{ const s=document.getElementById('f-channel'); return s?s.value:''; })();
-
-  if(!title && !author && !summary && currentManuscripts.length===0){
-    alert('도서명, 저자명, 기획안 요약 또는 원고 파일 중 하나 이상 입력해 주세요.');
-    return;
-  }
-
-  // 파일 읽기 (텍스트 추출 가능한 것만: txt, 일부 base64)
-  let fileText = '';
-  for(const m of currentManuscripts){
-    if(m.data && m.type && m.type.includes('text')){
-      try{
-        const raw = atob(m.data.split(',')[1]||'');
-        fileText += `\n\n[첨부파일: ${m.name}]\n` + raw.slice(0,4000);
-      }catch(e){}
-    } else if(m.name){
-      fileText += `\n[첨부파일 있음: ${m.name} (${fmtBytes(m.size||0)})]`;
-    }
-  }
-
-  // 프롬프트 구성
-  const prompt = `당신은 한국 IT·실용 출판사(에이콘출판사)의 수석 편집장입니다. 아래 도서 기획안을 평가하여 JSON으로만 응답하세요.
-
-=== 기획안 정보 ===
-도서명: ${title||'(미입력)'}
-저자명: ${author||'(미입력)'}
-저자 직업/경력: ${job||'(미입력)'}
-분야: ${genre||'(미입력)'}
-투고 경로: ${channel||'(미입력)'}
-기획안 요약:
-${summary||'(미입력)'}
-${fileText?'\n원고/기획안 발췌:\n'+fileText.slice(0,3000):''}
-
-=== 평가 기준 (에이콘 내부 가중치) ===
-- 원고(10%): 완성도, 차별성, 독자가치, 문장력, 구성
-- 저자(50%): 전문성, 강의이력, SNS채널, 커뮤니티, 협업가능성
-- 시장(10%): 경쟁도서, 독자수요, 트렌드, 글로벌가능성
-- 마케팅(30%): 강의연계, SNS홍보력, 단체구매, 마케팅예산
-
-=== 출력 형식 (JSON만, 마크다운 없이) ===
-{
-  "scores": {
-    "manuscript": <0~100 정수>,
-    "author": <0~100 정수>,
-    "market": <0~100 정수>,
-    "marketing": <0~100 정수>
-  },
-  "weighted": <가중 종합 0~100 정수>,
-  "decision": <"approve"|"conditional"|"selfpub"|"reject">,
-  "decision_label": <"기획출판"|"조건부·반기획"|"자비출판"|"기각">,
-  "strengths": [<강점 2~3개, 각 20자 이내>],
-  "weaknesses": [<보완점 2~3개, 각 20자 이내>],
-  "rationale": "<저자에게 전달할 200~300자 문안. 완곡하고 설득력 있게.>",
-  "internal_note": "<내부 판정 근거 100자 이내>"
-}`;
-
-  // UI 초기화
-  panel.style.display = 'block';
-  output.textContent = '';
-  scoreCards.style.display = 'none';
-  applyBtn.style.display = 'none';
-  status.textContent = '분석 중…';
-  btn.disabled = true;
-  btn.textContent = '⏳ 분석 중…';
-  _aiEvalResult = null;
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        stream: true,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if(!resp.ok){ throw new Error('API ' + resp.status); }
-
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '', accumulated = '';
-
-    while(true){
-      const { done, value } = await reader.read();
-      if(done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
-      for(const line of lines){
-        if(!line.startsWith('data: ')) continue;
-        const data = line.slice(6).trim();
-        if(data === '[DONE]') continue;
-        try{
-          const ev = JSON.parse(data);
-          if(ev.type === 'content_block_delta' && ev.delta?.text){
-            accumulated += ev.delta.text;
-            output.textContent = accumulated;
-          }
-        }catch(e){}
-      }
-    }
-
-    // JSON 파싱
-    const jsonMatch = accumulated.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error('JSON 파싱 실패');
-    const result = JSON.parse(jsonMatch[0]);
-    _aiEvalResult = result;
-
-    // 점수 카드 렌더
-    const catInfo = {
-      manuscript: { label:'원고', weight:'10%', color:'#1560B8' },
-      author:     { label:'저자', weight:'50%', color:'#7A1F2B' },
-      market:     { label:'시장', weight:'10%', color:'#2E7D32' },
-      marketing:  { label:'마케팅', weight:'30%', color:'#B89B54' }
-    };
-    scoreCards.innerHTML = Object.entries(catInfo).map(([k,v])=>{
-      const s = result.scores[k]||0;
-      const bar = Math.round(s);
-      const col = s>=70?'#2E7D32':s>=50?'#B89B54':'#C62828';
-      return `<div style="background:#fff;border:1px solid #e0d8f0;border-radius:8px;padding:10px;text-align:center;">
-        <div style="font-size:10px;color:#888;font-weight:600;">${v.label} <span style="color:${v.color}">(${v.weight})</span></div>
-        <div style="font-size:22px;font-weight:800;color:${col};line-height:1.2;">${s}</div>
-        <div style="height:4px;background:#eee;border-radius:2px;margin-top:4px;"><div style="height:4px;background:${col};border-radius:2px;width:${bar}%"></div></div>
-      </div>`;
-    }).join('');
-    scoreCards.style.display = 'grid';
-
-    // 결과 요약 텍스트
-    const decColors = {approve:'#2E7D32',conditional:'#B89B54',selfpub:'#1560B8',reject:'#C62828'};
-    output.innerHTML = `<div style="margin-bottom:10px;">
-      <span style="font-size:18px;font-weight:800;color:${decColors[result.decision]||'#333'}">종합 ${result.weighted}점 → ${result.decision_label}</span>
-    </div>
-    <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:140px;"><div style="font-size:11px;font-weight:700;color:#2E7D32;margin-bottom:4px;">✅ 강점</div>${(result.strengths||[]).map(s=>`<div style="font-size:12px;color:#333;padding:2px 0">• ${s}</div>`).join('')}</div>
-      <div style="flex:1;min-width:140px;"><div style="font-size:11px;font-weight:700;color:#C62828;margin-bottom:4px;">⚠ 보완점</div>${(result.weaknesses||[]).map(w=>`<div style="font-size:12px;color:#333;padding:2px 0">• ${w}</div>`).join('')}</div>
-    </div>
-    <div style="background:#f0f0f8;border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.7;color:#333;margin-bottom:8px;"><b style="font-size:11px;color:#6C3FA0;">📝 저자 전달 문안 (초안)</b><br>${result.rationale||''}</div>
-    <div style="background:#fff8e1;border-radius:6px;padding:8px 12px;font-size:11px;color:#555;"><b>🔒 내부 메모:</b> ${result.internal_note||''}</div>`;
-
-    status.textContent = '완료';
-    applyBtn.style.display = 'inline-flex';
-
-  } catch(e) {
-    output.textContent = '⚠ AI 평가 중 오류가 발생했습니다: ' + e.message;
-    status.textContent = '오류';
-    console.error('AI 평가 오류', e);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '🤖 AI 자동 평가';
-  }
-}
-
-function applyAiEval(){
-  if(!_aiEvalResult) return;
-  const r = _aiEvalResult;
-
-  // 4개 항목 점수 → 체크리스트 자동 선택 (점수 비율로 항목 채움)
-  const catMap = {
-    manuscript: { id:'manuscript', items:5 },
-    author:     { id:'author',     items:5 },
-    market:     { id:'market',     items:4 },
-    marketing:  { id:'marketing',  items:4 }
-  };
-  Object.entries(catMap).forEach(([key, cfg])=>{
-    const score = r.scores[key]||0;
-    const total = cfg.items;
-    const checks = Math.round((score/100)*total);
-    // 해당 카테고리의 체크박스 가져오기
-    const cat = CRITERIA.find(c=>c.id===cfg.id);
-    if(!cat) return;
-    cat.items.forEach((item, idx)=>{
-      const el = document.getElementById('chk-'+cfg.id+'-'+idx);
-      if(!el) return;
-      // 상위 checks개는 Y, 나머지는 N
-      const newVal = idx < checks ? 'Y' : 'N';
-      if(el.dataset.v !== newVal){
-        el.dataset.v = newVal;
-        el.textContent = newVal==='Y'?'✔':'✘';
-        el.style.background = newVal==='Y'?'var(--ok)':newVal==='N'?'var(--ex)':'var(--s3)';
-        el.style.color = newVal==='Y'||newVal==='N'?'#fff':'var(--text3)';
-      }
-    });
-  });
-
-  // 점수 갱신
-  const scores = getScores();
-  renderScoreReadout(scores);
-
-  // 판정 적용
-  if(r.decision) selectDec(r.decision);
-
-  // 저자 전달 문안 채움
-  const rationaleTa = document.getElementById('f-rationale');
-  if(rationaleTa && r.rationale){
-    rationaleTa.value = r.rationale;
-    document.getElementById('btn-copy-rationale').style.display = 'inline-flex';
-    document.getElementById('btn-insert-rationale').style.display = 'inline-flex';
-  }
-
-  // 내부 메모 채움
-  const noteTa = document.getElementById('f-dec-note');
-  if(noteTa && r.internal_note){
-    if(!noteTa.value.trim()) noteTa.value = r.internal_note;
-    else noteTa.value += '\n\n[AI 자동 평가 내부 메모]\n' + r.internal_note;
-  }
-
-  document.getElementById('ai-apply-btn').textContent = '✅ 적용됨';
-  setTimeout(()=>{ const b=document.getElementById('ai-apply-btn'); if(b) b.textContent='✅ 평가 결과 적용 →'; }, 2000);
-}
-
 // ── 판정 사유 자동 작성 (저자 전달용, 카피 가능) ──────────────────
 function generateRationale(){
   const decision=document.getElementById('f-decision').value;
@@ -2446,10 +2193,10 @@ function bumpCorr(id, who, ev){
 }
 
 // ── 목록 정렬 ─────────────────────────────────────────────────────
-let listSort = { key:'createdAt', dir:'desc' };   // 기본: 등록 시각 최신순
+let listSort = { key:'date', dir:'desc' };   // 기본: 접수일 최신순
 function setListSort(key){
   if(listSort.key===key){ listSort.dir = (listSort.dir==='asc'?'desc':'asc'); }
-  else { listSort.key=key; listSort.dir='desc'; }  // 새 키는 항상 최신순(desc) 기본
+  else { listSort.key=key; listSort.dir='asc'; }
   renderList();
 }
 function sortArrow(key){
@@ -2459,8 +2206,7 @@ function sortArrow(key){
 function sortVal(p,key){
   if(key==='genre') return (gnDisp(p)||'').toLowerCase();
   if(key==='reviewer') return (p.reviewer||'').toLowerCase();
-  if(key==='date') return p.date || (p.createdAt?p.createdAt.slice(0,10):'') || p.id||'';
-  if(key==='createdAt') return p.createdAt || (p.date?p.date+'T00:00:00':'') || p.id||'';
+  if(key==='date') return (p.date||'');
   return '';
 }
 
