@@ -3352,22 +3352,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <div class="page-header" style="background:linear-gradient(135deg,#1E1040 0%,#2D1B69 60%,#0F172A 100%);">
     <div class="ph-eyebrow">MEETING NOTES · 에이콘출판사</div>
     <h1 class="ph-title">회의록 <span style="font-size:.55em;font-weight:400;opacity:.7">Meeting Notes</span></h1>
-    <p class="ph-sub">팀 회의 내용을 기록하고 작성자·날짜·주제별로 조회합니다.</p>
+    <p class="ph-sub">회의를 기록하고, 연속 주제는 스레드로 이어서 관리합니다.</p>
   </div>
   <div class="content">
 
     <!-- 상단 액션 바 -->
-    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px;">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <div style="display:flex;gap:6px;align-items:center;">
-          <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
-            style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:220px;"
-            oninput="mnFilter()" onkeydown="if(event.key==='Enter')mnFilter()">
-          <button onclick="mnFilter()" style="padding:8px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;"
-            onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">검색</button>
-          <button onclick="document.getElementById('mn-search').value='';mnFilter()" style="padding:8px 10px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text3);cursor:pointer;"
-            title="검색어 초기화">✕</button>
-        </div>
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
+          style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:200px;"
+          oninput="mnFilter()">
         <select id="mn-filter-author" onchange="mnFilter()"
           style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
           <option value="">👤 작성자 전체</option>
@@ -3377,32 +3371,42 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <option value="">🏷 주제 전체</option>
         </select>
       </div>
-      <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;"
-        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-        ✏️ 새 회의록 작성
+      <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
+        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">✏️ 새 회의록</button>
+    </div>
+
+    <!-- 진행/완료 탭 -->
+    <div style="display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:18px;">
+      <button id="mn-tab-active" onclick="mnSetTab('active')"
+        style="padding:9px 22px;border:none;background:none;font-size:13px;font-weight:700;color:var(--purple);border-bottom:2.5px solid var(--purple);margin-bottom:-2px;cursor:pointer;">
+        🔵 진행중
       </button>
+      <button id="mn-tab-done" onclick="mnSetTab('done')"
+        style="padding:9px 22px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">
+        ✅ 완료
+      </button>
+      <span id="mn-tab-count" style="margin-left:auto;align-self:center;font-size:11px;color:var(--text3);padding-right:4px;"></span>
     </div>
 
     <!-- 회의록 목록 -->
     <div id="mn-list" style="display:flex;flex-direction:column;gap:10px;"></div>
     <div id="mn-empty" style="display:none;text-align:center;padding:48px 0;color:var(--text3);">
       <div style="font-size:40px;margin-bottom:12px;">📋</div>
-      <div style="font-size:14px;">아직 작성된 회의록이 없습니다.</div>
-      <div style="font-size:12px;margin-top:6px;">위의 버튼을 클릭해 첫 회의록을 작성해 보세요.</div>
+      <div id="mn-empty-msg" style="font-size:14px;">회의록이 없습니다.</div>
     </div>
 
-    <!-- 회의록 작성/편집 모달 -->
+    <!-- ── 작성/편집 모달 ── -->
     <div id="mn-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
       <div style="background:var(--surface);border-radius:16px;padding:28px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
           <div style="font-size:16px;font-weight:700;color:var(--text);" id="mn-modal-title">📝 새 회의록 작성</div>
-          <button onclick="mnCloseModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:4px;">✕</button>
+          <button onclick="mnCloseModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
             <div>
               <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">제목 *</div>
-              <input id="mn-f-title" type="text" placeholder="회의 제목을 입력하세요"
+              <input id="mn-f-title" type="text" placeholder="회의 제목"
                 style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
             </div>
             <div>
@@ -3419,31 +3423,31 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             </div>
             <div>
               <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">참석자</div>
-              <input id="mn-f-attendees" type="text" placeholder="쉼표로 구분 (예: 황영주, 강승훈)"
+              <input id="mn-f-attendees" type="text" placeholder="예: 황영주, 강승훈"
                 style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
             </div>
           </div>
           <div>
             <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">주제 태그</div>
             <div style="display:flex;gap:7px;flex-wrap:wrap;" id="mn-tag-btns">
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'편집')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">편집</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기획')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기획</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'편집')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">편집</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기획')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기획</button>
               <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'마케팅')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">마케팅</button>
               <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'디자인')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">디자인</button>
               <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'플랫폼')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">플랫폼</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'KPI')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">KPI</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'경영')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">경영</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기타')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기타</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'KPI')"    style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">KPI</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'경영')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">경영</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기타')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기타</button>
             </div>
           </div>
           <div>
             <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">회의 내용 *</div>
-            <textarea id="mn-f-body" rows="10" placeholder="회의 내용을 자유롭게 작성하세요.&#10;&#10;예) 안건 / 논의 내용 / 결정 사항 / 다음 액션 아이템"
+            <textarea id="mn-f-body" rows="8" placeholder="안건 / 논의 내용 / 결정 사항"
               style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
           </div>
           <div>
             <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">액션 아이템</div>
-            <textarea id="mn-f-actions" rows="3" placeholder="예) - 홍길동: 기획안 수정 (6/30까지)&#10;- 김철수: 디자인 시안 제출 (7/5까지)"
+            <textarea id="mn-f-actions" rows="3" placeholder="예: - 홍길동: 기획안 수정 (6/30까지)"
               style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
           </div>
           <div id="mn-save-msg" style="font-size:12px;color:var(--teal);font-family:'JetBrains Mono',monospace;"></div>
@@ -3455,63 +3459,91 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
 
-    <!-- 회의록 보기 모달 -->
+    <!-- ── 스레드 추가 모달 ── -->
+    <div id="mn-thread-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface);border-radius:16px;padding:26px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text);">🔗 연속 스레드 추가</div>
+          <button onclick="mnCloseThread()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
+        </div>
+        <div id="mn-thread-origin" style="padding:10px 14px;background:var(--s2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;margin-bottom:16px;font-size:12px;color:var(--text2);"></div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">날짜 *</div>
+              <input id="mn-th-date" type="date" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">작성자 *</div>
+              <input id="mn-th-author" type="text" placeholder="이름" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">참석자</div>
+            <input id="mn-th-attendees" type="text" placeholder="예: 황영주, 강승훈" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">회의 내용 *</div>
+            <textarea id="mn-th-body" rows="6" placeholder="이번 회의에서 논의·결정된 내용"
+              style="width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">액션 아이템</div>
+            <textarea id="mn-th-actions" rows="2" placeholder="- 담당자: 내용 (기한)"
+              style="width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <input type="hidden" id="mn-th-note-id">
+          <input type="hidden" id="mn-th-thread-id">
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="mnCloseThread()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+            <button onclick="mnSaveThread()" style="padding:8px 22px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">스레드 저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 보기 모달 ── -->
     <div id="mn-view-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
-      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:660px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-        <!-- 모달 헤더 -->
+      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:700px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);">
         <div style="padding:20px 24px 0;flex-shrink:0;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
             <div style="flex:1;padding-right:12px;">
-              <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);text-transform:uppercase;margin-bottom:6px;">📝 회의록</div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);text-transform:uppercase;margin-bottom:5px;">📝 회의록</div>
               <div id="mnv-title" style="font-size:18px;font-weight:800;color:var(--text);line-height:1.3;"></div>
             </div>
-            <button onclick="mnCloseView()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:4px;flex-shrink:0;">✕</button>
-          </div>
-          <!-- 메타 정보 -->
-          <div style="display:flex;gap:16px;flex-wrap:wrap;padding:10px 14px;background:var(--s2);border-radius:8px;margin-bottom:12px;">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">📅</span>
-              <div>
-                <div style="font-size:10px;color:var(--text3);font-weight:600;">작성일</div>
-                <div id="mnv-date" style="font-size:13px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace;"></div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">✍️</span>
-              <div>
-                <div style="font-size:10px;color:var(--text3);font-weight:600;">작성자</div>
-                <div id="mnv-author" style="font-size:13px;font-weight:700;color:var(--text);"></div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;">👥</span>
-              <div>
-                <div style="font-size:10px;color:var(--text3);font-weight:600;">참석자</div>
-                <div id="mnv-attendees" style="font-size:13px;font-weight:700;color:var(--text);"></div>
-              </div>
+            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+              <span id="mnv-status-badge"></span>
+              <button onclick="mnCloseView()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:4px;">✕</button>
             </div>
           </div>
-          <!-- 태그 -->
-          <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;"></div>
+          <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
           <div style="height:1px;background:var(--border);"></div>
         </div>
-        <!-- 스크롤 본문 -->
         <div style="flex:1;overflow-y:auto;padding:16px 24px;">
-          <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase;">회의 내용</div>
-          <div id="mnv-body" style="font-size:13.5px;line-height:1.85;"></div>
-          <div id="mnv-actions"></div>
+          <!-- 스레드 타임라인 -->
+          <div id="mnv-thread-list"></div>
+          <!-- 하단 액션 버튼 -->
+          <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button id="mnv-thread-btn" onclick="mnOpenThread(document.getElementById('mnv-edit-btn').dataset.id)"
+              style="padding:8px 16px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.35);border-radius:8px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;">
+              🔗 스레드 추가
+            </button>
+            <button id="mnv-done-btn" onclick="mnToggleDone(document.getElementById('mnv-edit-btn').dataset.id)"
+              style="padding:8px 16px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.35);border-radius:8px;font-size:12px;font-weight:700;color:var(--teal);cursor:pointer;">
+              ✅ 완료 처리
+            </button>
+          </div>
         </div>
-        <!-- 푸터 -->
-        <div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:var(--s2);">
-          <button onclick="mnCloseView()" style="padding:8px 20px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">닫기</button>
-          <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)" style="padding:8px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
-            onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">✏️ 수정</button>
+        <div style="padding:12px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:var(--s2);">
+          <button onclick="mnCloseView()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">닫기</button>
+          <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)"
+            style="padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">✏️ 수정</button>
         </div>
       </div>
     </div>
 
   </div>
-</div><!-- /s10 -->
+</div>
 
 <!-- ══ S11: 참고 사이트 ══ -->
 <div id="s11" class="section">
@@ -3855,7 +3887,13 @@ function nav(id, subTabId) {
   window.scrollTo(0,0);
   buildChecklist();
   if (id === 's9') { setTimeout(function(){ if(typeof pilotInit==='function') pilotInit(); }, 50); }
-  if (id === 's10') { setTimeout(function(){ if(typeof mnLoad==='function') mnLoad(); }, 50); }
+  if (id === 's10') {
+    setTimeout(function(){
+      requestAnimationFrame(function(){
+        if(typeof mnLoad==='function') mnLoad();
+      });
+    }, 120);
+  }
   if (id === 's11') { setTimeout(function(){ if(typeof refTab==='function') refTab(0, document.querySelector('#s11 .ref-tab')); }, 50); }
 }
 
@@ -4777,410 +4815,244 @@ async function hardRefresh() {
 
 
 // ════════════════════════════════════════════════════════
-// 회의록 (Meeting Notes) — Supabase + localStorage
-// ════════════════════════════════════════════════════════
-// 테이블: meeting_notes
-//   id uuid PK default gen_random_uuid()
-//   title text NOT NULL
-//   date  date NOT NULL
-//   author text NOT NULL
-//   attendees text
-//   tags  text[]  default '{}'
-//   body  text NOT NULL
-//   actions text
-//   created_at timestamptz default now()
-//   updated_at timestamptz default now()
-//
-// RLS: anon key로 read/insert/update/delete 허용
-// (개발 중) RLS disabled 또는 public policy
-
+// ══════════════════════════════════════════════════════════════
+// 회의록 — Supabase + localStorage  (스레드·진행/완료 관리)
+// note = { id, title, date, author, attendees, tags[], body,
+//          actions, status('active'|'done'), threads[],
+//          created_at, updated_at }
+// thread = { id, date, author, attendees, body, actions, created_at }
+// ══════════════════════════════════════════════════════════════
 var MN_TABLE = 'meeting_notes';
 var MN_EDIT_ID = null;
 var MN_SELECTED_TAGS = [];
 var MN_ALL = [];
+var MN_TAB = 'active';
 
-// ── Supabase 헬퍼 (SUPABASE_CONFIG 공유) ─────────────
-async function mnFetchAll() {
-  if (!sbOn()) return mnLocalAll();
-  try {
-    const ctrl = new AbortController();
-    const tid  = setTimeout(function(){ ctrl.abort(); }, 3000);
-    const res  = await fetch(
-      SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE +
-      '?select=*&order=date.desc,created_at.desc',
-      { headers: sbHeaders({'Cache-Control':'no-cache'}),
-        cache: 'no-store', signal: ctrl.signal }
-    );
-    clearTimeout(tid);
-    if (!res.ok) return mnLocalAll();
-    return await res.json();
-  } catch(e) { return mnLocalAll(); }
+function mnFetchAll() {
+  if (!sbOn()) return Promise.resolve(mnLocalAll());
+  var ctrl=new AbortController(), tid=setTimeout(function(){ctrl.abort();},3000);
+  return fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE+'?select=*&order=date.desc,created_at.desc',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store',signal:ctrl.signal}
+  ).then(function(r){clearTimeout(tid);return r.ok?r.json():mnLocalAll();})
+   .catch(function(){return mnLocalAll();});
 }
-function mnLocalAll() {
-  try { return JSON.parse(localStorage.getItem('mn_notes') || '[]'); } catch(e){ return []; }
-}
-function mnLocalSave(notes) {
-  localStorage.setItem('mn_notes', JSON.stringify(notes));
-}
+function mnLocalAll(){try{return JSON.parse(localStorage.getItem('mn_notes')||'[]');}catch(e){return[];}}
+function mnLocalSave(n){localStorage.setItem('mn_notes',JSON.stringify(n));}
+function mnUID(){return 'mn_'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 
-function mnUpsert(note) {
-  // ① localStorage 즉시 저장 (동기, 항상 성공)
-  const all = mnLocalAll();
-  const idx = all.findIndex(function(n){ return n.id === note.id; });
-  if (idx >= 0) all[idx] = note; else all.unshift(note);
-  all.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+function mnUpsert(note){
+  var all=mnLocalAll(),idx=all.findIndex(function(n){return n.id===note.id;});
+  if(idx>=0)all[idx]=note;else all.unshift(note);
+  all.sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
   mnLocalSave(all);
+  if(!sbOn())return;
+  var ctrl=new AbortController();setTimeout(function(){ctrl.abort();},3000);
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE,{
+    method:'POST',headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify(note),signal:ctrl.signal
+  }).catch(function(){});
+}
+function mnDelete(id){
+  mnLocalSave(mnLocalAll().filter(function(n){return n.id!==id;}));
+  if(!sbOn())return;
+  var ctrl=new AbortController();setTimeout(function(){ctrl.abort();},3000);
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE+'?id=eq.'+id,{method:'DELETE',headers:sbHeaders(),signal:ctrl.signal}).catch(function(){});
+}
 
-  // ② Supabase fire-and-forget (3초 타임아웃, await 없음)
-  if (!sbOn()) return;
-  var ctrl = new AbortController();
-  setTimeout(function(){ ctrl.abort(); }, 3000);
-  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE, {
-    method : 'POST',
-    headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-    body   : JSON.stringify(note),
-    signal : ctrl.signal,
+// ── 로드 ─────────────────────────────────────────────────────
+function mnLoad(){
+  MN_ALL=mnLocalAll();
+  try{mnRebuildFilters();mnFilter();}catch(e){}
+  if(!sbOn())return;
+  mnFetchAll().then(function(remote){
+    if(!remote||!remote.length)return;
+    var ids={};remote.forEach(function(n){ids[n.id]=true;});
+    MN_ALL=remote.concat(MN_ALL.filter(function(n){return!ids[n.id];}));
+    MN_ALL.sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
+    mnLocalSave(MN_ALL);
+    try{mnRebuildFilters();mnFilter();}catch(e){}
   }).catch(function(){});
 }
 
-function mnDelete(id) {
-  const all = mnLocalAll().filter(function(n){ return n.id !== id; });
-  mnLocalSave(all);
-  if (!sbOn()) return;
-  var ctrl = new AbortController();
-  setTimeout(function(){ ctrl.abort(); }, 3000);
-  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + MN_TABLE + '?id=eq.' + id, {
-    method: 'DELETE', headers: sbHeaders(), signal: ctrl.signal,
-  }).catch(function(){});
-}
-
-// ── 화면 렌더링 ───────────────────────────────────────
-async function mnLoad() {
-  // localStorage 먼저 표시 (즉시 렌더) → Supabase 후 병합
-  MN_ALL = mnLocalAll();
-  mnRebuildFilters();
+// ── 탭 ───────────────────────────────────────────────────────
+function mnSetTab(tab){
+  MN_TAB=tab;
+  var isA=tab==='active';
+  var ta=document.getElementById('mn-tab-active'),td=document.getElementById('mn-tab-done');
+  if(ta){ta.style.color=isA?'var(--purple)':'var(--text3)';ta.style.borderBottomColor=isA?'var(--purple)':'transparent';ta.style.fontWeight=isA?'700':'600';}
+  if(td){td.style.color=!isA?'var(--teal)':'var(--text3)';td.style.borderBottomColor=!isA?'var(--teal)':'transparent';td.style.fontWeight=!isA?'700':'600';}
   mnFilter();
-
-  // Supabase 데이터가 있으면 병합 (백그라운드)
-  if (sbOn()) {
-    try {
-      const remote = await mnFetchAll();
-      if (remote && remote.length > 0) {
-        // remote 우선, local only 항목 병합
-        const remoteIds = new Set(remote.map(function(n){ return n.id; }));
-        const localOnly = MN_ALL.filter(function(n){ return !remoteIds.has(n.id); });
-        MN_ALL = remote.concat(localOnly);
-        MN_ALL.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
-        mnLocalSave(MN_ALL); // 병합 결과를 localStorage에도 동기화
-        mnRebuildFilters();
-        mnFilter();
-      }
-    } catch(e) { /* Supabase 실패 — localStorage로 이미 표시됨 */ }
-  }
 }
 
-function mnRebuildFilters() {
-  const authors = [...new Set(MN_ALL.map(n => n.author).filter(Boolean))].sort();
-  const tags    = [...new Set(MN_ALL.flatMap(n => n.tags||[]).filter(Boolean))].sort();
-
-  const fa = document.getElementById('mn-filter-author');
-  const ft = document.getElementById('mn-filter-tag');
-  if (!fa || !ft) return;
-
-  fa.innerHTML = '<option value="">👤 작성자 전체</option>' +
-    authors.map(a => '<option value="' + a + '">' + a + '</option>').join('');
-  ft.innerHTML = '<option value="">🏷 주제 전체</option>' +
-    tags.map(t => '<option value="' + t + '">' + t + '</option>').join('');
+// ── 필터 & 렌더 ───────────────────────────────────────────────
+function mnRebuildFilters(){
+  var authors=[...new Set(MN_ALL.map(function(n){return n.author;}).filter(Boolean))].sort();
+  var tags=[...new Set(MN_ALL.flatMap(function(n){return n.tags||[];}).filter(Boolean))].sort();
+  var fa=document.getElementById('mn-filter-author'),ft=document.getElementById('mn-filter-tag');
+  if(fa)fa.innerHTML='<option value="">👤 작성자 전체</option>'+authors.map(function(a){return'<option>'+a+'</option>';}).join('');
+  if(ft)ft.innerHTML='<option value="">🏷 주제 전체</option>'+tags.map(function(t){return'<option>'+t+'</option>';}).join('');
 }
+var TAG_COLORS={'편집':{bg:'rgba(10,62,132,.1)',c:'var(--blue)'},'기획':{bg:'rgba(13,148,136,.1)',c:'var(--teal)'},'마케팅':{bg:'rgba(124,58,237,.1)',c:'var(--purple)'},'디자인':{bg:'rgba(239,68,68,.1)',c:'#DC2626'},'플랫폼':{bg:'rgba(184,134,11,.1)',c:'var(--gold2)'},'KPI':{bg:'rgba(10,120,96,.1)',c:'var(--teal)'},'경영':{bg:'rgba(30,58,138,.1)',c:'#1E3A8A'},'기타':{bg:'rgba(100,100,100,.1)',c:'var(--text3)'}};
+function tagBadge(t){var c=TAG_COLORS[t]||{bg:'rgba(100,100,100,.1)',c:'var(--text3)'};return'<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:'+c.bg+';color:'+c.c+';border:1px solid rgba(0,0,0,.06);font-weight:600;">'+t+'</span>';}
 
-function mnFilter() {
-  const q      = (document.getElementById('mn-search')?.value||'').toLowerCase();
-  const author = document.getElementById('mn-filter-author')?.value||'';
-  const tag    = document.getElementById('mn-filter-tag')?.value||'';
-
-  const filtered = MN_ALL.filter(function(n) {
-    const matchQ = !q || (n.title||'').toLowerCase().includes(q) ||
-                   (n.body||'').toLowerCase().includes(q) ||
-                   (n.author||'').toLowerCase().includes(q);
-    const matchA = !author || n.author === author;
-    const matchT = !tag    || (n.tags||[]).includes(tag);
-    return matchQ && matchA && matchT;
+function mnFilter(){
+  var q=(document.getElementById('mn-search')?.value||'').toLowerCase();
+  var author=document.getElementById('mn-filter-author')?.value||'';
+  var tag=document.getElementById('mn-filter-tag')?.value||'';
+  var list=document.getElementById('mn-list'),empty=document.getElementById('mn-empty');
+  if(!list||!empty)return;
+  var filtered=MN_ALL.filter(function(n){
+    if(MN_TAB==='active'&&(n.status||'active')!=='active')return false;
+    if(MN_TAB==='done'&&(n.status||'active')!=='done')return false;
+    if(q&&!((n.title||'').toLowerCase().includes(q)||(n.body||'').toLowerCase().includes(q)||(n.author||'').toLowerCase().includes(q)))return false;
+    if(author&&n.author!==author)return false;
+    if(tag&&!(n.tags||[]).includes(tag))return false;
+    return true;
   });
-
-  const list  = document.getElementById('mn-list');
-  const empty = document.getElementById('mn-empty');
-  if (!list || !empty) return;
-
-  if (!filtered.length) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  // ── 태그 색상 ──
-  var TAG_COLORS = {
-    '편집':   { bg:'rgba(10,62,132,.1)',  color:'var(--blue)'   },
-    '기획':   { bg:'rgba(13,148,136,.1)', color:'var(--teal)'   },
-    '마케팅': { bg:'rgba(124,58,237,.1)', color:'var(--purple)' },
-    '디자인': { bg:'rgba(239,68,68,.1)',  color:'#DC2626'        },
-    '플랫폼': { bg:'rgba(184,134,11,.1)', color:'var(--gold2)'  },
-    'KPI':    { bg:'rgba(10,120,96,.1)',  color:'var(--teal)'   },
-    '경영':   { bg:'rgba(30,58,138,.1)',  color:'#1E3A8A'        },
-    '기타':   { bg:'rgba(100,100,100,.1)','color':'var(--text3)' },
-  };
-  function tagBadge(t) {
-    var c = TAG_COLORS[t] || { bg:'rgba(100,100,100,.1)', color:'var(--text3)' };
-    return '<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:' + c.bg + ';color:' + c.color + ';border:1px solid rgba(0,0,0,.06);font-weight:600;">' + t + '</span>';
-  }
-
-  // ── 월별 그룹핑 ──
-  var groups = {};
-  var groupOrder = [];
-  filtered.forEach(function(n) {
-    var ym = (n.date||'').slice(0,7) || '날짜 없음'; // 'YYYY-MM'
-    if (!groups[ym]) { groups[ym] = []; groupOrder.push(ym); }
-    groups[ym].push(n);
-  });
-  groupOrder.sort(function(a,b){ return b.localeCompare(a); }); // 최신 월 먼저
-
-  // ── 렌더링 ──
-  var html = '';
-  groupOrder.forEach(function(ym) {
-    // 월 헤더
-    var label = ym === '날짜 없음' ? '날짜 없음' : (function(){
-      var parts = ym.split('-');
-      return parts[0] + '년 ' + parseInt(parts[1]) + '월';
-    })();
-    var cnt = groups[ym].length;
-    html += '<div style="display:flex;align-items:center;gap:10px;margin:20px 0 10px;">' +
-      '<div style="font-size:13px;font-weight:800;color:var(--text);">' + label + '</div>' +
-      '<div style="font-size:11px;padding:2px 8px;border-radius:100px;background:rgba(124,58,237,.1);color:var(--purple);font-weight:700;">' + cnt + '건</div>' +
-      '<div style="flex:1;height:1px;background:var(--border);"></div>' +
-    '</div>';
-
-    // 카드 그리드 (4열)
-    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:4px;">';
-    groups[ym].forEach(function(n) {
-      var nid  = n.id;
-      var tags = (n.tags||[]).map(tagBadge).join('');
-      var dayStr = (n.date||'').slice(5).replace('-','/'); // MM/DD
-      html +=
-        '<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 15px;' +
-              'display:flex;flex-direction:column;gap:8px;transition:border-color .15s,box-shadow .15s;" ' +
-              'onmouseover="this.style.borderColor=\'var(--purple)\';this.style.boxShadow=\'0 4px 16px rgba(124,58,237,.1)\'" ' +
-              'onmouseout="this.style.borderColor=\'var(--border)\';this.style.boxShadow=\'none\'">' +
-
-          // 날짜 + 작성자
-          '<div style="display:flex;align-items:center;justify-content:space-between;">' +
-            '<span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3);font-weight:600;">📅 ' + dayStr + '</span>' +
-            '<span style="font-size:11px;color:var(--text3);">✍️ ' + (n.author||'') + '</span>' +
-          '</div>' +
-
-          // 제목
-          '<div style="font-size:13.5px;font-weight:700;color:var(--text);line-height:1.4;' +
-               'overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' +
-            (n.title||'(제목 없음)') +
-          '</div>' +
-
-          // 태그
-          (tags ? '<div style="display:flex;flex-wrap:wrap;gap:4px;">' + tags + '</div>' : '') +
-
-          // 버튼 행
-          '<div style="display:flex;gap:5px;margin-top:auto;padding-top:6px;border-top:1px solid var(--border);">' +
-            '<button onclick="mnView(this.dataset.id)" data-id="' + nid + '" ' +
-              'style="flex:1;padding:5px 0;background:rgba(124,58,237,.08);border:1.5px solid rgba(124,58,237,.25);border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--purple);" ' +
-              'onmouseover="this.style.background=\'var(--purple)\';this.style.color=\'#fff\'" ' +
-              'onmouseout="this.style.background=\'rgba(124,58,237,.08)\';this.style.color=\'var(--purple)\'">보기</button>' +
-            '<button onclick="mnEdit(this.dataset.id)" data-id="' + nid + '" ' +
-              'style="flex:1;padding:5px 0;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);" ' +
-              'onmouseover="this.style.borderColor=\'var(--blue)\';this.style.color=\'var(--blue)\'" ' +
-              'onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--text3)\'">수정</button>' +
-            '<button onclick="mnRemove(this.dataset.id)" data-id="' + nid + '" ' +
-              'style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);" ' +
-              'onmouseover="this.style.borderColor=\'#DC2626\';this.style.color=\'#DC2626\'" ' +
-              'onmouseout="this.style.borderColor=\'var(--border)\';this.style.color=\'var(--text3)\'">삭제</button>' +
-          '</div>' +
-
-        '</div>';
+  var ce=document.getElementById('mn-tab-count');
+  if(ce)ce.textContent='총 '+filtered.length+'건';
+  if(!filtered.length){list.innerHTML='';empty.style.display='block';var m=document.getElementById('mn-empty-msg');if(m)m.textContent=MN_TAB==='done'?'완료된 회의록이 없습니다.':'진행중인 회의록이 없습니다.';return;}
+  empty.style.display='none';
+  var groups={},order=[];
+  filtered.forEach(function(n){var ym=(n.date||'').slice(0,7)||'날짜 없음';if(!groups[ym]){groups[ym]=[];order.push(ym);}groups[ym].push(n);});
+  order.sort(function(a,b){return b.localeCompare(a);});
+  var html='';
+  order.forEach(function(ym){
+    var label=ym==='날짜 없음'?'날짜 없음':(function(){var p=ym.split('-');return p[0]+'년 '+parseInt(p[1])+'월';})();
+    html+='<div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px;"><div style="font-size:13px;font-weight:800;color:var(--text);">'+label+'</div><div style="font-size:11px;padding:2px 8px;border-radius:100px;background:rgba(124,58,237,.1);color:var(--purple);font-weight:700;">'+groups[ym].length+'건</div><div style="flex:1;height:1px;background:var(--border);"></div></div>';
+    html+='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-bottom:4px;">';
+    groups[ym].forEach(function(n){
+      var nid=n.id,tags=(n.tags||[]).map(tagBadge).join(''),dayStr=(n.date||'').slice(5).replace('-','/'),threadCnt=(n.threads||[]).length,isDone=(n.status||'active')==='done';
+      var lc=isDone?'var(--teal)':'var(--purple)';
+      html+='<div style="background:var(--surface);border:1.5px solid var(--border);border-left:3px solid '+lc+';border-radius:12px;padding:14px 15px;display:flex;flex-direction:column;gap:8px;transition:.15s;" onmouseover="this.style.boxShadow=\'0 4px 16px rgba(0,0,0,.1)\'" onmouseout="this.style.boxShadow=\'none\'">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--text3);font-weight:600;">📅 '+dayStr+'</span>'+(isDone?'<span style="font-size:10px;padding:1px 7px;border-radius:100px;background:rgba(13,148,136,.12);color:var(--teal);font-weight:700;">✅ 완료</span>':'')+'</div>'
+        +'<div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+((n.title||'(제목 없음)'))+'</div>'
+        +'<div style="font-size:11px;color:var(--text3);">✍️ '+(n.author||'')+(threadCnt>0?' &nbsp;<span style="color:var(--purple);font-weight:700;">🔗 스레드 '+threadCnt+'개</span>':'')+'</div>'
+        +(tags?'<div style="display:flex;flex-wrap:wrap;gap:4px;">'+tags+'</div>':'')
+        +'<div style="display:flex;gap:5px;margin-top:auto;padding-top:6px;border-top:1px solid var(--border);">'
+        +'<button onclick="mnView(\''+nid+'\')" style="flex:1;padding:5px 0;background:rgba(124,58,237,.08);border:1.5px solid rgba(124,58,237,.25);border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--purple);">보기</button>'
+        +'<button onclick="mnEdit(\''+nid+'\')" style="flex:1;padding:5px 0;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);">수정</button>'
+        +'<button onclick="mnRemove(\''+nid+'\')" style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--text3);">삭제</button>'
+        +'</div></div>';
     });
-    html += '</div>';
+    html+='</div>';
   });
-
-  list.innerHTML = html;
+  list.innerHTML=html;
 }
 
-// ── 모달 ─────────────────────────────────────────────
-function mnOpenModal(note) {
-  MN_EDIT_ID = note ? note.id : null;
-  MN_SELECTED_TAGS = note ? [...(note.tags||[])] : [];
-
-  document.getElementById('mn-modal-title').textContent = note ? '✏️ 회의록 수정' : '✏️ 새 회의록 작성';
-  document.getElementById('mn-f-title').value     = note?.title     || '';
-  document.getElementById('mn-f-date').value      = note?.date      || new Date().toISOString().slice(0,10);
-  document.getElementById('mn-f-author').value    = note?.author    || '';
-  document.getElementById('mn-f-attendees').value = note?.attendees || '';
-  document.getElementById('mn-f-body').value      = note?.body      || '';
-  document.getElementById('mn-f-actions').value   = note?.actions   || '';
-  document.getElementById('mn-save-msg').textContent = '';
-
-  // 태그 버튼 상태 리셋
-  document.querySelectorAll('.mn-tag-opt').forEach(btn => {
-    const active = MN_SELECTED_TAGS.includes(btn.textContent.trim());
-    btn.style.background = active ? 'var(--purple)' : 'var(--surface)';
-    btn.style.color      = active ? '#fff' : 'var(--text3)';
-    btn.style.borderColor= active ? 'var(--purple)' : 'var(--border)';
+// ── 작성/편집 모달 ────────────────────────────────────────────
+function mnOpenModal(note){
+  MN_EDIT_ID=note?note.id:null;MN_SELECTED_TAGS=note?[...(note.tags||[])]:[];
+  document.getElementById('mn-modal-title').textContent=note?'✏️ 회의록 수정':'📝 새 회의록 작성';
+  ['title','date','author','attendees','body','actions'].forEach(function(f){var el=document.getElementById('mn-f-'+f);if(el)el.value=note?note[f]||'':(f==='date'?new Date().toISOString().slice(0,10):'');});
+  document.getElementById('mn-save-msg').textContent='';
+  document.querySelectorAll('.mn-tag-opt').forEach(function(btn){
+    var a=MN_SELECTED_TAGS.includes(btn.textContent.trim());
+    btn.style.background=a?'var(--purple)':'var(--surface)';btn.style.color=a?'#fff':'var(--text3)';btn.style.borderColor=a?'var(--purple)':'var(--border)';
   });
-
-  const modal = document.getElementById('mn-modal');
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  document.getElementById('mn-modal').style.display='flex';document.body.style.overflow='hidden';
 }
-function mnCloseModal() {
-  document.getElementById('mn-modal').style.display = 'none';
-  document.body.style.overflow = '';
+function mnCloseModal(){document.getElementById('mn-modal').style.display='none';document.body.style.overflow='';}
+function mnToggleTag(btn,tag){
+  var i=MN_SELECTED_TAGS.indexOf(tag);
+  if(i>=0){MN_SELECTED_TAGS.splice(i,1);btn.style.background='var(--surface)';btn.style.color='var(--text3)';btn.style.borderColor='var(--border)';}
+  else{MN_SELECTED_TAGS.push(tag);btn.style.background='var(--purple)';btn.style.color='#fff';btn.style.borderColor='var(--purple)';}
 }
-function mnToggleTag(btn, tag) {
-  const i = MN_SELECTED_TAGS.indexOf(tag);
-  if (i >= 0) {
-    MN_SELECTED_TAGS.splice(i, 1);
-    btn.style.background  = 'var(--surface)';
-    btn.style.color       = 'var(--text3)';
-    btn.style.borderColor = 'var(--border)';
-  } else {
-    MN_SELECTED_TAGS.push(tag);
-    btn.style.background  = 'var(--purple)';
-    btn.style.color       = '#fff';
-    btn.style.borderColor = 'var(--purple)';
-  }
-}
-
-async function mnSave() {
-  const title     = (document.getElementById('mn-f-title')?.value  || '').trim();
-  const date      = (document.getElementById('mn-f-date')?.value   || '').trim();
-  const author    = (document.getElementById('mn-f-author')?.value || '').trim();
-  const body      = (document.getElementById('mn-f-body')?.value   || '').trim();
-  const attendees = (document.getElementById('mn-f-attendees')?.value || '').trim();
-  const actions   = (document.getElementById('mn-f-actions')?.value  || '').trim();
-  const msgEl     = document.getElementById('mn-save-msg');
-  const btn       = document.getElementById('mn-save-btn');
-
-  // 필수 항목 검증
-  if (!title || !date || !author || !body) {
-    if (msgEl) { msgEl.textContent = '⚠ 제목·날짜·작성자·내용은 필수입니다.'; msgEl.style.color = '#EF4444'; }
-    return;
-  }
-
-  // 저장 중 표시
-  if (btn) { btn.textContent = '저장 중…'; btn.disabled = true; }
-  if (msgEl) { msgEl.textContent = ''; }
-
-  try {
-    const now = new Date().toISOString();
-    const note = {
-      id         : MN_EDIT_ID || ('mn_' + Date.now().toString(36)),
-      title, date, author, attendees,
-      tags       : [...MN_SELECTED_TAGS],
-      body, actions,
-      updated_at : now,
-      created_at : MN_EDIT_ID
-        ? (MN_ALL.find(function(n){ return n.id === MN_EDIT_ID; })?.created_at || now)
-        : now,
-    };
-
-    // 저장
+function mnSave(){
+  var v=function(id){return(document.getElementById(id)?.value||'').trim();};
+  var title=v('mn-f-title'),date=v('mn-f-date'),author=v('mn-f-author'),body=v('mn-f-body');
+  var msgEl=document.getElementById('mn-save-msg'),btn=document.getElementById('mn-save-btn');
+  if(!title||!date||!author||!body){if(msgEl){msgEl.textContent='⚠ 제목·날짜·작성자·내용은 필수입니다.';msgEl.style.color='#EF4444';}return;}
+  if(btn){btn.textContent='저장 중…';btn.disabled=true;}
+  try{
+    var now=new Date().toISOString(),ex=MN_EDIT_ID?MN_ALL.find(function(n){return n.id===MN_EDIT_ID;}):null;
+    var note={id:MN_EDIT_ID||mnUID(),title,date,author,attendees:v('mn-f-attendees'),tags:[...MN_SELECTED_TAGS],body,actions:v('mn-f-actions'),status:ex?.status||'active',threads:ex?.threads||[],updated_at:now,created_at:ex?.created_at||now};
     mnUpsert(note);
+    if(typeof notifCreate==='function')notifCreate('meeting',note.title,note.author,(MN_EDIT_ID?'회의록 수정':'새 회의록 작성')+'('+note.date+')');
+    mnLoad();mnCloseModal();
+  }catch(err){if(msgEl){msgEl.textContent='❌ 오류: '+(err.message||err);msgEl.style.color='#EF4444';}}
+  finally{if(btn){btn.textContent='저장';btn.disabled=false;}}
+}
+function mnEdit(id){var n=MN_ALL.find(function(x){return x.id===id;});if(n)mnOpenModal(n);}
+function mnRemove(id){if(!confirm('이 회의록을 삭제하시겠습니까?'))return;mnDelete(id);mnLoad();}
 
-    // 알림 발생
-    if (typeof notifCreate === 'function') {
-      notifCreate('meeting', note.title, note.author,
-        (MN_EDIT_ID ? '회의록이 수정되었습니다.' : '새 회의록이 작성되었습니다.') + ' (' + note.date + ')');
-    }
-
-    // 목록 새로고침
-    await mnLoad();
-
-    // ✅ 모달 닫기 + 버튼 복원
-    mnCloseModal();
-
-  } catch(err) {
-    console.error('[mnSave]', err);
-    if (msgEl) { msgEl.textContent = '❌ 저장 중 오류가 발생했습니다: ' + (err.message || err); msgEl.style.color = '#EF4444'; }
-  } finally {
-    if (btn) { btn.textContent = '저장'; btn.disabled = false; }
-  }
+// ── 완료 토글 ─────────────────────────────────────────────────
+function mnToggleDone(id){
+  var n=MN_ALL.find(function(x){return x.id===id;});if(!n)return;
+  var wasDone=(n.status||'active')==='done';
+  if(!wasDone&&!confirm('이 회의록을 완료 처리하시겠습니까?'))return;
+  n.status=wasDone?'active':'done';n.updated_at=new Date().toISOString();
+  mnUpsert(n);mnLoad();mnCloseView();
 }
 
-async function mnEdit(id) {
-  var note = MN_ALL.find(function(n){ return n.id === id; });
-  if (note) mnOpenModal(note);
+// ── 스레드 모달 ───────────────────────────────────────────────
+function mnOpenThread(noteId,threadId){
+  var n=MN_ALL.find(function(x){return x.id===noteId;});if(!n)return;
+  var oe=document.getElementById('mn-thread-origin');
+  if(oe)oe.textContent='📝 '+n.title+' ('+n.date+') — 연속 주제 스레드';
+  document.getElementById('mn-th-note-id').value=noteId;
+  document.getElementById('mn-th-thread-id').value=threadId||'';
+  var th=threadId?(n.threads||[]).find(function(t){return t.id===threadId;}):null;
+  document.getElementById('mn-th-date').value=th?th.date:new Date().toISOString().slice(0,10);
+  document.getElementById('mn-th-author').value=th?th.author:(n.author||'');
+  document.getElementById('mn-th-attendees').value=th?th.attendees||'':'';
+  document.getElementById('mn-th-body').value=th?th.body||'':'';
+  document.getElementById('mn-th-actions').value=th?th.actions||'':'';
+  document.getElementById('mn-thread-modal').style.display='flex';
+  document.body.style.overflow='hidden';
 }
-async function mnRemove(id) {
-  if (!confirm('이 회의록을 삭제하시겠습니까?')) return;
-  mnDelete(id);
-  await mnLoad();
-}
-
-// ── 보기 모달 ─────────────────────────────────────────
-function mnView(id) {
-  var n = MN_ALL.find(function(x){ return x.id === id; });
-  if (!n) return;
-  var TC = {
-    '편집':{ bg:'rgba(10,62,132,.12)', c:'var(--blue)' },
-    '기획':{ bg:'rgba(13,148,136,.12)', c:'var(--teal)' },
-    '마케팅':{ bg:'rgba(124,58,237,.12)', c:'var(--purple)' },
-    '디자인':{ bg:'rgba(239,68,68,.12)', c:'#DC2626' },
-    '플랫폼':{ bg:'rgba(184,134,11,.12)', c:'var(--gold2)' },
-    'KPI':{ bg:'rgba(10,120,96,.12)', c:'var(--teal)' },
-    '경영':{ bg:'rgba(30,58,138,.12)', c:'#1E3A8A' },
-    '기타':{ bg:'rgba(100,100,100,.12)', c:'var(--text3)' },
-  };
-  var tags = (n.tags||[]).map(function(t){
-    var c = TC[t] || { bg:'rgba(100,100,100,.1)', c:'var(--text3)' };
-    return '<span style="font-size:12px;padding:3px 11px;border-radius:100px;background:' + c.bg + ';color:' + c.c + ';border:1px solid rgba(0,0,0,.08);font-weight:600;">' + t + '</span>';
-  }).join('');
-  var bodyHtml = (n.body||'').split('\n').map(function(line){
-    return '<p style="margin:0 0 8px;line-height:1.85;color:var(--text2);">' + (line||'&nbsp;') + '</p>';
-  }).join('');
-  var actHtml = n.actions
-    ? '<div style="margin-top:16px;padding:14px 16px;background:rgba(13,148,136,.06);border-left:3px solid var(--teal);border-radius:8px;">' +
-        '<div style="font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.06em;margin-bottom:8px;">✅ 액션 아이템</div>' +
-        '<div style="font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-line;">' + n.actions + '</div></div>'
-    : '';
-
-  var m = document.getElementById('mn-view-modal');
-  if (!m) return;
-  document.getElementById('mnv-title').textContent     = n.title||'(제목 없음)';
-  document.getElementById('mnv-date').textContent      = n.date||'';
-  document.getElementById('mnv-author').textContent    = n.author||'';
-  document.getElementById('mnv-attendees').textContent = n.attendees||'—';
-  document.getElementById('mnv-tags').innerHTML        = tags||'<span style="color:var(--text3);font-size:12px;">없음</span>';
-  document.getElementById('mnv-body').innerHTML        = bodyHtml;
-  document.getElementById('mnv-actions').innerHTML     = actHtml;
-  document.getElementById('mnv-edit-btn').dataset.id   = n.id;
-  m.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-function mnCloseView() {
-  var m = document.getElementById('mn-view-modal');
-  if(m) m.style.display = 'none';
-  document.body.style.overflow = '';
+function mnCloseThread(){document.getElementById('mn-thread-modal').style.display='none';}
+function mnSaveThread(){
+  var noteId=document.getElementById('mn-th-note-id').value;
+  var threadId=document.getElementById('mn-th-thread-id').value;
+  var date=document.getElementById('mn-th-date').value.trim();
+  var author=document.getElementById('mn-th-author').value.trim();
+  var body=document.getElementById('mn-th-body').value.trim();
+  if(!date||!author||!body){alert('날짜·작성자·내용은 필수입니다.');return;}
+  var n=MN_ALL.find(function(x){return x.id===noteId;});if(!n)return;
+  if(!n.threads)n.threads=[];
+  var now=new Date().toISOString();
+  if(threadId){var idx=n.threads.findIndex(function(t){return t.id===threadId;});if(idx>=0)n.threads[idx]={id:threadId,date,author,attendees:document.getElementById('mn-th-attendees').value.trim(),body,actions:document.getElementById('mn-th-actions').value.trim(),created_at:n.threads[idx].created_at||now};}
+  else n.threads.push({id:mnUID(),date,author,attendees:document.getElementById('mn-th-attendees').value.trim(),body,actions:document.getElementById('mn-th-actions').value.trim(),created_at:now});
+  n.threads.sort(function(a,b){return(a.date||'').localeCompare(b.date||'');});
+  n.updated_at=now;mnUpsert(n);mnLoad();mnCloseThread();mnView(noteId);
 }
 
-
-function refTab(idx, btn) {
-  // 패널 전환
-  [0,1,2,3,4].forEach(function(i){
-    var p = document.getElementById('rp'+i);
-    if(p) p.style.display = i===idx ? 'block' : 'none';
+// ── 보기 모달 ─────────────────────────────────────────────────
+function mnView(id){
+  var n=MN_ALL.find(function(x){return x.id===id;});if(!n)return;
+  var isDone=(n.status||'active')==='done';
+  var TC={'편집':{bg:'rgba(10,62,132,.12)',c:'var(--blue)'},'기획':{bg:'rgba(13,148,136,.12)',c:'var(--teal)'},'마케팅':{bg:'rgba(124,58,237,.12)',c:'var(--purple)'},'디자인':{bg:'rgba(239,68,68,.12)',c:'#DC2626'},'플랫폼':{bg:'rgba(184,134,11,.12)',c:'var(--gold2)'},'KPI':{bg:'rgba(10,120,96,.12)',c:'var(--teal)'},'경영':{bg:'rgba(30,58,138,.12)',c:'#1E3A8A'},'기타':{bg:'rgba(100,100,100,.12)',c:'var(--text3)'}};
+  function tb(t){var c=TC[t]||{bg:'rgba(100,100,100,.12)',c:'var(--text3)'};return'<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:'+c.bg+';color:'+c.c+';border:1px solid rgba(0,0,0,.06);font-weight:600;">'+t+'</span>';}
+  document.getElementById('mnv-title').textContent=n.title||'(제목 없음)';
+  document.getElementById('mnv-tags').innerHTML=(n.tags||[]).map(tb).join('');
+  var badge=document.getElementById('mnv-status-badge');
+  if(badge)badge.innerHTML=isDone?'<span style="font-size:11px;padding:2px 10px;border-radius:100px;background:rgba(13,148,136,.15);color:var(--teal);font-weight:700;">✅ 완료</span>':'<span style="font-size:11px;padding:2px 10px;border-radius:100px;background:rgba(124,58,237,.12);color:var(--purple);font-weight:700;">🔵 진행중</span>';
+  var db=document.getElementById('mnv-done-btn');
+  if(db){db.textContent=isDone?'↩ 진행중으로':'✅ 완료 처리';db.style.color=isDone?'var(--text3)':'var(--teal)';}
+  document.getElementById('mnv-edit-btn').dataset.id=id;
+  function bh(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');}
+  function actHtml(t){return t?'<div style="margin-top:10px;padding:10px 12px;background:var(--s2);border-left:3px solid var(--gold2);border-radius:0 6px 6px 0;"><div style="font-size:10px;font-weight:700;color:var(--gold2);margin-bottom:5px;">⚡ 액션 아이템</div><div style="font-size:12px;color:var(--text2);line-height:1.7;">'+bh(t)+'</div></div>':'';}
+  function metaRow(d,a,att){return'<div style="display:flex;gap:14px;flex-wrap:wrap;padding:7px 12px;background:var(--s2);border-radius:6px;margin-bottom:10px;font-size:11px;color:var(--text3);"><span>📅 <strong style="color:var(--text);">'+d+'</strong></span><span>✍️ <strong style="color:var(--text);">'+a+'</strong></span>'+(att?'<span>👥 '+att+'</span>':'')+'</div>';}
+  var threads=n.threads||[];
+  var html='<div style="position:relative;padding-left:20px;border-left:2px solid var(--purple);margin-bottom:20px;"><div style="position:absolute;left:-7px;top:0;width:12px;height:12px;border-radius:50%;background:var(--purple);"></div><div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.08em;margin-bottom:6px;padding-left:4px;">ORIGIN</div>'+metaRow(n.date,n.author,n.attendees)+'<div style="font-size:13px;line-height:1.8;color:var(--text);">'+bh(n.body)+'</div>'+actHtml(n.actions)+'</div>';
+  threads.forEach(function(th,i){
+    var isLast=i===threads.length-1;
+    var lc=isLast&&isDone?'var(--teal)':'rgba(124,58,237,.4)';
+    var dc=isLast&&isDone?'var(--teal)':'rgba(124,58,237,.6)';
+    html+='<div style="position:relative;padding-left:20px;border-left:2px solid '+lc+';margin-bottom:18px;"><div style="position:absolute;left:-6px;top:0;width:10px;height:10px;border-radius:50%;background:'+dc+'"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;padding-left:4px;"><span style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.08em;">THREAD '+(i+1)+'</span><button onclick="mnOpenThread(\''+id+'\',\''+th.id+'\')" style="font-size:10px;padding:1px 8px;border:1px solid var(--border);border-radius:100px;background:none;cursor:pointer;color:var(--text3);">수정</button><button onclick="mnRemoveThread(\''+id+'\',\''+th.id+'\')" style="font-size:10px;padding:1px 8px;border:1px solid var(--border);border-radius:100px;background:none;cursor:pointer;color:#DC2626;">삭제</button></div>'+metaRow(th.date,th.author,th.attendees)+'<div style="font-size:13px;line-height:1.8;color:var(--text);">'+bh(th.body)+'</div>'+actHtml(th.actions)+'</div>';
   });
-  // 탭 버튼 active
-  document.querySelectorAll('#s11 .ref-tab').forEach(function(b){ b.classList.remove('active'); });
-  if(btn) btn.classList.add('active');
+  document.getElementById('mnv-thread-list').innerHTML=html;
+  document.getElementById('mn-view-modal').style.display='flex';
+  document.body.style.overflow='hidden';
 }
-// s11 진입 시 첫 탭 활성화
-// s10 진입 시 로드
-
+function mnCloseView(){document.getElementById('mn-view-modal').style.display='none';document.body.style.overflow='';}
+function mnRemoveThread(noteId,threadId){
+  if(!confirm('이 스레드를 삭제하시겠습니까?'))return;
+  var n=MN_ALL.find(function(x){return x.id===noteId;});if(!n)return;
+  n.threads=(n.threads||[]).filter(function(t){return t.id!==threadId;});
+  n.updated_at=new Date().toISOString();mnUpsert(n);mnLoad();mnView(noteId);
+}
 
 // ════════════════════════════════════════════════════════
 // 알림 시스템 (Notification System)
