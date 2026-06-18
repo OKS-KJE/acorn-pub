@@ -5497,7 +5497,7 @@ function refOpenDetail(oid, tabIdx){
           +'<div style="display:flex;gap:5px;">'
           +'<button onclick="refCloseDetail();refOpenContactModal(\''+escH(oid)+'\',\''+escH(ct._id)+'\')" '
           +'style="padding:4px 10px;background:none;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--text3);">✏️ 수정</button>'
-          +'<button onclick="refDeleteContact(\''+escH(oid)+'\',\''+escH(ct._id)+'\');refCloseDetail();setTimeout(function(){if(REF_DETAIL_OID)refOpenDetail(REF_DETAIL_OID,REF_DETAIL_TAB);},100)" '
+          +'<button onclick="refDeleteContact(\''+escH(oid)+'\',\''+escH(ct._id)+'\');" '
           +'style="padding:4px 10px;background:none;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--ex);">🗑 삭제</button>'
           +'</div></div>'
           +'<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px;color:var(--text2);line-height:1.8;">'
@@ -5694,13 +5694,22 @@ function refDeleteContact(oid,cid){
   if(!confirm('담당자를 삭제하시겠습니까?')) return;
   var userOrg=REF_USER.find(function(x){return x.id===oid;});
   if(userOrg){
-    userOrg.contacts=(userOrg.contacts||[]).filter(function(x){return x.id!==cid;});
+    // cid 형식: 'orgId_c_contactId' → 실제 contact.id 추출
+    var realCid=cid;
+    var prefix=oid+'_c_';
+    if(cid.startsWith(prefix)) realCid=cid.slice(prefix.length);
+    userOrg.contacts=(userOrg.contacts||[]).filter(function(x){
+      return x.id!==realCid && x.id!==cid;
+    });
     refSaveOrg(userOrg);
-  } else { refHide(cid); }
+  } else {
+    // 빌트인 담당자 숨김
+    refHide(cid);
+  }
   refRenderCurrentTab();
-  // 상세 모달이 열려있으면 갱신
+  // 상세 모달 갱신 (닫고 재열기가 아닌 직접 갱신)
   var dm=document.getElementById('ref-detail-modal');
-  if(dm&&dm.style.display==='flex'&&REF_DETAIL_OID===oid){
+  if(dm&&dm.style.display==='flex'){
     refOpenDetail(REF_DETAIL_OID,REF_DETAIL_TAB);
   }
 }
