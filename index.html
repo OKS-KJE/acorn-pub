@@ -4402,78 +4402,75 @@ function SB_getUserId() {
 }
 
 // ── Supabase 상태 배지 (proposal.html 스타일) ─────────────
-async function updatePilotDbStatus(){
-  const el = document.getElementById('db-status-badge');
-  const el2 = document.getElementById('sb-status-badge');
-  const el3 = document.getElementById('sb-status-badge-2');
-  function setAll(cls, html){
+function updatePilotDbStatus(){
+  var el=document.getElementById('db-status-badge');
+  var el2=document.getElementById('sb-status-badge');
+  var el3=document.getElementById('sb-status-badge-2');
+  function setAll(cls,html){
     [el,el2,el3].forEach(function(e){
       if(!e) return;
-      if(e === el){ e.className = 'db-status ' + cls; e.innerHTML = html; }
-      else { e.innerHTML = cls === 'cloud'
-        ? '<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(80,200,120,.15);color:#50C878;border:1px solid rgba(80,200,120,.3);">🟢 Supabase 연결됨</span>'
-        : '<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(184,114,10,.15);color:var(--gold2);border:1px solid rgba(184,114,10,.3);">🟡 localStorage 모드</span>';
+      if(e===el){ e.className='db-status '+cls; e.innerHTML=html; }
+      else{ e.innerHTML=cls==='cloud'
+        ?'<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(80,200,120,.15);color:#50C878;border:1px solid rgba(80,200,120,.3);">🟢 Supabase 연결됨</span>'
+        :'<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(184,114,10,.15);color:var(--gold2);border:1px solid rgba(184,114,10,.3);">🟡 localStorage 모드</span>';
       }
     });
   }
   if(!sbOn()){
-    const miss=[];
+    var miss=[];
     if(!SUPABASE_CONFIG.enabled) miss.push('비활성');
     if(!SUPABASE_CONFIG.url) miss.push('url 없음');
     if(!SUPABASE_CONFIG.key) miss.push('key 없음');
-    setAll('local','<div class="db-dot" style="background:var(--gold2)"></div>localStorage ' + (miss.length?'('+miss.join(', ')+')':""));
+    setAll('local','<div class="db-dot" style="background:var(--gold2)"></div>localStorage '+(miss.length?'('+miss.join(', ')+')':''));
     return;
   }
   setAll('local','<div class="db-dot" style="background:#9aa0a6"></div>확인 중…');
-  try {
-    const res = await fetch(
-      SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
-      {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
-    );
+  fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(res){
     if(res.ok){
       setAll('cloud','<div class="db-dot" style="background:#50C878"></div>Supabase 연결됨');
     } else {
-      let hint = res.status===401||res.status===403 ? ' · 키 확인'
-               : res.status===404 ? ' · 테이블 없음' : '';
+      var hint=res.status===401||res.status===403?' · 키 확인':res.status===404?' · 테이블 없음':'';
       setAll('local','<div class="db-dot" style="background:#e57373"></div>연결 실패 '+res.status+hint);
     }
-  } catch(e) {
+  }).catch(function(){
     setAll('local','<div class="db-dot" style="background:#e57373"></div>연결 실패 (네트워크)');
-  }
+  });
 }
 
 // ── STORE 레이어 (localStorage + Supabase 이중화) ─────────
-async function SB_upsert(itemKey, done) {
+function SB_upsert(itemKey, done) {
   if(!sbOn()) return;
-  try {
-    await fetch(SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table, {
-      method : 'POST',
-      headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-      body   : JSON.stringify({
-        user_id   : SB_getUserId(),
-        item_key  : itemKey,
-        done      : done,
-        updated_at: new Date().toISOString()
-      })
-    });
-  } catch(e){ console.warn('[Pilot SB] upsert 실패 (offline):', e.message); }
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table, {
+    method : 'POST',
+    headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body   : JSON.stringify({
+      user_id   : SB_getUserId(),
+      item_key  : itemKey,
+      done      : done,
+      updated_at: new Date().toISOString()
+    })
+  }).then(function(r){
+    if(!r.ok) r.text().then(function(t){ console.warn('[Pilot SB] upsert FAIL:',r.status,t); });
+  }).catch(function(e){ console.warn('[Pilot SB] upsert ERROR:', e.message); });
 }
-async function SB_loadAll() {
-  if(!sbOn()) return null;
-  try {
-    const res = await fetch(
-      SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table
-      +'?user_id=eq.'+SB_getUserId()+'&select=item_key,done',
-      {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
-    );
-    if(res.status === 404){
-      console.warn('[Pilot SB] pilot_milestones 테이블 없음 — Supabase SQL Editor에서 테이블 생성 필요');
+function SB_loadAll() {
+  if(!sbOn()) return Promise.resolve(null);
+  return fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table
+    +'?user_id=eq.'+SB_getUserId()+'&select=item_key,done',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+  ).then(function(res){
+    if(res.status===404){
+      console.warn('[Pilot SB] pilot_milestones 테이블 없음');
       sbSetResult('⚠ pilot_milestones 테이블 없음 — [🛠 테이블 생성] 버튼을 클릭하세요.','#B45309');
       return null;
     }
     if(!res.ok) return null;
-    return await res.json();
-  } catch(e){ console.warn('[Pilot SB] loadAll 실패 (offline):', e.message); return null; }
+    return res.json();
+  }).catch(function(e){ console.warn('[Pilot SB] loadAll 실패:', e.message); return null; });
 }
 
 // 데이터 레이어 — localStorage 항상 작동, Supabase fire-and-forget
@@ -4624,75 +4621,71 @@ function sbUpdateToggleUI(){
 }
 
 // ── 활성화 토글 ─────────────────────────────────────────
-async function sbToggleEnabled(){
+function sbToggleEnabled(){
   sbSaveConfig();
-  const {url, key} = SUPABASE_CONFIG;
-  if(!SUPABASE_CONFIG.enabled && (!url||url.includes('YOUR_')||!key||key.includes('YOUR_')||!key)){
-    sbSetResult('⚠ Supabase URL과 Anon Key를 먼저 입력하세요.', '#B45309'); return;
+  var url=SUPABASE_CONFIG.url, key=SUPABASE_CONFIG.key;
+  if(!SUPABASE_CONFIG.enabled&&(!url||url.includes('YOUR_')||!key||key.includes('YOUR_')||!key)){
+    sbSetResult('⚠ Supabase URL과 Anon Key를 먼저 입력하세요.','#B45309'); return;
   }
-  SUPABASE_CONFIG.enabled = !SUPABASE_CONFIG.enabled;
-  localStorage.setItem('pilot_sb_enabled', SUPABASE_CONFIG.enabled ? '1' : '0');
+  SUPABASE_CONFIG.enabled=!SUPABASE_CONFIG.enabled;
+  localStorage.setItem('pilot_sb_enabled',SUPABASE_CONFIG.enabled?'1':'0');
   sbUpdateToggleUI();
-  await updatePilotDbStatus();
-  if(SUPABASE_CONFIG.enabled){
-    sbSetResult('', '');
-    await sbPullAll();   // 활성화 즉시 DB 데이터 로드
-  }
+  updatePilotDbStatus();
+  if(SUPABASE_CONFIG.enabled){ sbSetResult('',''); sbPullAll(); }
 }
 
 // ── 연결 테스트 ─────────────────────────────────────────
-async function sbTestConnection(){
+function sbTestConnection(){
   sbSaveConfig();
-  sbSetResult('⏳ 연결 테스트 중…', '#9aa0a6');
-  await updatePilotDbStatus();
-  const el = document.getElementById('db-status-badge');
-  if(el && el.className.includes('cloud')){
-    sbSetResult('✅ 연결 성공', '#0D9488');
-  } else {
-    sbSetResult('❌ 연결 실패 — URL / Key 확인 필요', '#e57373');
-    SUPABASE_CONFIG.enabled = false;
-    localStorage.setItem('pilot_sb_enabled','0');
-    sbUpdateToggleUI();
-  }
+  sbSetResult('⏳ 연결 테스트 중…','#9aa0a6');
+  fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(res){
+    updatePilotDbStatus();
+    if(res.ok){
+      sbSetResult('✅ 연결 성공','#0D9488');
+    } else {
+      sbSetResult('❌ 연결 실패 — URL / Key 확인 필요','#e57373');
+      SUPABASE_CONFIG.enabled=false;
+      localStorage.setItem('pilot_sb_enabled','0');
+      sbUpdateToggleUI();
+    }
+  }).catch(function(){
+    sbSetResult('❌ 연결 실패 — 네트워크 오류','#e57373');
+  });
 }
 
 // ── 전체 업로드 (localStorage → Supabase) ─────────────
-async function sbPushAll(){
+function sbPushAll(){
   sbSaveConfig();
   if(!sbOn()){ sbSetResult('⚠ Supabase가 비활성 상태입니다.','#B45309'); return; }
   sbSetResult('⬆ 업로드 중…','#9aa0a6');
-  const rows = [];
-  const uid  = SB_getUserId();
-  PT_ITEMS.forEach((_,i) => rows.push({
-    user_id:uid, item_key:'pt_check_'+i,
-    done: STORE_get('pt_check_'+i), updated_at: new Date().toISOString()
-  }));
-  [1,2,3].forEach(p=>[0,1,2,3].forEach(i=>rows.push({
-    user_id:uid, item_key:'dash_p'+p+'_'+i,
-    done: STORE_get('dash_p'+p+'_'+i), updated_at: new Date().toISOString()
-  })));
-  try {
-    const res = await fetch(SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table, {
-      method:'POST',
-      headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-      body: JSON.stringify(rows)
-    });
-    sbSetResult(res.ok ? '✅ 업로드 완료 ('+rows.length+'행)' : '❌ 업로드 실패: HTTP '+res.status,
-                res.ok ? '#0D9488' : '#e57373');
-  } catch(e){ sbSetResult('❌ 오류: '+e.message.slice(0,50),'#e57373'); }
+  var rows=[], uid=SB_getUserId();
+  PT_ITEMS.forEach(function(_,i){ rows.push({user_id:uid,item_key:'pt_check_'+i,done:STORE_get('pt_check_'+i),updated_at:new Date().toISOString()}); });
+  [1,2,3].forEach(function(p){ [0,1,2,3].forEach(function(i){ rows.push({user_id:uid,item_key:'dash_p'+p+'_'+i,done:STORE_get('dash_p'+p+'_'+i),updated_at:new Date().toISOString()}); }); });
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table,{
+    method:'POST',
+    headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify(rows)
+  }).then(function(res){
+    sbSetResult(res.ok?'✅ 업로드 완료 ('+rows.length+'행)':'❌ 업로드 실패: HTTP '+res.status,
+                res.ok?'#0D9488':'#e57373');
+  }).catch(function(e){ sbSetResult('❌ 오류: '+e.message.slice(0,50),'#e57373'); });
 }
 
 // ── 전체 동기화 (Supabase → localStorage) ─────────────
-async function sbPullAll(){
+function sbPullAll(){
   sbSaveConfig();
   if(!sbOn()){ sbSetResult('⚠ Supabase가 비활성 상태입니다.','#B45309'); return; }
   sbSetResult('⬇ 동기화 중…','#9aa0a6');
-  const rows = await SB_loadAll();
-  if(!rows){ sbSetResult('❌ DB 로드 실패','#e57373'); return; }
-  rows.forEach(r => localStorage.setItem(r.item_key, r.done ? '1' : '0'));
-  ptBuildChecklist();
-  dashRefresh();
-  sbSetResult('✅ 동기화 완료 ('+rows.length+'행)', '#0D9488');
+  SB_loadAll().then(function(rows){
+    if(!rows){ sbSetResult('❌ DB 로드 실패','#e57373'); return; }
+    rows.forEach(function(r){ localStorage.setItem(r.item_key, r.done?'1':'0'); });
+    ptBuildChecklist();
+    dashRefresh();
+    sbSetResult('✅ 동기화 완료 ('+rows.length+'행)','#0D9488');
+  });
 }
 
 function sbSetResult(msg, color){
@@ -4721,41 +4714,43 @@ CREATE POLICY "pilot_own_rows" ON pilot_milestones
 
 // ── 테이블 자동 생성 (RPC 방식 — service_role 없이 anon key로 가능한 범위) ──
 // Supabase에서 anon key로는 DDL 직접 실행 불가 → SQL 복사 안내 + 연결만 확인
-async function sbInitTable(){
+function sbInitTable(){
   sbSaveConfig();
   if(!sbOn()){ sbSetResult('⚠ 먼저 Supabase를 활성화하세요.','#B45309'); return; }
   sbSetResult('🛠 테이블 존재 확인 중…','#9aa0a6');
-  try {
-    const res = await fetch(
-      SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
-      {headers: sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
-    );
-    if(res.ok || res.status===406){
+  fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+  ).then(function(res){
+    if(res.ok||res.status===406){
       sbSetResult('✅ 테이블 존재 확인 — 정상 사용 가능합니다.','#0D9488');
-      await updatePilotDbStatus();
+      updatePilotDbStatus();
     } else if(res.status===404){
       sbSetResult('❌ pilot_milestones 테이블 없음 — 아래 SQL을 Supabase SQL Editor에서 실행하세요.','#e57373');
-      // SQL 패널 자동 오픈
-      const sqlDetails = document.querySelector('#sb-config-panel details');
-      if(sqlDetails) sqlDetails.open = true;
+      var sqlDetails=document.querySelector('#sb-config-panel details');
+      if(sqlDetails) sqlDetails.open=true;
       sbCopySQL();
     } else {
       sbSetResult('⚠ HTTP '+res.status+' — URL/Key를 확인하세요.','#B45309');
     }
-  } catch(e){
+  }).catch(function(e){
     sbSetResult('❌ 네트워크 오류 — CORS 또는 인터넷 연결 확인','#e57373');
-  }
+  });
 }
 
 // ── pilotInit: s9 진입 시 호출 ────────────────────────
-async function pilotInit(){
-  sbLoadConfig();            // 저장된 설정 복원 + 배지 갱신
+function pilotInit(){
+  sbLoadConfig();
   if(sbOn()){
-    const rows = await SB_loadAll();
-    if(rows) rows.forEach(r => localStorage.setItem(r.item_key, r.done ? '1' : '0'));
+    SB_loadAll().then(function(rows){
+      if(rows) rows.forEach(function(r){ localStorage.setItem(r.item_key, r.done?'1':'0'); });
+      ptBuildChecklist();
+      dashRefresh();
+    });
+  } else {
+    ptBuildChecklist();
+    dashRefresh();
   }
-  ptBuildChecklist();
-  dashRefresh();
 }
 
 // 페이지 로드 시 설정 복원
