@@ -4830,11 +4830,13 @@ var MN_TAB = 'active';
 
 function mnFetchAll() {
   if (!sbOn()) return Promise.resolve(mnLocalAll());
-  var ctrl=new AbortController(), tid=setTimeout(function(){ctrl.abort();},3000);
   return fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE+'?select=*&order=date.desc,created_at.desc',
-    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store',signal:ctrl.signal}
-  ).then(function(r){clearTimeout(tid);return r.ok?r.json():mnLocalAll();})
-   .catch(function(){return mnLocalAll();});
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(r){
+    console.log('[mn] fetch status:',r.status);
+    if(!r.ok){ return r.text().then(function(t){ console.warn('[mn] fetch FAIL:',r.status,t); return mnLocalAll(); }); }
+    return r.json();
+  }).catch(function(e){console.warn('[mn] fetch ERROR:',e.message||e);return mnLocalAll();});
 }
 function mnLocalAll(){try{return JSON.parse(localStorage.getItem('mn_notes')||'[]');}catch(e){return[];}}
 function mnLocalSave(n){localStorage.setItem('mn_notes',JSON.stringify(n));}
@@ -4851,20 +4853,21 @@ function mnUpsert(note){
   var sbNote = Object.assign({}, note);
   if(!Array.isArray(sbNote.threads)) sbNote.threads = [];
   if(!Array.isArray(sbNote.tags))    sbNote.tags    = [];
-  var ctrl=new AbortController();setTimeout(function(){ctrl.abort();},5000);
   fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE,{
     method:'POST',
     headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-    body:JSON.stringify(sbNote),signal:ctrl.signal
+    body:JSON.stringify(sbNote)
   }).then(function(r){
-    if(!r.ok) r.text().then(function(t){ console.warn('[mn] upsert failed:',r.status,t); });
-  }).catch(function(e){ console.warn('[mn] upsert error:',e); });
+    if(r.ok){ console.log('[mn] upsert OK:', r.status); }
+    else r.text().then(function(t){ console.warn('[mn] upsert FAIL:',r.status,t); });
+  }).catch(function(e){ console.warn('[mn] upsert ERROR:',e.message||e); });
 }
 function mnDelete(id){
   mnLocalSave(mnLocalAll().filter(function(n){return n.id!==id;}));
   if(!sbOn())return;
-  var ctrl=new AbortController();setTimeout(function(){ctrl.abort();},3000);
-  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE+'?id=eq.'+id,{method:'DELETE',headers:sbHeaders(),signal:ctrl.signal}).catch(function(){});
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE+'?id=eq.'+id,
+    {method:'DELETE',headers:sbHeaders()}
+  ).catch(function(){});
 }
 
 // ── 로드 ─────────────────────────────────────────────────────
