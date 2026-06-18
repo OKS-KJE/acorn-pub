@@ -464,20 +464,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <span class="nav-icon">📆</span>Calendar
       </div>
     </a>
-    <div class="nav-item" onclick="nav('s10')" style="color:#A78BFA;border-left:2px solid rgba(167,139,250,.4);">
-      <span class="nav-icon">📝</span>회의록
-    </div>
     <div class="nav-divider" style="height:1px;background:rgba(255,255,255,.1);margin:8px 16px;"></div>
     <a href="proposal.html" style="text-decoration:none;">
       <div class="nav-item" style="color:var(--gold3);border-left:3px solid var(--gold3);">
         <span class="nav-icon">📋</span>기획안 관리
       </div>
     </a>
-    <div class="nav-item" onclick="nav('s9')" style="color:#5DD6B3;border-left:2px solid rgba(93,214,179,.4);">
-      <span class="nav-icon">🧪</span>Pilot Test
-    </div>
     <div class="nav-item" onclick="nav('s11')" style="color:#60A5FA;border-left:2px solid rgba(96,165,250,.4);">
       <span class="nav-icon">🔗</span>참고 사이트
+    </div>
+    <div class="nav-item" onclick="nav('s12')" style="color:#F59E0B;border-left:2px solid rgba(245,158,11,.4);">
+      <span class="nav-icon">👤</span>저·역자 관리
+    </div>
+    <div class="nav-item" onclick="nav('s10')" style="color:#A78BFA;border-left:2px solid rgba(167,139,250,.4);">
+      <span class="nav-icon">📝</span>회의록
+    </div>
+    <div class="nav-item" onclick="nav('s9')" style="color:#5DD6B3;border-left:2px solid rgba(93,214,179,.4);">
+      <span class="nav-icon">🧪</span>Pilot Test
     </div>
   </div>
   <div class="sidebar-footer">
@@ -3550,110 +3553,102 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <div class="page-header" style="background:linear-gradient(135deg,#0C1F3A 0%,#0A3E5A 60%,#091A0A 100%);">
     <div class="ph-eyebrow">REFERENCE SITES · 에이콘출판사</div>
     <h1 class="ph-title">참고 사이트 <span style="font-size:.55em;font-weight:400;opacity:.7">Quick Links</span></h1>
-    <p class="ph-sub">업무에 자주 사용하는 사이트를 카테고리별로 모아 빠르게 접근합니다.</p>
+    <p class="ph-sub">업무에 자주 사용하는 사이트와 거래처·미디어 담당자 정보를 관리합니다.</p>
   </div>
   <div class="content">
-
-    <!-- 가로 탭 -->
-    <div style="display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:22px;overflow-x:auto;">
-      <button class="ref-tab active" onclick="refTab(0,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:700;color:var(--blue);border-bottom:2.5px solid var(--blue);margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🏢 회사 &amp; SNS</button>
-      <button class="ref-tab" onclick="refTab(1,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🛒 유통사</button>
-      <button class="ref-tab" onclick="refTab(2,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🌍 외국 출판사</button>
-      <button class="ref-tab" onclick="refTab(3,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🏛 국내 출판사</button>
-      <button class="ref-tab" onclick="refTab(4,this)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📋 출판 기관</button>
-    </div>
-
-    <!-- 탭 0: 회사 & SNS -->
-    <div class="ref-panel" id="rp0">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;margin-bottom:20px;">
-        <a href="https://www.acornpub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);"><span class="ref-icon">🌐</span><div><div class="ref-name">홈페이지</div><div class="ref-url">acornpub.co.kr</div></div></a>
-        <a href="https://login.ecount.com/Login/KR/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);"><span class="ref-icon">📊</span><div><div class="ref-name">이카운트 ERP</div><div class="ref-url">ecount.com</div></div></a>
-        <a href="https://publisher.acornpub.kr/login" target="_blank" rel="noopener" class="ref-link" style="--rc:#7A1F2B;"><span class="ref-icon">🏢</span><div><div class="ref-name">출판사 포털</div><div class="ref-url">publisher.acornpub.kr</div></div></a>
-        <a href="https://author.acornpub.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#7A1F2B;"><span class="ref-icon">✍️</span><div><div class="ref-name">저자 사이트</div><div class="ref-url">author.acornpub.kr</div></div></a>
-        <a href="https://app.notion.com/p/HOME-121b5bc6231880b0a43ef1a75f3cc463" target="_blank" rel="noopener" class="ref-link" style="--rc:#000;"><span class="ref-icon">📓</span><div><div class="ref-name">에이콘 NOTION</div><div class="ref-url">app.notion.com</div></div></a>
+    <!-- 탭 + 추가 버튼 -->
+    <div style="display:flex;align-items:center;border-bottom:2px solid var(--border);margin-bottom:18px;">
+      <div id="ref-tab-row" style="display:flex;gap:0;overflow-x:auto;flex:1;"></div>
+      <div style="flex-shrink:0;padding:0 6px 2px;">
+        <button onclick="refOpenAddModal()" style="padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">➕ 추가</button>
       </div>
-      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:10px;">SNS &amp; 채널</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;">
-        <a href="https://www.linkedin.com/in/booktori42/" target="_blank" rel="noopener" class="ref-link" style="--rc:#0077B5;"><span class="ref-icon" style="color:#0077B5;">💼</span><div><div class="ref-name">LinkedIn</div><div class="ref-url">linkedin.com</div></div></a>
-        <a href="https://www.acornpub.co.kr/blog" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--blue);"><span class="ref-icon">✍️</span><div><div class="ref-name">에이콘 블로그</div><div class="ref-url">acornpub.co.kr/blog</div></div></a>
-        <a href="https://www.youtube.com/@booktory_acornon" target="_blank" rel="noopener" class="ref-link" style="--rc:#FF0000;"><span class="ref-icon" style="color:#FF0000;">▶</span><div><div class="ref-name">YouTube</div><div class="ref-url">@booktory_acornon</div></div></a>
-        <a href="https://x.com/acornpublisher" target="_blank" rel="noopener" class="ref-link" style="--rc:#000;"><span class="ref-icon">𝕏</span><div><div class="ref-name">X (Twitter)</div><div class="ref-url">x.com/acornpublisher</div></div></a>
-        <a href="https://www.facebook.com/acornpub" target="_blank" rel="noopener" class="ref-link" style="--rc:#1877F2;"><span class="ref-icon" style="color:#1877F2;">f</span><div><div class="ref-name">Facebook</div><div class="ref-url">facebook.com/acornpub</div></div></a>
-        <a href="https://www.instagram.com/acorn_pub" target="_blank" rel="noopener" class="ref-link" style="--rc:#E1306C;"><span class="ref-icon" style="color:#E1306C;">📷</span><div><div class="ref-name">Instagram</div><div class="ref-url">@acorn_pub</div></div></a>
-        <a href="https://www.acornpub.co.kr/contact/newsletter" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📧</span><div><div class="ref-name">뉴스레터</div><div class="ref-url">acornpub.co.kr</div></div></a>
+    </div>
+    <!-- 패널 컨테이너 -->
+    <div id="ref-panels"></div>
+
+    <!-- 기관 편집 모달 -->
+    <div id="ref-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--surface);border-radius:14px;width:100%;max-width:560px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+        <div id="ref-modal-hdr" style="padding:14px 20px;background:var(--blue);display:flex;align-items:center;flex-shrink:0;">
+          <span id="ref-modal-title" style="font-size:14px;font-weight:800;color:#fff;flex:1;"></span>
+          <button onclick="refCloseModal()" style="background:none;border:none;color:rgba(255,255,255,.8);font-size:20px;cursor:pointer;padding:4px;">✕</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:18px 20px;" id="ref-modal-fields"></div>
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:var(--s2);">
+          <button onclick="refCloseModal()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+          <button onclick="refModalSave()" style="padding:8px 22px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">💾 저장</button>
+        </div>
       </div>
     </div>
 
-    <!-- 탭 1: 유통사 -->
-    <div class="ref-panel" id="rp1" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
-        <a href="https://www.kyobobook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">교보문고</div><div class="ref-url">kyobobook.co.kr</div></div></a>
-        <a href="https://aladin.co.kr/home/welcome.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">알라딘</div><div class="ref-url">aladin.co.kr</div></div></a>
-        <a href="https://www.ypbooks.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">영풍문고</div><div class="ref-url">ypbooks.co.kr</div></div></a>
-        <a href="https://www.yes24.com/Main/default.aspx" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">예스24</div><div class="ref-url">yes24.com</div></div></a>
-        <a href="http://www.booxen.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📦</span><div><div class="ref-name">북센</div><div class="ref-url">booxen.com</div></div></a>
-        <a href="https://www.bookcube.com/main.asp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📱</span><div><div class="ref-name">북큐브</div><div class="ref-url">bookcube.com</div></div></a>
-        <a href="https://play.google.com/store/books?hl=ko" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">▶</span><div><div class="ref-name">구글 플레이</div><div class="ref-url">play.google.com</div></div></a>
-        <a href="https://www.apple.com/kr/apple-books/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">🍎</span><div><div class="ref-name">애플 북스</div><div class="ref-url">apple.com/kr</div></div></a>
-        <a href="https://bsearch.interpark.com/dsearch/book.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">🛍</span><div><div class="ref-name">인터파크</div><div class="ref-url">interpark.com</div></div></a>
-        <a href="https://search.shopping.naver.com/book/home" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">🟢</span><div><div class="ref-name">네이버 북</div><div class="ref-url">naver.com/book</div></div></a>
-        <a href="https://ridibooks.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📖</span><div><div class="ref-name">리디북스</div><div class="ref-url">ridibooks.com</div></div></a>
-        <a href="https://www.y2books.com/product/productTotalList?cateDepth1=10000000&cateDepth2=10000023" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">Y2BOOKS</div><div class="ref-url">y2books.com</div></div></a>
-        <a href="https://www.readingrak.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📚</span><div><div class="ref-name">리딩락</div><div class="ref-url">readingrak.com</div></div></a>
-        <a href="https://www.amazon.com/books-used-books-textbooks/b?node=283155" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--teal);"><span class="ref-icon">📦</span><div><div class="ref-name">아마존</div><div class="ref-url">amazon.com</div></div></a>
+    <!-- 기관 상세 모달 (카드 클릭 시) -->
+    <div id="ref-detail-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:680px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+        <div id="rdm-hdr" style="padding:16px 22px;display:flex;align-items:flex-start;flex-shrink:0;">
+          <div style="flex:1;">
+            <div id="rdm-title" style="font-size:17px;font-weight:900;color:#fff;margin-bottom:3px;"></div>
+            <div id="rdm-sub" style="font-size:12px;color:rgba(255,255,255,.75);font-weight:600;"></div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-left:10px;flex-shrink:0;">
+            <a id="rdm-link" href="#" target="_blank" style="display:none;padding:5px 11px;background:rgba(255,255,255,.2);border-radius:7px;color:#fff;font-size:11px;text-decoration:none;font-weight:700;">🔗 사이트</a>
+            <button onclick="refDetailAddContact()" style="padding:5px 12px;background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.3);border-radius:7px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;">➕ 담당자</button>
+            <button id="rdm-edit-btn" onclick="" style="padding:5px 11px;background:rgba(255,255,255,.2);border:none;border-radius:7px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;">✏️ 기관 수정</button>
+            <button id="rdm-del-btn" onclick="" style="padding:5px 11px;background:rgba(255,60,60,.35);border:none;border-radius:7px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;">🗑 삭제</button>
+            <button onclick="refCloseDetail()" style="background:none;border:none;color:rgba(255,255,255,.8);font-size:22px;cursor:pointer;padding:2px 4px;line-height:1;">✕</button>
+          </div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:0 22px 20px;" id="rdm-body"></div>
       </div>
     </div>
-
-    <!-- 탭 2: 외국 출판사 -->
-    <div class="ref-panel" id="rp2" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
-        <a href="https://www.edelweiss.plus/#dashboard" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🌸</span><div><div class="ref-name">Edelweiss</div><div class="ref-url">edelweiss.plus</div></div></a>
-        <a href="https://www.oreilly.com/publisher/addison-wesley-professional/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🦦</span><div><div class="ref-name">O'Reilly</div><div class="ref-url">oreilly.com</div></div></a>
-        <a href="https://nostarch.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">⭐</span><div><div class="ref-name">No Starch</div><div class="ref-url">nostarch.com</div></div></a>
-        <a href="https://mitpress.mit.edu/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🎓</span><div><div class="ref-name">MIT Press</div><div class="ref-url">mitpress.mit.edu</div></div></a>
-        <a href="https://www.wiley.com/en-kr" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📘</span><div><div class="ref-name">Wiley</div><div class="ref-url">wiley.com</div></div></a>
-        <a href="https://docs.google.com/spreadsheets/d/1-miJAMk_MfZ_zrT6YbU-jUN06Cm4Hpaw0ctB7hdThXg/edit" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📊</span><div><div class="ref-name">O'Reilly 정리</div><div class="ref-url">Google Sheets</div></div></a>
-        <a href="https://www.manning.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📗</span><div><div class="ref-name">Manning</div><div class="ref-url">manning.com</div></div></a>
-        <a href="https://www.packtpub.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">📙</span><div><div class="ref-name">Packt</div><div class="ref-url">packtpub.com</div></div></a>
-        <a href="https://www.penguin.co.in/books/non-fiction/computing-internet-digital-media/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--purple);"><span class="ref-icon">🐧</span><div><div class="ref-name">Penguin</div><div class="ref-url">penguin.co.in</div></div></a>
-      </div>
-    </div>
-
-    <!-- 탭 3: 국내 출판사 -->
-    <div class="ref-panel" id="rp3" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">
-        <a href="https://jpub.tistory.com/notice/1074" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">제이펍</div><div class="ref-url">jpub.tistory.com</div></div></a>
-        <a href="https://www.onlybook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">책만</div><div class="ref-url">onlybook.co.kr</div></div></a>
-        <a href="https://ebook.insightbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">인사이트</div><div class="ref-url">insightbook.co.kr</div></div></a>
-        <a href="https://www.easyspub.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">이지스퍼블리싱</div><div class="ref-url">easyspub.co.kr</div></div></a>
-        <a href="https://www.hanbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">한빛미디어</div><div class="ref-url">hanbit.co.kr</div></div></a>
-        <a href="https://www.gilbut.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">길벗</div><div class="ref-url">gilbut.co.kr</div></div></a>
-        <a href="https://wikibook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">위키북스</div><div class="ref-url">wikibook.co.kr</div></div></a>
-        <a href="https://festbook.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">페스트북</div><div class="ref-url">festbook.co.kr</div></div></a>
-        <a href="https://goldenrabbit.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">🐰</span><div><div class="ref-name">골드래빗</div><div class="ref-url">goldenrabbit.co.kr</div></div></a>
-        <a href="https://bjpublic.tistory.com/373" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">비제이퍼블릭</div><div class="ref-url">bjpublic.tistory.com</div></div></a>
-        <a href="https://www.booksr.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">생능출판사</div><div class="ref-url">booksr.co.kr</div></div></a>
-        <a href="https://www.smartbooks21.com/" target="_blank" rel="noopener" class="ref-link" style="--rc:var(--gold2);"><span class="ref-icon">📕</span><div><div class="ref-name">스마트북스</div><div class="ref-url">smartbooks21.com</div></div></a>
-      </div>
-    </div>
-
-    <!-- 탭 4: 출판 기관 -->
-    <div class="ref-panel" id="rp4" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;">
-        <a href="https://www.mcst.go.kr/site/main.jsp" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🏛</span><div><div class="ref-name">문화체육관광부</div><div class="ref-url">mcst.go.kr</div></div></a>
-        <a href="https://www.kocca.kr/kocca/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🎨</span><div><div class="ref-name">한국콘텐츠진흥원</div><div class="ref-url">kocca.kr</div></div></a>
-        <a href="https://bookapply.kpipa.or.kr/front/main.do" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">📋</span><div><div class="ref-name">출판문화사업진흥원</div><div class="ref-url">kpipa.or.kr</div></div></a>
-        <a href="https://www.kopus.org/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🤝</span><div><div class="ref-name">한국출판인회의</div><div class="ref-url">kopus.org</div></div></a>
-        <a href="https://bnk.kpipa.or.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🗄</span><div><div class="ref-name">출판전산망</div><div class="ref-url">bnk.kpipa.or.kr</div></div></a>
-        <a href="https://baro.kpipa.or.kr/front/login/loginPage.do?gubun=1" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">📱</span><div><div class="ref-name">전자책바로</div><div class="ref-url">baro.kpipa.or.kr</div></div></a>
-        <a href="https://www.epage.co.kr/home/home.page?cmd=home-service" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🔗</span><div><div class="ref-name">한국전자출판협동조합</div><div class="ref-url">epage.co.kr</div></div></a>
-        <a href="http://e-kpc.co.kr/" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">📊</span><div><div class="ref-name">한국출판콘텐츠</div><div class="ref-url">e-kpc.co.kr</div></div></a>
-        <a href="https://www.biznavi.co.kr/taskManage/page2" target="_blank" rel="noopener" class="ref-link" style="--rc:#DC2626;"><span class="ref-icon">🧭</span><div><div class="ref-name">비즈나비</div><div class="ref-url">biznavi.co.kr</div></div></a>
-      </div>
-    </div>
-
   </div>
 </div><!-- /s11 -->
+
+<!-- ══ S12: 저·역자 관리 ══ -->
+<div id="s12" class="section">
+  <div class="page-header" style="background:linear-gradient(135deg,#3A2000 0%,#8A5A00 60%,#1A1000 100%);">
+    <div class="ph-eyebrow">AUTHORS & TRANSLATORS · 에이콘출판사</div>
+    <h1 class="ph-title">저·역자 관리 <span style="font-size:.55em;font-weight:400;opacity:.7">People</span></h1>
+    <p class="ph-sub">저자 및 역자 정보를 검색하고 관리합니다.</p>
+  </div>
+  <div class="content">
+    <!-- 검색 / 필터 -->
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;">
+      <input id="ppl-search" type="text" placeholder="🔍 이름·분야·소속 검색…"
+        style="flex:1;min-width:200px;padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;"
+        oninput="pplFilter()">
+      <select id="ppl-type" onchange="pplFilter()"
+        style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
+        <option value="">전체 (저자+역자)</option>
+        <option value="author">저자만</option>
+        <option value="translator">역자만</option>
+      </select>
+      <select id="ppl-grade" onchange="pplFilter()"
+        style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
+        <option value="">등급 전체</option>
+        <option value="A">A등급</option>
+        <option value="B">B등급</option>
+        <option value="C">C등급</option>
+      </select>
+      <span id="ppl-count" style="font-size:12px;color:var(--text3);white-space:nowrap;"></span>
+      <button onclick="pplOpenModal()" style="padding:9px 18px;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">➕ 신규 등록</button>
+    </div>
+    <!-- 목록 -->
+    <div id="ppl-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;"></div>
+
+    <!-- 상세/편집 모달 -->
+    <div id="ppl-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface);border-radius:16px;padding:0;width:100%;max-width:680px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+        <div id="ppl-modal-hdr" style="padding:18px 24px;background:var(--gold2);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <div style="font-size:15px;font-weight:800;color:#fff;flex:1;" id="ppl-modal-title">저·역자 정보</div>
+          <button onclick="pplSave()" style="padding:7px 18px;background:#fff;color:var(--gold2);border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">💾 저장</button>
+          <button onclick="pplCloseModal()" style="background:none;border:none;font-size:20px;color:rgba(255,255,255,.8);cursor:pointer;padding:4px;">✕</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:20px 24px;" id="ppl-modal-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- .main -->
 
 <script>
@@ -3894,7 +3889,8 @@ function nav(id, subTabId) {
       });
     }, 120);
   }
-  if (id === 's11') { setTimeout(function(){ if(typeof refTab==='function') refTab(0, document.querySelector('#s11 .ref-tab')); }, 50); }
+  if (id === 's11') { setTimeout(function(){ if(typeof refInit==='function') refInit(); }, 60); }
+  if (id === 's12') { setTimeout(function(){ if(typeof pplInit==='function') pplInit(); }, 80); }
 }
 
 // ── LANGUAGE SYSTEM ──────────────────────────────────────────
@@ -5084,6 +5080,772 @@ function mnRemoveThread(noteId,threadId){
   n.threads=(n.threads||[]).filter(function(t){return t.id!==threadId;});
   n.updated_at=new Date().toISOString();mnUpsert(n);mnLoad();mnView(noteId);
 }
+
+
+// ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+// 참고 사이트 — 기관별 계층 관리 시스템
+// 구조: 기관(parent) → 부서/지점 담당자(contacts[])
+// ════════════════════════════════════════════════════════
+
+var REF_TABS = [
+  {id:0,label:'🏢 회사&SNS',    type:'link',   color:'var(--blue)'},
+  {id:1,label:'🌐 에이콘 시스템',type:'link',   color:'#7A1F2B'},
+  {id:2,label:'🛒 유통사',       type:'org',    color:'var(--teal)'},
+  {id:3,label:'📡 IT미디어',     type:'org',    color:'var(--blue)'},
+  {id:4,label:'🌍 해외출판사',   type:'link',   color:'var(--purple)'},
+  {id:5,label:'🤝 에이전시',     type:'agency', color:'var(--purple)'},
+  {id:6,label:'🏛 국내출판사',   type:'link',   color:'var(--gold2)'},
+  {id:7,label:'📋 출판기관',     type:'link',   color:'#DC2626'},
+  {id:8,label:'⭐ 즐겨찾기',     type:'link',   color:'var(--teal)'},
+];
+var REF_KEY = 'acorn_ref_v3';
+var REF_CURRENT_TAB = 0;
+var FINPUT_S = 'width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;';
+
+// ── 빌트인 링크 ──────────────────────────────────────────────
+var REF_LINK_ORGS = [
+  {id:'b0_1',tab:0,name:'홈페이지',url:'https://www.acornpub.co.kr/',icon:'🌐',memo:''},
+  {id:'b0_2',tab:0,name:'에이콘 블로그',url:'https://www.acornpub.co.kr/blog',icon:'✍️',memo:''},
+  {id:'b0_3',tab:0,name:'LinkedIn',url:'https://www.linkedin.com/in/booktori42/',icon:'💼',memo:''},
+  {id:'b0_4',tab:0,name:'YouTube',url:'https://www.youtube.com/@booktory_acornon',icon:'▶',memo:''},
+  {id:'b0_5',tab:0,name:'X (Twitter)',url:'https://x.com/acornpublisher',icon:'𝕏',memo:''},
+  {id:'b0_6',tab:0,name:'Facebook',url:'https://www.facebook.com/acornpub',icon:'f',memo:''},
+  {id:'b0_7',tab:0,name:'Instagram',url:'https://www.instagram.com/acorn_pub',icon:'📷',memo:''},
+  {id:'b0_8',tab:0,name:'뉴스레터',url:'https://www.acornpub.co.kr/contact/newsletter',icon:'📧',memo:''},
+  {id:'b1_1',tab:1,name:'출판사 포털',url:'https://publisher.acornpub.kr/login',icon:'🏢',memo:'내부 관리'},
+  {id:'b1_2',tab:1,name:'저자 사이트',url:'https://author.acornpub.kr/',icon:'✍️',memo:'저자 원고 제출'},
+  {id:'b1_3',tab:1,name:'에이콘 NOTION',url:'https://app.notion.com/p/HOME-121b5bc6231880b0a43ef1a75f3cc463',icon:'📓',memo:'팀 지식 관리'},
+  {id:'b1_4',tab:1,name:'이카운트 ERP',url:'https://login.ecount.com/Login/KR/',icon:'📊',memo:'재고·회계'},
+  {id:'b4_1',tab:4,name:'Edelweiss',url:'https://www.edelweiss.plus/#dashboard',icon:'🌸',memo:''},
+  {id:'b4_2',tab:4,name:"O'Reilly",url:'https://www.oreilly.com/',icon:'🦦',memo:''},
+  {id:'b4_3',tab:4,name:'No Starch Press',url:'https://nostarch.com/',icon:'⭐',memo:''},
+  {id:'b4_4',tab:4,name:'MIT Press',url:'https://mitpress.mit.edu/',icon:'🎓',memo:''},
+  {id:'b4_5',tab:4,name:'Wiley',url:'https://www.wiley.com/en-kr',icon:'📘',memo:''},
+  {id:'b4_6',tab:4,name:'Pearson',url:'https://www.pearson.com/',icon:'📗',memo:''},
+  {id:'b4_7',tab:4,name:'Manning',url:'https://www.manning.com/',icon:'📗',memo:''},
+  {id:'b4_8',tab:4,name:'Packt',url:'https://www.packtpub.com/',icon:'📙',memo:''},
+  {id:'b4_9',tab:4,name:'Oxford Univ. Press',url:'https://global.oup.com/',icon:'🎓',memo:''},
+  {id:'b4_10',tab:4,name:'Penguin Random House',url:'https://www.penguinrandomhouse.com/',icon:'🐧',memo:''},
+  {id:'b4_11',tab:4,name:'Cambridge Univ. Press',url:'https://www.cambridge.org/',icon:'📘',memo:''},
+  {id:'b4_12',tab:4,name:'Harvard Business Review',url:'https://hbr.org/',icon:'💼',memo:''},
+  {id:'b4_13',tab:4,name:"O'Reilly 정리",url:'https://docs.google.com/spreadsheets/d/1-miJAMk_MfZ_zrT6YbU-jUN06Cm4Hpaw0ctB7hdThXg/edit',icon:'📊',memo:'Google Sheets'},
+  {id:'b6_1',tab:6,name:'제이펍',url:'https://jpub.tistory.com/notice/1074',icon:'📕',memo:''},
+  {id:'b6_2',tab:6,name:'책만',url:'https://www.onlybook.co.kr/',icon:'📕',memo:''},
+  {id:'b6_3',tab:6,name:'인사이트',url:'https://ebook.insightbook.co.kr/',icon:'📕',memo:''},
+  {id:'b6_4',tab:6,name:'이지스퍼블리싱',url:'https://www.easyspub.co.kr/',icon:'📕',memo:''},
+  {id:'b6_5',tab:6,name:'한빛미디어',url:'https://www.hanbit.co.kr/',icon:'📕',memo:''},
+  {id:'b6_6',tab:6,name:'길벗',url:'https://www.gilbut.co.kr/',icon:'📕',memo:''},
+  {id:'b6_7',tab:6,name:'위키북스',url:'https://wikibook.co.kr/',icon:'📕',memo:''},
+  {id:'b6_8',tab:6,name:'페스트북',url:'https://festbook.co.kr/',icon:'📕',memo:''},
+  {id:'b6_9',tab:6,name:'골드래빗',url:'https://goldenrabbit.co.kr/',icon:'🐰',memo:''},
+  {id:'b6_10',tab:6,name:'비제이퍼블릭',url:'https://bjpublic.tistory.com/373',icon:'📕',memo:''},
+  {id:'b6_11',tab:6,name:'생능출판사',url:'https://www.booksr.co.kr/',icon:'📕',memo:''},
+  {id:'b6_12',tab:6,name:'스마트북스',url:'https://www.smartbooks21.com/',icon:'📕',memo:''},
+  {id:'b7_1',tab:7,name:'문화체육관광부',url:'https://www.mcst.go.kr/site/main.jsp',icon:'🏛',memo:''},
+  {id:'b7_2',tab:7,name:'한국콘텐츠진흥원',url:'https://www.kocca.kr/kocca/main.do',icon:'🎨',memo:''},
+  {id:'b7_3',tab:7,name:'출판문화사업진흥원',url:'https://bookapply.kpipa.or.kr/front/main.do',icon:'📋',memo:''},
+  {id:'b7_4',tab:7,name:'한국출판인회의',url:'https://www.kopus.org/',icon:'🤝',memo:''},
+  {id:'b7_5',tab:7,name:'출판전산망',url:'https://bnk.kpipa.or.kr/',icon:'🗄',memo:''},
+  {id:'b7_6',tab:7,name:'전자책바로',url:'https://baro.kpipa.or.kr/front/login/loginPage.do?gubun=1',icon:'📱',memo:''},
+  {id:'b7_7',tab:7,name:'한국전자출판협동조합',url:'https://www.epage.co.kr/home/home.page?cmd=home-service',icon:'🔗',memo:''},
+  {id:'b7_8',tab:7,name:'한국출판콘텐츠',url:'http://e-kpc.co.kr/',icon:'📊',memo:''},
+  {id:'b7_9',tab:7,name:'ISBN 국가번호',url:'https://www.nl.go.kr/isbn',icon:'🔢',memo:''},
+  {id:'b7_10',tab:7,name:'세종도서 공모',url:'https://www.sejongbook.kr',icon:'🏆',memo:''},
+  {id:'b7_11',tab:7,name:'아마존 KDP',url:'https://kdp.amazon.com',icon:'🌍',memo:''},
+];
+
+// 유통사 (기관별)
+var DIST_ORGS = {"교보문고": {"url": "https://docs.google.com/spreadsheets/d/1uCcOdC1xBYbcz5zjdJsSro2IJwvt-C26klPlW6ZidwM/edit?gid=1908115336#gid=1908115336&r", "contacts": [{"dept": "", "name": "", "tel": "", "email": "new@kyobobook.com", "note": "도서 예약 판매, 서지 정보 등록"}, {"dept": "구매팀 PM", "name": "노지연", "tel": "02-2076-0340", "email": "jiyeon20@kyobobook.com", "note": "신간도서 발주 및 구매, 오프라인 및 부곡리 입출고 확인, 협의반품"}, {"dept": "온라인 MD", "name": "신수진", "tel": "02-3156-3709", "email": "sj@kyobobook.com", "note": "북시티 입출고 확인, 신간 온라인 마케팅 관련"}, {"dept": "전자책", "name": "허이진", "tel": "02-3156-3784", "email": "ilook@kyobobook.com", "note": ""}, {"dept": "광화문점", "name": "최슬기", "tel": "02-397-3431", "email": "choisk_84@kyobobook.com", "note": "컴퓨터 분야"}, {"dept": "광화문점", "name": "임윤옥", "tel": "010-3151-0128", "email": "", "note": "경제경영 분야"}, {"dept": "광화문점", "name": "이영희 차장", "tel": "02-397-3427", "email": "kjly@kyobobook.com", "note": "경제경영 광고"}, {"dept": "강남점", "name": "정진범 차장", "tel": "02-530-0332", "email": "citygall@kyobobook.co.kr", "note": "컴퓨터 분야"}, {"dept": "강남점", "name": "이세진 차장", "tel": "02-530-0330", "email": "sjlee@kybobook.co.kr", "note": "사회/과학 분야"}, {"dept": "강남점", "name": "유영미 차장", "tel": "02-530-0330/010-8733-3965", "email": "kbbk3590@kyobobook.com", "note": "사회/과학 분야"}]}, "YES24": {"url": "", "contacts": [{"dept": "구매기획팀", "name": "김채영 매니저", "tel": "02-3215-9516", "email": "cykim@yes24.com", "note": "도서 발주 및 구매, 입출고 확인, 재고 및 품절판 관리, 출판사 신규거래"}, {"dept": "서지 정보 등록", "name": "", "tel": "", "email": "book@yes24.com", "note": "도서 예약 판매, 서지 정보 등록"}, {"dept": "PD", "name": "배승연 PD", "tel": "02-3215-9347", "email": "bsy0627@yes24.com", "note": "신간 홍보, 담당 분야 도서 마케팅, 프로모션 관련"}, {"dept": "전자책", "name": "이석영 PD", "tel": "02-3215-9290", "email": "tjrdud@yes24.com", "note": ""}]}, "알라딘": {"url": "", "contacts": [{"dept": "도서팀", "name": "김채희", "tel": "02-6913-2622", "email": "chaeng@aladin.co.kr", "note": "도서 발주, 담당 분야 도서 마케팅, 프로모션 관련"}, {"dept": "서지 정보 등록", "name": "", "tel": "", "email": "paper@aladin.co.kr", "note": "도서 예약 판매, 서지 정보 등록"}, {"dept": "전자책", "name": "이영화", "tel": "02-6913-2680", "email": "yhyi@aladin.co.kr", "note": ""}]}, "영풍문고": {"url": "", "contacts": [{"dept": "서적팀", "name": "고경모", "tel": "02-399-6423", "email": "seckoh@ypbooks.co.kr", "note": ""}, {"dept": "보도자료", "name": "이남희 대리", "tel": "02-399-6453", "email": "newbooks@ypbooks.co.kr", "note": ""}]}, "리브로": {"url": "", "contacts": [{"dept": "", "name": "김용진", "tel": "070-4726-2887", "email": "", "note": ""}]}, "리디북스": {"url": "", "contacts": [{"dept": "리디CP사이트", "name": "-", "tel": "-", "email": "payment@ridi.com", "note": "홈페이지 문의 등록"}]}, "쿠팡": {"url": "", "contacts": [{"dept": "발주 담당자", "name": "박소진", "tel": "", "email": "sopark177@coupang.com", "note": ""}]}, "서울북주식회사": {"url": "", "contacts": [{"dept": "대표", "name": "한경섭", "tel": "031-848-9771", "email": "han77555@naver.com", "note": "한국전파진흥협회, hpe교육센터, 아시아경제, 쌍용교육센터. 한국s/w인재개발원"}]}, "신한전문서적": {"url": "", "contacts": [{"dept": "대표", "name": "김덕헌", "tel": "031-942-9851", "email": "kangcoms@naver.com", "note": ""}]}, "디엠도서유통": {"url": "", "contacts": [{"dept": "대표", "name": "신중관", "tel": "031-944-5861", "email": "dmbooks@daum.net", "note": "오픈이지북스, 4세대아카데미"}]}, "비전북스": {"url": "", "contacts": [{"dept": "대표", "name": "구본경", "tel": "010-6471-4470", "email": "koo4470@gmail.com", "note": ""}]}, "(부산)영광도서": {"url": "", "contacts": [{"dept": "대표", "name": "김윤환", "tel": "051-816-9500", "email": "tax@ykbook.com", "note": ""}]}, "가람디엠씨": {"url": "", "contacts": [{"dept": "대표", "name": "전우찬", "tel": "02-835-6855", "email": "ss3355@nate.com", "note": ""}]}, "세연도서": {"url": "", "contacts": [{"dept": "대표", "name": "송재호", "tel": "031-938-0124", "email": "sybook01@naver.com", "note": "한국정보교육원"}]}, "더송북": {"url": "", "contacts": [{"dept": "대표", "name": "송재혁", "tel": "031-935-6933", "email": "thesongbook@naver.co", "note": ""}]}, "가산동 학술정보": {"url": "", "contacts": [{"dept": "대표", "name": "오수민", "tel": "070-4895-6078", "email": "haksul1@korea.com", "note": ""}]}, "스쿨라이프": {"url": "", "contacts": [{"dept": "대표", "name": "반평관", "tel": "053-426-8289", "email": "ban0220@hanmail.net", "note": ""}]}, "고성도서유통": {"url": "", "contacts": [{"dept": "대표", "name": "고형식", "tel": "02-529-7996", "email": "wabook@hanmail.net", "note": ""}]}, "(을지로)대신서적": {"url": "", "contacts": [{"dept": "대표", "name": "박대봉", "tel": "02-707-2193", "email": "dsbc@hanafos.com", "note": ""}]}, "거래처": {"url": "", "contacts": [{"dept": "", "name": "담당자", "tel": "전화번호", "email": "이메일", "note": "비고"}]}, "날개물류 부곡리": {"url": "", "contacts": [{"dept": "본사", "name": "이호성 이사", "tel": "010-3319-1206", "email": "lee3361@nalgae.co.kr", "note": "https://www.nalgae.com/"}, {"dept": "본사", "name": "민병희 본부장", "tel": "010-6430-0859", "email": "mbh@nalgae.co.kr", "note": ""}, {"dept": "본사 전산", "name": "우현정 대리", "tel": "", "email": "", "note": ""}, {"dept": "본사 전산 주담당", "name": "한설희 사원", "tel": "031-940-1355", "email": "", "note": "경기도 파주시 파주읍 윗가마울길 77 ㈜날개물류"}, {"dept": "날개프로그램 개발팀", "name": "ID생성 연락 : 영업부 이호성 실장님 (031-940-1311)\nID권한부여 담당 : 주 담당자-전성귀 부장님 (031-940-1364) / 권의영 실장님 (031-940-1366)", "tel": "", "email": "", "note": ""}]}, "날개물류 오금리": {"url": "", "contacts": [{"dept": "현장담당", "name": "이시호 팀장", "tel": "010-8895-5685", "email": "", "note": "경기도 파주시 탄현면 오금리 59-2번지, ㈜날개물류"}]}, "더드림": {"url": "", "contacts": [{"dept": "날개 랩핑", "name": "", "tel": "010-6217-1416", "email": "", "note": "경기도 파주시 파주읍 여울길 310-47 더드림"}]}, "드림날개": {"url": "", "contacts": [{"dept": "본사", "name": "", "tel": "031-945-6001", "email": "", "note": ""}, {"dept": "수거담당", "name": "", "tel": "010-2886-3778", "email": "", "note": ""}]}, "모아시스": {"url": "", "contacts": [{"dept": "", "name": "형남석 사장", "tel": "02-374-6102\n010-2712-0185", "email": "", "note": ""}]}, "CJ대한통운": {"url": "", "contacts": [{"dept": "", "name": "", "tel": "010-2644-8744", "email": "", "note": "010-7592-8082•기사님께 직접 전화요망\n010-3228-6280•장애 OP문의(전산문의) 대표 배우자\n010-8868-6280"}]}, "다모아OA": {"url": "", "contacts": [{"dept": "", "name": "", "tel": "02-2217-2100", "email": "", "note": ""}]}, "농협은행": {"url": "", "contacts": [{"dept": "목동역금융센터", "name": "백승훈 팀장", "tel": "02-2640-0029, 010-8511-7906", "email": "trinitas78@nonghyup.com", "note": "기업대출 담당"}, {"dept": "", "name": "이재은 계장", "tel": "02-2640-0022", "email": "nacf0076-1@nonghyup.com", "note": "퇴직연금, 해외송금"}]}, "에릭양 에이전시": {"url": "", "contacts": [{"dept": "", "name": "최일인", "tel": "", "email": "eya-assistant1@eyagency.com", "note": ""}]}, "한국저작권센터": {"url": "", "contacts": [{"dept": "", "name": "이조은 차장", "tel": "02-725-3350 (109)", "email": "jelee@kccseoul.com", "note": ""}]}, "대니홍 에이전시": {"url": "", "contacts": [{"dept": "", "name": "홍대규 대표", "tel": "02-6402-8890, 02-332-4319, 070-4848-0043", "email": "danny@dannyhong.co.kr", "note": ""}, {"dept": "", "name": "백미나", "tel": "02-6402-8890", "email": "mina@dannyhong.co.kr", "note": ""}]}, "듀란킴 에이전시": {"url": "", "contacts": [{"dept": "", "name": "김두환 대표", "tel": "02-583-5724, 5725", "email": "duran@durankim.com", "note": ""}, {"dept": "", "name": "김다정 부장", "tel": "02-583-5724, 5725", "email": "dajeong@durankim.com", "note": ""}]}, "알렉스리 에이전시": {"url": "", "contacts": [{"dept": "", "name": "이주연 대표", "tel": "02-3676-0290", "email": "alex@alexleeagency.com", "note": ""}, {"dept": "", "name": "이기수 이사", "tel": "", "email": "gslee@alexleeagency.com", "note": ""}]}, "AMO 에이전시": {"url": "", "contacts": [{"dept": "", "name": "노아미 팀장", "tel": "031-211-4160", "email": "amoagency@gmail.com", "note": ""}, {"dept": "", "name": "노아모 실장", "tel": "031-211-4160", "email": "amonoh@gmail.com", "note": ""}]}, "임프리마": {"url": "", "contacts": [{"dept": "Foreign Rights", "name": "이지윤", "tel": "02-325-9155 (205)", "email": "stacylee@imprima.co.kr", "note": ""}, {"dept": "경영지원팀", "name": "조유경 과장", "tel": "02-325-9155 (401)", "email": "ykcho@imprima.co.kr", "note": ""}]}, "시에나조 에이전시": {"url": "", "contacts": [{"dept": "", "name": "조민예 실장", "tel": "010-3094-6541", "email": "sienna@siennajoagency.com", "note": ""}]}, "Brockman, Inc": {"url": "", "contacts": [{"dept": "", "name": "Max Brockman", "tel": "+1.212.935.8900, ext 140\nmobile: +1.917.842.1656", "email": "max@brockman.com", "note": ""}, {"dept": "", "name": "Russell Weinberger", "tel": "212.935.8900 ext. 160\nmobile:+1.917.842.0661", "email": "weinberger@brockman.com", "note": ""}]}};
+// IT미디어 (기관별)
+var MEDIA_ORGS = {"북피알": {"desc": "기자리스트를 매일 업데이트해서 담당 기자 바로 확인 가능", "email": "bookprm@naver.com", "contacts": []}, "지디넷코리아": {"desc": "", "email": "", "contacts": [{"name": "김익현", "topic": "", "email": "sini@zdnet.co.kr"}]}, "ITWorld": {"desc": "IDG 운영", "email": "editor@itworld.co.kr", "contacts": [{"name": "이안나", "topic": "클라우드", "email": "anna@ddaily.co.kr"}]}, "Foundry": {"desc": "IDG 운영 / Global Marketers", "email": "", "contacts": []}, "CIO Korea": {"desc": "비지니스 리더 성공사례 및 인터뷰", "email": "", "contacts": []}, "케이벤치": {"desc": "", "email": "", "contacts": []}, "테크수다": {"desc": "", "email": "", "contacts": [{"name": "도안구", "topic": "", "email": "eyeball@techsuda.com"}]}, "아웃스탠딩 광고": {"desc": "", "email": "", "contacts": []}, "플래텀": {"desc": "", "email": "", "contacts": []}, "기글하드웨어": {"desc": "", "email": "", "contacts": []}, "IT동아": {"desc": "", "email": "", "contacts": [{"name": "한만혁", "topic": "AI", "email": "mh@itdonga.com"}]}, "IT조선": {"desc": "", "email": "", "contacts": [{"name": "송가영", "topic": "게임/콘텐츠", "email": "sgy0116@chosunbiz.com"}]}, "ETNews": {"desc": "", "email": "", "contacts": [{"name": "박두호", "topic": "AI / 클라우드", "email": "walnut_park@etnews.com"}]}, "디지털타임스": {"desc": "", "email": "", "contacts": [{"name": "김광태", "topic": "", "email": "ktkim@dt.co.kr"}]}, "디지털데일리": {"desc": "", "email": "", "contacts": [{"name": "이나연", "topic": "게임/웹툰", "email": ""}]}, "웹진 인벤": {"desc": "", "email": "", "contacts": [{"name": "강승진", "topic": "게임/웹툰", "email": "Looa@inven.co.kr"}]}, "대한출판문화협회": {"desc": "https://www.kpa21.or.kr/", "email": "", "contacts": []}, "한국출판인회의": {"desc": "https://www.kopus.org/", "email": "", "contacts": []}, "출판물불법유통신고": {"desc": "https://e.kpipa.or.kr/cleanBook/main/main.do", "email": "", "contacts": []}, "출핀유통통합전산망": {"desc": "https://bnk.kpipa.or.kr/home/", "email": "", "contacts": []}, "sbi(출판업교육)": {"desc": "http://sbin.or.kr/Education/yearcalendar.aspx", "email": "", "contacts": []}, "북피알미디어": {"desc": "https://www.bookprmedia.com/#", "email": "", "contacts": []}, "책과 콩나무": {"desc": "1004_nada@enterskorea.com", "email": "", "contacts": []}};
+// 에이전시
+var AGENCY_ORGS = [
+  {id:'ag1',name:'에릭양 에이전시 (EYA)',publishers:'Oxford · Wiley · Pearson · Penguin Random House',url:'https://www.eyagency.com',color:'var(--purple)',contacts:[{id:'agc1_1',dept:'',name:'Yujung Kim',tel:'+82-2-592-3356 / Fax +82-2-592-3359',email:'eya-assistant4@eyagency.com',note:'3F, e-Building 20, Seochojungang-ro 33-gil, Seocho-Gu, Seoul 06593'}]},
+  {id:'ag2',name:'대니홍 에이전시 (DHA)',publishers:'Manning · Watson · Little Ltd',url:'https://dannyhong.co.kr',color:'var(--teal)',contacts:[{id:'agc2_1',dept:'',name:'전선우 Sonu John',tel:'+82-70-4210-2979 / +82-2-6402-8890',email:'sonu@dannyhong.co.kr',note:'#201, 50 Donggyo-ro 22-gil, Mapo-gu, Seoul 04030'}]},
+  {id:'ag3',name:'듀란킴 에이전시 (DKA)',publishers:'일본 출판사 외',url:'',color:'var(--gold2)',contacts:[{id:'agc3_1',dept:'',name:'정다영 사원',tel:'02-583-5724/5725',email:'japandka@durankim.com',note:'서울시 서초구 반포대로 18길 56, 센츄리2오피스텔 203호 (06651)'}]},
+  {id:'ag4',name:'한국저작권센터 (KCC)',publishers:'Harvard Business Review Press · 알렉스리',url:'https://www.kcc.go.kr',color:'#DC2626',contacts:[{id:'agc4_1',dept:'',name:'이조은 차장',tel:'',email:'',note:'서울 종로구 사직로 8길 34, 경희궁의 아침 3단지 오피스텔 520호 (03174)'}]},
+];
+
+// 사용자 데이터
+var REF_USER = [];
+
+function refUID(p){ return (p||'u')+Date.now().toString(36)+Math.random().toString(36).slice(2,4); }
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function refGetHidden(){ try{return JSON.parse(localStorage.getItem('ref_hidden')||'[]');}catch(e){return[];} }
+function refHide(id){ var h=refGetHidden(); if(!h.includes(id))h.push(id); localStorage.setItem('ref_hidden',JSON.stringify(h)); }
+
+// ── Supabase ─────────────────────────────────────────────────
+// ── Supabase ref_sites 컬럼: id, tab, name, url, icon, memo, type, contacts, publishers ──
+// contacts, type, publishers 컬럼이 없으면 아래 SQL로 추가:
+// ALTER TABLE ref_sites ADD COLUMN IF NOT EXISTS type text DEFAULT 'link';
+// ALTER TABLE ref_sites ADD COLUMN IF NOT EXISTS contacts jsonb DEFAULT '[]';
+// ALTER TABLE ref_sites ADD COLUMN IF NOT EXISTS publishers text DEFAULT '';
+
+function refLoad(){
+  try{REF_USER=JSON.parse(localStorage.getItem(REF_KEY)||'[]');}catch(e){REF_USER=[];}
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/ref_sites?select=*&order=created_at.asc',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(r){return r.ok?r.json():null;})
+  .then(function(rows){
+    if(!rows||!rows.length) return;
+    REF_USER=rows.map(function(r){
+      return {
+        id:r.id,
+        tab:Number(r.tab||8),
+        type:r.type||'link',
+        name:r.name||'',
+        url:r.url||'',
+        icon:r.icon||'🔗',
+        memo:r.memo||'',
+        publishers:r.publishers||'',
+        contacts: Array.isArray(r.contacts) ? r.contacts
+                  : (typeof r.contacts==='string' ? JSON.parse(r.contacts||'[]') : []),
+      };
+    });
+    localStorage.setItem(REF_KEY,JSON.stringify(REF_USER));
+    refRenderCurrentTab();
+    console.log('[ref] Supabase 동기화 완료:', REF_USER.length+'건');
+  }).catch(function(e){console.warn('[ref] Supabase 로드 실패:', e.message);});
+}
+
+function refSaveOrg(org){
+  var idx=REF_USER.findIndex(function(x){return x.id===org.id;});
+  if(idx>=0)REF_USER[idx]=org;else REF_USER.push(org);
+  localStorage.setItem(REF_KEY,JSON.stringify(REF_USER));
+  if(!sbOn()) return;
+  // 테이블 컬럼에 맞게 직렬화
+  var row={
+    id:org.id,
+    tab:Number(org.tab||8),
+    name:org.name||'',
+    url:org.url||'',
+    icon:org.icon||'🔗',
+    memo:org.memo||'',
+    type:org.type||'link',
+    contacts:org.contacts||[],
+    publishers:org.publishers||'',
+    updated_at:new Date().toISOString(),
+  };
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/ref_sites',{
+    method:'POST',
+    headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify(row)
+  }).then(function(r){
+    if(r.ok) console.log('[ref] upsert OK:', org.name);
+    else r.text().then(function(t){console.warn('[ref] upsert FAIL:',r.status,t);});
+  }).catch(function(e){console.warn('[ref] upsert ERROR:',e.message);});
+}
+
+function refDeleteOrg(id){
+  REF_USER=REF_USER.filter(function(x){return x.id!==id;});
+  localStorage.setItem(REF_KEY,JSON.stringify(REF_USER));
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/ref_sites?id=eq.'+encodeURIComponent(id),
+    {method:'DELETE',headers:sbHeaders()}
+  ).then(function(r){
+    if(r.ok) console.log('[ref] delete OK:', id);
+  }).catch(function(e){console.warn('[ref] delete ERROR:',e.message);});
+}
+
+// ── 탭 ───────────────────────────────────────────────────────
+function refBuildTabs(){
+  var row=document.getElementById('ref-tab-row');if(!row)return;
+  row.innerHTML=REF_TABS.map(function(t,i){
+    var a=i===REF_CURRENT_TAB;
+    return '<button onclick="refTab('+t.id+')" style="padding:9px 13px;border:none;background:none;font-size:12px;font-weight:'+(a?700:600)+';color:'+(a?'var(--blue)':'var(--text3)')+';border-bottom:2.5px solid '+(a?'var(--blue)':'transparent')+';margin-bottom:-2px;cursor:pointer;white-space:nowrap;">'+t.label+'</button>';
+  }).join('');
+}
+function refTab(idx){
+  REF_CURRENT_TAB=idx;
+  document.querySelectorAll('#ref-tab-row button').forEach(function(b,i){
+    b.style.color=i===idx?'var(--blue)':'var(--text3)';
+    b.style.fontWeight=i===idx?'700':'600';
+    b.style.borderBottomColor=i===idx?'var(--blue)':'transparent';
+  });
+  refRenderCurrentTab();
+}
+function refRenderCurrentTab(){refRenderTab(REF_CURRENT_TAB);}
+
+// ── 렌더 ─────────────────────────────────────────────────────
+function refRenderTab(idx){
+  var container=document.getElementById('ref-panels');if(!container)return;
+  var tab=REF_TABS[idx];var hidden=refGetHidden();
+  if(tab.type==='link'){
+    var bl=REF_LINK_ORGS.filter(function(l){return l.tab===idx&&!hidden.includes(l.id);});
+    var ul=REF_USER.filter(function(d){return d.tab===idx;});
+    container.innerHTML=renderLinkCards(bl.concat(ul),tab.color);
+  } else if(tab.type==='org'){
+    renderOrgTab(container,idx===2?DIST_ORGS:MEDIA_ORGS,hidden,idx,tab.color);
+  } else if(tab.type==='agency'){
+    var ua=REF_USER.filter(function(d){return d.tab===5;});
+    container.innerHTML=renderAgencySection(AGENCY_ORGS.filter(function(a){return!hidden.includes(a.id);}).concat(ua));
+  }
+}
+
+// ── 링크 카드 ─────────────────────────────────────────────────
+function renderLinkCards(items,color){
+  if(!items.length) return '<div style="text-align:center;padding:40px;color:var(--text3);">등록된 사이트가 없습니다.</div>';
+  return '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;">'
+    +items.map(function(l){
+      var domain='';try{domain=new URL(l.url).hostname.replace('www.','');}catch(e){}
+      return '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:3px solid '+(color||'var(--blue)')+';border-radius:10px;padding:11px 12px;">'
+        +'<a href="'+l.url+'" target="_blank" rel="noopener" style="text-decoration:none;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:7px;">'
+        +'<span style="font-size:19px;flex-shrink:0;">'+(l.icon||'🔗')+'</span>'
+        +'<div style="min-width:0;"><div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escH(l.name)+'</div>'
+        +(domain?'<div style="font-size:10px;color:var(--text3);">'+domain+'</div>':'')
+        +(l.memo?'<div style="font-size:10px;color:var(--text3);">'+escH(l.memo)+'</div>':'')
+        +'</div></a>'
+        +'<div style="display:flex;gap:3px;border-top:1px solid var(--border);padding-top:5px;">'
+        +'<button onclick="refOpenOrgEdit(\''+l.id+'\')" style="flex:1;padding:3px;background:none;border:1px solid var(--border);border-radius:5px;font-size:10px;cursor:pointer;color:var(--text3);">✏️ 수정</button>'
+        +'<button onclick="refDeleteLink(\''+l.id+'\')" style="padding:3px 7px;background:none;border:1px solid var(--border);border-radius:5px;font-size:10px;cursor:pointer;color:var(--ex);">🗑</button>'
+        +'</div></div>';
+    }).join('')+'</div>';
+}
+
+// ── 기관+담당자 탭 ───────────────────────────────────────────
+function renderOrgTab(container,orgsData,hidden,tabIdx,color){
+  container.innerHTML='<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">'
+    +'<input id="org-q-'+tabIdx+'" type="text" placeholder="🔍 기관·담당자·이메일 검색…" oninput="orgFilter('+tabIdx+')" '
+    +'style="flex:1;min-width:180px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">'
+    +'<span id="org-cnt-'+tabIdx+'" style="font-size:11px;color:var(--text3);"></span></div>'
+    +'<div id="org-cards-'+tabIdx+'" style="display:flex;flex-direction:column;gap:10px;"></div>';
+  orgFilter(tabIdx);
+}
+
+function orgFilter(tabIdx){
+  var q=(document.getElementById('org-q-'+tabIdx)?.value||'').toLowerCase();
+  var el=document.getElementById('org-cards-'+tabIdx);
+  var cntEl=document.getElementById('org-cnt-'+tabIdx);
+  if(!el)return;
+  var hidden=refGetHidden();
+  var orgsData=tabIdx===2?DIST_ORGS:MEDIA_ORGS;
+  var color=tabIdx===2?'var(--teal)':'var(--blue)';
+  var cards=[]; var cnt=0;
+
+  Object.keys(orgsData).forEach(function(orgName){
+    var bid='bo'+tabIdx+'_'+orgName;
+    if(hidden.includes(bid))return;
+    var org=orgsData[orgName];
+    var contacts=(org.contacts||[]).filter(function(c,ci){return !hidden.includes('bc'+tabIdx+'_'+orgName+'_'+ci);});
+    if(q){
+      var m=orgName.toLowerCase().includes(q)||contacts.some(function(c){return (c.name+c.dept+c.email+c.tel+c.note+c.reporter+c.rEmail+c.topic||'').toLowerCase().includes(q);});
+      if(!m)return;
+    }
+    cards.push({id:bid,name:orgName,url:org.url||'',contacts:contacts,color:color,isBuiltin:true,builtinKey:orgName,tabIdx:tabIdx});
+    cnt++;
+  });
+
+  REF_USER.filter(function(d){return d.tab===tabIdx&&!hidden.includes(d.id);}).forEach(function(d){
+    var contacts=(d.contacts||[]).filter(function(c){return !hidden.includes(d.id+'_c_'+c.id);});
+    if(q){
+      var m=(d.name||'').toLowerCase().includes(q)||contacts.some(function(c){return (c.name+c.dept+c.email+c.tel+c.note||'').toLowerCase().includes(q);});
+      if(!m)return;
+    }
+    cards.push({id:d.id,name:d.name||'',url:d.url||'',contacts:contacts,color:color,isBuiltin:false,builtinKey:'',tabIdx:tabIdx});
+    cnt++;
+  });
+
+  if(cntEl)cntEl.textContent='총 '+cnt+'개 기관';
+  el.innerHTML=cnt===0
+    ?'<div style="text-align:center;padding:40px;color:var(--text3);">검색 결과가 없습니다.</div>'
+    :'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">'+cards.map(function(c){return renderOrgTile(c);}).join('')+'</div>';
+}
+
+function renderOrgTile(o){
+  var clen=o.contacts.length;
+  var color=o.color||'var(--teal)';
+  return '<div onclick="refOpenDetail(\''+escH(o.id)+'\','+o.tabIdx+')" '
+    +'style="background:var(--surface);border:1.5px solid var(--border);border-top:4px solid '+color+';border-radius:12px;padding:16px;cursor:pointer;transition:.15s;position:relative;" '
+    +'onmouseover="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 20px rgba(0,0,0,.12)\'" '
+    +'onmouseout="this.style.transform=\'\';this.style.boxShadow=\'\'">'
+    +'<div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;line-height:1.3;">'+escH(o.name)+'</div>'
+    +(o.url?'<div style="font-size:10px;color:var(--text3);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+o.url.replace('https://','').replace('http://','')+'</div>':'')
+    +'<div style="margin-top:auto;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">'
+    +'<span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(0,0,0,.06);color:'+color+';">담당자 '+clen+'명</span>'
+    +'<span style="font-size:18px;color:var(--text3);">›</span>'
+    +'</div></div>';
+}
+
+function renderAgencySection(items){
+  var COLS=['var(--purple)','var(--teal)','var(--gold2)','#DC2626','var(--blue)'];
+  return '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">'
+    +items.map(function(a,i){
+      var c=a.color||COLS[i%COLS.length];
+      var clen=(a.contacts||[]).length;
+      return '<div onclick="refOpenDetail(\''+escH(a.id)+'\',5)" '
+        +'style="background:var(--surface);border:1.5px solid var(--border);border-top:4px solid '+c+';border-radius:12px;padding:16px;cursor:pointer;transition:.15s;" '
+        +'onmouseover="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 20px rgba(0,0,0,.12)\'" '
+        +'onmouseout="this.style.transform=\'\';this.style.boxShadow=\'\'">'
+        +'<div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px;">'+escH(a.name||a.agencyName||'')+'</div>'
+        +(a.publishers?'<div style="font-size:11px;color:'+c+';font-weight:700;margin-bottom:4px;">'+escH(a.publishers)+'</div>':'')
+        +(a.url?'<div style="font-size:10px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px;">'+a.url.replace('https://','')+'</div>':'')
+        +'<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">'
+        +'<span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(0,0,0,.06);color:'+c+';">담당자 '+clen+'명</span>'
+        +'<span style="font-size:18px;color:var(--text3);">›</span>'
+        +'</div></div>';
+    }).join('')+'</div>';
+}
+
+// ── 상세 모달 ────────────────────────────────────────────────
+var REF_DETAIL_OID = '';
+var REF_DETAIL_TAB = 0;
+
+function refOpenDetail(oid, tabIdx){
+  REF_DETAIL_OID=oid; REF_DETAIL_TAB=tabIdx;
+  var hidden=refGetHidden();
+  var COLS=['var(--purple)','var(--teal)','var(--gold2)','#DC2626','var(--blue)'];
+
+  // 데이터 로드
+  var name='',url='',publishers='',contacts=[],color='var(--blue)';
+  var isAgency=tabIdx===5;
+
+  if(oid.startsWith('bo')){
+    var ti=parseInt(oid.replace('bo','').split('_')[0]);
+    var bn=oid.replace('bo'+ti+'_','');
+    var od=ti===2?DIST_ORGS[bn]:MEDIA_ORGS[bn];
+    name=bn; url=od?.url||'';
+    color=ti===2?'var(--teal)':'var(--blue)';
+    contacts=(od?.contacts||[]).map(function(c,ci){
+      return Object.assign({_id:'bc'+ti+'_'+bn+'_'+ci,_builtin:true},c);
+    }).filter(function(c){return !hidden.includes(c._id);});
+  } else if(oid.startsWith('ag')){
+    var ba=AGENCY_ORGS.find(function(x){return x.id===oid;})||{};
+    name=ba.name||''; url=ba.url||''; publishers=ba.publishers||''; color=ba.color||'var(--purple)';
+    contacts=(ba.contacts||[]).map(function(ct){return Object.assign({_id:ct.id,_builtin:true},ct);});
+    isAgency=true;
+  } else {
+    var ud=REF_USER.find(function(x){return x.id===oid;})||{};
+    name=ud.name||''; url=ud.url||''; publishers=ud.publishers||'';
+    color=tabIdx===2?'var(--teal)':tabIdx===3?'var(--blue)':tabIdx===5?'var(--purple)':'var(--blue)';
+    contacts=(ud.contacts||[]).map(function(ct){return Object.assign({_id:oid+'_c_'+ct.id,_builtin:false},ct);});
+  }
+
+  // 헤더 색상
+  var hdr=document.getElementById('rdm-hdr');
+  if(hdr) hdr.style.background=color;
+  document.getElementById('rdm-title').textContent=name;
+  var sub=document.getElementById('rdm-sub');
+  if(sub) sub.textContent=publishers||(isAgency?'에이전시':'');
+  // 링크
+  var lnk=document.getElementById('rdm-link');
+  if(lnk){if(url){lnk.style.display='inline-flex';lnk.href=url;}else{lnk.style.display='none';}}
+  // 편집/삭제 버튼
+  var editBtn=document.getElementById('rdm-edit-btn');
+  var delBtn=document.getElementById('rdm-del-btn');
+  if(editBtn) editBtn.onclick=function(){refCloseDetail();refOpenOrgEdit(oid,tabIdx);};
+  if(delBtn)  delBtn.onclick=function(){refDeleteOrg2(oid,tabIdx);refCloseDetail();};
+
+  // 담당자 목록
+  var body=document.getElementById('rdm-body');
+  if(!body)return;
+
+  if(!contacts.length){
+    body.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3);"><div style="font-size:32px;margin-bottom:10px;">👤</div><div>등록된 담당자가 없습니다.</div></div>';
+  } else {
+    body.innerHTML='<div style="display:flex;flex-direction:column;gap:10px;padding-top:4px;">'
+      +contacts.map(function(ct){
+        var nm=ct.name||ct.reporter||'-';
+        var dept=ct.dept||'';
+        var tel=ct.tel||'';
+        var email=ct.email||ct.rEmail||'';
+        var note=ct.note||ct.topic||'';
+        return '<div style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">'
+          +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">'
+          +'<div>'
+          +'<div style="font-size:14px;font-weight:800;color:var(--text);">'+escH(nm)+'</div>'
+          +(dept?'<div style="font-size:11px;color:var(--text3);margin-top:2px;">'+escH(dept)+'</div>':'')
+          +'</div>'
+          +'<div style="display:flex;gap:5px;">'
+          +'<button onclick="refCloseDetail();refOpenContactModal(\''+escH(oid)+'\',\''+escH(ct._id)+'\')" '
+          +'style="padding:4px 10px;background:none;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--text3);">✏️ 수정</button>'
+          +'<button onclick="refDeleteContact(\''+escH(oid)+'\',\''+escH(ct._id)+'\');refCloseDetail();setTimeout(function(){if(REF_DETAIL_OID)refOpenDetail(REF_DETAIL_OID,REF_DETAIL_TAB);},100)" '
+          +'style="padding:4px 10px;background:none;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--ex);">🗑 삭제</button>'
+          +'</div></div>'
+          +'<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12px;color:var(--text2);line-height:1.8;">'
+          +(tel?'<span style="color:var(--text3);">📞</span><span>'+escH(tel)+'</span>':'')
+          +(email?'<span style="color:var(--text3);">📧</span><span><a href="mailto:'+email+'" style="color:var(--blue);">'+escH(email)+'</a></span>':'')
+          +(note?'<span style="color:var(--text3);">📝</span><span style="color:var(--text3);">'+escH(note)+'</span>':'')
+          +'</div></div>';
+      }).join('')+'</div>';
+  }
+
+  document.getElementById('ref-detail-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function refCloseDetail(){
+  document.getElementById('ref-detail-modal').style.display='none';
+  document.body.style.overflow='';
+}
+
+function refDetailAddContact(){
+  refCloseDetail();
+  refOpenContactModal(REF_DETAIL_OID,'');
+}
+
+// ── 추가 버튼 ────────────────────────────────────────────────
+function refOpenAddModal(){
+
+  var tab=REF_CURRENT_TAB; var tm=REF_TABS[tab];
+  var isLink=tm.type==='link';
+  var extraFields='';
+  if(isLink){
+    extraFields='<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">아이콘 (이모지)</div><input id="rm-icon" type="text" value="🔗" maxlength="4" style="width:70px;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;background:var(--s2);color:var(--text);outline:none;text-align:center;"></div>';
+  } else if(tm.type==='agency'){
+    extraFields='<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">담당 출판사</div><input id="rm-pub" type="text" placeholder="담당 출판사" style="'+FINPUT_S+'"></div>';
+  }
+  document.getElementById('ref-modal-title').textContent='➕ '+tm.label+' 기관 추가';
+  document.getElementById('ref-modal-fields').innerHTML=
+    '<input type="hidden" id="rm-mode" value="add_org"><input type="hidden" id="rm-tab" value="'+tab+'">'
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">기관명 *</div><input id="rm-name" type="text" placeholder="기관 이름" style="'+FINPUT_S+'"></div>'
+    +extraFields
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">URL</div><input id="rm-url" type="url" placeholder="https://" style="'+FINPUT_S+'"></div>'
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">메모</div><input id="rm-memo" type="text" placeholder="간단한 설명" style="'+FINPUT_S+'"></div>'
+    +'<div id="rm-msg" style="font-size:11px;color:var(--ex);min-height:14px;"></div>';
+  document.getElementById('ref-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+// 기관 정보 수정
+function refOpenOrgEdit(oid, tabIdx){
+  var tab=tabIdx!=null?tabIdx:REF_CURRENT_TAB; var tm=REF_TABS[tab];
+  var name='',url='',icon='🔗',memo='',pub='';
+  // 빌트인 링크
+  var bl=REF_LINK_ORGS.find(function(x){return x.id===oid;});if(bl){name=bl.name;url=bl.url;icon=bl.icon;memo=bl.memo;}
+  // 빌트인 에이전시
+  var ba=AGENCY_ORGS.find(function(x){return x.id===oid;});if(ba){name=ba.name;url=ba.url||'';pub=ba.publishers||'';}
+  // 빌트인 유통/미디어
+  if(oid.startsWith('bo')){var t2=parseInt(oid.replace('bo','').split('_')[0]);var bn=oid.replace('bo'+t2+'_','');var od=t2===2?DIST_ORGS[bn]:MEDIA_ORGS[bn];if(od){name=bn;url=od.url||'';}}
+  // 사용자
+  var ud=REF_USER.find(function(x){return x.id===oid;});if(ud){name=ud.name||'';url=ud.url||'';icon=ud.icon||'🔗';memo=ud.memo||'';pub=ud.publishers||'';}
+
+  var isLink=tm.type==='link';
+  var extraFields=isLink
+    ?'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">아이콘</div><input id="rm-icon" type="text" value="'+escH(icon)+'" maxlength="4" style="width:70px;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;background:var(--s2);color:var(--text);outline:none;text-align:center;"></div>'
+    :(tm.type==='agency'?'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">담당 출판사</div><input id="rm-pub" type="text" value="'+escH(pub)+'" style="'+FINPUT_S+'"></div>':'');
+
+  document.getElementById('ref-modal-title').textContent='✏️ 기관 정보 수정';
+  document.getElementById('ref-modal-fields').innerHTML=
+    '<input type="hidden" id="rm-mode" value="edit_org"><input type="hidden" id="rm-tab" value="'+tab+'">'
+    +'<input type="hidden" id="rm-oid" value="'+escH(oid)+'">'
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">기관명 *</div><input id="rm-name" type="text" value="'+escH(name)+'" style="'+FINPUT_S+'"></div>'
+    +extraFields
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">URL</div><input id="rm-url" type="url" value="'+escH(url)+'" placeholder="https://" style="'+FINPUT_S+'"></div>'
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">메모</div><input id="rm-memo" type="text" value="'+escH(memo)+'" style="'+FINPUT_S+'"></div>'
+    +'<div id="rm-msg" style="font-size:11px;color:var(--ex);min-height:14px;"></div>';
+  document.getElementById('ref-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+// 담당자 추가/수정
+function refOpenContactModal(oid,cid){
+  var dept='',name='',tel='',email='',note='';
+  if(cid){
+    // 빌트인 담당자
+    if(cid.startsWith('bc')){
+      var parts=cid.split('_'); var ti=parseInt(parts[1]); var bn2=parts.slice(2,-1).join('_'); var ci2=parseInt(parts[parts.length-1]);
+      var od2=(ti===2?DIST_ORGS:MEDIA_ORGS)[bn2]||{}; var c2=(od2.contacts||[])[ci2]||{};
+      name=c2.name||c2.reporter||''; dept=c2.dept||''; tel=c2.tel||''; email=c2.email||c2.rEmail||''; note=c2.note||c2.topic||'';
+    } else {
+      // 사용자 또는 에이전시
+      var srcOrg=REF_USER.find(function(x){return x.id===oid;})||AGENCY_ORGS.find(function(x){return x.id===oid;})||{};
+      var ct2=(srcOrg.contacts||[]).find(function(x){return x.id===cid;})||{};
+      name=ct2.name||''; dept=ct2.dept||''; tel=ct2.tel||''; email=ct2.email||''; note=ct2.note||'';
+    }
+  }
+  document.getElementById('ref-modal-title').textContent=cid?'✏️ 담당자 수정':'➕ 담당자 추가';
+  document.getElementById('ref-modal-fields').innerHTML=
+    '<input type="hidden" id="rm-mode" value="'+(cid?'edit_c':'add_c')+'">'
+    +'<input type="hidden" id="rm-oid" value="'+escH(oid)+'">'
+    +'<input type="hidden" id="rm-cid" value="'+escH(cid)+'">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">'
+    +'<div><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">담당자명 *</div><input id="rm-name" type="text" value="'+escH(name)+'" placeholder="홍길동" style="'+FINPUT_S+'"></div>'
+    +'<div><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">부서/지점</div><input id="rm-dept" type="text" value="'+escH(dept)+'" placeholder="구매팀" style="'+FINPUT_S+'"></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">'
+    +'<div><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">전화</div><input id="rm-tel" type="text" value="'+escH(tel)+'" placeholder="02-0000-0000" style="'+FINPUT_S+'"></div>'
+    +'<div><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">이메일</div><input id="rm-email" type="email" value="'+escH(email)+'" placeholder="user@example.com" style="'+FINPUT_S+'"></div>'
+    +'</div>'
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">비고/주소</div><input id="rm-note" type="text" value="'+escH(note)+'" style="'+FINPUT_S+'"></div>'
+    +'<div id="rm-msg" style="font-size:11px;color:var(--ex);min-height:14px;"></div>';
+  document.getElementById('ref-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function refCloseModal(){document.getElementById('ref-modal').style.display='none';document.body.style.overflow='';}
+
+// ── 저장 ─────────────────────────────────────────────────────
+function refModalSave(){
+  var mode=document.getElementById('rm-mode')?.value||'';
+  var msg=document.getElementById('rm-msg');
+  var g=function(id){var e=document.getElementById(id);return e?e.value.trim():'';};
+
+  if(mode==='add_org'||mode==='edit_org'){
+    var name=g('rm-name'); if(!name){if(msg)msg.textContent='기관명을 입력하세요.';return;}
+    var tab=Number(g('rm-tab')||REF_CURRENT_TAB); var tm=REF_TABS[tab];
+    var oid=g('rm-oid')||refUID('o');
+    var isBuiltin=oid&&(oid.startsWith('b')||oid.startsWith('ag'));
+    // 빌트인 수정 시 기존 contacts 보존
+    var existContacts=[];
+    if(isBuiltin){
+      if(oid.startsWith('bo')){var t3=parseInt(oid.replace('bo','').split('_')[0]);var bn3=oid.replace('bo'+t3+'_','');var od3=(t3===2?DIST_ORGS:MEDIA_ORGS)[bn3]||{};existContacts=(od3.contacts||[]).map(function(c){return Object.assign({id:refUID('c')},c);});}
+      else if(oid.startsWith('ag')){var ba3=AGENCY_ORGS.find(function(x){return x.id===oid;})||{};existContacts=JSON.parse(JSON.stringify(ba3.contacts||[]));}
+      else if(oid.startsWith('b')){existContacts=[];}
+      refHide(oid); oid=oid+'_e';
+    } else {
+      var ud2=REF_USER.find(function(x){return x.id===oid;});existContacts=ud2?ud2.contacts||[]:[];
+    }
+    var org={id:oid,tab,type:tm.type==='org'?(tab===2?'dist':'media'):(tm.type==='agency'?'agency':'link'),
+      name,url:g('rm-url'),icon:g('rm-icon')||'🔗',memo:g('rm-memo'),publishers:g('rm-pub')||'',contacts:existContacts};
+    refSaveOrg(org); refCloseModal(); refRenderTab(tab);
+
+  } else if(mode==='add_c'||mode==='edit_c'){
+    var cname=g('rm-name'); if(!cname){if(msg)msg.textContent='담당자명을 입력하세요.';return;}
+    var oid2=g('rm-oid'); var cid2=g('rm-cid');
+    var newC={id:cid2||refUID('c'),name:cname,dept:g('rm-dept'),tel:g('rm-tel'),email:g('rm-email'),note:g('rm-note')};
+    // 사용자 기관에 추가
+    var userOrg2=REF_USER.find(function(x){return x.id===oid2;});
+    if(userOrg2){
+      if(!userOrg2.contacts)userOrg2.contacts=[];
+      var ci3=userOrg2.contacts.findIndex(function(x){return x.id===cid2;});
+      if(ci3>=0)userOrg2.contacts[ci3]=newC;else userOrg2.contacts.push(newC);
+      refSaveOrg(userOrg2);
+    } else {
+      // 빌트인 → 사용자 버전 생성
+      var tab4=REF_CURRENT_TAB; var tm4=REF_TABS[tab4];
+      var existC4=[];
+      if(oid2.startsWith('bo')){var t4=parseInt(oid2.replace('bo','').split('_')[0]);var bn4=oid2.replace('bo'+t4+'_','');var od4=(t4===2?DIST_ORGS:MEDIA_ORGS)[bn4]||{};existC4=(od4.contacts||[]).map(function(c){return Object.assign({id:refUID('c')},c);});}
+      else if(oid2.startsWith('ag')){var ba4=AGENCY_ORGS.find(function(x){return x.id===oid2;})||{};existC4=JSON.parse(JSON.stringify(ba4.contacts||[]));}
+      if(cid2&&!cid2.startsWith('r')){// 기존 빌트인 담당자 교체
+        if(cid2.startsWith('bc')){var ci4=parseInt(cid2.split('_')[cid2.split('_').length-1]);existC4.splice(ci4,1,newC);}
+        else{existC4=existC4.filter(function(x){return x.id!==cid2;});existC4.push(newC);}
+      } else {existC4.push(newC);}
+      var nm4=oid2.startsWith('bo')?oid2.replace('bo'+tab4+'_',''):(AGENCY_ORGS.find(function(x){return x.id===oid2;})||{}).name||'';
+      var newOrg4={id:oid2+'_e',tab:tab4,type:tm4.type==='org'?(tab4===2?'dist':'media'):(tm4.type==='agency'?'agency':'link'),name:nm4,url:'',icon:'🔗',memo:'',publishers:'',contacts:existC4};
+      refHide(oid2); refSaveOrg(newOrg4);
+    }
+    refCloseModal(); refRenderCurrentTab();
+  }
+}
+
+// ── 삭제 ─────────────────────────────────────────────────────
+function refDeleteLink(id){
+  if(!confirm('삭제하시겠습니까?')) return;
+  if(id.startsWith('b')){refHide(id);}else{refDeleteOrg(id);}
+  refRenderCurrentTab();
+}
+function refDeleteOrg2(oid,tabIdx){
+  if(!confirm('기관을 삭제하시겠습니까? 담당자 정보도 함께 삭제됩니다.')) return;
+  var isBuiltin=oid.startsWith('b')||oid.startsWith('ag');
+  if(isBuiltin){refHide(oid);}else{refDeleteOrg(oid);}
+  var tab=tabIdx!=null?tabIdx:REF_CURRENT_TAB; refRenderTab(tab);
+}
+function refDeleteContact(oid,cid){
+  if(!confirm('담당자를 삭제하시겠습니까?')) return;
+  var userOrg=REF_USER.find(function(x){return x.id===oid;});
+  if(userOrg){
+    userOrg.contacts=(userOrg.contacts||[]).filter(function(x){return x.id!==cid;});
+    refSaveOrg(userOrg);
+  } else { refHide(cid); }
+  refRenderCurrentTab();
+  // 상세 모달이 열려있으면 갱신
+  var dm=document.getElementById('ref-detail-modal');
+  if(dm&&dm.style.display==='flex'&&REF_DETAIL_OID===oid){
+    refOpenDetail(REF_DETAIL_OID,REF_DETAIL_TAB);
+  }
+}
+
+// ── 초기화 ────────────────────────────────────────────────────
+function refInit(){ refLoad(); refBuildTabs(); refRenderTab(0); }
+
+// 저·역자 관리
+// ════════════════════════════════════════════════════════
+var PPL_KEY = 'acorn_people_v1';
+var PPL_ALL = [{"id": "t1", "name": "김성준", "type": "translator", "grade": "A", "field": "애자일, 파이썬, 테스트 자동화", "gender": "남", "email": "cheuora@gmail.com", "phone": "010-7682-1360", "org": "삼성 청년 소프트웨어 아카데미(SSAFY)", "school": "홍익대학교\n서강대학교 대학원", "degree": "학사\n석사", "major": "기계공학과\n정보통신", "career": "", "linkedIn": "", "repBook": "RESTful Web API 패턴과 모범 사례", "tools": "", "memo": "일본어"}, {"id": "t2", "name": "남기환", "type": "translator", "grade": "A", "field": "양자역학, 물리학", "gender": "남", "email": "snowall@gmail.com", "phone": "010-3949-9336", "org": "광통신레이저회사 연구원", "school": "중앙대학교 대학원", "degree": "석사", "major": "입자물리학", "career": "", "linkedIn": "", "repBook": "양자 컴퓨팅의 이해", "tools": "", "memo": ""}, {"id": "t3", "name": "이태상", "type": "translator", "grade": "A", "field": "파이썬, 리액트, 자바, 스프링, 톰캣, JSF", "gender": "남", "email": "taesang@gmail.com", "phone": "010-9064-7618", "org": "", "school": "연세대학교", "degree": "학사", "major": "자연과학부 생물학과", "career": "", "linkedIn": "", "repBook": "Tkinter를 사용한 파이썬 GUI 프로그래밍 2/e", "tools": "", "memo": ""}, {"id": "t4", "name": "최영재", "type": "translator", "grade": "A", "field": "AI, DevOps", "gender": "남", "email": "youngjae.choi1977@gmail.com", "phone": "010-4703-9812", "org": "STA테스팅컨설팅", "school": "홍익대학교", "degree": "학사", "major": "전자전기공학", "career": "", "linkedIn": "", "repBook": "해석 가능한 AI", "tools": "", "memo": ""}, {"id": "t5", "name": "김상현B", "type": "translator", "grade": "A", "field": "보안, 프라이버시, 에세이", "gender": "남", "email": "kevin.sh.kim@gmail.com", "phone": "010-3092-5576\n+1 604-362-5917\n+1 778-879-5951", "org": "캘리언 그룹(Calian Group)", "school": "토론토대학교", "degree": "석사", "major": "삼림보전", "career": "", "linkedIn": "", "repBook": "통계의 함정", "tools": "", "memo": ""}, {"id": "t6", "name": "이병욱((주)크라스랩)", "type": "translator", "grade": "A", "field": "AI, 머신러닝, 금융, R, 파이썬, LLM , 통계, 암호화폐, 퀀트", "gender": "남", "email": "byunguk@gmail.com", "phone": "010-2387-5659", "org": "AIRI 인공지능연구원 Deputy CEO, \n서울과학종합대학원대학교 디지털금융 주임교수", "school": "한국과학기술원(KAIST)", "degree": "학사\n석사", "major": "전산학과\n계산이론", "career": "", "linkedIn": "", "repBook": "LangChain으로 구현하는 LLM", "tools": "", "memo": ""}, {"id": "t7", "name": "한성곤", "type": "translator", "grade": "A", "field": "Go, 파이썬, TypeScript, 스프링 부트,  JPA, 쿠버네티스", "gender": "남", "email": "nowfly@naver.com", "phone": "010-3348-2247", "org": "삼성SDS Principal Engineer/Architect", "school": "한국교원대학교", "degree": "학사", "major": "수학과", "career": "", "linkedIn": "", "repBook": "스프링 부트 JPA 모범 사례", "tools": "", "memo": ""}, {"id": "t8", "name": "허용건", "type": "translator", "grade": "A", "field": "보안, 정보보안, 개인정보보호", "gender": "남", "email": "linkinhur@naver.com", "phone": "010-7676-9140", "org": "네이버 클라우드 보안 업무", "school": "한성대학교", "degree": "학사", "major": "컴퓨터시스템", "career": "", "linkedIn": "", "repBook": "API 보안 인 액션", "tools": "", "memo": ""}, {"id": "t9", "name": "김모세(김연수)", "type": "translator", "grade": "B", "field": "애자일, 조직 생산성, 러스트, ChatGPT", "gender": "남", "email": "creatinov.kim@gmail.com", "phone": "010-3162-7433", "org": "네이버 애자일 코치", "school": "한동대학교", "degree": "학사", "major": "전산전자공학", "career": "", "linkedIn": "", "repBook": "데브옵스 핸드북 2/e", "tools": "", "memo": "일본어"}, {"id": "t10", "name": "최만균", "type": "translator", "grade": "B", "field": "네트워크,웹 보안\n프로그래밍 언어, OS(리눅스 및 윈도우), 모바일, 데이터베이스, 클라우드\n디지털 트윈", "gender": "남", "email": "ferozah83@naver.com", "phone": "+64 22-320-5060", "org": "Livestock Improvement Corporation(LIC) Software Test Engineer", "school": "명지전문대학\nUNITEC", "degree": "학사", "major": "컴퓨터전자과\nNetwork and Data Communication", "career": "", "linkedIn": "https://www.linkedin.com/in/mankyunchoi/", "repBook": "디지털 트윈 구축과 배포", "tools": "", "memo": ""}, {"id": "t11", "name": "이정표", "type": "translator", "grade": "A", "field": "소프트웨어, 웹 개발, 모바일, 젠킨스, 알고리듬", "gender": "남", "email": "lee.jungpyo@gmail.com", "phone": "010-7300-4984", "org": "KTH 백엔드플랫폼", "school": "인하대학교", "degree": "학사", "major": "물리학", "career": "", "linkedIn": "", "repBook": "젠킨스로 배우는 CI/CD 파이프라인 구축", "tools": "", "memo": ""}, {"id": "t12", "name": "박상영", "type": "translator", "grade": "B", "field": "정보보안, 개인정보보호, AWS", "gender": "남", "email": "intothesec@gmail.com", "phone": "010-4156-6559", "org": "이커머스 기업 정보 보호 담당", "school": "학점은행제 \n한국방송통신대\n성균관대학교 대학원", "degree": "학사\n학사\n석사", "major": "정보보호\n영어영문\n정보보호", "career": "", "linkedIn": "", "repBook": "AWS 마이크로서비스 보안", "tools": "", "memo": ""}, {"id": "t13", "name": "이지성", "type": "translator", "grade": "A", "field": "언리얼, 유니티, C++, C#", "gender": "여", "email": "easystar@naver.com", "phone": "010-4308-1812", "org": "㈜에스더블유엠 책임연구원", "school": "서경대학교\n고려대학교 대학원", "degree": "학사\n석사", "major": "컴퓨터공학과\n컴퓨터정보통신공학과", "career": "", "linkedIn": "", "repBook": "언리얼 엔진 5로 제작하는 실시간 VFX (공역)", "tools": "", "memo": ""}, {"id": "t14", "name": "송정은", "type": "translator", "grade": "A", "field": "언리얼, 유니티, C#", "gender": "남", "email": "stardust1221@naver.com", "phone": "010-3888-2205", "org": "", "school": "세종대학교\n국제영어대학원대학교", "degree": "학사\n석사", "major": "컴퓨터공학\n영어교재개발학과", "career": "", "linkedIn": "", "repBook": "언리얼 엔진 5로 제작하는 실시간 VFX (공역)", "tools": "", "memo": ""}, {"id": "t15", "name": "이장훈", "type": "translator", "grade": "A", "field": "쿠버네티스, 데브옵스, 클라우드, Argo CD, 깃옵스", "gender": "남", "email": "ljhun307@naver.com", "phone": "010-8975-3917", "org": "홍익과학기술", "school": "건국대학교", "degree": "학사", "major": "영어영문", "career": "", "linkedIn": "", "repBook": "예제로 배우는 Argo CD", "tools": "", "memo": ""}, {"id": "t16", "name": "전정순", "type": "translator", "grade": "A", "field": "소설", "gender": "여", "email": "gaia8740@naver.com", "phone": "010-4509-0724", "org": "프리랜서 번역가", "school": "연세대학교", "degree": "학사", "major": "신문방송학", "career": "", "linkedIn": "", "repBook": "레디 플레이어 투", "tools": "", "memo": ""}, {"id": "t17", "name": "이진호", "type": "translator", "grade": "B", "field": "취약점 분석, 해킹, 금융보안, 리눅스, 함수형 프로그래밍", "gender": "남", "email": "ezno84@gmail.com", "phone": "010-9958-9735", "org": "금융보안원", "school": "성균관대학교\n캘리포니아 대학교 데이비스", "degree": "학사\n석사", "major": "컴퓨터교육학\n컴퓨터과학", "career": "", "linkedIn": "", "repBook": "함수형 프로그래밍 (공역)", "tools": "", "memo": ""}, {"id": "t18", "name": "한용진", "type": "translator", "grade": "B", "field": "함수형 프로그래밍", "gender": "남", "email": "yj94730@gmail.com", "phone": "+1 (530)231-2001", "org": "캘리포니아 대학교 데이비스", "school": "동국대학교 \n캘리포니아 대학교 데이비스", "degree": "학사\n석사 과정 중", "major": "컴퓨터과학", "career": "", "linkedIn": "https://www.linkedin.com/in/yongjin-han/", "repBook": "함수형 프로그래밍 (공역)", "tools": "", "memo": ""}, {"id": "t19", "name": "용환성", "type": "translator", "grade": "B", "field": "애자일", "gender": "남", "email": "hsyong71@naver.com", "phone": "010-2754-3220", "org": "(사)한국엔터프라이즈아키텍처학회 사무국장\n㈜노바테크 기획총괄 및 전사 PMO", "school": "고려대학교\n고려대학교 대학원\n한양대학교 성균관대학원", "degree": "학사\n석사\n박사", "major": "경영학\n소프트웨어공학 \n생산서비스경영", "career": "", "linkedIn": "", "repBook": "급진적 협업 기업", "tools": "", "memo": ""}, {"id": "t20", "name": "최왕용", "type": "translator", "grade": "B", "field": "소프트웨어 아키텍처", "gender": "남", "email": "choiwangyong@gmail.com", "phone": "010-6671-8186", "org": "네이버 클라우드(NAVER Cloud)", "school": "숭실대학교", "degree": "학사", "major": "컴퓨터과학", "career": "", "linkedIn": "", "repBook": "소프트웨어 성능의 이해", "tools": "", "memo": ""}, {"id": "t21", "name": "김지원B", "type": "translator", "grade": "B", "field": "Go, 클라우드, 쿠버네티스, 서비스매쉬, 개발언어", "gender": "여", "email": "kimjiwoney@gmail.com", "phone": "010-6302-3587", "org": "현대자동차", "school": "아주대학교", "degree": "학사", "major": "소프트웨어학", "career": "", "linkedIn": "", "repBook": "Pro Go", "tools": "", "memo": ""}, {"id": "t22", "name": "최준", "type": "translator", "grade": "A", "field": "쿠버네티스, Go, , 도커, 테라폼, AI, 머신러닝", "gender": "남", "email": "fullsocrates@hotmail.com", "phone": "+1 647 331 1741", "org": "코드클래식", "school": "서울시립대", "degree": "학사", "major": "기계공학", "career": "", "linkedIn": "", "repBook": "쿠버네티스로 구현하는 머신러닝", "tools": "", "memo": ""}, {"id": "t23", "name": "정대권", "type": "translator", "grade": "A", "field": "수학, 영상/음성신호처리, 통신신호처리", "gender": "남", "email": "dgjeong@kau.ac.kr", "phone": "010-3357-7432", "org": "항공전자정보공학부 명예교수", "school": "한국항공대학교\n텍사스 A&M 대학", "degree": "학사\n석사/박사", "major": "항공전자공학과\n전자공학", "career": "", "linkedIn": "", "repBook": "대학 때 놓친 수학 2/e", "tools": "", "memo": ""}, {"id": "t24", "name": "진석준", "type": "translator", "grade": "A", "field": "언리얼, 로블록스, 게임, 해킹", "gender": "남", "email": "bbjoony@gmail.com", "phone": "010-6322-7478", "org": "데브시스터즈 진저랩", "school": "동국대학교", "degree": "학사", "major": "역사학", "career": "", "linkedIn": "", "repBook": "언리얼 엔진 5로 만드는 메타휴먼 캐릭터", "tools": "", "memo": ""}, {"id": "t25", "name": "김상필", "type": "translator", "grade": "A", "field": "쿠버네티스, 클라우드 아키텍처", "gender": "남", "email": "snoopy400@gmail.com", "phone": "010-2720-0935", "org": "MongoDB", "school": "서울대학교", "degree": "학사", "major": "전자공학부", "career": "", "linkedIn": "https://www.linkedin.com/in/sangpill-kim-a5821118/", "repBook": "솔루션 아키텍트 핸드북 2/e (공역)", "tools": "", "memo": ""}, {"id": "t26", "name": "김택구", "type": "translator", "grade": "B", "field": "머신러닝, 딥러닝", "gender": "남", "email": "vanang@naver.com", "phone": "010-7226-7909", "org": "유핀테크허브 이사", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "머신러닝을 위한 효율적 데이터 레이블링 (공역)", "tools": "", "memo": ""}, {"id": "t27", "name": "정영민", "type": "translator", "grade": "B", "field": "웹 API, AWS", "gender": "남", "email": "ymjoung@amazon.com", "phone": "010-9559-1044", "org": "Amazon Web Services (AWS)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "웹 API 설계 원칙 (공역)", "tools": "", "memo": ""}, {"id": "t28", "name": "제갈호준", "type": "translator", "grade": "B", "field": "머신러닝, 딥러닝", "gender": "남", "email": "jaygarl@gmail.com", "phone": "010-3867-4234", "org": "현대 캐피탈 상무", "school": "아이오와 주립대학교", "degree": "박사", "major": "컴퓨터과학", "career": "", "linkedIn": "", "repBook": "머신러닝을 위한 효율적 데이터 레이블링 (공역)", "tools": "", "memo": ""}, {"id": "t29", "name": "김대곤", "type": "translator", "grade": "B", "field": "깃허브, 데브옵스, 클라우드", "gender": "남", "email": "ko.daegonkim@gmail.com", "phone": "010-4064-7897", "org": "AWS Professional Services 팀", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "깃허브로 완성하는 데브옵스 가속화 (공역)", "tools": "", "memo": ""}, {"id": "t30", "name": "류한진", "type": "translator", "grade": "B", "field": "깃허브, 데브옵스, 플랫폼 엔지니어링", "gender": "남", "email": "ryu.hanjin.rh@gmail.com", "phone": "010-4855-8637", "org": "Amazon Web Services (AWS)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "깃허브로 완성하는 데브옵스 가속화 (공역)", "tools": "", "memo": ""}, {"id": "t31", "name": "백준선", "type": "translator", "grade": "B", "field": "깃허브, 데브옵스, 머신러닝, 데이터", "gender": "남", "email": "joonsun.baek@gmail.com", "phone": "010-6848-3855", "org": "Amazon Web Services (AWS)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "깃허브로 완성하는 데브옵스 가속화 (공역)", "tools": "", "memo": ""}, {"id": "t32", "name": "채민관", "type": "translator", "grade": "B", "field": "깃허브, 데브옵스, 클라우드", "gender": "남", "email": "pizon.chae@gmail.com", "phone": "(대표역자와 연락함)", "org": "AWS Professional Services 팀", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "깃허브로 완성하는 데브옵스 가속화 (공역)", "tools": "", "memo": ""}, {"id": "t33", "name": "최재웅", "type": "translator", "grade": "B", "field": "깃허브, 데브옵스, MLOps, 개발자 도구, MSA", "gender": "남", "email": "xhoto.choi@gmail.com", "phone": "010-2888-7166", "org": "Amazon Web Services (AWS)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "깃허브로 완성하는 데브옵스 가속화 (공역)", "tools": "", "memo": ""}, {"id": "t34", "name": "김한주", "type": "translator", "grade": "A", "field": "루트킷, 부트킷, 보안, 기반기술", "gender": "남", "email": "hjkim3146@gmail.com", "phone": "010-3231-3146", "org": "㈜안랩 기반기술팀 수석연구원", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "Windows Internals 7/e Vol.2 (공역)", "tools": "", "memo": ""}, {"id": "t35", "name": "김기주", "type": "translator", "grade": "A", "field": "임베디드, 리눅스", "gender": "남", "email": "Kiju.kim@sun.com", "phone": "010-4532-0659", "org": "elastic.co 에듀케이션 아키텍트", "school": "포스텍", "degree": "학사/석사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "임베디드 리눅스 프로그래밍 완전정복 3/e (공역)", "tools": "", "memo": ""}, {"id": "t36", "name": "김낙일", "type": "translator", "grade": "B", "field": "애자일", "gender": "남", "email": "anvil@naver.com", "phone": "010-8978-0080", "org": "㈜네오라마 대표", "school": "건국대학교", "degree": "석사/박사", "major": "컴퓨터공학석사/경영공학박사", "career": "", "linkedIn": "", "repBook": "가치 플라이휠 효과 (공역)", "tools": "", "memo": ""}, {"id": "t37", "name": "김병극", "type": "translator", "grade": "A", "field": "임베디드, 리눅스", "gender": "남", "email": "byungkeuk.kim@gmail.com", "phone": "010-2222-2328", "org": "블랙 덕(Black Duck)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "임베디드 리눅스 프로그래밍 완전정복 3/e (공역)", "tools": "", "memo": ""}, {"id": "t38", "name": "송지연A", "type": "translator", "grade": "A", "field": "임베디드, 리눅스, 애자일", "gender": "여", "email": "onsjy12@gmail.com", "phone": "010-2898-7223", "org": "로쿠(Roku)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "임베디드 리눅스 프로그래밍 완전정복 3/e (공역)", "tools": "", "memo": ""}, {"id": "t39", "name": "황태웅", "type": "translator", "grade": "B", "field": "웹 개발, 파이썬, HTML", "gender": "남", "email": "taeung2008@gmail.com", "phone": "010-8364 -9009", "org": "롯데정보통신", "school": "경희대학교", "degree": "학사", "major": "유전공학과", "career": "", "linkedIn": "", "repBook": "생물정보학을 위한 파이썬", "tools": "", "memo": ""}, {"id": "t40", "name": "김지우", "type": "translator", "grade": "B", "field": "보안, 해킹", "gender": "여", "email": "may7460@gmail.com", "phone": "010-2014-9919", "org": "SK Telecom", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "빅 브리치: 세계를 놀라게 한 개인정보 유출사고 (공역)", "tools": "", "memo": ""}, {"id": "t41", "name": "나정호", "type": "translator", "grade": "B", "field": "쿠버네티스, 도커, 컨테이너, 클라우드", "gender": "남", "email": "skwjdgh1@gmail.com", "phone": "010-8946-3348", "org": "", "school": "한성대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "프로덕션 쿠버네티스", "tools": "", "memo": ""}, {"id": "t42", "name": "이대근A", "type": "translator", "grade": "B", "field": "보안, 해킹", "gender": "남", "email": "dynamic.kay@gmail.com", "phone": "010-2775-2222", "org": "구글(Google)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "빅 브리치: 세계를 놀라게 한 개인정보 유출사고 (공역)", "tools": "", "memo": ""}, {"id": "t43", "name": "류미경", "type": "translator", "grade": "A", "field": "애자일", "gender": "여", "email": "mkyoo2010@gmail.com", "phone": "010-9094-9080", "org": "", "school": "호주 뉴캐슬대학교", "degree": "학사", "major": "커뮤니케이션", "career": "", "linkedIn": "", "repBook": "유니콘 프로젝트 (공역)", "tools": "", "memo": ""}, {"id": "t44", "name": "박현철", "type": "translator", "grade": "A", "field": "애자일", "gender": "남", "email": "architect.mentor@gmail.com", "phone": "010-5277-3943", "org": "㈜오픈소스컨설팅", "school": "서울대학교\n연세대학교", "degree": "학사\n석사", "major": "계산통계학과\nMBA", "career": "", "linkedIn": "", "repBook": "유니콘 프로젝트 (공역)", "tools": "", "memo": ""}, {"id": "t45", "name": "문기영", "type": "translator", "grade": "A", "field": "게임, AI, 유니티", "gender": "남", "email": "kiyoungmoon@gmail.com", "phone": "010-5140-0759", "org": "TLM Partners", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "게임을 위한 AI 3/e", "tools": "", "memo": ""}, {"id": "t46", "name": "이지은B", "type": "translator", "grade": "A", "field": "UI, 자바, 안드로이드, 캔바", "gender": "여", "email": "wizand@gmail.com", "phone": "010-7220-1272", "org": "(주)악티보 감리법인", "school": "부산대학교", "degree": "학사", "major": "정보 컴퓨터 공학", "career": "", "linkedIn": "", "repBook": "캔바로 만드는 나만의 브랜드", "tools": "", "memo": ""}, {"id": "t47", "name": "최중연", "type": "translator", "grade": "A", "field": "일래스틱, 카프카", "gender": "남", "email": "newpcraft@gmail.com", "phone": "010-3055-5627", "org": "Naver Laps", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "Kafka in Action", "tools": "", "memo": ""}, {"id": "t48", "name": "윤근용(윤우빈,윤영빈)", "type": "translator", "grade": "A", "field": "보안, 해킹, 리버스 엔지니어링", "gender": "남", "email": "happyme9@empas.com", "phone": "010-4252-1272", "org": "카카오 CERT팀", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "암호화 알고리듬", "tools": "", "memo": ""}, {"id": "t49", "name": "심규대", "type": "translator", "grade": "A", "field": "UX", "gender": "남", "email": "kewday@naver.com", "phone": "010-9765-6048", "org": "신한라이프생명", "school": "한국과학기술원(KAIST)", "degree": "학사, 석사", "major": "산업디자인학과, 인터랙션 디자인", "career": "", "linkedIn": "", "repBook": "UX 원칙 2/e", "tools": "", "memo": ""}, {"id": "t50", "name": "이승준", "type": "translator", "grade": "B", "field": "C, C++, Java, 네트워킹, 컴퓨터 일반", "gender": "남", "email": "violakr0@gmail.com", "phone": "070-8252-7630", "org": "프리랜서", "school": "연세대학교", "degree": "학사", "major": "천문기상학과", "career": "", "linkedIn": "", "repBook": "게임 디자인, 프로토타입 제작, 개발 2/e", "tools": "", "memo": ""}, {"id": "t51", "name": "장세윤", "type": "translator", "grade": "B", "field": "유니티, 언리얼, 게임 개발, 안드로이드, iOS, Node.js", "gender": "남", "email": "ronniej@naver.com", "phone": "010-9500-0587", "org": "프리랜서", "school": "한성대학교", "degree": "학사", "major": "정보통신공학", "career": "", "linkedIn": "", "repBook": "프로젝트 기반으로 배우는 언리얼 엔진 5 게임 개발 2/e", "tools": "", "memo": ""}, {"id": "t52", "name": "허정준", "type": "translator", "grade": "B", "field": "파이토치, 데이터, 머신러닝", "gender": "남", "email": "soss3264@gmail.com", "phone": "010-4939-0818", "org": "크몽 데이터엔지니어/머신러닝엔지니어, 디파이퍼 대표", "school": "서울대학교", "degree": "학사", "major": "기계공학과", "career": "", "linkedIn": "", "repBook": "파이토치 라이트닝으로 시작하는 딥러닝", "tools": "", "memo": ""}, {"id": "t53", "name": "이준A", "type": "translator", "grade": "B", "field": "네트워크, 클라우드, 쿠버네티스, 도커", "gender": "남", "email": "rootfs32@gmail.com", "phone": "010-3109-5206", "org": "현대자동차그룹 카클라우드개발팀", "school": "경희대학교\n경희대학교", "degree": "학사\n석사", "major": "컴퓨터공학과\n네트워크", "career": "", "linkedIn": "", "repBook": "쿠버네티스 시작하기 3/e", "tools": "", "memo": ""}, {"id": "t54", "name": "유동하", "type": "translator", "grade": "B", "field": "웹 분석, 디지털 분석, 구글 애널리틱스, 웹마이닝, 빅데이터", "gender": "남", "email": "ddoyo@nethru.co.kr", "phone": "010-5648-5648", "org": "넷스루", "school": "경희대학교", "degree": "학사, 석사", "major": "전산학과, 경영학과", "career": "", "linkedIn": "", "repBook": "구글 애널리틱스", "tools": "", "memo": ""}, {"id": "t55", "name": "이기홍", "type": "translator", "grade": "B", "field": "금융, 투자, 머신러닝, 딥러닝", "gender": "남", "email": "keerhee@gmail.com", "phone": "010-3177-1045", "org": "PIM 자산운용본부", "school": "카네기멜론대학교\n피츠버그대학교", "degree": "석사\nPh.D", "major": "Finance", "career": "", "linkedIn": "", "repBook": "평균 회귀 트레이딩 전략의 최적 설계", "tools": "", "memo": ""}, {"id": "t56", "name": "권구주", "type": "translator", "grade": "A", "field": "컴퓨터 그래픽스", "gender": "남", "email": "mysofs@naver.com", "phone": "010-2727-9822", "org": "배화여자대학교 스마트IT학과 교수", "school": "인하대학교", "degree": "박사", "major": "컴퓨터 그래픽스", "career": "", "linkedIn": "", "repBook": "리얼-타임 렌더링 4/e (공역)", "tools": "", "memo": ""}, {"id": "t57", "name": "서형국", "type": "translator", "grade": "A", "field": "코틀린, 함수형 프로그래밍, 파이썬", "gender": "남", "email": "(대표역자와 연락함)", "phone": "010-2859-0530", "org": "LG CNS D&A연구소", "school": "한국과학기술원(KAIST)\n서강대학교 대학원", "degree": "학사\n석사", "major": "정보통신", "career": "", "linkedIn": "", "repBook": "코틀린 함수형 프로그래밍 (공역)", "tools": "", "memo": ""}, {"id": "t58", "name": "오현석(Hyunsok Oh)", "type": "translator", "grade": "A", "field": "코틀린, 스칼라, 함수형 프로그래밍", "gender": "남", "email": "enshahar@gmail.com", "phone": "Mobile: +61-420-699-551\n010-3170-6377(어머니)", "org": "모빌리티42 이사", "school": "경기과학고\n한국과학기술원(KAIST)", "degree": "석사", "major": "전산학과(프로그래밍 언어)", "career": "", "linkedIn": "", "repBook": "코틀린 함수형 프로그래밍 (공역)", "tools": "", "memo": ""}, {"id": "t59", "name": "이은석", "type": "translator", "grade": "A", "field": "컴퓨터 그래픽스", "gender": "남", "email": "elflee77@gmail.com", "phone": "010-8960-7950", "org": "유한대학교 VR게임·앱학과 교수", "school": "인하대학교", "degree": "박사", "major": "컴퓨터 그래픽스", "career": "", "linkedIn": "", "repBook": "리얼-타임 렌더링 4/e (공역)", "tools": "", "memo": ""}, {"id": "t60", "name": "임석현", "type": "translator", "grade": "A", "field": "컴퓨터 그래픽스", "gender": "남", "email": "cgwizard@gmail.com", "phone": "010-6363-3166", "org": "한양여자대학교 스마트IT과 교수", "school": "인하대학교", "degree": "학사, 석사, 박사", "major": "컴퓨터 그래픽스", "career": "", "linkedIn": "", "repBook": "리얼-타임 렌더링 4/e (공역)", "tools": "", "memo": ""}, {"id": "t61", "name": "김기돈", "type": "translator", "grade": "A", "field": "언리얼", "gender": "남", "email": "qc3067@gmail.com", "phone": "010-5767-1702", "org": "메타버스 엔터테인먼트", "school": "DigiPen 공과대학", "degree": "학사", "major": "컴퓨터공학 및 게임 개발", "career": "", "linkedIn": "", "repBook": "언리얼 엔진 5 셰이더와 이펙트 2/e", "tools": "", "memo": ""}, {"id": "t62", "name": "임형준", "type": "translator", "grade": "A", "field": "데이터 분석", "gender": "남", "email": "hyungjuneim@gmail.com", "phone": "010-3129-2392", "org": "Naver ETECH", "school": "카이스트", "degree": "학사, 석사", "major": "전산학", "career": "", "linkedIn": "", "repBook": "데이터 분석과 비판적 사고", "tools": "", "memo": ""}, {"id": "t63", "name": "김현욱", "type": "translator", "grade": "A", "field": "c++, c#, python, go, 플랫폼, 도구", "gender": "남", "email": "nnhope@hotmail.com", "phone": "010-8973-0589", "org": "스마일게이트", "school": "", "degree": "", "major": "국어국문, 컴퓨터공학", "career": "", "linkedIn": "", "repBook": "크로스 플랫폼 개발을 위한 C# 10과 .NET 6 6/e", "tools": "", "memo": ""}, {"id": "t64", "name": "고석범", "type": "translator", "grade": "A", "field": "의료, 헬스케어, 인공지능", "gender": "남", "email": "koseokbum@gmail.com", "phone": "010-8570-3667", "org": "성심요양병원 원장", "school": "가톨릭대학교", "degree": "", "major": "의과대학", "career": "", "linkedIn": "", "repBook": "인공지능 기반 의료", "tools": "", "memo": ""}, {"id": "t65", "name": "김우현", "type": "translator", "grade": "B", "field": "데이터분석, python, pytorch, R, 빅데이터", "gender": "남", "email": "woosa7@gmail.com", "phone": "010-2978-8923", "org": "프리랜서", "school": "국민대학교", "degree": "", "major": "경영대학원 빅데이터경영MBA", "career": "", "linkedIn": "", "repBook": "파이썬을 활용한 머신러닝 해석 가능성", "tools": "", "memo": ""}, {"id": "t66", "name": "반장현", "type": "translator", "grade": "A", "field": "블록체인, 암호화폐", "gender": "남", "email": "ban@tobesoft.com", "phone": "010-3162-6029", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "마스터링 블록체인 (공역)", "tools": "", "memo": ""}, {"id": "t67", "name": "장기식", "type": "translator", "grade": "A", "field": "머신러닝, 양자, 알고리즘, 그래프 머신러닝, 데이터 분석, 파이썬, 판다스, 사이버 번역, C", "gender": "남", "email": "honors@nate.com", "phone": "010-3190-3919", "org": "(주)시옷 CTO\n------------\n경찰청\n사이버안전국 디지털포렌식센터\n경찰대학 치안정책연구소", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "Effective C (공역)", "tools": "", "memo": ""}, {"id": "t68", "name": "황주필", "type": "translator", "grade": "A", "field": "istio, 코틀린, 쿠버네티스", "gender": "남", "email": "jupil.hwang@gmail.com", "phone": "010-9173-7530", "org": "Confluent", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "실용적인 마이크로서비스 아키텍처 패턴", "tools": "", "memo": ""}, {"id": "t69", "name": "동준상", "type": "translator", "grade": "A", "field": "임베디드 보안, 리눅스 가상화, 4차산업혁명 및 IoT 기반, 클라우드, 인공지능, 양자컴퓨팅 실무 활용서", "gender": "남", "email": "naebon@naver.com", "phone": "010-4801-4118", "org": "넥스트플랫폼 대표", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "AWS 공인 솔루션스 아키텍트 스터디 가이드 - 어소시에이트 4/e", "tools": "", "memo": ""}, {"id": "t70", "name": "박상희", "type": "translator", "grade": "A", "field": "게임 엔진", "gender": "남", "email": "parrrrk@gmail.com", "phone": "010-9094-5360", "org": "", "school": "서울대학교", "degree": "학사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "게임 엔진 아키텍처 3/e", "tools": "", "memo": ""}, {"id": "t71", "name": "심지현", "type": "translator", "grade": "A", "field": "인공지능, C++, 머신러닝, 텐서플로, 스파크, 스칼라", "gender": "여", "email": "shimnyangi@naver.com", "phone": "010-4878-1351", "org": "", "school": "이화여자대학교\n카이스트", "degree": "학사\n석사", "major": "컴퓨터공학\n전산", "career": "", "linkedIn": "", "repBook": "객체지향 파이썬 프로그래밍 2/e", "tools": "", "memo": ""}, {"id": "t72", "name": "이병호", "type": "translator", "grade": "A", "field": "로보틱스", "gender": "남", "email": "bhlee@robotics.snu.ac.kr", "phone": "010-3646-9609", "org": "서울대학교 기계공학부 로봇자동화연구실", "school": "", "degree": "박사과정", "major": "", "career": "", "linkedIn": "", "repBook": "모던 로보틱스 (공역)", "tools": "", "memo": ""}, {"id": "t73", "name": "이진형", "type": "translator", "grade": "A", "field": "머신러닝, 추천시스템, 케라스", "gender": "남", "email": "samjin0@gmail.com", "phone": "010-2015-5906", "org": "빅쏠", "school": "학점은행제\n한국방송통신대학교\n서울과학종합대학원", "degree": "학사\n석사", "major": "경영학\n정보통계학\n빅데이터", "career": "", "linkedIn": "", "repBook": "오토케라스로 만드는 AutoML", "tools": "", "memo": ""}, {"id": "t74", "name": "김희태", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "남", "email": "kimheetae@gmail.com", "phone": "010-8743-3379", "org": "한국에너지공과대학교 에너지공학부 교수", "school": "고려대학교\n성균관대학교", "degree": "학사\n박사", "major": "유전공학\n에너지과학", "career": "", "linkedIn": "", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t75", "name": "손승우", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "남", "email": "sonswoo@gmail.com", "phone": "010-2512-6219", "org": "한양대학교 ERICA 캠퍼스 응용물리학과 교수", "school": "포스텍\n카이스트", "degree": "학사\n석사, 박사", "major": "물리학", "career": "", "linkedIn": "https://scholar.google.co.kr/citations?user=GUpdvGoAAAAJ", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t76", "name": "송유미", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "여", "email": "yoomself@hotmail.com", "phone": "010-7727-3975", "org": "LG전자 MC연구소 UI lab", "school": "이화여자대학교\nParsons School of Design", "degree": "학사\n석사", "major": "정보디자인\nDesign & Technology", "career": "", "linkedIn": "", "repBook": "디자인 정의", "tools": "", "memo": ""}, {"id": "t77", "name": "윤진혁", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "남", "email": "noirkura@gmail.com", "phone": "010-5295-4152", "org": "숭실대학교 AI융학학부 교수", "school": "카이스트", "degree": "학사, 박사", "major": "물리학, 복잡계 네트워크 및 데이터 과학", "career": "", "linkedIn": "", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t78", "name": "이미진", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "여", "email": "mj.mijin.lee@gmail.com", "phone": "010-9033-1267", "org": "한양대학교 ERICA 캠퍼스 응용물리학과 교수", "school": "성균관대학교", "degree": "학사, 박사", "major": "물리학", "career": "", "linkedIn": "", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t79", "name": "이상훈", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "남", "email": "phoenixlee1@gmail.com", "phone": "010-9960-7150", "org": "경상국립대학교 물리학과 부교수", "school": "카이스트", "degree": "학사, 박사", "major": "물리학", "career": "", "linkedIn": "", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t80", "name": "이은", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "여", "email": "leeeun309@gmail.com", "phone": "010-7356-7890", "org": "부경대학교 과학컴퓨팅학과 교수", "school": "이화여자대학교\n성균관대학교", "degree": "학사\n박사", "major": "정보통신학\n복잡계 및 네트워크 과학", "career": "", "linkedIn": "", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t81", "name": "조항현", "type": "translator", "grade": "A", "field": "네트워크 과학, 복잡계 네트워크", "gender": "남", "email": "h2jo23@gmail.com", "phone": "010-3797-1381", "org": "가톨릭대학교 물리학과 교수", "school": "카이스트", "degree": "학사, 석사, 박사", "major": "물리학", "career": "", "linkedIn": "", "repBook": "네트워크 사이언스 (공역)", "tools": "", "memo": ""}, {"id": "t82", "name": "최지희", "type": "translator", "grade": "A", "field": "Azure, AWS, GCP, Naver Cloud, 클라우드 보안", "gender": "여", "email": "wlgml220@gmail.com", "phone": "010-6566-4693", "org": "SK주식회사 C&C", "school": "", "degree": "", "major": "정보보호", "career": "", "linkedIn": "", "repBook": "Azure를 활용한 클라우드 네이티브 인프라 (공역)", "tools": "", "memo": ""}, {"id": "t83", "name": "김동호", "type": "translator", "grade": "A", "field": "파이썬 GUI,  파이썬, 스위프트, 애플리케이션 개발", "gender": "남", "email": "homgru@gmail.com", "phone": "010-5476-8879", "org": "네이버", "school": "동국대학교\n고려대학교 대학원", "degree": "학사\n석사", "major": "산업공학과\n디지털미디어공학", "career": "", "linkedIn": "", "repBook": "파이썬과 Qt6로 GUI 애플리케이션 만들기 5/e", "tools": "", "memo": ""}, {"id": "t84", "name": "남궁영환", "type": "translator", "grade": "A", "field": "로보틱스, AWS 네트워킹, 파이썬, 머신러닝, 아파치", "gender": "남", "email": "ynamkoon@gmail.com", "phone": "010-9167-5155", "org": "Amazon Web Services (AWS)", "school": "고려대학교\n서던캘리포니아 대학교\n플로리다 대학교", "degree": "학사, 석사\n석사\n박사", "major": "컴퓨터학과\n컴퓨터공학", "career": "", "linkedIn": "", "repBook": "인공지능 로보틱스 2/e (공역)", "tools": "", "memo": ""}, {"id": "t85", "name": "지성국", "type": "translator", "grade": "A", "field": "로보틱스", "gender": "남", "email": "jisky96@naver.com", "phone": "010-4020-8425", "org": "구글 코리아 전략 담당", "school": "서울대학교\n듀크 대학교", "degree": "학사\n석사", "major": "외교학\n경영학", "career": "", "linkedIn": "", "repBook": "인공지능 로보틱스 2/e (공역)", "tools": "", "memo": ""}, {"id": "t86", "name": "최기쁨(박은숙)", "type": "translator", "grade": "B", "field": "자연어 처리, UX", "gender": "남", "email": "ee.glow2644@gmail.com", "phone": "010-2708-8469", "org": "삼성전자 디자인경영센터 UX센터 UX디자이너", "school": "동덕여자대학교", "degree": "학사", "major": "시각디자인전공", "career": "", "linkedIn": "", "repBook": "음성과 언어 처리 2/e", "tools": "", "memo": ""}, {"id": "t87", "name": "김동현B", "type": "translator", "grade": "A", "field": "로보틱스", "gender": "남", "email": "kdh0429@snu.ac.kr", "phone": "010-7183-4664", "org": "서울대학교 지능정보융합학과 동적로봇시스템 연구실(DYROS)", "school": "성균관대학교\n서울대학교", "degree": "학사\n석박사 통합 과정 중", "major": "기계공학과\n지능정보융합학과", "career": "", "linkedIn": "", "repBook": "로보틱스 알고리듬", "tools": "", "memo": ""}, {"id": "t88", "name": "김승기", "type": "translator", "grade": "A", "field": "언리얼 엔진", "gender": "남", "email": "mhesiierktu@gmail.com", "phone": "010-5109-0227", "org": "엔씨소프트", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "언리얼 엔진 5 블루프린트 비주얼 스크립팅 3/e (공역)", "tools": "", "memo": ""}, {"id": "t89", "name": "김제룡", "type": "translator", "grade": "A", "field": "언리얼 엔진, C++", "gender": "남", "email": "nicecapj@gmail.com", "phone": "010-4220-9992", "org": "엔씨소프트", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "언리얼 엔진 5 블루프린트 비주얼 스크립팅 3/e (공역)", "tools": "", "memo": ""}, {"id": "t90", "name": "김무항", "type": "translator", "grade": "A", "field": "소프트웨어 아키텍처", "gender": "남", "email": "niceggal1@naver.com", "phone": "010-2812-5171", "org": "삼성SDS 정보기술연구소", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "소프트웨어 엔지니어링 생산성 돌아보기", "tools": "", "memo": ""}, {"id": "t91", "name": "김슬기", "type": "translator", "grade": "A", "field": "UX 리서치/분석", "gender": "남", "email": "jurapj@nexon.co.kr", "phone": "010-2303-7418", "org": "넥슨코리아 인텔리전스랩스", "school": "단국대학교\n국민대학교 대학원", "degree": "학사\n석사", "major": "영화연출전공\n인터랙션디자인", "career": "", "linkedIn": "", "repBook": "게임 유저 리서치", "tools": "", "memo": ""}, {"id": "t92", "name": "강윤영", "type": "translator", "grade": "A", "field": "UX 리서치/분석", "gender": "여", "email": "jessica12kan@naver.com", "phone": "(대표역자와 연락함)", "org": "넥슨코리아 UX리처서/분석가", "school": "고려대학교\n연세대학교 대학원", "degree": "학사\n석사", "major": "심리학/뇌인지과학 융합전공\n인지과학", "career": "", "linkedIn": "", "repBook": "게임 유저 리서치", "tools": "", "memo": ""}, {"id": "t93", "name": "안시형", "type": "translator", "grade": "A", "field": "UX 리서치/분석", "gender": "남", "email": "sea900318@gmail.com", "phone": "(대표역자와 연락함)", "org": "넥슨코리아 UX리서처/분석가", "school": "연세대학교\n연세대학교 대학원", "degree": "학사\n석사", "major": "컴퓨터과학\n생활디자인학", "career": "", "linkedIn": "", "repBook": "게임 유저 리서치", "tools": "", "memo": ""}, {"id": "t94", "name": "구본승", "type": "translator", "grade": "A", "field": "UX 리서치/분석", "gender": "남", "email": "aaronkoo@nexon.co.kr", "phone": "(대표역자와 연락함)", "org": "넥슨코리아 UX리서처/분석가", "school": "중앙대학교\n연세대학교 대학원", "degree": "학사\n석사", "major": "심리학\n인지과학", "career": "", "linkedIn": "", "repBook": "게임 유저 리서치", "tools": "", "memo": ""}, {"id": "t95", "name": "구지연", "type": "translator", "grade": "A", "field": "UX 리서치/분석", "gender": "여", "email": "jykooUX@nexon.co.kr", "phone": "(대표역자와 연락함)", "org": "넥슨코리아 UX리서처/분석가", "school": "연세대학교", "degree": "학사", "major": "문화디자인경영학과", "career": "", "linkedIn": "", "repBook": "게임 유저 리서치", "tools": "", "memo": ""}, {"id": "t96", "name": "김현성", "type": "translator", "grade": "A", "field": "UX 리서치/분석", "gender": "남", "email": "kmhs@nexon.co.kr", "phone": "(대표역자와 연락함)", "org": "넥슨코리아 UX리서처/분석가", "school": "서울대학교\n서울대학교 대학원", "degree": "학사\n석사", "major": "언론정보학/정보문화학\n언론정보학", "career": "", "linkedIn": "", "repBook": "게임 유저 리서치", "tools": "", "memo": ""}, {"id": "t97", "name": "이설민", "type": "translator", "grade": "A", "field": "데이터베이스, 자동화, 쿠버네티스, 인공지능", "gender": "남", "email": "c0desway@naver.com", "phone": "010-4216-6242", "org": "SK텔레콤", "school": "연세대학교", "degree": "석사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "데이터베이스 신뢰성 엔지니어링", "tools": "", "memo": ""}, {"id": "t98", "name": "이판호", "type": "translator", "grade": "A", "field": "머신러닝, 딥러닝, 프로그래밍, 데이터 분석", "gender": "남", "email": "peno8050@gmail.com", "phone": "010-6530-5168", "org": "", "school": "성균관대학교", "degree": "학사", "major": "통계학과", "career": "", "linkedIn": "", "repBook": "확률론적 머신러닝 : 기본편", "tools": "", "memo": ""}, {"id": "t99", "name": "이재익", "type": "translator", "grade": "A", "field": "컴퓨터 과학, 자바, 알고리듬, 일래스틱서치", "gender": "남", "email": "humanjack@gmail.com", "phone": "010-2676-5691", "org": "네이버", "school": "카이스트", "degree": "석사", "major": "", "career": "", "linkedIn": "", "repBook": "알고리듬 세계에 뛰어들기", "tools": "", "memo": ""}, {"id": "t100", "name": "김기성B", "type": "translator", "grade": "A", "field": "머신러닝, 그래프", "gender": "남", "email": "kskim@ivstech.co.kr", "phone": "010-9457-5298", "org": "아이브스 AI Lab 알고리즘팀", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "그래프 머신러닝 (공역)", "tools": "", "memo": ""}, {"id": "t101", "name": "배창혁", "type": "translator", "grade": "A", "field": "차량용 소프트웨어, Yocto", "gender": "남", "email": "locust2001@gmail.com", "phone": "010-2604-0915", "org": "메르세데스 벤츠 이노베이션 랩", "school": "한국기술교육대학교\n광주과학기술원", "degree": "학사\n석사", "major": "정보통신\n네트워크미디어", "career": "", "linkedIn": "", "repBook": "자동차 소프트웨어 아키텍처 2/e", "tools": "", "memo": ""}, {"id": "t102", "name": "서도현", "type": "translator", "grade": "A", "field": "보안, 데이터 보호", "gender": "남", "email": "hyundoseo@gmail.com", "phone": "010-4033-6572", "org": "삼성SDS", "school": "성균관대학교", "degree": "석사", "major": "", "career": "", "linkedIn": "", "repBook": "제로 트러스트 보안", "tools": "", "memo": ""}, {"id": "t103", "name": "김성현", "type": "translator", "grade": "A", "field": "보안, 멀웨어", "gender": "남", "email": "greemate@gmail.com", "phone": "010-3266-0260", "org": "㈜안랩", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "루트킷과 부트킷 (공역)", "tools": "", "memo": ""}, {"id": "t104", "name": "강경구", "type": "translator", "grade": "A", "field": "안드로이드, 스위프트, 코틀린", "gender": "남", "email": "rudrn85@gmail.com", "phone": "010-5136-2468", "org": "웍스 모바일", "school": "강원대학교", "degree": "학사", "major": "물리학과", "career": "", "linkedIn": "", "repBook": "젯팩 컴포즈로 개발하는 안드로이드 UI", "tools": "", "memo": ""}, {"id": "t105", "name": "김상현C", "type": "translator", "grade": "A", "field": "클라우드 컴퓨팅", "gender": "남", "email": "sanghyun@amazon.com", "phone": "010-8778-5680", "org": "Amazon Web Services (AWS)", "school": "한양대학교", "degree": "학사", "major": "전자공학부", "career": "", "linkedIn": "https://www.linkedin.com/in/sanghyun-kim-5560b8b7/", "repBook": "솔루션 아키텍트 핸드북 2/e (공역)", "tools": "", "memo": ""}, {"id": "t106", "name": "오영욱", "type": "translator", "grade": "A", "field": "게임 개발", "gender": "남", "email": "krucef@gmail.com", "phone": "010-3432-2525", "org": "웹진 게임제너레이션 프리랜서, 가천대학교 연구원", "school": "연세대학교", "degree": "학사", "major": "화학공학과", "career": "", "linkedIn": "https://www.linkedin.com/in/ohyoungwook/", "repBook": "게임 콘솔 2.0", "tools": "", "memo": ""}, {"id": "t107", "name": "추정호", "type": "translator", "grade": "A", "field": "양자 컴퓨팅, AI, 빅데이터, 수학", "gender": "남", "email": "jhchu@hotmail.com", "phone": "010-4412-0484", "org": "유안타 증권", "school": "카이스트", "degree": "학사, 석사\n박사", "major": "수학과\n기계공학과", "career": "", "linkedIn": "", "repBook": "음악 수학", "tools": "", "memo": ""}, {"id": "t108", "name": "백진욱", "type": "translator", "grade": "A", "field": "AWS, GCP 클라우드, 데브옵스", "gender": "남", "email": "kokos.papa8@gmail.com", "phone": "010-4793-7860", "org": "딜리버스", "school": "카네기멜론대학교", "degree": "석사", "major": "Science in Electrical and Computer Engineering", "career": "", "linkedIn": "", "repBook": "AWS 쿡북", "tools": "", "memo": ""}, {"id": "t109", "name": "김주현", "type": "translator", "grade": "A", "field": "양자 컴퓨팅", "gender": "남", "email": "nerohwangje@gmail.com", "phone": "010-3016-0007", "org": "ASML Korea", "school": "고려대학교", "degree": "학사", "major": "물리학과", "career": "", "linkedIn": "", "repBook": "양자 컴퓨팅 개론", "tools": "", "memo": ""}, {"id": "t110", "name": "양정열", "type": "translator", "grade": "A", "field": "AWS, azure, 구글 클라우드 등 클라우드 서비스", "gender": "남", "email": "yjyeal@gmail.com", "phone": "010-5375-7128", "org": "알티모빌리티", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "풀스택 리액트, 타입스크립트, 노드", "tools": "", "memo": ""}, {"id": "t111", "name": "김예솔", "type": "translator", "grade": "A", "field": "게임QA, 모바일QA, 위협 모델링", "gender": "여", "email": "cuterose7@naver.com", "phone": "010-9958-2694", "org": "이글루 시큐리티 해외기술지원팀", "school": "상명대학교", "degree": "학사", "major": "디지털 미디어 학부", "career": "", "linkedIn": "", "repBook": "개발자를 위한 위협 모델링", "tools": "", "memo": ""}, {"id": "t112", "name": "오세봉", "type": "translator", "grade": "A", "field": "빅데이터, 데이터 분석, 스칼라", "gender": "남", "email": "aiden.oh@nexr.com", "phone": "010-7794-8054", "org": "SK텔레콤", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "카프카 스트림즈와 ksqlDB 정복", "tools": "", "memo": ""}, {"id": "t113", "name": "남정현", "type": "translator", "grade": "B", "field": "데브옵스, 문서 자동화, 클라우드", "gender": "남", "email": "rkttu@rkttu.com", "phone": "010-5339-9142", "org": "데브시스터즈", "school": "인하대학교", "degree": "학사", "major": "정보통신 공학", "career": "", "linkedIn": "", "repBook": "실전 분산 추적", "tools": "", "memo": ""}, {"id": "t114", "name": "박상우", "type": "translator", "grade": "A", "field": "보안, 데이터 보호", "gender": "남", "email": "bruceprk@hotmail.com", "phone": "+1 778-697-8936", "org": "딜로이트 밴쿠버", "school": "한국산업기술대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "모던 데이터 보호 (공역)", "tools": "", "memo": ""}, {"id": "t115", "name": "허성연", "type": "translator", "grade": "A", "field": "소프트웨어 엔지니어링, 웹 개발, 알고리즘", "gender": "남", "email": "ethan0311@gmail.com", "phone": "010-2960-6386", "org": "당근마켓", "school": "서울대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "Go 마스터하기 3/e", "tools": "", "memo": ""}, {"id": "t116", "name": "나가진", "type": "translator", "grade": "A", "field": "제어 시스템, 블록체인, 솔루션 아키텍처", "gender": "여", "email": "gajin.na@grayflow.io", "phone": "010-9116-2715", "org": "그레이플로우", "school": "이화여자대학교", "degree": "석사", "major": "컴퓨터 - 정보통신 및 네트워크 보안", "career": "", "linkedIn": "", "repBook": "페도라로 실습하는 리눅스 시스템 관리 Vol.1 (공역)", "tools": "", "memo": ""}, {"id": "t117", "name": "오주환", "type": "translator", "grade": "A", "field": "소프트웨어 아키텍처, 쿠버네티스, DevOps, SRE, 데이터 시각화, 스프링 부트, 스프링 클라우", "gender": "남", "email": "goddessism@gmail.com", "phone": "카카오톡 ID: naongc\n+81-090-6207-4214", "org": "일본전자회사", "school": "", "degree": "학사", "major": "컴퓨터공학\nMBA(일본)", "career": "", "linkedIn": "", "repBook": "소프트웨어 아키텍트 엘리베이터", "tools": "", "memo": "일본어"}, {"id": "t118", "name": "정순욱", "type": "translator", "grade": "A", "field": "프리젠테이션, 데이터 시각화, 에세이", "gender": "남", "email": "soonuk@gmail.com", "phone": "010-8567-2967", "org": "", "school": "서울대학교\n텍사스주립대학교", "degree": "학사, 석사, 박사\n석사", "major": "공업화학과", "career": "", "linkedIn": "", "repBook": "어나더레벨 데이터 시각화", "tools": "", "memo": ""}, {"id": "t119", "name": "최동훈", "type": "translator", "grade": "A", "field": "자바스크립트, 루비, 파이썬, 셸스크립트, 리눅스", "gender": "남", "email": "sapsaldog@gmail.com", "phone": "010-8306-7892", "org": "위트라이얼", "school": "고려대학교", "degree": "학사", "major": "기계공학과, 컴퓨터학과", "career": "", "linkedIn": "", "repBook": "C++ 함수형 프로그래밍", "tools": "", "memo": ""}, {"id": "t120", "name": "신현진(정윤민)", "type": "translator", "grade": "A", "field": "정보보안, 해킹, IOT, 차량해킹", "gender": "남", "email": "hj6269@gmail.com", "phone": "010-6269-5076", "org": "현대자동차", "school": "수원대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "커넥티드카 해킹", "tools": "", "memo": ""}, {"id": "t121", "name": "정병혁", "type": "translator", "grade": "A", "field": "리눅스 커널, 사물인터넷, 안드로이드", "gender": "남", "email": "coreatiger@gmail.com", "phone": "010-8828-3419", "org": "Broadcom Inc.", "school": "고려대학교", "degree": "학사\n석사", "major": "컴퓨터 엔지니어링\n무선 네트워크", "career": "", "linkedIn": "", "repBook": "고성능 임베디드 시스템 설계", "tools": "", "memo": ""}, {"id": "t122", "name": "김홍석", "type": "translator", "grade": "A", "field": "보안 취약점, 해킹 사고, 개인정보보호", "gender": "남", "email": "hongseok@live.com", "phone": "010-4324-2228", "org": "김앤장 법률사무소", "school": "서울대학교", "degree": "학사\n석사", "major": "전기공학과", "career": "", "linkedIn": "", "repBook": "보안 취약점 관리 자동화", "tools": "", "memo": ""}, {"id": "t123", "name": "노영찬", "type": "translator", "grade": "A", "field": "C, 소프트웨어 엔지니어링, 시스템 컨설팅", "gender": "남", "email": "youngc.noh@gmail.com", "phone": "+1 714.552.6758", "org": "Cloud Cornerstore,Inc.", "school": "서던캘리포니아 대학교", "degree": "학부\n대학원", "major": "소프트웨어 엔지니어링", "career": "", "linkedIn": "", "repBook": "CERT C 프로그래밍 2/e", "tools": "", "memo": ""}, {"id": "t124", "name": "이준호", "type": "translator", "grade": "A", "field": "마이크로소프트 Azure, 프라이빗 클라우드, 쿠버네티스, 인메모리 데이터 그리드, 마이크로 서비스 아키텍처, API 게이트웨이, 영상 관련 분야 및 테스트 방법론", "gender": "남", "email": "junholee@nexon.co.kr", "phone": "010-5163-8580", "org": "넥슨", "school": "서울대학교", "degree": "학사", "major": "고고미술사학과\n전산과학(부전공)", "career": "", "linkedIn": "", "repBook": "일래스틱서치 쿡북 4/e", "tools": "", "memo": ""}, {"id": "t125", "name": "배진호", "type": "translator", "grade": "A", "field": "로보틱스, Optical Engineering, 인공지능, 자율주행, 분산처리", "gender": "남", "email": "silverbjin@gmail.com", "phone": "010-6640-3596", "org": "", "school": "서울과학기술대학교\n로즈헐만 공과대학교", "degree": "석사\n석사", "major": "로봇공학\n레이저 공학", "career": "", "linkedIn": "", "repBook": "ROS 로보틱스 프로그래밍 3/e", "tools": "", "memo": ""}, {"id": "t126", "name": "이태휘", "type": "translator", "grade": "A", "field": "데이터베이스, 빅데이터 시스템/프로그래밍, 리눅스, 프로그래밍, 알고리즘", "gender": "남", "email": "taewhi@etri.re.kr", "phone": "010-4604-0565", "org": "한국전자통신연구원(ETRI)", "school": "서울대학교", "degree": "박사", "major": "공학", "career": "", "linkedIn": "", "repBook": "연합학습", "tools": "", "memo": ""}, {"id": "t127", "name": "윤민홍(evilqcom)", "type": "translator", "grade": "A", "field": "보안/해킹, 구글 클라우드 플랫폼, Go, Rust", "gender": "남", "email": "mhyun.rice@gmail.com", "phone": "010-4604-0565", "org": "구글", "school": "라이스 대학교", "degree": "박사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "제로 트러스트 네트워크", "tools": "", "memo": ""}, {"id": "t128", "name": "전성빈", "type": "translator", "grade": "A", "field": "컴퓨터비전", "gender": "남", "email": "clockoon@gmail.com", "phone": "010-4853-6516", "org": "삼성전자", "school": "연세대학교\n연세대학교 공학대학원", "degree": "학사\n석/박사", "major": "기계공학과\n진동 및 광메카트로닉스", "career": "", "linkedIn": "", "repBook": "컴퓨터 비전 5/e", "tools": "", "memo": ""}, {"id": "t129", "name": "장지나", "type": "translator", "grade": "C", "field": "악성코드, IT 기술, 해킹", "gender": "여", "email": "jjn961106@gmail.com", "phone": "010-3681-7579", "org": "SK인포섹", "school": "순천향대학교", "degree": "학사", "major": "정보보호학과", "career": "", "linkedIn": "", "repBook": "웹 개발자를 위한 웹 보안", "tools": "", "memo": ""}, {"id": "t130", "name": "김원권", "type": "translator", "grade": "A", "field": "데이터 분석, 시각화, DAX", "gender": "남", "email": "sekomi28@gmail.com", "phone": "010-7292-6201", "org": "제약회사", "school": "서강대학교\n카이스트", "degree": "학사\nMBA", "major": "경제학\n테크노경영대학원", "career": "", "linkedIn": "", "repBook": "전문가를 위한 DAX 완벽 가이드 2/e", "tools": "", "memo": ""}, {"id": "t131", "name": "김기영C", "type": "translator", "grade": "A", "field": "메타버스, 데이터 분석", "gender": "남", "email": "kky416@snu.ac.kr", "phone": "010-5023-0102", "org": "아티피셜 소사이어티(Artificial Society)", "school": "서울대학교\n서울대학교 대학원", "degree": "학사\n박사", "major": "기계항공공학부\n유체역학, 응용수학", "career": "", "linkedIn": "", "repBook": "A/B 테스트 (공역)", "tools": "", "memo": ""}, {"id": "t132", "name": "백성복", "type": "translator", "grade": "A", "field": "딥러닝, 웹 기술, 프로그래밍 언어, 정보통신", "gender": "남", "email": "sbbaik@gmail.com", "phone": "010-9800-9882", "org": "KT 대덕2연구센터", "school": "강원대학교\n숭실대학교 대학원\n일리노이 공과대학교", "degree": "학사\n석사\n박사", "major": "컴퓨터 과학\n컴퓨터 과학(시스템 소프트웨어)\n컴퓨터 과학", "career": "", "linkedIn": "", "repBook": "실무자를 위한 딥러닝", "tools": "", "memo": ""}, {"id": "t133", "name": "이주한", "type": "translator", "grade": "A", "field": "PM, 방법론, 게임 전반", "gender": "남", "email": "joohan@nexon.co.kr", "phone": "010-3630-0877", "org": "넥슨 PM부서", "school": "경희대학교", "degree": "학사", "major": "이학부(생물학)", "career": "", "linkedIn": "", "repBook": "데이터 민주화와 셀프서비스 데이터", "tools": "", "memo": ""}, {"id": "t134", "name": "양준기", "type": "translator", "grade": "A", "field": "소프트웨어 아키텍처, 클라우드 네이티브 애플리케이션", "gender": "남", "email": "javamania@gmail.com", "phone": "010-9891-0181", "org": "SK주식회사 C&C", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "서비스 메시 마스터 (공역)", "tools": "", "memo": ""}, {"id": "t135", "name": "지은정", "type": "translator", "grade": "A", "field": "클라우드, 데이터 엔지니어링", "gender": "여", "email": "eunjeong.ji2@gmail.com", "phone": "010-8459-5987", "org": "SK주식회사 C&C", "school": "", "degree": "학사\n석사", "major": "정보통계학\n정보산업공학", "career": "", "linkedIn": "", "repBook": "서비스 메시 마스터 (공역)", "tools": "", "memo": ""}, {"id": "t136", "name": "김창엽", "type": "translator", "grade": "B", "field": "데이터 분석, 머신러닝, 딥러닝", "gender": "남", "email": "czangyeob@gmail.com", "phone": "010-8554-9649", "org": "크라우드웍스", "school": "고려대학교", "degree": "박사", "major": "산업경영공학과 데이터 사이언스 및 비즈니스 애널리틱스(DSBA) 연구실", "career": "", "linkedIn": "", "repBook": "그림으로 배우는 딥러닝 (공역)", "tools": "", "memo": ""}, {"id": "t137", "name": "백명훈", "type": "translator", "grade": "A", "field": "블록체인, 개인정보보호", "gender": "남", "email": "mhbaek@gmail.com", "phone": "010-7264-0003", "org": "스트리미 CISO 이사", "school": "고려대학교 정보보호대학원", "degree": "석사", "major": "", "career": "경찰, 김앤장", "linkedIn": "", "repBook": "새로운 신뢰 아키텍처를 위한 블록체인", "tools": "", "memo": ""}, {"id": "t138", "name": "이진오", "type": "translator", "grade": "A", "field": "게임, 유니티, 언리얼 엔진", "gender": "남", "email": "redhairjino@gmail.com", "phone": "010-9265-4231", "org": "판교 소재 게임회사", "school": "미국 소재 대학", "degree": "", "major": "컴퓨터 공학", "career": "", "linkedIn": "", "repBook": "로블록스 개발 첫 발자국 떼기", "tools": "", "memo": ""}, {"id": "t139", "name": "이동근", "type": "translator", "grade": "B", "field": "파이썬, 딥러닝, AI", "gender": "남", "email": "ddanggle.y@gmail.com", "phone": "010-9105-4514", "org": "", "school": "충남대학교", "degree": "중퇴(창업으로 인함)", "major": "컴퓨터과학", "career": "", "linkedIn": "", "repBook": "자연어 처리의 정석 (공역)", "tools": "", "memo": ""}, {"id": "t140", "name": "박병주", "type": "translator", "grade": "A", "field": "리눅스, 파이썬, 앤서블, 오픈스택, 클라우드 네이티브", "gender": "남", "email": "brandon2n1.park@gmail.com", "phone": "010-5130-4824", "org": "IBM Korea", "school": "경북대학교", "degree": "학사", "major": "기계 계열", "career": "", "linkedIn": "", "repBook": "Go로 구현하는 클라우드 네이티브 애플리케이션", "tools": "", "memo": ""}, {"id": "t141", "name": "박재유", "type": "translator", "grade": "A", "field": "소프트웨어 보안, 포렌식", "gender": "남", "email": "cpuu@kaist.ac.kr", "phone": "010-2967-8407", "org": "LG전자 소프트웨어 공학연구소", "school": "한국항공대학교\n카이스트", "degree": "학사\n석사", "major": "컴퓨터공학과\n소프트웨어 엔지니어링", "career": "", "linkedIn": "", "repBook": "Black Hat Python 2/e", "tools": "", "memo": ""}, {"id": "t142", "name": "정지수", "type": "translator", "grade": "A", "field": "그래프 신경망, 머신러닝", "gender": "남", "email": "jisujeong89@gmail.com", "phone": "010-9874-3363", "org": "네이버 MLX 팀", "school": "카이스트", "degree": "학사\n석사\n박사", "major": "수리과학과", "career": "", "linkedIn": "", "repBook": "그래프 신경망 입문", "tools": "", "memo": ""}, {"id": "t143", "name": "장혜림", "type": "translator", "grade": "A", "field": "테크니컬 라이터, 기자", "gender": "여", "email": "bshr89@gmail.com", "phone": "010-9194-5280", "org": "아웃스탠딩", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "3D 사용자 인터페이스 2/e (공역)", "tools": "", "memo": ""}, {"id": "t144", "name": "구본아", "type": "translator", "grade": "A", "field": "클라우드 아키텍처, 애저", "gender": "남", "email": "bonahbruce93@gmail.com", "phone": "010-9932-6208", "org": "SK주식회사 C&C", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "데이터 플랫폼 설계와 구축 (공역)", "tools": "", "memo": ""}, {"id": "t145", "name": "박종하", "type": "translator", "grade": "A", "field": "소프트웨어 아키텍처, 클라우드", "gender": "남", "email": "jonghah@gmail.com", "phone": "010-3892-0014", "org": "메가존㈜", "school": "광운대학교", "degree": "학사\n석사", "major": "전자재료\nComputer Simulation", "career": "", "linkedIn": "", "repBook": "데이터 플랫폼 설계와 구축 (공역)", "tools": "", "memo": ""}, {"id": "t146", "name": "최철원", "type": "translator", "grade": "A", "field": "소프트웨어 아키텍처, 클라우드 네이티브 아키텍처", "gender": "남", "email": "cwchoe@hotmail.com", "phone": "010-9976-7515", "org": "SK주식회사 C&C", "school": "서강대학교\n카네기멜론대학교", "degree": "석사\n석사", "major": "화학\nMISM", "career": "", "linkedIn": "", "repBook": "데이터 플랫폼 설계와 구축 (공역)", "tools": "", "memo": ""}, {"id": "t147", "name": "김진웅", "type": "translator", "grade": "A", "field": "클라우드", "gender": "남", "email": "ddiiwoong@gmail.co", "phone": "010-7189-7171", "org": "Amazon Web Services (AWS)", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "클라우드 네이티브 트랜스포메이션 (공역)", "tools": "", "memo": ""}, {"id": "t148", "name": "임주섭", "type": "translator", "grade": "A", "field": "디지털 포렌식, 사고 대응, 사이버시큐리티, 멀웨어, eDiscovery", "gender": "남", "email": "limjuseop@gmail.com", "phone": "778-866-6837", "org": "뉴욕공과대학교", "school": "뉴욕시립대학교", "degree": "석사", "major": "포렌식 컴퓨팅", "career": "", "linkedIn": "", "repBook": "사이버 사고 대응 실무", "tools": "", "memo": ""}, {"id": "t149", "name": "홍영표", "type": "translator", "grade": "A", "field": "금융 분석", "gender": "남", "email": "ypyohong@gmail.com", "phone": "02-3671-7163", "org": "SGI서울보증", "school": "카이스트", "degree": "석사", "major": "정보경영", "career": "", "linkedIn": "", "repBook": "Quantitative Economics with R", "tools": "", "memo": ""}, {"id": "t150", "name": "송지연B", "type": "translator", "grade": "A", "field": "웹 디자인, VR", "gender": "여", "email": "jiyounie@gmail.com", "phone": "010-5470-4509", "org": "", "school": "일본전자전문학교", "degree": "학사", "major": "컴퓨터그래픽스, CG 프로그래밍", "career": "", "linkedIn": "", "repBook": "객체지향 UI 디자인", "tools": "", "memo": "일본어"}, {"id": "t151", "name": "최희경", "type": "translator", "grade": "A", "field": "파이썬, IT 개발론, IT 문화, UI/UX", "gender": "여", "email": "gyowhk@kakao.com", "phone": "010-2826-6614", "org": "Delivery hero korea", "school": "건국대학교", "degree": "학사", "major": "인터넷미디어공학부", "career": "", "linkedIn": "", "repBook": "프로젝트에서 제품으로 (공역)", "tools": "", "memo": ""}, {"id": "t152", "name": "하석근", "type": "translator", "grade": "B", "field": "금융경제, 금융공학", "gender": "남", "email": "withha@hotmail.com", "phone": "010 3878 3056", "org": "하나UBS 자산운용", "school": "한국원서어대학교\n컬럼비아대학교\n프랑스 EDHEC Business School", "degree": "학사\n석사\n박사", "major": "경영학과\n산업공학\n금융", "career": "", "linkedIn": "", "repBook": "퇴직 연금 전략 (공역)", "tools": "", "memo": ""}, {"id": "t153", "name": "한주현", "type": "translator", "grade": "A", "field": "생물정보학", "gender": "남", "email": "kenneth.jh.han@gmail.com", "phone": "010-2532-1015", "org": "쓰리빌리언", "school": "동국대학교\n서울대학교", "degree": "학사\n석박사", "major": "생명과학과\n의료정보학", "career": "", "linkedIn": "", "repBook": "생물정보학 알고리듬 3/e (공역)", "tools": "", "memo": ""}, {"id": "t154", "name": "한헌종", "type": "translator", "grade": "A", "field": "생물정보학", "gender": "남", "email": "0hhj6212@gmail.com", "phone": "010-4708-4437", "org": "쓰리빌리언", "school": "연세대학교", "degree": "박사", "major": "생명공학과", "career": "", "linkedIn": "", "repBook": "생물정보학 알고리듬 3/e (공역)", "tools": "", "memo": ""}, {"id": "t155", "name": "송주경", "type": "translator", "grade": "A", "field": "파이썬, 스파크, 스프링", "gender": "여", "email": "sjeuni@gmail.com", "phone": "010-8863-0020", "org": "동아방송대, 국제대", "school": "서강대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "Great Code Vol.2 2/e", "tools": "", "memo": ""}, {"id": "t156", "name": "엄영호", "type": "translator", "grade": "A", "field": "복잡계 네트워크", "gender": "남", "email": "yheom@uos.ac.kr", "phone": "010-2339-6105", "org": "서울시립대학교", "school": "카이스트", "degree": "학사\n석사\n박사", "major": "물리학과", "career": "", "linkedIn": "https://scholar.google.co.kr/citations?user=4nirJyUAAAAJ", "repBook": "네트워크 분석 (공역)", "tools": "", "memo": ""}, {"id": "t157", "name": "이혜연", "type": "translator", "grade": "B", "field": "파이썬, 텍스트 분석, 머신러닝", "gender": "여", "email": "yhyeyeon@gmail.com", "phone": "010-9871-9693", "org": "한국스마트카드 빅데이터팀", "school": "아주대학교", "degree": "학사", "major": "산업공학과", "career": "", "linkedIn": "", "repBook": "태블로 학습하기 4/e", "tools": "", "memo": ""}, {"id": "t158", "name": "김도균A", "type": "translator", "grade": "A", "field": "안드로이드 프로그래밍, C#", "gender": "남", "email": "dokyun@dokyun.pe.kr", "phone": "010-9857-5058", "org": "늘품플러스, 이사", "school": "부산대학교", "degree": "학사", "major": "기계공학과", "career": "", "linkedIn": "", "repBook": "Essential C# 7/e (공역)", "tools": "", "memo": ""}, {"id": "t159", "name": "안철진", "type": "translator", "grade": "A", "field": "C#, WPF, 전산, bot", "gender": "남", "email": "andalf@gmail.com", "phone": "010-9991-2494", "org": "(주)KT DS", "school": "영남대학교", "degree": "학사", "major": "기계공학부", "career": "", "linkedIn": "", "repBook": "Essential C# 7/e (공역)", "tools": "", "memo": ""}, {"id": "t160", "name": "김세영B", "type": "translator", "grade": "A", "field": "리눅스 커널&시스템, 오픈스택, 웹, 프로그래밍 언어", "gender": "남", "email": "one@seyeong.kim", "phone": "010-5474-6716", "org": "캐노니컬", "school": "성균관대학교", "degree": "학사", "major": "정보통신공학부, 기계공학부", "career": "", "linkedIn": "", "repBook": "유닉스·리눅스 시스템 관리 핸드북 5/e (공역)", "tools": "", "memo": ""}, {"id": "t161", "name": "정윤선", "type": "translator", "grade": "A", "field": "커널 프로그래밍, 리눅스", "gender": "여", "email": "", "phone": "", "org": "육아휴직중, KT 클라우드웨어의 서버 가상화 팀", "school": "성균관대학교", "degree": "학사", "major": "정보통신공학부", "career": "", "linkedIn": "", "repBook": "유닉스·리눅스 시스템 관리 핸드북 5/e (공역)", "tools": "", "memo": ""}, {"id": "t162", "name": "배수진", "type": "translator", "grade": "A", "field": "빅데이터, 데이터분석, 가상현실, 증강현실", "gender": "여", "email": "luckybsj@daum.net", "phone": "010-9151-8247", "org": "경희대학교, 단국대학교", "school": "단국대학교", "degree": "박사", "major": "빅데이터 경영", "career": "", "linkedIn": "", "repBook": "센티언트 엔터프라이즈 (공역)", "tools": "", "memo": ""}, {"id": "t163", "name": "김영기", "type": "translator", "grade": "B", "field": "웹 자동화, 파이썬, 소프트웨어 아키텍저, 데브옵스, Node.js", "gender": "남", "email": "resious@gmail.com", "phone": "010-9530-3017", "org": "삼성전자 네트워크 SE 그룹", "school": "홍익대학교", "degree": "학사", "major": "전자전기과", "career": "", "linkedIn": "", "repBook": "개발자를 위한 웹 개발 환경 자동화 (공역)", "tools": "", "memo": ""}, {"id": "t164", "name": "박득형", "type": "translator", "grade": "B", "field": "소프트웨어 테스팅, 테브옵스, 지라 애자일", "gender": "남", "email": "deukhyoung.park@gmail.com", "phone": "010-2791-2329", "org": "삼성전자", "school": "카이스트", "degree": "박사", "major": "통신 및 네트워크 분야", "career": "", "linkedIn": "", "repBook": "개발자를 위한 웹 개발 환경 자동화 (공역)", "tools": "", "memo": ""}, {"id": "t165", "name": "이주희", "type": "translator", "grade": "A", "field": "추천시스템", "gender": "여", "email": "juhee1108@gmail.com", "phone": "010-4476-0886", "org": "이화여자대학교 수리과학연구소 연구교수", "school": "이화여자대학교 대학원", "degree": "박사", "major": "수학과", "career": "", "linkedIn": "", "repBook": "추천 시스템 (공역)", "tools": "", "memo": ""}, {"id": "t166", "name": "이진형", "type": "translator", "grade": "A", "field": "머신러닝, 추천시스템, 케라스", "gender": "남", "email": "samjin0@gmail.com", "phone": "010-2015-5906", "org": "빅쏠", "school": "평생교육진흥원\n한국방송통신대학교\n서울과학종합대학원", "degree": "학사\n학사\n석사", "major": "경영학\n정보통계학\n빅데이터", "career": "", "linkedIn": "", "repBook": "추천 시스템 (공역)", "tools": "", "memo": ""}, {"id": "t167", "name": "김유성", "type": "translator", "grade": "A", "field": "Selenium, 타입스크립트", "gender": "남", "email": "kallare@gmail.com", "phone": "010-6628-1710", "org": "네이버", "school": "광운대학교", "degree": "학사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "Selenium을 활용한 테스트 자동화 2/e", "tools": "", "memo": ""}, {"id": "t168", "name": "문경식", "type": "translator", "grade": "A", "field": "멀티 클라우드, 클라우드 컴퓨팅", "gender": "남", "email": "moon91sikk@naver.com", "phone": "010-6350-2988", "org": "SK텔레콤 Core Infra 본부", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "멀티 클라우드로의 전환", "tools": "", "memo": ""}, {"id": "t169", "name": "한정민", "type": "translator", "grade": "A", "field": "인간컴퓨터공학", "gender": "여", "email": "jasmine.j.han@gmail.com", "phone": "010-6440-0709", "org": "SK홀딩스", "school": "카네기멜론대학교", "degree": "학사", "major": "인간컴퓨터공학, 정보시스템, 디자인 전공", "career": "", "linkedIn": "", "repBook": "비주얼 씽킹 & 러닝 디자인 2/e", "tools": "", "memo": ""}, {"id": "t170", "name": "유일호(유진호)", "type": "translator", "grade": "A", "field": "C/C++, Go, 자바, 코틀린, 알고리즘, 스프링", "gender": "남", "email": "acid.acidrain@gmail.com", "phone": "010-5225-9976", "org": "위메프", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "코틀린 안드로이드 프로그래밍", "tools": "", "memo": ""}, {"id": "t171", "name": "임준혁", "type": "translator", "grade": "A", "field": "단위 테스트", "gender": "남", "email": "itanoss@gmail.com", "phone": "010-4747-8673", "org": "Amazon.com Software Development Engineer", "school": "한양대학교", "degree": "학사", "major": "산업공학, 컴퓨터공학", "career": "", "linkedIn": "", "repBook": "단위 테스트", "tools": "", "memo": ""}, {"id": "t172", "name": "김명준", "type": "translator", "grade": "A", "field": "베이지안 통계/모델링, 자연어 처리", "gender": "남", "email": "junkim930@ajou.ac.kr", "phone": "010-2032-6467", "org": "박사학위중", "school": "Swarthmore 대학\n아주대학교", "degree": "박사", "major": "수학경제\n산업공학과", "career": "", "linkedIn": "", "repBook": "베이지안으로 접근하는 자연어 처리 2/e (공역)", "tools": "", "memo": ""}, {"id": "t173", "name": "이재원", "type": "translator", "grade": "A", "field": "베이지안 통계/모델링, 자연어 처리", "gender": "남", "email": "jaewon.lee728@gmail.com", "phone": "010-5031-0728", "org": "네이버 Search&Clova, ChatBot Model", "school": "The Johns Hopkins University, Baltimore, USA\nB.S. in Applied Math and Statistics & B.S. in Computer Science", "degree": "석사", "major": "수학통계 컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "베이지안으로 접근하는 자연어 처리 2/e (공역)", "tools": "", "memo": ""}, {"id": "t174", "name": "홍창수", "type": "translator", "grade": "B", "field": "금융, 로보어드바이저, 퀀트", "gender": "남", "email": "gauss92@naver.com", "phone": "010-9799-4119", "org": "NICE P&I 정보사업본부 금융공학 컨설팅 업무", "school": "경북대학교\n한국원서어대학교", "degree": "박사", "major": "경영학", "career": "", "linkedIn": "", "repBook": "퀀트 투자를 위한 머신러닝·딥러닝 알고리듬 트레이딩 2/e (공역)", "tools": "", "memo": ""}, {"id": "t175", "name": "서창수", "type": "translator", "grade": "A", "field": "AR/VR, WebGL, Three.js, A-Frame, WebXR", "gender": "남", "email": "s1gun82@gmail.com", "phone": "010-9980-5045", "org": "SK C&C", "school": "한국원서어대학교", "degree": "학사", "major": "정보통계학과", "career": "", "linkedIn": "", "repBook": "WebXR로 만드는 AR/VR (공역)", "tools": "", "memo": ""}, {"id": "t176", "name": "최재철", "type": "translator", "grade": "A", "field": "AR/VR, WebGL, Three.js, A-Frame, WebXR, 아두노이", "gender": "남", "email": "cjc07@naver.com", "phone": "010-2927-9750", "org": "SK C&C", "school": "유타주립대학교", "degree": "학사", "major": "컴퓨터학과", "career": "", "linkedIn": "", "repBook": "WebXR로 만드는 AR/VR (공역)", "tools": "", "memo": ""}, {"id": "t177", "name": "최광민", "type": "translator", "grade": "B", "field": "프로그래밍 언어 일반(C/ C++/ 객체지향 C/ 자바/ 루비/ Erlang/ 자바스크립트), Java 기반 웹 개발(Spring, Seam, Restlet 프레임워크/ MyBatis, Hibernate ORM/ JSF 및 RichFace), Windows 애플리케이션 개발(MFC 및 Win32 API/ 소켓, 동기화/ I/O 모델 등을 결합한 시스템 프로", "gender": "남", "email": "mhmckm@gmail.com", "phone": "010-2209-9600", "org": "삼성 SDS", "school": "한양대학교", "degree": "학사", "major": "컴퓨터학과", "career": "", "linkedIn": "", "repBook": "소프트웨어의 품격", "tools": "", "memo": ""}, {"id": "t178", "name": "곽승주", "type": "translator", "grade": "B", "field": "데이터베이스 설계 이론", "gender": "남", "email": "sjoo.kwak@gmail.com", "phone": "", "org": "IT 회사의 데이터베이스 관련 프로젝트에 참여중", "school": "한양대학교", "degree": "석사", "major": "경제학", "career": "", "linkedIn": "", "repBook": "데이터베이스 설계와 관계형 이론 2/e (공역)", "tools": "", "memo": ""}, {"id": "t179", "name": "이규옥", "type": "translator", "grade": "A", "field": "디지털 포렌식, 블록체인 기술, 암호화폐", "gender": "여", "email": "legis0205@gmail.com", "phone": "010-3390-9590", "org": "한국은행 법규제도실 금융법규팀", "school": "성균관대학교\n이화여자대학교", "degree": "박사", "major": "법학과", "career": "", "linkedIn": "", "repBook": "디지털 포렌식과 사고 대응 2/e (공역)", "tools": "", "memo": ""}, {"id": "t180", "name": "조경빈", "type": "translator", "grade": "A", "field": "로블록스, C++, 파이썬, 자바스트립트, Immutable.js, 유니티, 언리얼 엔진, ios 앱개발", "gender": "남", "email": "cgmaniax@gmail.com", "phone": "010-6205-6084", "org": "(주)인프라웨어", "school": "아주대학교", "degree": "학사", "major": "기계공학/ 컴퓨터공학", "career": "", "linkedIn": "", "repBook": "손쉬운 로블록스 게임 코딩", "tools": "", "memo": ""}, {"id": "t181", "name": "정사범", "type": "translator", "grade": "B", "field": "파이썬, 알고리즘, 머신러닝, 텐서플로, IIOT, 객체지향, R", "gender": "남", "email": "skk1991@naver.com", "phone": "010-7560-1243", "org": "LG생산기술원", "school": "성균관대학교", "degree": "석사", "major": "산업공학과", "career": "", "linkedIn": "", "repBook": "파이썬 기반 강화학습 알고리듬", "tools": "", "memo": ""}, {"id": "t182", "name": "신동혁B", "type": "translator", "grade": "A", "field": "클라우드 보안", "gender": "남", "email": "008sdh@naver.com", "phone": "010-8884-1864", "org": "핀테크 기업 CISO/CPO 및 경영진", "school": "", "degree": "박사", "major": "정보보호 공학석사\n컴퓨터공학 박사", "career": "", "linkedIn": "", "repBook": "실용적인 클라우드 보안 (공역)", "tools": "", "memo": ""}, {"id": "t183", "name": "박선표", "type": "translator", "grade": "A", "field": "데브옵스, 쿠버네티스, 쿠버네티스 에코시스템, 클라우드 컴퓨팅, 테라폼, 빅데이터 분석", "gender": "남", "email": "photo1004@empas.com", "phone": "카카오톡 ID : utucc1004\n인터넷 전화 : 070-4205-5784", "org": "캐나다 블록체인 업체", "school": "고려대학교 컴퓨터정보통신대학원", "degree": "석사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "포그ㆍ에지 컴퓨팅", "tools": "", "memo": ""}, {"id": "t184", "name": "김현민", "type": "translator", "grade": "A", "field": "정보보안 분야(모의해킹/리버싱/포렌식/모바일/웹 등)", "gender": "남", "email": "kimhmin85@naver.com", "phone": "010-8517-0565", "org": "금융보안원 (Financial Security Institute)", "school": "고려대학교", "degree": "석사", "major": "정보보호대학원", "career": "", "linkedIn": "", "repBook": "실전 버그 바운티 (공역)", "tools": "", "memo": ""}, {"id": "t185", "name": "이진호", "type": "translator", "grade": "B", "field": "함수형 프로그래밍, 해킹, AWS 보안, 칼리 리눅스, 사이버 보안, 운영체제, IoT", "gender": "남", "email": "ezno84@gmail.com", "phone": "010-9958-9735", "org": "금융보안원 (Financial Security Institute)", "school": "성균관대학교\nUniversity of California, Davis", "degree": "석사", "major": "컴퓨터과학\n컴퓨터 교육", "career": "", "linkedIn": "", "repBook": "실전 버그 바운티 (공역)", "tools": "", "memo": ""}, {"id": "t186", "name": "김형훈(테크 트랜스 그룹 T4)", "type": "translator", "grade": "B", "field": "알고리즘, 양자 컴퓨팅, OpenCV, 머신러닝, 그래프 머신러닝", "gender": "남", "email": "greg_kim1002@naver.com", "phone": "010-9530-5295", "org": "삼성전자", "school": "인하대학교", "degree": "학사", "major": "전자공학과", "career": "", "linkedIn": "", "repBook": "그래프 알고리즘 (공역)", "tools": "", "memo": ""}, {"id": "t187", "name": "윤원주", "type": "translator", "grade": "B", "field": "정량/계량 데이터, R, STATA, 마케팅 (일영 번역 가능)", "gender": "남", "email": "wyun@hufs.ac.kr", "phone": "010-6430-2815", "org": "한국원서어대학교 경영대학 마케팅 전공 교수", "school": "노스웨스턴 대학교\n한양대학교\n텍사스 A&M 대학교 메이즈 경영대학원", "degree": "박사", "major": "경영대학", "career": "", "linkedIn": "", "repBook": "계량 사회과학 입문", "tools": "", "memo": ""}, {"id": "t188", "name": "김광일", "type": "translator", "grade": "A", "field": "머신러닝, 딥러닝, 기타 인공지능 관련, 데이터 분석/데이터 과학", "gender": "남", "email": "kikim6114@gmail.com", "phone": "010-2611-6114", "org": "동국대학 융합교육원 및 인공지능대학원", "school": "한양대학교\n한국과학기술원(KAIST)", "degree": "학사\n석사", "major": "산업공학과\n경영과공학", "career": "", "linkedIn": "", "repBook": "케라스부터 쿠버네티스까지", "tools": "", "memo": ""}, {"id": "t189", "name": "변혜정", "type": "translator", "grade": "A", "field": "데이터 분석, 시각화", "gender": "여", "email": "hjbyun1109@naver.com", "phone": "010-8885-1522", "org": "쿠팡", "school": "서울대학교", "degree": "박사", "major": "환경보건학", "career": "", "linkedIn": "", "repBook": "데이터 스토리텔링 연습", "tools": "", "memo": ""}, {"id": "t190", "name": "이덕기", "type": "translator", "grade": "A", "field": "C, Java, C++, 파이썬, 클라우드 컴퓨팅, 빅데이터, 헬스케어, 유비쿼터스, 컴퓨터 구조, 운영체제, 데이터베이스, IoT, 아두이노", "gender": "남", "email": "csleedk@gmail.com", "phone": "010-5584-0845", "org": "연암공과대학교 스마트소프트웨어학과 교수", "school": "University of Florid\n한국항공대학교", "degree": "박사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "스트리밍 시스템 (공역)", "tools": "", "memo": ""}, {"id": "t191", "name": "전진우", "type": "translator", "grade": "A", "field": "클라우드 컴퓨팅 (AWS), 리눅스", "gender": "남", "email": "vance1014@gmail.com", "phone": "010-9027-8663", "org": "삼성SDS", "school": "건국대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "파이썬으로 하는 데브옵스", "tools": "", "memo": ""}, {"id": "t192", "name": "정아정", "type": "translator", "grade": "A", "field": "소프트웨어 개발방법론, 소프트웨어 테스팅, C++ 프로그래밍", "gender": "여", "email": "ooookoooo88@gmail.com", "phone": "010-8726-7962", "org": "LIG넥스원에서 소프트웨어 개발자", "school": "부산대학교", "degree": "석사", "major": "정보컴퓨터공학부\n컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "데브옵스 도입 전략", "tools": "", "memo": ""}, {"id": "t193", "name": "강병윤", "type": "translator", "grade": "A", "field": "OAuth, 보안, 해킹", "gender": "남", "email": "kby88power@naver.com", "phone": "010-5557-8286", "org": "모의해킹 컨설턴트 프린랜서", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "OAuth 2.0 API 보안 2/e (공역)", "tools": "", "memo": ""}, {"id": "t194", "name": "김한수", "type": "translator", "grade": "A", "field": "OAuth, 보안, 해킹", "gender": "남", "email": "normaltic1018@gmail.com", "phone": "010-3041-1426", "org": "모의해킹 컨설턴트 프린랜서", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "OAuth 2.0 API 보안 2/e (공역)", "tools": "", "memo": ""}, {"id": "t195", "name": "구진수", "type": "translator", "grade": "B", "field": "모바일 프로그래밍 (안드로이드, 아이폰, 코틀린, 스위프트, 오브젝티브 씨 등), 게임 프로그래밍 (언리얼, 유니티 등), 기타 컴퓨터 프로그래밍 관련 (머신러닝, 빅데이터, 알고리즘 등)", "gender": "남", "email": "paser2@gmail.com", "phone": "010-3084-3628", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "레이 트레이싱", "tools": "", "memo": ""}, {"id": "t196", "name": "노설빈", "type": "translator", "grade": "A", "field": "AWS  AI 서비스", "gender": "여", "email": "", "phone": "", "org": "프리랜서 번역가", "school": "연세대학교\n연세대학교 대학원", "degree": "학사\n석사", "major": "영어영문학과\n영어영문학과", "career": "", "linkedIn": "", "repBook": "AWS 기반 AI 애플리케이션 개발 (공역)", "tools": "", "memo": ""}, {"id": "t197", "name": "허준호", "type": "translator", "grade": "A", "field": "컴퓨팅 전반(분산/병렬 알고리즘, 클라우드 컴퓨팅 등)", "gender": "남", "email": "jhher@tta.or.kr", "phone": "010-7250-4562", "org": "한국정보통신기술협회", "school": "경북대학교\n광주과학기술원\n프랑스 국책연구소 INRIA", "degree": "학사\n석/박사\n박사후연구원", "major": "전자전기공학부 전자전기컴퓨터 전공\n분산 및 병렬처리 알고리즘 전공\n과학계산용 병렬 수치 라이브러리를 개발", "career": "", "linkedIn": "", "repBook": "AWS 기반 AI 애플리케이션 개발 (공역)", "tools": "", "memo": ""}, {"id": "t198", "name": "배영부", "type": "translator", "grade": "A", "field": "AWS 보안, 네트워크 보안, 디지털 포렌식", "gender": "남", "email": "rich.bae@gmail.com", "phone": "010-3157-0618", "org": "아마존", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "쉽게 적용하는 AWS 보안 레시피 (공역)", "tools": "", "memo": ""}, {"id": "t199", "name": "김홍중", "type": "translator", "grade": "A", "field": "모바일, 아이폰, 윈도우폰, 플러터, C#, 유니티", "gender": "남", "email": "planetar@gmail.com", "phone": "010-4893-2064", "org": "", "school": "중앙대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "C# 동시성 프로그래밍 2/e", "tools": "", "memo": ""}, {"id": "t200", "name": "이승룡", "type": "translator", "grade": "A", "field": "통계, 스프링 배치", "gender": "남", "email": "sleepred@gmail.com", "phone": "010-3045-5406", "org": "LG", "school": "홍익대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "스프링 배치 완벽 가이드 2/e (공역)", "tools": "", "memo": ""}, {"id": "t201", "name": "박효균", "type": "translator", "grade": "A", "field": "데이터 엔지니어링, 오라클, 빅데이터 마이닝", "gender": "남", "email": "gyrbsdl18@naver.com", "phone": "010 5195 6576", "org": "네이버", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "빅데이터 마이닝 3/e (공역)", "tools": "", "memo": ""}, {"id": "t202", "name": "이미정", "type": "translator", "grade": "A", "field": "Splunk, 자바, 파이썬, 머신러닝, 빅데이터 마이닝", "gender": "여", "email": "puremjlee@gmail.com", "phone": "010-2109-4093", "org": "Snowflake Senior Sales Engineer", "school": "성균관대학교\n한동대학교", "degree": "학사\n석사", "major": "컴퓨터공학\n정보통신학과", "career": "", "linkedIn": "https://www.linkedin.com/in/m-j-lee-525a18b6/", "repBook": "빅데이터 마이닝 3/e (공역)", "tools": "", "memo": ""}, {"id": "t203", "name": "유연재", "type": "translator", "grade": "A", "field": "자바, 파이썬, 자동화", "gender": "남", "email": "yyj20934@naver.com", "phone": "010-8898-9423", "org": "캐롯손해보험", "school": "동국대학교", "degree": "학사", "major": "", "career": "", "linkedIn": "", "repBook": "클린 파이썬", "tools": "", "memo": ""}, {"id": "t204", "name": "권혜정", "type": "translator", "grade": "A", "field": "시각디자인", "gender": "여", "email": "kwonejeong@gmail.com", "phone": "010-4709-7958", "org": "번역 프리랜서", "school": "국민대학교", "degree": "학사", "major": "시각디자인학과", "career": "", "linkedIn": "", "repBook": "개발 함정을 탈출하라", "tools": "", "memo": ""}, {"id": "t205", "name": "김진홍", "type": "translator", "grade": "A", "field": "검색모델링, 검색엔진", "gender": "남", "email": "jinhong.kim@gmail.com", "phone": "010-2613-6313", "org": "네이버", "school": "서울대학교\n서울대학교 대학원", "degree": "학사\n석사", "major": "물리학과 \n통계물리학", "career": "", "linkedIn": "", "repBook": "정보 검색의 이론과 실제 (공역)", "tools": "", "memo": ""}, {"id": "t206", "name": "지현미", "type": "translator", "grade": "A", "field": "디지털보안, 포렌식, 보안", "gender": "여", "email": "hmji@kmu.ac.kr", "phone": "010-2490-3986", "org": "계명대학교 경영대학 회계학전공 부교수", "school": "성균관대학교", "degree": "박사", "major": "경영대학 회계학전공", "career": "", "linkedIn": "", "repBook": "IT 감사 3/e (공역)", "tools": "", "memo": ""}, {"id": "t207", "name": "최영곤", "type": "translator", "grade": "A", "field": "디지털보안, 포렌식, 보안", "gender": "남", "email": "ykc295@gw.kmu.ac.kr", "phone": "010-8570-5287", "org": "계명대학교 경영대학 회계학전공 명예교수", "school": "연세대학교", "degree": "박사", "major": "경영대학 회계학전공", "career": "", "linkedIn": "", "repBook": "IT 감사 3/e (공역)", "tools": "", "memo": ""}, {"id": "t208", "name": "홍순태", "type": "translator", "grade": "B", "field": "클라우드 컨설팅, 구축, 운영 관리", "gender": "남", "email": "suntae.hong@thecloudist.co.kr", "phone": "010-9072-5930", "org": "더클라우디스트", "school": "고려대학교", "degree": "석사", "major": "사회학과", "career": "", "linkedIn": "", "repBook": "AWS 공인 솔루션스 아키텍트 연습문제 - 어소시에이트", "tools": "", "memo": ""}, {"id": "t209", "name": "권병섭", "type": "translator", "grade": "A", "field": "임베디드 소프트웨어 개발, 엔터프라이즈 프레임워크 개발", "gender": "남", "email": "sk.refresh@gmail.com", "phone": "010-2875-6784", "org": "네이버 클라우드 아키텍트", "school": "", "degree": "학사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "카오스 공학", "tools": "", "memo": ""}, {"id": "t210", "name": "심주연", "type": "translator", "grade": "A", "field": "콘텐츠", "gender": "여", "email": "joo.shim@gmail.com", "phone": "010-5958-9031", "org": "", "school": "서강대학교", "degree": "학사", "major": "경역학과\n중국문화학", "career": "", "linkedIn": "", "repBook": "공간 웹", "tools": "", "memo": ""}, {"id": "t211", "name": "장세영", "type": "translator", "grade": "A", "field": "Digital Innovation, 빅데이터, AI, IoT를 활용한 발전 분야의 솔루션 전략 및 개발", "gender": "남", "email": "sygavy@gmail.com", "phone": "010-4114-4764", "org": "두산중공업 IT전략", "school": "경희대학교\n경희대학교 대학원", "degree": "학사\n석사", "major": "행정학과\n도시정보전략", "career": "", "linkedIn": "", "repBook": "디지털 전환 시대의 애자일 경영", "tools": "", "memo": ""}, {"id": "t212", "name": "김재민", "type": "translator", "grade": "A", "field": "데이터 분석, 통계 연구, 경영전략, 데이터과학", "gender": "남", "email": "jaemin.kim@stockton.edu", "phone": "010-4529-4036", "org": "미시간 오클랜드대학교 비지니스스쿨 경영학과 조교수", "school": "미시시피대학", "degree": "박사", "major": "경영학", "career": "", "linkedIn": "", "repBook": "자연어 처리와 딥러닝", "tools": "", "memo": ""}, {"id": "t213", "name": "이우현", "type": "translator", "grade": "B", "field": "데이터베이스, 클라우드 컴퓨팅, 웹, 모바일 프로그래밍, 소프트웨어 아키텍쳐", "gender": "남", "email": "owen.left@gmail.com", "phone": "010-3311-4051", "org": "", "school": "서울대학교\n위스콘신 메디슨 주립대", "degree": "학사\n석사", "major": "컴퓨터공학과\n컴퓨터공학", "career": "", "linkedIn": "", "repBook": "데이터베이스 인터널스", "tools": "", "memo": ""}, {"id": "t214", "name": "김유성", "type": "translator", "grade": "A", "field": "Selenium, 타입스크립트", "gender": "남", "email": "kallare@gmail.com", "phone": "010-6628-1710", "org": "사이냅소프트", "school": "광운대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "타입스크립트 실전 프로젝트", "tools": "", "memo": ""}, {"id": "t215", "name": "류영선", "type": "translator", "grade": "A", "field": "웹기술, 홈네트워크 표준화", "gender": "남", "email": "rebelion@naver.com", "phone": "010-2288-7809", "org": "삼성전자 연구소", "school": "성균관대학교", "degree": "학사", "major": "전기공학과", "career": "", "linkedIn": "", "repBook": "프레임워크 없는 프론트엔드 개발", "tools": "", "memo": ""}, {"id": "t216", "name": "반영록", "type": "translator", "grade": "A", "field": "컴퓨터 과학, 스칼라", "gender": "남", "email": "yrbahn@gmail.com", "phone": "010-6291-7116", "org": "쿠팡 Machine Learning Engineer", "school": "뉴욕대학교", "degree": "석사", "major": "컴퓨터과학", "career": "", "linkedIn": "", "repBook": "Programming in Scala 4/e (공역)", "tools": "", "memo": ""}, {"id": "t217", "name": "이동욱", "type": "translator", "grade": "A", "field": "브젝티브C, 스칼라, 객체지향, C언어,", "gender": "남", "email": "i015005@gmail.com", "phone": "010-4002-3202", "org": "SK테크엑스", "school": "연세대학교", "degree": "학사", "major": "도시공학과", "career": "", "linkedIn": "", "repBook": "Programming in Scala 4/e (공역)", "tools": "", "memo": ""}, {"id": "t218", "name": "강인호", "type": "translator", "grade": "A", "field": "AWS, k8s, cloud native app develop, observability", "gender": "남", "email": "innoshome@gmail.com", "phone": "010-8467-3279", "org": "Amazon Web Services (AWS)", "school": "인하대학교", "degree": "학사", "major": "항공우주공학과", "career": "", "linkedIn": "https://www.linkedin.com/in/inho-kang-40281392/", "repBook": "쿠버네티스 인 액션 (공역)", "tools": "", "memo": ""}, {"id": "t219", "name": "송용근", "type": "translator", "grade": "A", "field": "데이터 마이닝, 구글 애널리틱스, 데이터 분석, 시각화", "gender": "남", "email": "insaint03@gmail.com", "phone": "010-2861-2993", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t220", "name": "박지수", "type": "translator", "grade": "A", "field": "정보보안, 위협모델", "gender": "남", "email": "jisoo8881@naver.com", "phone": "010-9020-2368", "org": "", "school": "동국대학교\n고려대학교 정보보호대학원", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "위협 인텔리전스와 데이터 기반 위협 사냥", "tools": "", "memo": ""}, {"id": "t221", "name": "강원종(남성민)", "type": "translator", "grade": "A", "field": "보안, 네트워크, 시스템 아키텍쳐, 콜센터시스템", "gender": "남", "email": "wjkang55@gmail.com", "phone": "010-7677-3334", "org": "", "school": "서경대학교", "degree": "학사", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "멀웨어 분석과 리버스 엔지니어링", "tools": "", "memo": ""}, {"id": "t222", "name": "이찬희", "type": "translator", "grade": "", "field": "머신러닝, 데이터 분석, 파이썬", "gender": "남", "email": "qjzx6428@gmail.com/chanheelee@devsisters.com", "phone": "010-9344-5671", "org": "데브시스터즈", "school": "포항공과대학교\n서울대학교 대학원", "degree": "학사\n석사", "major": "물리학\n물리학", "career": "", "linkedIn": "https://www.linkedin.com/in/chanhee-lee-337b60205/", "repBook": "Mathematics for Game Programming and Computer Graphics 번역중", "tools": "", "memo": ""}, {"id": "t223", "name": "김성진", "type": "translator", "grade": "", "field": "퀀트, 금융공학, 알고리즘 트레이딩", "gender": "남", "email": "davidkim0523@gmail.com", "phone": "010-7137-6406", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t224", "name": "박성철", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "fupfin@gmail.com", "phone": "010-9248-5874", "org": "마켓컬리 이사", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t225", "name": "김진환", "type": "translator", "grade": "", "field": "정보보안, 개인정보", "gender": "남", "email": "jhkim7973@gmail.com", "phone": "010-6298-7973", "org": "프리랜서(회사명)", "school": "건국대학교\n경원대학교 대학원", "degree": "학사\n석사", "major": "정보통신대학원 정보시스템감리전공\n전자공학전공(학사)", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t226", "name": "이동수", "type": "translator", "grade": "", "field": "게임, 컴퓨터 그래픽", "gender": "남", "email": "cineson72@gmail.com", "phone": "010-8792-6007", "org": "아트가우디 미술학원/원장", "school": "중앙대학교", "degree": "학사", "major": "서양화과", "career": "", "linkedIn": "www.linkedin.com/in/stevedongsulee", "repBook": "", "tools": "", "memo": ""}, {"id": "t227", "name": "이승범", "type": "translator", "grade": "", "field": "소프트웨어 아키텍처", "gender": "남", "email": "blcktgr73@gmail.com", "phone": "010-2713-7392", "org": "삼성전자 무선사업부", "school": "서강대학교", "degree": "석사", "major": "전자공학과", "career": "", "linkedIn": "https://www.linkedin.com/in/seung-bum-lee-b5049118/", "repBook": "", "tools": "", "memo": ""}, {"id": "t228", "name": "한정원", "type": "translator", "grade": "", "field": "정보보호, 보안, 개인정보 관점의 서비스 설계\nAWS 등 클라우드 아키텍처 및 보안", "gender": "남", "email": "mirme01@nate.com", "phone": "010-9137-2381", "org": "야놀자", "school": "동국대학교 국제정보보호대학원", "degree": "석사", "major": "정보보호학과", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t229", "name": "이지성", "type": "translator", "grade": "", "field": "게임 개발,언리얼 엔진, 유니티", "gender": "남", "email": "", "phone": "", "org": "㈜에스더블유엠", "school": "고려대학교 컴퓨터정보통신대학원", "degree": "석사", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": "송정은 부부"}, {"id": "t230", "name": "송정은", "type": "translator", "grade": "", "field": "게임 개발,언리얼 엔진, 유니티, 빅데이터, 인공지능", "gender": "여", "email": "", "phone": "", "org": "", "school": "세종대학교 컴퓨터공학\n국제영어대학원대학교(IGSE)", "degree": "학사\n석사", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": "이지성 부부"}, {"id": "t231", "name": "김찬규", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "calvin.kyu@kidsnote.com", "phone": "010-6357-6462", "org": "키즈노트", "school": "서울시립대학교\n서울대학교", "degree": "학사\n석사", "major": "국제협력학과", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t232", "name": "박철", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "iron.p@kidsnote.com", "phone": "", "org": "키즈노트", "school": "", "degree": "", "major": "전문학사, 전공 모바일IT", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t233", "name": "이국성", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "noah.gook@kidsnote.com", "phone": "", "org": "키즈노트", "school": "가천대학교\n남서울대학교 대학원", "degree": "학사\n석사", "major": "전자공학과\n빅데이터인공지능학과", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t234", "name": "김민호", "type": "translator", "grade": "", "field": "해킹 보안, 시스템/네트워크 보안, 클라우드 등", "gender": "남", "email": "ygha07@gmail.com", "phone": "010-5617-2485", "org": "Softbank SOC 분석팀", "school": "", "degree": "학사", "major": "전자계산학", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t235", "name": "손진호, 서휘원", "type": "translator", "grade": "", "field": "로보틱스", "gender": "남", "email": "handjino@naver.com", "phone": "010-8149-0466", "org": "아크릴ai", "school": "성균관대학교\n서울대학교 대학원", "degree": "박사", "major": "컴퓨터 시스템 네트워킹\n나노융합IP최고전략", "career": "", "linkedIn": "https://www.linkedin.com/in/drsohn777/", "repBook": "", "tools": "", "memo": ""}, {"id": "t236", "name": "권석기", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "hallomuze@gmail.com", "phone": "010-2875-1391", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t237", "name": "박명훈", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "parc.seoultech@gmail.com", "phone": "010-8963-2495", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t238", "name": "박세진", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "ivyheart2@gmail.com", "phone": "010-4796-2501", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t239", "name": "김은도", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "maniada2@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t240", "name": "이상우", "type": "translator", "grade": "", "field": "", "gender": "남", "email": "leejswo@gmail.com", "phone": "010-5247-2361", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t241", "name": "곽찬희", "type": "translator", "grade": "", "field": "", "gender": "", "email": "chk@kangnam.ac.kr", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t242", "name": "김상원", "type": "translator", "grade": "", "field": "", "gender": "", "email": "vangogh9591@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t243", "name": "김지현", "type": "translator", "grade": "", "field": "", "gender": "", "email": "potatogim@potatogim.net", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t244", "name": "박경현", "type": "translator", "grade": "", "field": "", "gender": "", "email": "hareton@etri.re.kr", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t245", "name": "박병준", "type": "translator", "grade": "", "field": "", "gender": "", "email": "pbjworking@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t246", "name": "황다찬", "type": "translator", "grade": "", "field": "", "gender": "", "email": "dachan.hwang@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t247", "name": "박상구", "type": "translator", "grade": "", "field": "", "gender": "", "email": "parksg92@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t248", "name": "박수민", "type": "translator", "grade": "", "field": "", "gender": "", "email": "mam3b@snu.ac.kr", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t249", "name": "박정현", "type": "translator", "grade": "", "field": "", "gender": "", "email": "liveinfootball@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t250", "name": "서아름", "type": "translator", "grade": "", "field": "", "gender": "", "email": "info@areumseo.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t251", "name": "손진호", "type": "translator", "grade": "", "field": "", "gender": "", "email": "handjino@naver.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t252", "name": "윤여찬", "type": "translator", "grade": "", "field": "", "gender": "", "email": "vorsicht80@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t253", "name": "이영석", "type": "translator", "grade": "", "field": "", "gender": "", "email": "eoleumbi@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t254", "name": "이정문", "type": "translator", "grade": "", "field": "", "gender": "", "email": "kamui73@hotmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t255", "name": "권구주", "type": "translator", "grade": "", "field": "", "gender": "", "email": "mysofs@naver.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t256", "name": "이은석", "type": "translator", "grade": "", "field": "", "gender": "", "email": "elflee77@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t257", "name": "임태영", "type": "translator", "grade": "", "field": "", "gender": "", "email": "ty576@naver.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t258", "name": "안영훈", "type": "translator", "grade": "", "field": "", "gender": "", "email": "fomagran6@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t259", "name": "장민창", "type": "translator", "grade": "", "field": "", "gender": "", "email": "mins4416@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t260", "name": "정슬기", "type": "translator", "grade": "", "field": "", "gender": "", "email": "seulki.jung1024@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t261", "name": "조문옥", "type": "translator", "grade": "", "field": "", "gender": "", "email": "jodas78@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t262", "name": "최진우", "type": "translator", "grade": "", "field": "", "gender": "", "email": "jwchoi0710@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t263", "name": "김인", "type": "translator", "grade": "", "field": "", "gender": "", "email": "hoeyin@snu.ac.kr", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t264", "name": "하창균", "type": "translator", "grade": "", "field": "", "gender": "", "email": "hachonkun22@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t265", "name": "황혁기", "type": "translator", "grade": "", "field": "", "gender": "", "email": "​qbranes@gmail.com", "phone": "", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t266", "name": "이선민", "type": "translator", "grade": "A", "field": "디자인, UX", "gender": "여", "email": "editelsewhere@gmail.com", "phone": "010-3101-6533", "org": "이화여자대학교 겸임교수", "school": "이화여자대학교\nRhode Island School of Design", "degree": "학사\n석사", "major": "산업 디자인", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}, {"id": "t267", "name": "김현진", "type": "translator", "grade": "A", "field": "산업공학, 통계, UX 디자인", "gender": "남", "email": "hj.kim8519@gmail.com", "phone": "010-7920-1389", "org": "딥핑소스", "school": "포항공과대학교", "degree": "박사", "major": "산업경영공학", "career": "", "linkedIn": "https://www.linkedin.com/in/hjkim8519/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", "repBook": "", "tools": "", "memo": ""}, {"id": "a1", "name": "김재성", "type": "author", "grade": "A", "field": "프리젠테이션", "gender": "남", "email": "into-my-light@hanmail.net", "phone": "010-7184-0527", "org": "카카오 Corporate Strategy\n파트장", "school": "서울대학교", "degree": "학사", "major": "컴퓨터 공학부", "career": "", "linkedIn": "", "repBook": "퍼펙트 프리젠테이션 3", "tools": "", "memo": ""}, {"id": "a2", "name": "연수권", "type": "author", "grade": "A", "field": "ISMS-P, 개인정보 보안", "gender": "남", "email": "ysk1069@naver.com", "phone": "010-8575-1069", "org": "와디즈 CISO", "school": "", "degree": "박사", "major": "경영학", "career": "", "linkedIn": "", "repBook": "ISMS-P 인증 실무 가이드 3/e (공저)", "tools": "", "memo": ""}, {"id": "a3", "name": "신동혁", "type": "author", "grade": "A", "field": "ISMS-P, 개인정보 보안", "gender": "남", "email": "donghyukshin@shindygames.com", "phone": "010-8884-1864", "org": "핀테크 기업 CISO/CPO 및 경영진", "school": "", "degree": "박사", "major": "정보보호 공학석사\n컴퓨터공학 박사", "career": "", "linkedIn": "", "repBook": "ISMS-P 인증 실무 가이드 3/e (공저)", "tools": "", "memo": ""}, {"id": "a4", "name": "박나룡", "type": "author", "grade": "A", "field": "ISMS-P, 개인정보 보안", "gender": "남", "email": "isssi@daum.net", "phone": "010-2749-1296", "org": "보안전략연구소 소장, 브로콜리 CISO/CPO", "school": "성균관대학교 대학원", "degree": "석사", "major": "정보통신정책학 공학석사", "career": "", "linkedIn": "", "repBook": "ISMS-P 인증 실무 가이드 3/e (공저)", "tools": "", "memo": ""}, {"id": "a5", "name": "조세영", "type": "author", "grade": "A", "field": "코틀린, 안드로이드", "gender": "남", "email": "seyoungcho2@gmail.com", "phone": "010-9763-3776", "org": "라인플러스 안드로이드 개발자", "school": "한국과학기술원(KAIST) 전기및전자공학부 \n고려대학교 전기전자전파공학부 학사\n고려대학교 보건정책관리학부 학사\n인천원서어고등학교 졸업", "degree": "석사", "major": "", "career": "", "linkedIn": "", "repBook": "코틀린 코루틴의 정석", "tools": "", "memo": ""}, {"id": "a6", "name": "정영균", "type": "author", "grade": "A", "field": "오라클", "gender": "남", "email": "ykyunjung@naver.com", "phone": "010-4189-7241", "org": "한국 오라클", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "바로 쓰는 오라클 클라우드 (공저)", "tools": "", "memo": ""}, {"id": "a7", "name": "유정훈", "type": "author", "grade": "A", "field": "오라클", "gender": "남", "email": "junghoon.yoo@oracle.com", "phone": "010-2667-3228", "org": "한국 오라클", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "바로 쓰는 오라클 클라우드 (공저)", "tools": "", "memo": ""}, {"id": "a8", "name": "김가림", "type": "author", "grade": "A", "field": "레디스", "gender": "여", "email": "garimoo.kim@gmail.com\ngarim95@hanmail.net(사용안함)", "phone": "010-2739-5361", "org": "㈜우아한형제들 데이터베이스 엔지니어", "school": "", "degree": "동국대학교", "major": "컴퓨터공학과", "career": "", "linkedIn": "", "repBook": "개발자를 위한 레디스", "tools": "", "memo": ""}, {"id": "a9", "name": "동준상", "type": "author", "grade": "A", "field": "임베디드 보안, 리눅스 가상화, 4차산업혁명 및 IoT 기반, 클라우드, 인공지능, 양자컴퓨팅 실무 활용서", "gender": "남", "email": "naebon@naver.com", "phone": "010-4801-4118", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "AWS 공인 클라우드 프랙티셔너 마스터", "tools": "", "memo": ""}, {"id": "a10", "name": "조운래", "type": "author", "grade": "A", "field": "YOCTO", "gender": "남", "email": "woonrae@hanmail.net", "phone": "010-5520-7611", "org": "현대모비스 책임연구원", "school": "인하대학교", "degree": "석사", "major": "전기전자 학사\n(정보통신, 세부전공: 음성인식) 석사", "career": "", "linkedIn": "", "repBook": "Yocto, 쉽게 이해하고 깊게 다루기", "tools": "", "memo": ""}, {"id": "a11", "name": "김선일", "type": "author", "grade": "C", "field": "헬스케어 빅테이터", "gender": "남", "email": "suninno@gmail.com", "phone": "010-5845-6408", "org": "빅헤브솔루션㈜ CEO", "school": "야마가타(山形)대학 \n동경(東京)대학 대학원", "degree": "석사", "major": "공학부 정보과학과\n전자정보학 석사", "career": "", "linkedIn": "", "repBook": "헬스케어 빅데이터 분석의 정석", "tools": "", "memo": ""}, {"id": "a12", "name": "김상윤A", "type": "author", "grade": "A", "field": "ChatGPT", "gender": "남", "email": "slypuma@daum.net", "phone": "010-9378-6141", "org": "중앙선거관리위원회 정보정책과", "school": "독학\n고려대학교 대학원\n서울과학기술대학교 대학원", "degree": "학사\n석사\n박사 과정중", "major": "컴퓨터공학사\n공학석사\n박사 과정중", "career": "", "linkedIn": "", "repBook": "ChatGPT로 시작하는 대화형 인공지능 활용법", "tools": "", "memo": ""}, {"id": "a13", "name": "오현석(Hyunsok Oh)", "type": "author", "grade": "A", "field": "코틀린, 스칼라, 함수형 프로그래밍", "gender": "남", "email": "enshahar@gmail.com", "phone": "Mobile: +61-420-699-551\n010-3170-6377(어머니)", "org": "모빌리티42 이사", "school": "경기과학고\n한국과학기술원(KAIST)", "degree": "석사", "major": "전산학과(프로그래밍 언어)", "career": "", "linkedIn": "", "repBook": "핵심 코틀린 프로그래밍", "tools": "", "memo": ""}, {"id": "a14", "name": "김장현", "type": "author", "grade": "B", "field": "인공지능", "gender": "남", "email": "alohakim@skku.edu", "phone": "010-2389-2655", "org": "성균관대학교 교수", "school": "연세대학교\n미국 뉴욕주립대학교 버팔로", "degree": "석사", "major": "경제학 학사\n인터넷이용자 연구 석사", "career": "", "linkedIn": "", "repBook": "문과생을 위한 인공지능 입문 (공저)", "tools": "", "memo": ""}, {"id": "a15", "name": "김민철", "type": "author", "grade": "A", "field": "인공지능", "gender": "남", "email": "kimminchul@cau.ac.kr", "phone": "010-7135-6164", "org": "중앙대학교 미디어커뮤니케이션 학부 조교수", "school": "중앙대학교\n미국 인디애나 대학교", "degree": "박사", "major": "신문방송학 학사\n매스커뮤니케이션학 박사", "career": "", "linkedIn": "", "repBook": "문과생을 위한 인공지능 입문 (공저)", "tools": "", "memo": ""}, {"id": "a16", "name": "최성남", "type": "author", "grade": "A", "field": "5G, 이동통신 기술", "gender": "남", "email": "sungnam.choe@nokia.com", "phone": "010-5382-1929", "org": "노키아 기업용 5G 자가망 솔루션 컨설턴트", "school": "서울대학교\n헬싱키경제대학\nMIT Sloan & CSAIL의 AI Coursework", "degree": "석사", "major": "경영학", "career": "", "linkedIn": "", "repBook": "기업의 DX와 5G (공저)", "tools": "", "memo": ""}, {"id": "a17", "name": "안철주", "type": "author", "grade": "A", "field": "5G, 이동통신 기술", "gender": "남", "email": "cheol-joo.ahn@nokia.com", "phone": "010-8877-7439", "org": "노키아 E2E Solution Architect", "school": "성결대학교\n연세대학교\n한세대학교", "degree": "박사", "major": "공학", "career": "", "linkedIn": "", "repBook": "기업의 DX와 5G (공저)", "tools": "", "memo": ""}, {"id": "a18", "name": "육영수", "type": "author", "grade": "A", "field": "5G, 이동통신 기술", "gender": "남", "email": "youngsoo.yuk@nokia.com", "phone": "010-8224-9224", "org": "노키아", "school": "연세대학교", "degree": "박사", "major": "전자공학", "career": "", "linkedIn": "", "repBook": "기업의 DX와 5G (공저)", "tools": "", "memo": ""}, {"id": "a19", "name": "김다정", "type": "author", "grade": "A", "field": "소프트웨어 엔지니어링 전반, 자바, 분산시스템 디자인/개발", "gender": "여", "email": "f.softwareengineer@gmail.com", "phone": "1-424-358-8458", "org": "아마존 웹서비스(AWS Glue) 분산 서버리스 인프라 개발팀", "school": "건국대학교", "degree": "학사", "major": "컴퓨터공학부", "career": "", "linkedIn": "https://www.linkedin.com/in/alyssa-k-b545795b/", "repBook": "React.js, 스프링 부트, AWS로 배우는 웹 개발 101 2/e", "tools": "", "memo": ""}, {"id": "a20", "name": "홍창수", "type": "author", "grade": "A", "field": "금융, 로보어드바이저, 퀀트", "gender": "남", "email": "gauss92@naver.com", "phone": "1097994119", "org": "NICE P&I 정보사업본부 금융공학 컨설팅 업무", "school": "경북대학교\n한국원서어대학교", "degree": "박사", "major": "경영학", "career": "", "linkedIn": "", "repBook": "퀀트의 세계", "tools": "", "memo": ""}, {"id": "a21", "name": "이진기", "type": "author", "grade": "B", "field": "자연어 처리", "gender": "남", "email": "jinkilee73@gmail.com", "phone": "010-6685-1907", "org": "포스코ICT AI/빅데이터 개발그룹", "school": "성균관대학교\nUniversity of Warwick: Data Analysis", "degree": "석사", "major": "컴퓨터공학 학사\n데이터 분석", "career": "", "linkedIn": "", "repBook": "안녕, 트랜스포머", "tools": "", "memo": ""}, {"id": "a22", "name": "음두헌", "type": "author", "grade": "A", "field": "자바, 객체지향 프로그래밍", "gender": "남", "email": "dheum@duksung.ac.kr", "phone": "010-2245-8345", "org": "덕성여자대학교 소프트웨어 전공교수", "school": "미국 오리건(Oregon) 주립대학교에서", "degree": "석사", "major": "전자공학", "career": "", "linkedIn": "", "repBook": "자바 객체지향 프로그래밍 입문 2/e", "tools": "", "memo": ""}, {"id": "a23", "name": "김대욱", "type": "author", "grade": "A", "field": "사진, 조명", "gender": "남", "email": "kimdaewook@joongbu.ac.kr", "phone": "010-7710-9199", "org": "중부대학교(고양 캠퍼스) 사진영상학 전공 전임 교수", "school": "중앙대학교\n브룩스 사진 대학원\n중앙대학교", "degree": "박사", "major": "사진학과 학사\n광고 사진학 박사", "career": "", "linkedIn": "", "repBook": "알기 쉬운 조명 교과서", "tools": "", "memo": ""}, {"id": "a24", "name": "신임철(진경철)", "type": "author", "grade": "A", "field": "금융공학, 행동경제학", "gender": "남", "email": "imchul.shin@hotmail.com", "phone": "010-2941-1905", "org": "GS차지비 대표이사", "school": "고려대학교\n서울대학교\n예일대학교\n하버드 비즈니스 스쿨\n성균관대학교", "degree": "박사", "major": "정치학 학사\n행정학 석사\n경영학 박사", "career": "", "linkedIn": "", "repBook": "처음 만나는 행동경제학", "tools": "", "memo": ""}, {"id": "a25", "name": "이준B", "type": "author", "grade": "B", "field": "케라스, 인공신경망", "gender": "남", "email": "leejun1672@snu.ac.kr", "phone": "010-2771-0393", "org": "삼성전자", "school": "서울대학교", "degree": "박사", "major": "전기·정보공학부", "career": "", "linkedIn": "", "repBook": "케라스로 완성하는 인공 신경망 기본기", "tools": "", "memo": ""}, {"id": "a26", "name": "차정도", "type": "author", "grade": "A", "field": "시스템 보안, 네트워크 보안, 클라우드 보안, 인프라 운영/구축, 네트워크 운영/기초", "gender": "남", "email": "sdow0512@naver.com", "phone": "010-9544-1525", "org": "삼성SDS", "school": "경북대학교", "degree": "학사", "major": "컴퓨터공학\n전자전기공학", "career": "", "linkedIn": "", "repBook": "Amazon VPC 네트워킹 원리와 보안", "tools": "", "memo": ""}, {"id": "a27", "name": "이병욱((주)크라스랩)", "type": "author", "grade": "A", "field": "AI, 머신러닝, 금융, R, 파이썬, LLM , 통계, 암호화폐, 퀀트", "gender": "남", "email": "byunguk@gmail.com", "phone": "010-2387-5659", "org": "서울과학종합대원 AI첨단대학원 주임교수\n한국과학기술원(KAIST) 겸직교수\n한국금융연수원 겸임교수", "school": "카이스트", "degree": "석사", "major": "전산학과", "career": "", "linkedIn": "", "repBook": "돈의 정체", "tools": "", "memo": ""}, {"id": "a28", "name": "김기영C", "type": "author", "grade": "A", "field": "금융 데이터", "gender": "남", "email": "kky416@snu.ac.kr", "phone": "010-5023-0102", "org": "아티피셜 소사이어티 대표", "school": "서울대학교\n서울대학교 대학원", "degree": "박사", "major": "기계항공공학부 학사\n응용수학, 유체역학 박사", "career": "", "linkedIn": "", "repBook": "메타버스 테크놀로지", "tools": "", "memo": ""}, {"id": "a29", "name": "추정호", "type": "author", "grade": "A", "field": "양자 컴퓨팅, AI, 빅데이터, 수학", "gender": "남", "email": "jhchu@hotmail.com", "phone": "010-4412-0484", "org": "유안타 증권", "school": "한국과학기술원(KAIST)", "degree": "박사", "major": "수학과 학사/ 석사\n기계공학과 박사", "career": "", "linkedIn": "", "repBook": "금융공학의 변동성 입문", "tools": "", "memo": ""}, {"id": "a30", "name": "오동진", "type": "author", "grade": "A", "field": "모의 침투", "gender": "남", "email": "firstblood@naver.com", "phone": "010-3326-0107", "org": "국가공무원인재개발원과 한국지역정보개발원의 강사", "school": "인천대학교\n경희 사이버대학교\n한국원서어대학교 교육대학원", "degree": "석사", "major": "일어과\n정보 통신학과\n전산 교육학", "career": "", "linkedIn": "", "repBook": "칼리 리눅스 입문자를 위한 메타스플로잇 중심의 모의 침투 4/e", "tools": "", "memo": ""}, {"id": "a31", "name": "유종원", "type": "author", "grade": "A", "field": "컴파일러", "gender": "남", "email": "tornare86@gmail.com", "phone": "010-4177-9753", "org": "", "school": "청주대학교", "degree": "학사", "major": "컴퓨터정보공학과", "career": "", "linkedIn": "", "repBook": "컴파일러 만들기", "tools": "", "memo": ""}, {"id": "a32", "name": "이상근B", "type": "author", "grade": "A", "field": "블록체인, 클라우드", "gender": "남", "email": "sangkenlee@gmail.com", "phone": "010-9375-6737", "org": "람다랩스 주식회사 공동창업자", "school": "숭실대학교", "degree": "학사", "major": "컴퓨터공학", "career": "", "linkedIn": "", "repBook": "OPA 시작하기", "tools": "", "memo": ""}, {"id": "a33", "name": "김재민", "type": "author", "grade": "A", "field": "빅데이터, 통계", "gender": "남", "email": "jaemin.kim@stockton.edu", "phone": "609-225-2666\n(010-4529-4036)", "org": "미시간 오클랜드대학교 비지니스스쿨 경영학과 조교수", "school": "미시시피대학", "degree": "박사", "major": "경영학", "career": "", "linkedIn": "", "repBook": "메이저리그 야구 통계학 2/e", "tools": "", "memo": ""}, {"id": "a34", "name": "이봉석", "type": "author", "grade": "A", "field": "윈도우 디바이스 드라이버", "gender": "남", "email": "birdstar@hajesoft.co.kr", "phone": "010-8702-5199", "org": "(주)하제소프트 대표이사", "school": "서울과학기술대학교", "degree": "학사", "major": "전산학", "career": "", "linkedIn": "https://www.linkedin.com/in/%EB%B4%89%EC%84%9D-%EC%9D%B4-73487382/", "repBook": "Something in USB", "tools": "", "memo": ""}, {"id": "a35", "name": "남기덕", "type": "author", "grade": "A", "field": "게임 프로그래밍", "gender": "남", "email": "dkkamui@gmail.com", "phone": "010-9798-3107", "org": "동양대학교 게임학부 교수", "school": "홍익대학교\n상명대학교", "degree": "박사", "major": "컴퓨터공학\n게임공학 박사학", "career": "", "linkedIn": "", "repBook": "게임 디자인을 위한 기초 이론", "tools": "", "memo": ""}, {"id": "a36", "name": "이일민", "type": "author", "grade": "A", "field": "스프링", "gender": "남", "email": "tobyilee@gmail.com", "phone": "02-912-6908", "org": "", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "토비의 스프링 3.1", "tools": "", "memo": ""}, {"id": "a37", "name": "김영한", "type": "author", "grade": "A", "field": "", "gender": "남", "email": "ayhkim@skku.edu", "phone": "010-9929-1293", "org": "인프런 강사", "school": "경상대학교(자퇴)\n독학사(졸업)", "degree": "학사", "major": "컴퓨터과학\n컴퓨터과학", "career": "", "linkedIn": "", "repBook": "자바 ORM 표준 JPA 프로그래밍", "tools": "", "memo": ""}, {"id": "a38", "name": "양정윤", "type": "author", "grade": "A", "field": "게임 시나리오 기획", "gender": "남", "email": "jungyunstory@naver.com", "phone": "010-2847-6148", "org": "시프트업", "school": "", "degree": "", "major": "", "career": "", "linkedIn": "", "repBook": "게임 시나리오 기획자를 위한 안내서", "tools": "", "memo": ""}, {"id": "a39", "name": "옥상훈", "type": "author", "grade": "A", "field": "", "gender": "남", "email": "okgosu@gmail.com", "phone": "010-3976-4813", "org": "네이버 Open API & 개발자센터 PM / 네이버 D2 에반절리스트", "school": "한양대학교", "degree": "학사", "major": "생물학과", "career": "", "linkedIn": "https://www.linkedin.com/in/okgosu/", "repBook": "okgosu의 플렉스 4.5 & 플래시 빌더 정석", "tools": "", "memo": ""}, {"id": "a40", "name": "윤성진", "type": "author", "grade": "A", "field": "", "gender": "", "email": "sjyoon@gmail.com", "phone": "010-9192-6298", "org": "LG전자 미디어통신연구소 Agent Group - 연구원\nLG전자 전자기술원 Network Multimedia Group - 주임 연구원\n보험넷 인터넷기반기술연구소 - CTO/이사\nTmaxSoft 컨설팅사업본부/금융실 - 실장/수석컨설턴트, AP본부/FS2실 - 실장/수석연구원\nAccenture Technology Solution - 이사\nTmaxSoft ", "school": "이화여자대학교\nKAIST", "degree": "학사\n석사", "major": "자연과학대학 전자계산학과\n전산학과", "career": "", "linkedIn": "https://www.linkedin.com/in/seongjin-yoon-52046ab2", "repBook": "파이썬으로 구현하는 로보어드바이저", "tools": "", "memo": ""}, {"id": "a41", "name": "이상섭", "type": "author", "grade": "A", "field": "임베디드 해킹", "gender": "남", "email": "k1rh4.lee@gmail.com", "phone": "010-9179-3197", "org": "삼성전자 SR-Security Team", "school": "홍익대학교\nKAIST", "degree": "학사\n석사", "major": "정보통신학과\n정보보호", "career": "", "linkedIn": "", "repBook": "", "tools": "", "memo": ""}];
+var PPL_EDIT_ID = null;
+
+function pplLocalLoad(){
+  try{
+    var saved=JSON.parse(localStorage.getItem(PPL_KEY)||'[]');
+    if(saved.length){
+      // 저장된 편집본으로 기존 데이터 병합
+      var savedMap={};
+      saved.forEach(function(p){ savedMap[p.id]=p; });
+      PPL_ALL=PPL_ALL.map(function(p){ return savedMap[p.id]||p; });
+      // 신규 추가분 (xlsx에 없는 것)
+      saved.forEach(function(p){ if(!PPL_ALL.find(function(x){return x.id===p.id;})) PPL_ALL.push(p); });
+    }
+  }catch(e){}
+}
+function pplLocalSave(){
+  localStorage.setItem(PPL_KEY, JSON.stringify(PPL_ALL));
+}
+function pplUID(){ return 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,4); }
+
+function pplInit(){
+  pplLocalLoad();
+  pplFilter();
+}
+
+function pplFilter(){
+  var q=(document.getElementById('ppl-search')?.value||'').toLowerCase();
+  var type=document.getElementById('ppl-type')?.value||'';
+  var grade=document.getElementById('ppl-grade')?.value||'';
+  var list=document.getElementById('ppl-list');
+  var cnt=document.getElementById('ppl-count');
+  if(!list) return;
+
+  var filtered=PPL_ALL.filter(function(p){
+    if(type&&p.type!==type) return false;
+    if(grade&&p.grade!==grade) return false;
+    if(q&&!((p.name||'').toLowerCase().includes(q)||(p.field||'').toLowerCase().includes(q)||(p.org||'').toLowerCase().includes(q)||(p.email||'').toLowerCase().includes(q))) return false;
+    return true;
+  });
+  if(cnt) cnt.textContent='총 '+filtered.length+'명';
+
+  var TYPE_LBL={author:'저자',translator:'역자'};
+  var TYPE_CLR={author:'var(--blue)',translator:'var(--teal)'};
+
+  list.innerHTML=filtered.map(function(p){
+    var tc=TYPE_CLR[p.type]||'var(--text3)';
+    var tl=TYPE_LBL[p.type]||p.type;
+    return '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:3px solid '+tc+';border-radius:12px;padding:14px 15px;cursor:pointer;transition:.15s;" '
+      +'onmouseover="this.style.boxShadow=\'0 4px 16px rgba(0,0,0,.1)\'" '
+      +'onmouseout="this.style.boxShadow=\'none\'" '
+      +'onclick="pplView(\''+p.id+'\')">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+      +'<span style="font-size:10px;padding:2px 8px;border-radius:100px;background:'+tc+';color:#fff;font-weight:700;">'+tl+'</span>'
+      +(p.grade?'<span style="font-size:10px;padding:2px 7px;border-radius:100px;background:var(--s2);color:var(--text3);font-weight:700;">'+p.grade+'</span>':'')
+      +'<span style="font-size:13px;font-weight:800;color:var(--text);">'+p.name+'</span>'
+      +'</div>'
+      +(p.field?'<div style="font-size:11px;color:var(--text3);margin-bottom:4px;">📌 '+p.field+'</div>':'')
+      +(p.org?'<div style="font-size:11px;color:var(--text3);margin-bottom:4px;">🏢 '+p.org+'</div>':'')
+      +(p.repBook?'<div style="font-size:11px;color:var(--blue);">📖 '+p.repBook+'</div>':'')
+      +'</div>';
+  }).join('');
+}
+
+function pplField(label, val, id){
+  return '<div style="margin-bottom:10px;">'
+    +'<div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">'+label+'</div>'
+    +'<input id="'+id+'" value="'+(val||'').replace(/"/g,'&quot;')+'" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">'
+    +'</div>';
+}
+function pplTextarea(label, val, id){
+  return '<div style="margin-bottom:10px;">'
+    +'<div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">'+label+'</div>'
+    +'<textarea id="'+id+'" rows="3" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;resize:vertical;box-sizing:border-box;">'+(val||'')+'</textarea>'
+    +'</div>';
+}
+
+function pplView(id){
+  var p=PPL_ALL.find(function(x){return x.id===id;});
+  if(!p) return;
+  PPL_EDIT_ID=id;
+  var TYPE_LBL={author:'저자',translator:'역자'};
+  document.getElementById('ppl-modal-title').textContent=(TYPE_LBL[p.type]||p.type)+' — '+p.name;
+
+  var body=document.getElementById('ppl-modal-body');
+  body.innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +pplField('이름',p.name,'pe-name')
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">구분</div>'
+    +'<select id="pe-type" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">'
+    +'<option value="author"'+(p.type==='author'?' selected':'')+'>저자</option>'
+    +'<option value="translator"'+(p.type==='translator'?' selected':'')+'>역자</option>'
+    +'</select></div>'
+    +pplField('등급 (A/B/C)',p.grade,'pe-grade')
+    +pplField('성별',p.gender,'pe-gender')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +pplField('이메일',p.email,'pe-email')
+    +pplField('전화',p.phone,'pe-phone')
+    +'</div>'
+    +pplField('전문 분야',p.field,'pe-field')
+    +pplField('소속',p.org,'pe-org')
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">'
+    +pplField('학교',p.school,'pe-school')
+    +pplField('학위',p.degree,'pe-degree')
+    +pplField('전공',p.major,'pe-major')
+    +'</div>'
+    +pplField('경력',p.career,'pe-career')
+    +pplField('대표 도서',p.repBook,'pe-repBook')
+    +pplField('사용 도구',p.tools,'pe-tools')
+    +pplField('LinkedIn',p.linkedIn,'pe-linkedIn')
+    +pplTextarea('메모',p.memo,'pe-memo');
+
+  document.getElementById('ppl-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function pplOpenModal(){
+  PPL_EDIT_ID=null;
+  document.getElementById('ppl-modal-title').textContent='신규 저·역자 등록';
+  var body=document.getElementById('ppl-modal-body');
+  body.innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +pplField('이름','','pe-name')
+    +'<div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">구분</div>'
+    +'<select id="pe-type" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">'
+    +'<option value="translator">역자</option><option value="author">저자</option>'
+    +'</select></div>'
+    +pplField('등급 (A/B/C)','','pe-grade')
+    +pplField('성별','','pe-gender')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+    +pplField('이메일','','pe-email')
+    +pplField('전화','','pe-phone')
+    +'</div>'
+    +pplField('전문 분야','','pe-field')
+    +pplField('소속','','pe-org')
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">'
+    +pplField('학교','','pe-school')
+    +pplField('학위','','pe-degree')
+    +pplField('전공','','pe-major')
+    +'</div>'
+    +pplField('경력','','pe-career')
+    +pplField('대표 도서','','pe-repBook')
+    +pplField('사용 도구','','pe-tools')
+    +pplField('LinkedIn','','pe-linkedIn')
+    +pplTextarea('메모','','pe-memo');
+  document.getElementById('ppl-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function pplCloseModal(){
+  document.getElementById('ppl-modal').style.display='none';
+  document.body.style.overflow='';
+}
+
+function pplSave(){
+  var name=document.getElementById('pe-name')?.value.trim()||'';
+  if(!name){ alert('이름을 입력하세요.'); return; }
+  var g=function(id){ var e=document.getElementById(id); return e?e.value.trim():''; };
+  var obj={
+    id: PPL_EDIT_ID||pplUID(),
+    name, type:g('pe-type')||'translator',
+    grade:g('pe-grade'), gender:g('pe-gender'),
+    email:g('pe-email'), phone:g('pe-phone'),
+    field:g('pe-field'), org:g('pe-org'),
+    school:g('pe-school'), degree:g('pe-degree'), major:g('pe-major'),
+    career:g('pe-career'), repBook:g('pe-repBook'),
+    tools:g('pe-tools'), linkedIn:g('pe-linkedIn'),
+    memo:document.getElementById('pe-memo')?.value||'',
+    updatedAt: new Date().toISOString(),
+  };
+  if(PPL_EDIT_ID){
+    var idx=PPL_ALL.findIndex(function(p){return p.id===PPL_EDIT_ID;});
+    if(idx>=0) PPL_ALL[idx]=obj; else PPL_ALL.push(obj);
+  } else {
+    PPL_ALL.unshift(obj);
+  }
+  pplLocalSave();
+  pplCloseModal();
+  pplFilter();
+}
+
 
 // ════════════════════════════════════════════════════════
 // 알림 시스템 (Notification System)
