@@ -5314,6 +5314,40 @@ function renderOrgTab(container,orgsData,hidden,tabIdx,color){
   orgFilter(tabIdx);
 }
 
+// ── 기관 통합 데이터: 빌트인 + user 오버라이드 병합 ──────────
+function refGetOrgData(oid, tabIdx){
+  // oid 가 빌트인 id('bo2_교보문고') 이거나 user id('bo2_교보문고_e') 일 때 모두 처리
+  var hidden=refGetHidden();
+  var orgsData=tabIdx===2?DIST_ORGS:MEDIA_ORGS;
+
+  // 빌트인 기관명 추출 (bo2_교보문고 → 교보문고)
+  var builtinId=oid; var builtinKey='';
+  if(oid.endsWith('_e')) builtinId=oid.slice(0,-2);
+  if(builtinId.startsWith('bo'+tabIdx+'_')) builtinKey=builtinId.replace('bo'+tabIdx+'_','');
+
+  // user 오버라이드 버전 (builtinId+'_e' 또는 oid 자체)
+  var userOrg=REF_USER.find(function(x){return x.id===oid||x.id===builtinId+'_e';});
+
+  var name='',url='',contacts=[];
+  if(userOrg){
+    // user 버전 우선
+    name=userOrg.name||builtinKey;
+    url=userOrg.url||'';
+    contacts=(userOrg.contacts||[]).map(function(ct){
+      return Object.assign({_id:userOrg.id+'_c_'+ct.id,_builtin:false},ct);
+    }).filter(function(c){return !hidden.includes(c._id);});
+  } else if(builtinKey&&orgsData[builtinKey]){
+    // 빌트인 원본
+    var od=orgsData[builtinKey];
+    name=builtinKey; url=od.url||'';
+    contacts=(od.contacts||[]).map(function(c,ci){
+      var cid='bc'+tabIdx+'_'+builtinKey+'_'+ci;
+      return Object.assign({_id:cid,_builtin:true},c);
+    }).filter(function(c){return !hidden.includes(c._id);});
+  }
+  return {name:name,url:url,contacts:contacts};
+}
+
 function orgFilter(tabIdx){
   var q=(document.getElementById('org-q-'+tabIdx)?.value||'').toLowerCase();
   var el=document.getElementById('org-cards-'+tabIdx);
@@ -5322,28 +5356,35 @@ function orgFilter(tabIdx){
   var hidden=refGetHidden();
   var orgsData=tabIdx===2?DIST_ORGS:MEDIA_ORGS;
   var color=tabIdx===2?'var(--teal)':'var(--blue)';
-  var cards=[]; var cnt=0;
+  var cards=[]; var seen={}; var cnt=0;
 
+  // 빌트인 기관 (숨겨지지 않은 것 + user 오버라이드 병합)
   Object.keys(orgsData).forEach(function(orgName){
     var bid='bo'+tabIdx+'_'+orgName;
-    if(hidden.includes(bid))return;
-    var org=orgsData[orgName];
-    var contacts=(org.contacts||[]).filter(function(c,ci){return !hidden.includes('bc'+tabIdx+'_'+orgName+'_'+ci);});
+    if(hidden.includes(bid)) return;  // 완전 삭제된 기관
+    var d=refGetOrgData(bid,tabIdx);
+    // user 오버라이드가 있으면 그 id를 카드 id로 (클릭 시 정확히 찾아감)
+    var userOverride=REF_USER.find(function(x){return x.id===bid+'_e';});
+    var cardId=userOverride?bid+'_e':bid;
+    seen[bid]=true; seen[bid+'_e']=true;
     if(q){
-      var m=orgName.toLowerCase().includes(q)||contacts.some(function(c){return (c.name+c.dept+c.email+c.tel+c.note+c.reporter+c.rEmail+c.topic||'').toLowerCase().includes(q);});
+      var m=d.name.toLowerCase().includes(q)||d.contacts.some(function(c){return (c.name+c.dept+c.email+c.tel+c.note+c.reporter+c.rEmail+c.topic||'').toLowerCase().includes(q);});
       if(!m)return;
     }
-    cards.push({id:bid,name:orgName,url:org.url||'',contacts:contacts,color:color,isBuiltin:true,builtinKey:orgName,tabIdx:tabIdx});
+    cards.push({id:cardId,name:d.name,url:d.url,contacts:d.contacts,color:color,tabIdx:tabIdx});
     cnt++;
   });
 
-  REF_USER.filter(function(d){return d.tab===tabIdx&&!hidden.includes(d.id);}).forEach(function(d){
-    var contacts=(d.contacts||[]).filter(function(c){return !hidden.includes(d.id+'_c_'+c.id);});
+  // 사용자가 직접 추가한 순수 신규 기관 (빌트인과 무관한 것)
+  REF_USER.filter(function(d){
+    return d.tab===tabIdx&&!hidden.includes(d.id)&&!seen[d.id];
+  }).forEach(function(d){
+    var contacts=(d.contacts||[]).filter(function(c){return !hidden.includes(d.id+'_c_'+c.id);}).map(function(ct){return Object.assign({_id:d.id+'_c_'+ct.id,_builtin:false},ct);});
     if(q){
       var m=(d.name||'').toLowerCase().includes(q)||contacts.some(function(c){return (c.name+c.dept+c.email+c.tel+c.note||'').toLowerCase().includes(q);});
       if(!m)return;
     }
-    cards.push({id:d.id,name:d.name||'',url:d.url||'',contacts:contacts,color:color,isBuiltin:false,builtinKey:'',tabIdx:tabIdx});
+    cards.push({id:d.id,name:d.name||'',url:d.url||'',contacts:contacts,color:color,tabIdx:tabIdx});
     cnt++;
   });
 
@@ -5401,15 +5442,11 @@ function refOpenDetail(oid, tabIdx){
   var name='',url='',publishers='',contacts=[],color='var(--blue)';
   var isAgency=tabIdx===5;
 
-  if(oid.startsWith('bo')){
-    var ti=parseInt(oid.replace('bo','').split('_')[0]);
-    var bn=oid.replace('bo'+ti+'_','');
-    var od=ti===2?DIST_ORGS[bn]:MEDIA_ORGS[bn];
-    name=bn; url=od?.url||'';
-    color=ti===2?'var(--teal)':'var(--blue)';
-    contacts=(od?.contacts||[]).map(function(c,ci){
-      return Object.assign({_id:'bc'+ti+'_'+bn+'_'+ci,_builtin:true},c);
-    }).filter(function(c){return !hidden.includes(c._id);});
+  if(oid.startsWith('bo')||(!oid.startsWith('ag')&&REF_USER.find(function(x){return x.id===oid&&(x.tab===2||x.tab===3);})||false)){
+    var ti2=tabIdx; // tabIdx 직접 사용
+    var d2=refGetOrgData(oid,ti2);
+    name=d2.name; url=d2.url; contacts=d2.contacts;
+    color=ti2===2?'var(--teal)':'var(--blue)';
   } else if(oid.startsWith('ag')){
     var ba=AGENCY_ORGS.find(function(x){return x.id===oid;})||{};
     name=ba.name||''; url=ba.url||''; publishers=ba.publishers||''; color=ba.color||'var(--purple)';
@@ -5613,18 +5650,29 @@ function refModalSave(){
       if(ci3>=0)userOrg2.contacts[ci3]=newC;else userOrg2.contacts.push(newC);
       refSaveOrg(userOrg2);
     } else {
-      // 빌트인 → 사용자 버전 생성
+      // 빌트인 → 사용자 버전 생성 (또는 기존 user 오버라이드에 추가)
       var tab4=REF_CURRENT_TAB; var tm4=REF_TABS[tab4];
-      var existC4=[];
-      if(oid2.startsWith('bo')){var t4=parseInt(oid2.replace('bo','').split('_')[0]);var bn4=oid2.replace('bo'+t4+'_','');var od4=(t4===2?DIST_ORGS:MEDIA_ORGS)[bn4]||{};existC4=(od4.contacts||[]).map(function(c){return Object.assign({id:refUID('c')},c);});}
-      else if(oid2.startsWith('ag')){var ba4=AGENCY_ORGS.find(function(x){return x.id===oid2;})||{};existC4=JSON.parse(JSON.stringify(ba4.contacts||[]));}
-      if(cid2&&!cid2.startsWith('r')){// 기존 빌트인 담당자 교체
-        if(cid2.startsWith('bc')){var ci4=parseInt(cid2.split('_')[cid2.split('_').length-1]);existC4.splice(ci4,1,newC);}
-        else{existC4=existC4.filter(function(x){return x.id!==cid2;});existC4.push(newC);}
+      // 이미 user 오버라이드 버전이 있으면 그걸 사용
+      var existUserOrg=REF_USER.find(function(x){return x.id===oid2+'_e'||x.id===oid2;});
+      var targetId=existUserOrg?existUserOrg.id:(oid2+'_e');
+      var existC4=existUserOrg?(existUserOrg.contacts||[]).map(function(c){return Object.assign({},c);}):[]; 
+      if(!existUserOrg){
+        // 최초 user 버전 생성 - 빌트인 contacts 이전
+        if(oid2.startsWith('bo')){var t4=parseInt(oid2.replace('bo','').split('_')[0]);var bn4=oid2.replace('bo'+t4+'_','');var od4=(t4===2?DIST_ORGS:MEDIA_ORGS)[bn4]||{};existC4=(od4.contacts||[]).map(function(c){return Object.assign({id:refUID('c')},c);});}
+        else if(oid2.startsWith('ag')){var ba4=AGENCY_ORGS.find(function(x){return x.id===oid2;})||{};existC4=JSON.parse(JSON.stringify(ba4.contacts||[]));}
+      }
+      // 기존 담당자 편집이면 교체, 신규면 추가
+      if(cid2){
+        var ci4=existC4.findIndex(function(x){return x.id===cid2;});
+        if(ci4>=0){existC4[ci4]=newC;}
+        else if(cid2.startsWith('bc')){var bci=parseInt(cid2.split('_')[cid2.split('_').length-1]);if(existC4[bci])existC4[bci]=newC;else existC4.push(newC);}
+        else{existC4.push(newC);}
       } else {existC4.push(newC);}
-      var nm4=oid2.startsWith('bo')?oid2.replace('bo'+tab4+'_',''):(AGENCY_ORGS.find(function(x){return x.id===oid2;})||{}).name||'';
-      var newOrg4={id:oid2+'_e',tab:tab4,type:tm4.type==='org'?(tab4===2?'dist':'media'):(tm4.type==='agency'?'agency':'link'),name:nm4,url:'',icon:'🔗',memo:'',publishers:'',contacts:existC4};
-      refHide(oid2); refSaveOrg(newOrg4);
+      var nm4=existUserOrg?existUserOrg.name:(oid2.startsWith('bo')?oid2.replace('bo'+tab4+'_',''):(AGENCY_ORGS.find(function(x){return x.id===oid2;})||{}).name||'');
+      var newOrg4={id:targetId,tab:tab4,type:tm4.type==='org'?(tab4===2?'dist':'media'):(tm4.type==='agency'?'agency':'link'),name:nm4,url:existUserOrg?existUserOrg.url||'':'',icon:'🔗',memo:'',publishers:existUserOrg?existUserOrg.publishers||'':'',contacts:existC4};
+      if(!existUserOrg) refHide(oid2);
+      refSaveOrg(newOrg4);
+      REF_DETAIL_OID=targetId;
     }
     refCloseModal(); refRenderCurrentTab();
   }
