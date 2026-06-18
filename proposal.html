@@ -148,6 +148,8 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--surface);border-radius:var(--rL);width:min(920px,96vw);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-body .field input[type=number]{min-width:0;width:100%;box-sizing:border-box;}
+.modal-body [style*="grid-template-columns"]{overflow:hidden;}
 .modal-hdr{background:var(--nav);padding:16px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5;}
 .modal-hdr h3{font-size:14px;font-weight:700;color:#fff;flex:1;}
 .modal-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;line-height:1;}
@@ -281,6 +283,30 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .rights-sched-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;font-size:10px;}
 .rights-sched-check.done{background:var(--ok);border-color:var(--ok);color:#fff;}
 
+/* ── 마케팅 관리 ── */
+.mkt-tab{flex:1;padding:10px 6px;font-size:12px;font-weight:700;border:none;background:transparent;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:.15s;}
+.mkt-tab.on{color:var(--blue);border-bottom-color:var(--blue);}
+.mkt-panel{display:block;}
+.mkt-check-tab,.mkt-act-tab{padding:4px 12px;font-size:11px;font-weight:700;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text2);cursor:pointer;transition:.15s;}
+.mkt-check-tab.on,.mkt-act-tab.on{background:var(--blue);color:#fff;border-color:var(--blue);}
+.mkt-kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;}
+.mkt-kpi-card .mk-ch{font-size:10px;font-weight:700;color:var(--text3);}
+.mkt-kpi-card .mk-val{font-size:18px;font-weight:800;color:var(--blue);}
+.mkt-kpi-card .mk-sub{font-size:10px;color:var(--text3);}
+.mkt-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.mkt-row:last-child{border-bottom:none;}
+.mkt-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.mkt-badge-plan{background:#e7f0fb;color:#1560B8;}
+.mkt-badge-do{background:#e7f6ec;color:#1A7A3A;}
+.mkt-badge-done{background:#eef1f5;color:#5a6472;}
+.mkt-badge-miss{background:#fdeef0;color:#8A1A2A;}
+.mkt-badge-act{background:#fff5e5;color:#8A5A00;}
+.mkt-badge-check{background:#f0e7fb;color:#5a1A8A;}
+.mkt-act-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.mkt-act-card h4{font-size:12px;font-weight:700;margin:0 0 4px;}
+.mkt-act-card p{font-size:11px;color:var(--text2);margin:0;line-height:1.6;}
+.ch-goal-row{display:grid;grid-template-columns:160px 1fr 1fr 1fr;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;}
+.ch-goal-row:last-child{border-bottom:none;}
 </style>
 </head>
 <body>
@@ -317,6 +343,7 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
     <div class="menu-item" onclick="showView('contracts')" id="mi-contracts">📜 계약서 관리</div>
     <div class="menu-item" onclick="showView('projects')" id="mi-projects">📅 프로젝트 관리</div>
     <div class="menu-item" onclick="showView('rights')" id="mi-rights">©️ 판권 관리</div>
+    <div class="menu-item" onclick="showView('marketing')" id="mi-marketing">📣 마케팅 관리</div>
     <div class="menu-item" onclick="showView('sales')" id="mi-sales">💰 판매·손익 관리</div>
     <div class="menu-divider"></div>
     <div class="menu-item" onclick="showView('guides')" id="mi-guides">📚 참고자료 · 가이드</div>
@@ -684,11 +711,243 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 </div>
 
 <!-- ══ SALES ══ -->
+<!-- ══ MARKETING (마케팅 관리) ══ -->
+<div class="view" id="view-marketing">
+  <div class="page-hdr">
+    <div><h2>📣 마케팅 관리</h2><div class="sub">출간 도서 채널별 PDCA 마케팅 운영 시스템</div></div>
+    <div style="margin-left:auto;display:flex;gap:8px;">
+      <button class="btn btn-ghost btn-sm" onclick="renderMarketing()">🔄 새로고침</button>
+      <button class="btn btn-ghost btn-sm" onclick="openMktChannelSettingsModal()">⚙️ 채널 목표</button>
+    </div>
+  </div>
+
+  <!-- 도서 선택 -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+    <span style="font-size:12px;font-weight:700;color:var(--text2);white-space:nowrap;">📚 도서 선택</span>
+    <select id="mkt-book-sel" onchange="onMktBookChange()" style="flex:1;font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);">
+      <option value="">— 도서를 선택하세요 —</option>
+    </select>
+  </div>
+
+  <!-- 요약 카드 (판매·손익 관리와 동일 스타일) -->
+  <div class="sales-grid" id="mkt-summary-cards">
+    <div class="sales-card"><div class="sc-label">전체 달성률</div><div class="sc-val" id="mkt-sc-overall" style="color:var(--blue)">-</div><div class="sc-sub">조회 기준</div></div>
+    <div class="sales-card"><div class="sc-label">채널 달성</div><div class="sc-val" id="mkt-sc-channels" style="color:var(--ok)">-</div><div class="sc-sub">목표 달성 채널</div></div>
+    <div class="sales-card"><div class="sc-label">PLAN / DO</div><div class="sc-val" id="mkt-sc-plando" style="color:var(--text)">-</div><div class="sc-sub">기획 / 발행 콘텐츠</div></div>
+    <div class="sales-card"><div class="sc-label">진행중 ACT</div><div class="sc-val" id="mkt-sc-act" style="color:var(--ex)">-</div><div class="sc-sub">개선 액션</div></div>
+  </div>
+
+  <!-- PDCA 탭 -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rL);overflow:hidden;">
+    <div style="display:flex;border-bottom:1px solid var(--border);">
+      <button class="mkt-tab on" id="mkt-tab-plan"  onclick="switchMktTab('plan')">📋 PLAN</button>
+      <button class="mkt-tab"    id="mkt-tab-do"    onclick="switchMktTab('do')">🚀 DO</button>
+      <button class="mkt-tab"    id="mkt-tab-check" onclick="switchMktTab('check')">✅ CHECK</button>
+      <button class="mkt-tab"    id="mkt-tab-act"   onclick="switchMktTab('act')">⚡ ACT</button>
+    </div>
+    <!-- PLAN 패널 (기본 표시) -->
+    <div id="mkt-panel-plan" class="mkt-panel" style="display:block;">
+      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">
+        <span style="font-size:12px;font-weight:700;">캠페인·콘텐츠 기획 / 목표 KPI</span>
+        <button class="btn btn-primary btn-sm" onclick="openMktPlanModal()">➕ 기획 추가</button>
+      </div>
+      <div id="mkt-plan-list" style="padding:12px 16px;"></div>
+    </div>
+    <!-- DO 패널 -->
+    <div id="mkt-panel-do" class="mkt-panel" style="display:none;">
+      <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">
+        <span style="font-size:12px;font-weight:700;">제작·발행 현황 / 실적 입력</span>
+        <button class="btn btn-primary btn-sm" onclick="openMktDoModal()">➕ 실적 입력</button>
+      </div>
+      <div id="mkt-do-list" style="padding:12px 16px;"></div>
+    </div>
+    <!-- CHECK 패널 -->
+    <div id="mkt-panel-check" class="mkt-panel" style="display:none;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;font-weight:700;">성과 분석</span>
+        <div style="margin-left:auto;display:flex;gap:6px;">
+          <button class="mkt-check-tab on" id="mkt-ct-all"   onclick="switchCheckTab('all')">전체</button>
+          <button class="mkt-check-tab"    id="mkt-ct-ok"    onclick="switchCheckTab('ok')">완료·달성</button>
+          <button class="mkt-check-tab"    id="mkt-ct-miss"  onclick="switchCheckTab('miss')">성과미달</button>
+        </div>
+      </div>
+      <div id="mkt-check-content" style="padding:12px 16px;"></div>
+    </div>
+    <!-- ACT 패널 -->
+    <div id="mkt-panel-act" class="mkt-panel" style="display:none;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:12px;font-weight:700;">개선 액션 / 전략 게시판 / 회고 노트</span>
+        <div style="display:flex;gap:6px;">
+          <button class="mkt-act-tab on" id="mkt-at-action" onclick="switchActTab('action')">⚡ 개선 액션</button>
+          <button class="mkt-act-tab"    id="mkt-at-board"  onclick="switchActTab('board')">📌 전략 게시판</button>
+          <button class="mkt-act-tab"    id="mkt-at-retro"  onclick="switchActTab('retro')">📝 회고 노트</button>
+        </div>
+      </div>
+      <div id="mkt-act-content" style="padding:12px 16px;"></div>
+      <div style="padding:0 16px 14px;display:flex;justify-content:flex-end;">
+        <button class="btn btn-primary btn-sm" id="mkt-act-add-btn" onclick="openMktActModal('action')">➕ 등록</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PLAN 모달 -->
+<div class="modal-overlay" id="mkt-plan-modal">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-hdr"><h3>📋 캠페인 기획 등록</h3>
+      <button class="btn btn-primary btn-sm" onclick="saveMktPlan()" style="margin-left:auto;margin-right:8px;">💾 저장</button>
+      <button class="modal-close" onclick="closeMktModal('plan')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label>채널</label>
+          <select id="mp-channel" onchange="mktAutoName()">
+            <option value="youtube_long">YouTube — 롱폼 영상</option>
+            <option value="youtube_short">YouTube — 쇼츠</option>
+            <option value="instagram_feed">Instagram — 피드</option>
+            <option value="instagram_reel">Instagram — 릴스</option>
+            <option value="instagram_story">Instagram — 스토리</option>
+            <option value="facebook_card">Facebook — 카드뉴스</option>
+            <option value="facebook_event">Facebook — 이벤트</option>
+            <option value="newsletter">뉴스레터</option>
+            <option value="kakao">카카오채널</option>
+            <option value="blog_seo">블로그 — SEO</option>
+            <option value="blog_review">블로그 — 서평</option>
+            <option value="blog_interview">블로그 — 인터뷰</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="twitter">X(트위터)</option>
+          </select>
+        </div>
+        <div class="field"><label>담당자</label>
+          <input id="mp-reviewer" type="text" placeholder="담당자 이름" style="max-width:140px;" />
+        </div>
+      </div>
+      <div class="field"><label>캠페인명 <span style="font-size:10px;color:var(--text3);font-weight:400;">(채널 선택 시 자동 입력 · 수정 가능)</span></label>
+        <input id="mp-name" type="text" placeholder="도서명 + 채널명 자동 생성" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="field"><label>시작일</label><input id="mp-start" type="date" /></div>
+        <div class="field"><label>종료일</label><input id="mp-end" type="date" /></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;" id="mp-kpi-row">
+        <div class="field"><label id="mp-kpi-v-lbl">목표 KPI 1</label><input id="mp-kpi-view" type="number" placeholder="0" /></div>
+        <div class="field"><label id="mp-kpi-e-lbl">목표 KPI 2</label><input id="mp-kpi-engage" type="number" placeholder="0" /></div>
+        <div class="field"><label id="mp-kpi-c-lbl">목표 KPI 3</label><input id="mp-kpi-convert" type="number" placeholder="0" /></div>
+      </div>
+      <div class="field"><label>콘텐츠 기획 메모</label><textarea id="mp-memo" rows="3" placeholder="주제, 키워드, 포맷 등"></textarea></div>
+      <input type="hidden" id="mp-edit-id" />
+    </div>
+  </div>
+</div>
+
+<!-- DO 모달 -->
+<div class="modal-overlay" id="mkt-do-modal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-hdr"><h3>🚀 실적 입력</h3>
+      <button class="btn btn-primary btn-sm" onclick="saveMktDo()" style="margin-left:auto;margin-right:8px;">💾 저장</button>
+      <button class="modal-close" onclick="closeMktModal('do')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>연결 기획</label>
+        <select id="md-plan-ref"></select>
+      </div>
+      <div class="field"><label>발행일</label><input id="md-date" type="date" /></div>
+      <div class="field"><label>콘텐츠 제목 / URL</label><input id="md-title" type="text" placeholder="콘텐츠 제목 또는 링크" /></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;" id="md-kpi-row">
+        <div class="field"><label id="md-kpi-v-lbl">실적 KPI 1</label><input id="md-view" type="number" placeholder="0" /></div>
+        <div class="field"><label id="md-kpi-e-lbl">실적 KPI 2</label><input id="md-engage" type="number" placeholder="0" /></div>
+        <div class="field"><label id="md-kpi-c-lbl">실적 KPI 3</label><input id="md-convert" type="number" placeholder="0" /></div>
+      </div>
+      <div class="field"><label>상태</label>
+        <select id="md-status">
+          <option value="ongoing">진행중</option>
+          <option value="done">완료</option>
+        </select>
+      </div>
+      <div class="field"><label>담당자</label>
+        <input id="md-reviewer" type="text" placeholder="담당자 이름" style="max-width:140px;" />
+      </div>
+      <div class="field"><label>메모</label><textarea id="md-memo" rows="2"></textarea></div>
+      <input type="hidden" id="md-edit-id" />
+    </div>
+  </div>
+</div>
+
+<!-- ACT 모달 -->
+<div class="modal-overlay" id="mkt-act-modal">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-hdr"><h3 id="mkt-act-modal-title">⚡ 개선 액션 등록</h3>
+      <button class="btn btn-primary btn-sm" onclick="saveMktAct()" style="margin-left:auto;margin-right:8px;">💾 저장</button>
+      <button class="modal-close" onclick="closeMktModal('act')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ma-type" value="action" />
+      <input type="hidden" id="ma-edit-id" />
+
+      <!-- 연결 기획: 선택 시 제목 자동 완성 -->
+      <div class="field" id="ma-ref-wrap">
+        <label>연결 기획</label>
+        <select id="ma-plan-ref" onchange="mktActAutoTitle()">
+          <option value="">— 선택 안 함 —</option>
+        </select>
+      </div>
+
+      <div class="field"><label>제목 <span style="font-size:10px;color:var(--text3);font-weight:400;">(연결 기획 선택 시 자동 입력 · 수정 가능)</span></label>
+        <input id="ma-title" type="text" placeholder="개선 액션 제목" />
+      </div>
+      <div class="field"><label>개선 내용</label>
+        <textarea id="ma-body" rows="3" placeholder="어떤 문제를 발견했고 어떻게 개선할지 작성하세요"></textarea>
+      </div>
+
+      <!-- 상태: Check 중 제거 -->
+      <div class="field" id="ma-status-wrap">
+        <label>액션 상태</label>
+        <select id="ma-status" onchange="mktActStatusChange()">
+          <option value="open">등록</option>
+          <option value="do">Do 재투입</option>
+          <option value="done">목표 달성 완료</option>
+        </select>
+      </div>
+
+      <!-- Do 재투입 시 인라인 DO 입력 영역 -->
+      <div id="ma-do-section" style="display:none;margin-top:4px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);border-left:3px solid var(--blue);">
+        <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:8px;">🚀 Do 재투입 — 개선 실적 입력</div>
+        <!-- 이전 DO 실적 참고 -->
+        <div id="ma-do-prev" style="display:none;margin-bottom:10px;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:5px;">📊 이전 DO 실적 (참고)</div>
+          <div id="ma-do-prev-content" style="font-size:11px;color:var(--text2);line-height:1.8;"></div>
+        </div>
+        <div class="field"><label>발행일</label><input id="ma-do-date" type="date" /></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div class="field"><label id="ma-do-kpi-v-lbl">KPI 1</label><input id="ma-do-view" type="number" placeholder="0" /></div>
+          <div class="field"><label id="ma-do-kpi-e-lbl">KPI 2</label><input id="ma-do-engage" type="number" placeholder="0" /></div>
+          <div class="field"><label id="ma-do-kpi-c-lbl">KPI 3</label><input id="ma-do-convert" type="number" placeholder="0" /></div>
+        </div>
+        <div class="field"><label>담당자</label>
+          <input id="ma-do-reviewer" type="text" placeholder="담당자 이름" style="max-width:140px;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 채널 목표 설정 모달 -->
+<div class="modal-overlay" id="mkt-ch-modal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-hdr"><h3>⚙️ 채널별 운영 목표 설정</h3>
+      <button class="btn btn-primary btn-sm" onclick="saveMktChannelSettings()" style="margin-left:auto;margin-right:8px;">💾 저장</button>
+      <button class="modal-close" onclick="closeMktModal('ch')">×</button>
+    </div>
+    <div class="modal-body" id="mkt-ch-body"></div>
+  </div>
+</div>
+
 <div class="view" id="view-sales">
   <div class="page-hdr">
     <div><h2>💰 판매·손익 관리</h2><div class="sub">출간 도서 판매량·비용·BEP 현황</div></div>
     <div style="margin-left:auto;display:flex;gap:8px;">
       <button class="btn btn-ghost btn-sm" onclick="renderSales()">🔄 새로고침</button>
+      <button class="btn btn-primary btn-sm" onclick="openSalesReport()">📄 리포트</button>
     </div>
   </div>
   <!-- 전체 요약 -->
@@ -720,6 +979,23 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
   </div>
 </div>
 
+
+<!-- SALES REPORT 모달 -->
+<div class="modal-overlay" id="sales-report-modal">
+  <div class="modal" style="width:min(860px,97vw);">
+    <div class="modal-hdr">
+      <h3 id="sales-report-title">📄 도서 마케팅·손익 통합 리포트</h3>
+      <button class="btn btn-ghost btn-sm" onclick="printSalesReport()" style="margin-left:auto;margin-right:4px;">🖨️ 인쇄/PDF</button>
+      <button class="modal-close" onclick="document.getElementById('sales-report-modal').classList.remove('open')">×</button>
+    </div>
+    <!-- 도서 선택 탭 -->
+    <div style="padding:10px 20px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:12px;font-weight:700;color:var(--text2);white-space:nowrap;">📚 도서</span>
+      <select id="report-book-sel" onchange="loadSalesReport()" style="flex:1;font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r);background:#fff;color:var(--text);"></select>
+    </div>
+    <div class="modal-body" id="sales-report-body" style="padding:24px;"></div>
+  </div>
+</div>
 
 <!-- ══ QUOTES (견적서 관리) ══ -->
 <div class="view" id="view-quotes">
@@ -2914,6 +3190,7 @@ const COMMENT_MENUS = [
   {k:'quotes',    label:'🧾 견적서 관리'},
   {k:'contracts', label:'📜 계약서 관리'},
   {k:'projects',  label:'📅 프로젝트 관리'},
+  {k:'marketing', label:'📣 마케팅 관리'},
   {k:'sales',     label:'💰 판매·손익 관리'},
   {k:'guides',    label:'📚 참고자료 · 가이드'},
   {k:'etc',       label:'🗂 기타 / 전체'},
@@ -2929,6 +3206,17 @@ function commentMenuLabel(k){ const m=COMMENT_MENUS.find(x=>x.k===k); return m?m
 function saveComments(){ localStorage.setItem(COMMENT_KEY, JSON.stringify(comments)); }
 function cmFillMenuSelect(el, includeAll){
   if(!el) return;
+  // 상단 요약 카드 업데이트
+  const overallPct2 = totalKpiV > 0 ? Math.min(Math.round(totalActV / totalKpiV * 100), 999) : 0;
+  const achCh = chKeys.filter(k => chMap[k].kpiV > 0 && chMap[k].actV >= chMap[k].kpiV).length;
+  const actOpen2 = acts.filter(a => a.type === 'action' && a.status !== 'done').length;
+  const sc = id => document.getElementById(id);
+  if(sc('mkt-sc-overall'))  sc('mkt-sc-overall').textContent  = overallPct2 + '%';
+  if(sc('mkt-sc-channels')) sc('mkt-sc-channels').textContent = achCh + '/' + chKeys.length;
+  if(sc('mkt-sc-plando'))   sc('mkt-sc-plando').textContent   = plans.length + '/' + dos.length;
+  if(sc('mkt-sc-act'))      sc('mkt-sc-act').textContent      = actOpen2;
+  if(sc('mkt-sc-act'))      sc('mkt-sc-act').style.color      = actOpen2 > 0 ? 'var(--ex)' : 'var(--ok)';
+
   el.innerHTML = (includeAll?'<option value="">전체 메뉴</option>':'') + COMMENT_MENUS.map(m=>'<option value="'+m.k+'">'+m.label+'</option>').join('');
 }
 // 등록/수정 모달
@@ -3646,6 +3934,899 @@ bindOverlayClose('sales-modal', function(){ saveSalesDataAll(); closeSalesModal(
 
 // Extended in showView already (add project/sales calls to existing showView)
 // Patch: add project/sales rendering to existing showView
+
+// ═══════════════════════════════════════════════════════════════════
+// 마케팅 관리 모듈 v2 — PDCA 운영 시스템 (대시보드 포함)
+// ═══════════════════════════════════════════════════════════════════
+const MKT_KEY = 'acorn_marketing_v1';
+let mktData = {};
+let mktCurrentBook = null;
+let mktCurrentTab = 'plan';
+let mktCheckTab = 'all';
+let mktActTab = 'action';
+
+const MKT_CHANNELS = [
+  {k:'youtube_long',    label:'YouTube 롱폼',      goal:'주 1회',               sub:'롱폼 영상'},
+  {k:'youtube_short',   label:'YouTube 쇼츠',      goal:'주 1회',               sub:'쇼츠'},
+  {k:'instagram_feed',  label:'Instagram 피드',    goal:'주 3회',               sub:'피드'},
+  {k:'instagram_reel',  label:'Instagram 릴스',    goal:'주 3회',               sub:'릴스'},
+  {k:'instagram_story', label:'Instagram 스토리',  goal:'주 3회',               sub:'스토리'},
+  {k:'facebook_card',   label:'Facebook 카드뉴스', goal:'주 2회',               sub:'카드뉴스'},
+  {k:'facebook_event',  label:'Facebook 이벤트',   goal:'격주 / 구독자 500명',  sub:'이벤트'},
+  {k:'newsletter',      label:'뉴스레터',           goal:'격주',                 sub:'뉴스레터'},
+  {k:'kakao',           label:'카카오채널',          goal:'주 2회',               sub:'공지·신간'},
+  {k:'blog_seo',        label:'블로그 SEO',         goal:'주 2회',               sub:'SEO'},
+  {k:'blog_review',     label:'블로그 서평',         goal:'주 2회',               sub:'서평'},
+  {k:'blog_interview',  label:'블로그 인터뷰',       goal:'주 2회',               sub:'인터뷰'},
+  {k:'linkedin',        label:'LinkedIn',           goal:'주 3회',               sub:'저자 모집·브랜딩'},
+  {k:'twitter',         label:'X(트위터)',           goal:'주 3회',               sub:'실시간 반응·해시태그'},
+];
+
+// ── 채널별 KPI 메타 ────────────────────────────────────────────────
+const MKT_KPI = {
+  youtube_long:    {v:'조회수',        e:'시청 시간(분)',   c:'구독자 증가',  vp:'회',  ep:'분',  cp:'명'},
+  youtube_short:   {v:'조회수',        e:'좋아요',         c:'공유수',       vp:'회',  ep:'개',  cp:'회'},
+  instagram_feed:  {v:'노출수',        e:'좋아요+댓글',    c:'저장수',       vp:'회',  ep:'개',  cp:'개'},
+  instagram_reel:  {v:'재생수',        e:'좋아요+댓글',    c:'공유수',       vp:'회',  ep:'개',  cp:'회'},
+  instagram_story: {v:'노출수',        e:'답장+반응',      c:'링크 클릭',    vp:'회',  ep:'건',  cp:'회'},
+  facebook_card:   {v:'도달수',        e:'좋아요+댓글',    c:'공유수',       vp:'명',  ep:'개',  cp:'회'},
+  facebook_event:  {v:'참가 신청수',   e:'댓글',           c:'구독자 증가',  vp:'명',  ep:'개',  cp:'명'},
+  newsletter:      {v:'발송수',        e:'오픈율',         c:'클릭률',       vp:'명',  ep:'%',   cp:'%'},
+  kakao:           {v:'발송수',        e:'클릭수',         c:'구독자 수',    vp:'명',  ep:'회',  cp:'명'},
+  blog_seo:        {v:'방문수',        e:'평균 체류(분)',   c:'클릭 전환수',  vp:'명',  ep:'분',  cp:'건'},
+  blog_review:     {v:'방문수',        e:'댓글수',         c:'공유·링크수',  vp:'명',  ep:'개',  cp:'건'},
+  blog_interview:  {v:'방문수',        e:'댓글수',         c:'SNS 공유수',   vp:'명',  ep:'개',  cp:'회'},
+  linkedin:        {v:'노출수',        e:'좋아요+댓글',    c:'팔로워 증가',  vp:'회',  ep:'개',  cp:'명'},
+  twitter:         {v:'노출수',        e:'좋아요+RT',      c:'팔로워 증가',  vp:'회',  ep:'개',  cp:'명'},
+};
+function mktKpi(ch){ return MKT_KPI[ch]||{v:'KPI 1',e:'KPI 2',c:'KPI 3',vp:'',ep:'',cp:''}; }
+
+// PLAN 모달: 채널 변경 → KPI 레이블 + 캠페인명 자동 갱신
+window.mktAutoName=function(){
+  const ch=document.getElementById('mp-channel').value;
+  const k=mktKpi(ch);
+  ['v','e','c'].forEach(x=>{
+    const el=document.getElementById('mp-kpi-'+x+'-lbl');
+    const key=x==='v'?'v':x==='e'?'e':'c';
+    const unit=x==='v'?k.vp:x==='e'?k.ep:k.cp;
+    const label=x==='v'?k.v:x==='e'?k.e:k.c;
+    if(el) el.textContent='목표 '+label+(unit?' ('+unit+')':'');
+  });
+  if(document.getElementById('mp-edit-id').value) return;
+  const book=mktGetCurrentBook();
+  document.getElementById('mp-name').value=(book?book.title:'도서')+' — '+mktChLabel(ch);
+};
+
+// DO 모달: 연결 기획 변경 → KPI 레이블 갱신
+window.mktUpdateDoKpiLabels=function(){
+  const sel=document.getElementById('md-plan-ref');
+  if(!sel||!mktCurrentBook) return;
+  const plan=(mktBookData(mktCurrentBook).plans||[]).find(p=>p.id===sel.value);
+  const ch=plan?plan.channel:'';
+  const k=mktKpi(ch);
+  const pairs=[['md-kpi-v-lbl','v',k.vp,k.v,plan?plan.kpiView:null],
+               ['md-kpi-e-lbl','e',k.ep,k.e,null],
+               ['md-kpi-c-lbl','c',k.cp,k.c,null]];
+  pairs.forEach(([id,,unit,label,goal])=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    let txt='실적 '+label+(unit?' ('+unit+')':'');
+    if(goal!=null) txt+=' — 목표: '+goal+(unit?unit:'');
+    el.textContent=txt;
+  });
+};
+
+function mktE(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function mktChLabel(k){ const c=MKT_CHANNELS.find(x=>x.k===k); return c?c.label:k; }
+function mktChGoal(bookId,k){
+  const custom=(mktData[bookId]?.channels||{})[k];
+  const def=MKT_CHANNELS.find(x=>x.k===k);
+  return custom||(def?def.goal:'-');
+}
+function mktLoad(){
+  try{ mktData=JSON.parse(localStorage.getItem(MKT_KEY)||'{}'); }catch(e){ mktData={}; }
+}
+function mktSave(bookId){
+  try{ localStorage.setItem(MKT_KEY,JSON.stringify(mktData)); }catch(e){}
+  if(sbOn()&&bookId){
+    const p=proposals.find(x=>x.id===bookId);
+    if(p){ p.marketing=mktData[bookId]; saveData([p]).catch(()=>{}); }
+  }
+}
+function mktBookData(id){
+  if(!mktData[id]) mktData[id]={channels:{},plans:[],dos:[],acts:[]};
+  ['plans','dos','acts'].forEach(k=>{ if(!Array.isArray(mktData[id][k])) mktData[id][k]=[]; });
+  if(!mktData[id].channels) mktData[id].channels={};
+  return mktData[id];
+}
+function mktUID(){ return 'mk'+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+
+// ── 도서 목록: 프로젝트·판권 관리와 동일 ────────────────────────────
+function mktGetBooks(){
+  let books=proposals.filter(p=>p.contracts&&p.contracts.length>0);
+  if(!books.length) books=proposals.filter(p=>['approve','conditional'].includes(p.decision));
+  if(!books.length) books=proposals.filter(p=>p.title);
+  return books;
+}
+function mktGetCurrentBook(){
+  return proposals.find(p=>p.id===mktCurrentBook)||null;
+}
+
+function mktFillBookSel(){
+  const sel=document.getElementById('mkt-book-sel'); if(!sel) return;
+  const books=mktGetBooks();
+  const prev=mktCurrentBook;
+  sel.innerHTML='<option value="">— 도서를 선택하세요 —</option>'+
+    books.map(p=>'<option value="'+mktE(p.id)+'">'+mktE(p.title)+(p.author?' ('+mktE(p.author)+')':'')+'</option>').join('');
+  if(prev&&books.find(p=>p.id===prev)) sel.value=prev;
+  else if(books.length===1){ sel.value=books[0].id; mktCurrentBook=books[0].id; }
+}
+
+// 상단 요약 카드 업데이트 (대시보드와 동기화)
+function mktUpdateSummaryCards(){
+  const sc=id=>document.getElementById(id);
+  if(!mktCurrentBook){
+    ['mkt-sc-overall','mkt-sc-channels','mkt-sc-plando','mkt-sc-act'].forEach(id=>{
+      const e=sc(id); if(e) e.textContent='-';
+    });
+    return;
+  }
+  const bd=mktBookData(mktCurrentBook);
+  const plans=bd.plans||[], dos=bd.dos||[], acts=bd.acts||[];
+  // 채널별 집계
+  const chMap={};
+  plans.forEach(p=>{
+    if(!chMap[p.channel]) chMap[p.channel]={kpiV:0,actV:0};
+    chMap[p.channel].kpiV+=Number(p.kpiView||0);
+  });
+  dos.forEach(d=>{
+    const plan=plans.find(p=>p.id===d.planRef); if(!plan) return;
+    if(!chMap[plan.channel]) chMap[plan.channel]={kpiV:0,actV:0};
+    chMap[plan.channel].actV=(chMap[plan.channel].actV||0)+Number(d.actView||0);
+  });
+  const chKeys=Object.keys(chMap);
+  let totalKpiV=0,totalActV=0;
+  chKeys.forEach(k=>{ totalKpiV+=chMap[k].kpiV; totalActV+=(chMap[k].actV||0); });
+  const overallPct=totalKpiV>0?Math.min(Math.round(totalActV/totalKpiV*100),999):0;
+  const achCh=chKeys.filter(k=>chMap[k].kpiV>0&&(chMap[k].actV||0)>=chMap[k].kpiV).length;
+  const actOpen=acts.filter(a=>a.type==='action'&&a.status!=='done').length;
+
+  if(sc('mkt-sc-overall'))  sc('mkt-sc-overall').textContent=overallPct+'%';
+  if(sc('mkt-sc-channels')) sc('mkt-sc-channels').textContent=achCh+'/'+chKeys.length;
+  if(sc('mkt-sc-plando'))   sc('mkt-sc-plando').textContent=plans.length+'/'+dos.length;
+  if(sc('mkt-sc-act'))    { sc('mkt-sc-act').textContent=actOpen; sc('mkt-sc-act').style.color=actOpen>0?'var(--ex)':'var(--ok)'; }
+}
+
+window.renderMarketing=function(){
+  mktLoad();
+  mktFillBookSel();
+  mktUpdateSummaryCards();
+  switchMktTab('plan');
+};
+
+window.onMktBookChange=function(){
+  mktCurrentBook=document.getElementById('mkt-book-sel').value||null;
+  mktUpdateSummaryCards();
+  switchMktTab('plan');
+};
+
+// ── 탭 전환 ─────────────────────────────────────────────────────
+function switchMktTab(tab){
+  mktCurrentTab=tab;
+  ['plan','do','check','act'].forEach(t=>{
+    document.getElementById('mkt-tab-'+t)?.classList.toggle('on',t===tab);
+    const p=document.getElementById('mkt-panel-'+t);
+    if(p) p.style.display=(t===tab)?'block':'none';
+  });
+  if(tab==='plan')  renderMktPlan();
+  if(tab==='do')    renderMktDo();
+  if(tab==='check') renderMktCheck();
+  if(tab==='act')   renderMktAct();
+}
+
+// mktAutoName 정의는 MKT_KPI 블록으로 이동
+
+// ── PLAN ────────────────────────────────────────────────────────
+// 복수 PLAN 지원: 채널당 N개 등록 가능, plan별로 DO가 각각 연결됨
+function renderMktPlan(){
+  const el=document.getElementById('mkt-plan-list'); if(!el) return;
+  if(!mktCurrentBook){ el.innerHTML='<div class="empty-state" style="padding:20px"><div class="es-icon">📋</div><p>위에서 도서를 선택하세요</p></div>'; return; }
+  const plans=mktBookData(mktCurrentBook).plans||[];
+  if(!plans.length){ el.innerHTML='<div class="empty-state" style="padding:20px"><div class="es-icon">📋</div><p>등록된 기획이 없습니다</p><button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="openMktPlanModal()">➕ 기획 추가</button></div>'; return; }
+  // 채널별로 그룹핑
+  const grouped={};
+  plans.forEach(p=>{ if(!grouped[p.channel]) grouped[p.channel]=[]; grouped[p.channel].push(p); });
+  const bd=mktBookData(mktCurrentBook);
+  el.innerHTML=Object.keys(grouped).map(ch=>{
+    const rows=grouped[ch];
+    return '<div style="margin-bottom:14px;">'
+      +'<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:2px solid var(--border);margin-bottom:4px;">'
+      +'<span class="mkt-badge mkt-badge-plan">'+mktChLabel(ch)+'</span>'
+      +'<span style="font-size:11px;color:var(--text3);">목표: '+mktChGoal(mktCurrentBook,ch)+'</span>'
+      +'<button class="btn btn-ghost btn-sm" style="margin-left:auto;font-size:10px;" onclick="openMktPlanModal(null,\''+ch+'\')">+ 이 채널에 추가</button>'
+      +'</div>'
+      +rows.map(p=>{
+        const dosCnt=(bd.dos||[]).filter(d=>d.planRef===p.id).length;
+        return '<div class="mkt-row" style="padding-left:8px;">'
+          +'<span style="font-weight:700;flex:1;">'+mktE(p.name)+'</span>'
+          +(p.reviewer?'<span style="font-size:10px;color:var(--text3);background:var(--s2);padding:2px 7px;border-radius:10px;">'+mktE(p.reviewer)+'</span>':'')
+          +'<span style="font-size:11px;color:var(--text3);">'+mktE(p.start||'')+'~'+mktE(p.end||'')+'</span>'
+          +'<span style="font-size:10px;color:var(--blue);">DO '+dosCnt+'건</span>'
+          +(function(p){const k=mktKpi(p.channel);return '<span style="font-size:11px;color:var(--blue);">'+k.v+' '+(p.kpiView||0)+k.vp+' · '+k.e+' '+(p.kpiEngage||0)+k.ep+' · '+k.c+' '+(p.kpiConvert||0)+k.cp+'</span>';})(p)
+          +'<button class="btn btn-ghost btn-sm" onclick="editMktPlan(\''+p.id+'\')">✏️</button>'
+          +'<button class="btn btn-ghost btn-sm" style="color:var(--rose)" onclick="deleteMktItem(\'plan\',\''+p.id+'\')">🗑</button>'
+          +'</div>';
+      }).join('')
+      +'</div>';
+  }).join('');
+}
+
+window.openMktPlanModal=function(editId, presetChannel){
+  const f=id=>document.getElementById(id);
+  f('mp-channel').value=presetChannel||'youtube_long';
+  f('mp-reviewer').value='';
+  f('mp-start').value=''; f('mp-end').value='';
+  f('mp-kpi-view').value=''; f('mp-kpi-engage').value=''; f('mp-kpi-convert').value='';
+  f('mp-memo').value=''; f('mp-edit-id').value=editId||'';
+  if(editId&&mktCurrentBook){
+    const plan=(mktBookData(mktCurrentBook).plans||[]).find(p=>p.id===editId);
+    if(plan){
+      f('mp-channel').value=plan.channel||'youtube_long';
+      f('mp-reviewer').value=plan.reviewer||'';
+      f('mp-start').value=plan.start||''; f('mp-end').value=plan.end||'';
+      f('mp-kpi-view').value=plan.kpiView||''; f('mp-kpi-engage').value=plan.kpiEngage||''; f('mp-kpi-convert').value=plan.kpiConvert||'';
+      f('mp-memo').value=plan.memo||'';
+      f('mp-name').value=plan.name||'';
+    }
+  } else {
+    // 신규: 캠페인명 자동 생성
+    const book=mktGetCurrentBook();
+    const bookTitle=book?book.title:'도서';
+    const chLabel=mktChLabel(f('mp-channel').value);
+    f('mp-name').value=bookTitle+' — '+chLabel;
+  }
+  mktAutoName();
+  f('mkt-plan-modal').classList.add('open');
+};
+window.editMktPlan=function(id){ openMktPlanModal(id); };
+window.saveMktPlan=function(){
+  if(!mktCurrentBook){ alert('도서를 먼저 선택하세요.'); return; }
+  const name=document.getElementById('mp-name').value.trim();
+  if(!name){ alert('캠페인명을 입력하세요.'); return; }
+  const bd=mktBookData(mktCurrentBook);
+  const editId=document.getElementById('mp-edit-id').value;
+  const obj={
+    id:editId||mktUID(), name,
+    channel:document.getElementById('mp-channel').value,
+    reviewer:document.getElementById('mp-reviewer').value.trim(),
+    start:document.getElementById('mp-start').value,
+    end:document.getElementById('mp-end').value,
+    kpiView:Number(document.getElementById('mp-kpi-view').value)||0,
+    kpiEngage:Number(document.getElementById('mp-kpi-engage').value)||0,
+    kpiConvert:Number(document.getElementById('mp-kpi-convert').value)||0,
+    memo:document.getElementById('mp-memo').value,
+    createdAt:editId?((bd.plans.find(p=>p.id===editId)||{}).createdAt||new Date().toISOString()):new Date().toISOString(),
+    updatedAt:new Date().toISOString(),
+  };
+  if(editId){ const idx=bd.plans.findIndex(p=>p.id===editId); if(idx>=0) bd.plans[idx]=obj; else bd.plans.push(obj); }
+  else bd.plans.push(obj);
+  mktSave(mktCurrentBook);
+  closeMktModal('plan');
+  renderMktPlan(); mktUpdateSummaryCards();
+};
+
+// ── DO ──────────────────────────────────────────────────────────
+function renderMktDo(){
+  const el=document.getElementById('mkt-do-list'); if(!el) return;
+  if(!mktCurrentBook){ el.innerHTML='<div class="empty-state" style="padding:20px"><div class="es-icon">🚀</div><p>위에서 도서를 선택하세요</p></div>'; return; }
+  const dos=mktBookData(mktCurrentBook).dos||[];
+  const plans=mktBookData(mktCurrentBook).plans||[];
+  if(!dos.length){ el.innerHTML='<div class="empty-state" style="padding:20px"><div class="es-icon">🚀</div><p>등록된 실적이 없습니다</p><button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="openMktDoModal()">➕ 실적 입력</button></div>'; return; }
+  el.innerHTML=dos.map(d=>{
+    const plan=plans.find(p=>p.id===d.planRef);
+    const ch=plan?mktChLabel(plan.channel):'-';
+    const planName=plan?plan.name:'-';
+    const stBadge=d.status==='done'
+      ?'<span class="mkt-badge mkt-badge-do">완료</span>'
+      :'<span class="mkt-badge" style="background:#e7f0fb;color:#1560B8">진행중</span>';
+    return '<div class="mkt-row">'
+      +'<span class="mkt-badge mkt-badge-plan" style="white-space:nowrap">'+ch+'</span>'
+      +stBadge
+      +'<span style="flex:1;"><span style="font-weight:600;">'+mktE(d.title||'')+'</span>'
+      +(d.reviewer?'<span style="font-size:10px;color:var(--text3);margin-left:6px;background:var(--s2);padding:2px 7px;border-radius:10px;">'+mktE(d.reviewer)+'</span>':'')
+      +'<br><span style="font-size:10px;color:var(--text3);">'+mktE(planName)+'</span></span>'
+      +'<span style="font-size:11px;color:var(--text3);">'+mktE(d.date||'')+'</span>'
+      +(function(d,plan){const k=mktKpi(plan?plan.channel:'');return '<span style="font-size:11px;color:var(--ok);">'+k.v+' '+(d.actView||0)+k.vp+' / '+k.e+' '+(d.actEngage||0)+k.ep+' / '+k.c+' '+(d.actConvert||0)+k.cp+'</span>';})(d,plan)
+      +'<button class="btn btn-ghost btn-sm" onclick="editMktDo(\''+d.id+'\')">✏️</button>'
+      +'<button class="btn btn-ghost btn-sm" style="color:var(--rose)" onclick="deleteMktItem(\'do\',\''+d.id+'\')">🗑</button>'
+      +'</div>';
+  }).join('');
+}
+window.openMktDoModal=function(editId, planRefPreset){
+  if(!mktCurrentBook){ alert('도서를 먼저 선택하세요.'); return; }
+  const plans=mktBookData(mktCurrentBook).plans||[];
+  const sel=document.getElementById('md-plan-ref');
+  sel.innerHTML='<option value="">— 기획 선택 —</option>'+plans.map(p=>'<option value="'+p.id+'">'+mktE(p.name)+' ('+mktChLabel(p.channel)+')</option>').join('');
+  sel.onchange=function(){ mktUpdateDoKpiLabels(); };
+  if(planRefPreset) sel.value=planRefPreset;
+  else if(plans.length===1) sel.value=plans[0].id;
+  const f=id=>document.getElementById(id);
+  f('md-date').value=new Date().toISOString().slice(0,10);
+  f('md-title').value=''; f('md-view').value=''; f('md-engage').value=''; f('md-convert').value='';
+  f('md-reviewer').value=''; f('md-status').value='ongoing'; f('md-memo').value=''; f('md-edit-id').value=editId||'';
+  mktUpdateDoKpiLabels();
+  if(editId){
+    const d=(mktBookData(mktCurrentBook).dos||[]).find(x=>x.id===editId);
+    if(d){ sel.value=d.planRef||''; f('md-date').value=d.date||''; f('md-title').value=d.title||''; f('md-view').value=d.actView||''; f('md-engage').value=d.actEngage||''; f('md-convert').value=d.actConvert||''; f('md-reviewer').value=d.reviewer||''; f('md-status').value=d.status||'ongoing'; f('md-memo').value=d.memo||''; }
+  }
+  f('mkt-do-modal').classList.add('open');
+};
+window.editMktDo=function(id){ openMktDoModal(id); };
+window.saveMktDo=function(){
+  if(!mktCurrentBook){ alert('도서를 먼저 선택하세요.'); return; }
+  const bd=mktBookData(mktCurrentBook);
+  const editId=document.getElementById('md-edit-id').value;
+  const obj={
+    id:editId||mktUID(),
+    planRef:document.getElementById('md-plan-ref').value,
+    date:document.getElementById('md-date').value,
+    title:document.getElementById('md-title').value.trim(),
+    actView:Number(document.getElementById('md-view').value)||0,
+    actEngage:Number(document.getElementById('md-engage').value)||0,
+    actConvert:Number(document.getElementById('md-convert').value)||0,
+    reviewer:document.getElementById('md-reviewer').value.trim(),
+    status:document.getElementById('md-status').value,
+    memo:document.getElementById('md-memo').value,
+    updatedAt:new Date().toISOString(),
+  };
+  if(editId){ const idx=bd.dos.findIndex(x=>x.id===editId); if(idx>=0) bd.dos[idx]=obj; else bd.dos.push(obj); }
+  else bd.dos.push(obj);
+  mktSave(mktCurrentBook);
+  closeMktModal('do');
+  renderMktDo(); mktUpdateSummaryCards();
+};
+
+// ── CHECK ────────────────────────────────────────────────────────
+function switchCheckTab(t){
+  mktCheckTab=t;
+  ['all','ok','miss'].forEach(x=>{ document.getElementById('mkt-ct-'+x)?.classList.toggle('on',x===t); });
+  renderMktCheck();
+}
+function renderMktCheck(){
+  const el=document.getElementById('mkt-check-content'); if(!el) return;
+  if(!mktCurrentBook){ el.innerHTML='<div class="empty-state" style="padding:20px"><p>도서를 선택하세요</p></div>'; return; }
+  const bd=mktBookData(mktCurrentBook);
+  const plans=bd.plans||[], dos=bd.dos||[];
+  const rows=plans.map(p=>{
+    const linked=dos.filter(d=>d.planRef===p.id);
+    const sumV=linked.reduce((a,d)=>a+Number(d.actView||0),0);
+    const sumE=linked.reduce((a,d)=>a+Number(d.actEngage||0),0);
+    const sumC=linked.reduce((a,d)=>a+Number(d.actConvert||0),0);
+    const pctV=p.kpiView>0?Math.min(Math.round(sumV/p.kpiView*100),999):0;
+    return {p,sumV,sumE,sumC,pctV,achieved:pctV>=100};
+  });
+  let filtered=rows;
+  if(mktCheckTab==='ok')   filtered=rows.filter(r=>r.achieved);
+  if(mktCheckTab==='miss') filtered=rows.filter(r=>!r.achieved);
+  if(!filtered.length){ el.innerHTML='<div class="empty-state" style="padding:20px"><p>해당 항목이 없습니다</p></div>'; return; }
+  el.innerHTML=filtered.map(r=>{
+    const pct=r.pctV;
+    const bc=pct>=100?'var(--ok)':pct>=60?'var(--gold)':'var(--ex)';
+    return '<div style="padding:10px 0;border-bottom:1px solid var(--border);">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+      +'<span class="mkt-badge mkt-badge-plan">'+mktChLabel(r.p.channel)+'</span>'
+      +(r.p.reviewer?'<span style="font-size:10px;color:var(--text3);background:var(--s2);padding:2px 7px;border-radius:10px;">'+mktE(r.p.reviewer)+'</span>':'')
+      +'<span style="font-weight:700;font-size:12px;flex:1;">'+mktE(r.p.name)+'</span>'
+      +(r.achieved
+        ?'<span class="mkt-badge mkt-badge-do">달성</span>'
+        :'<span class="mkt-badge mkt-badge-miss">성과미달</span>'
+        +'<button class="btn btn-sm" style="background:var(--gold);color:#fff;font-size:10px;" onclick="quickActFromCheck(\''+r.p.id+'\')">⚡ ACT 등록</button>')
+      +'</div>'
+      +'<div style="background:var(--border);border-radius:4px;height:6px;margin-bottom:4px;"><div style="width:'+Math.min(pct,100)+'%;height:100%;border-radius:4px;background:'+bc+';transition:.3s;"></div></div>'
+      +(function(r){const k=mktKpi(r.p.channel);return '<div style="font-size:11px;color:var(--text3);">'+k.v+' '+r.sumV+'/'+r.p.kpiView+k.vp+' ('+r.pctV+'%) · '+k.e+' '+r.sumE+'/'+r.p.kpiEngage+k.ep+' · '+k.c+' '+r.sumC+'/'+r.p.kpiConvert+k.cp+'</div>';})(r)
+      +'</div>';
+  }).join('');
+}
+window.quickActFromCheck=function(planId){ switchMktTab('act'); switchActTab('action'); openMktActModal('action',null,planId); };
+
+// ── ACT ─────────────────────────────────────────────────────────
+function switchActTab(t){
+  mktActTab=t;
+  ['action','board','retro'].forEach(x=>{ document.getElementById('mkt-at-'+x)?.classList.toggle('on',x===t); });
+  const btn=document.getElementById('mkt-act-add-btn');
+  if(btn){ btn.textContent=t==='board'?'📌 게시 등록':t==='retro'?'📝 회고 등록':'⚡ 액션 등록'; }
+  renderMktAct();
+}
+function renderMktAct(){
+  const el=document.getElementById('mkt-act-content'); if(!el) return;
+  if(!mktCurrentBook){ el.innerHTML='<div class="empty-state" style="padding:20px"><p>도서를 선택하세요</p></div>'; return; }
+  const bd=mktBookData(mktCurrentBook);
+  const acts=(bd.acts||[]).filter(a=>a.type===mktActTab);
+  if(!acts.length){ el.innerHTML='<div class="empty-state" style="padding:20px"><p>등록된 항목이 없습니다</p></div>'; return; }
+  const SL={open:'등록',do:'Do 재투입',done:'목표 달성 완료'};
+  const SC={open:'mkt-badge-plan',do:'mkt-badge-act',done:'mkt-badge-do'};
+  el.innerHTML=acts.map(a=>
+    '<div class="mkt-act-card">'
+    +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">'
+    +'<span class="mkt-badge '+(SC[a.status]||'mkt-badge-plan')+'">'+mktE(SL[a.status]||a.status)+'</span>'
+    +(a.reviewer?'<span style="font-size:10px;color:var(--text3);background:var(--s2);padding:2px 7px;border-radius:10px;">'+mktE(a.reviewer)+'</span>':'')
+    +'<span style="font-weight:700;flex:1;font-size:12px;">'+mktE(a.title)+'</span>'
+    +'<button class="btn btn-ghost btn-sm" onclick="editMktAct(\''+a.id+'\')">✏️</button>'
+    +'<button class="btn btn-ghost btn-sm" style="color:var(--rose)" onclick="deleteMktItem(\'act\',\''+a.id+'\')">🗑</button>'
+    +'</div>'
+    +'<p>'+mktE(a.body||'')+'</p>'
+    +(a.planRef?'<div style="font-size:10px;color:var(--text3);margin-top:3px;">연결 기획: '+mktE(((bd.plans||[]).find(p=>p.id===a.planRef)||{}).name||a.planRef)+'</div>':'')
+    +(a.status==='do'&&a.doData&&a.doData.title?'<div style="font-size:10px;color:var(--blue);margin-top:3px;">🚀 재투입: '+mktE(a.doData.title)+(a.doData.date?' ('+mktE(a.doData.date)+')':'')+'</div>':'')
+    +'</div>'
+  ).join('');
+}
+// ── ACT 모달 헬퍼 ──────────────────────────────────────────────
+// 연결 기획 선택 → 제목 자동 완성
+window.mktActAutoTitle=function(){
+  if(!mktCurrentBook) return;
+  const sel=document.getElementById('ma-plan-ref');
+  const planId=sel?sel.value:'';
+  if(!planId) return;
+  const plan=(mktBookData(mktCurrentBook).plans||[]).find(p=>p.id===planId);
+  if(!plan) return;
+  const titleEl=document.getElementById('ma-title');
+  if(titleEl&&!titleEl.value.trim()){
+    titleEl.value='[ACT] '+plan.name+' 개선';
+  }
+  mktActUpdateDoKpiLabels(plan.channel);
+  // Do 재투입 상태이면 이전 실적도 갱신
+  const status=document.getElementById('ma-status');
+  if(status&&status.value==='do') mktLoadPrevDo();
+};
+
+// 상태 변경 → Do 재투입 영역 토글
+window.mktActStatusChange=function(){
+  const status=document.getElementById('ma-status').value;
+  const doSec=document.getElementById('ma-do-section');
+  if(!doSec) return;
+  if(status==='do'){
+    doSec.style.display='block';
+    document.getElementById('ma-do-date').value=new Date().toISOString().slice(0,10);
+    const sel=document.getElementById('ma-plan-ref');
+    const plan=sel&&mktCurrentBook?(mktBookData(mktCurrentBook).plans||[]).find(p=>p.id===sel.value):null;
+    if(plan) mktActUpdateDoKpiLabels(plan.channel);
+    // 이전 DO 실적 로드
+    mktLoadPrevDo();
+  } else {
+    doSec.style.display='none';
+  }
+};
+
+// 연결 기획의 가장 최근 DO 실적을 참고용으로 표시
+function mktLoadPrevDo(){
+  const prevBox=document.getElementById('ma-do-prev');
+  const prevContent=document.getElementById('ma-do-prev-content');
+  if(!prevBox||!prevContent||!mktCurrentBook) return;
+  const sel=document.getElementById('ma-plan-ref');
+  const planId=sel?sel.value:'';
+  if(!planId){ prevBox.style.display='none'; return; }
+  const bd=mktBookData(mktCurrentBook);
+  const plan=(bd.plans||[]).find(p=>p.id===planId);
+  const dos=(bd.dos||[]).filter(d=>d.planRef===planId).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(!dos.length){ prevBox.style.display='none'; return; }
+  const k=mktKpi(plan?plan.channel:'');
+  prevBox.style.display='block';
+  prevContent.innerHTML=dos.slice(0,3).map((d,i)=>{
+    const isLatest=i===0;
+    return '<div style="padding:4px 0;'+(i>0?'border-top:1px dashed var(--border);margin-top:4px;':'')+'">'
+      +(isLatest?'<span style="font-size:9px;background:var(--blue);color:#fff;padding:1px 5px;border-radius:8px;margin-right:4px;">최근</span>':'')
+      +'<span style="color:var(--text3);">'+mktE(d.date||'-')+'</span> '
+      +'<span style="color:var(--blue);">'+k.v+' '+(d.actView||0)+k.vp+'</span> · '
+      +'<span>'+k.e+' '+(d.actEngage||0)+k.ep+'</span> · '
+      +'<span>'+k.c+' '+(d.actConvert||0)+k.cp+'</span>'
+      +(d.reviewer?' <span style="color:var(--text3);">('+mktE(d.reviewer)+')</span>':'')
+      +'</div>';
+  }).join('');
+}
+
+// ACT 내 DO 영역 KPI 레이블 갱신
+function mktActUpdateDoKpiLabels(ch){
+  const k=mktKpi(ch||'');
+  const pairs=[['ma-do-kpi-v-lbl',k.v,k.vp],['ma-do-kpi-e-lbl',k.e,k.ep],['ma-do-kpi-c-lbl',k.c,k.cp]];
+  pairs.forEach(([id,label,unit])=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent='실적 '+label+(unit?' ('+unit+')':'');
+  });
+}
+
+window.openMktActModal=function(type,editId,planRef){
+  const t=type||mktActTab;
+  const f=id=>document.getElementById(id);
+  f('ma-type').value=t; f('ma-edit-id').value=editId||'';
+  f('ma-title').value=''; f('ma-body').value=''; f('ma-status').value='open';
+  f('mkt-act-modal-title').textContent=t==='board'?'📌 전략 게시판 등록':t==='retro'?'📝 회고 노트 등록':'⚡ 개선 액션 등록';
+  // 연결 기획 / 상태 필드: 액션에서만 표시
+  const refWrap=f('ma-ref-wrap');
+  const statusWrap=f('ma-status-wrap');
+  const isAction=t==='action';
+  if(refWrap) refWrap.style.display=isAction?'':'none';
+  if(statusWrap) statusWrap.style.display=isAction?'':'none';
+  // DO 재투입 영역 초기화
+  const doSec=f('ma-do-section');
+  if(doSec){ doSec.style.display='none'; }
+  const prevBox=document.getElementById('ma-do-prev'); if(prevBox) prevBox.style.display='none';
+  ['ma-do-date','ma-do-view','ma-do-engage','ma-do-convert','ma-do-reviewer'].forEach(id=>{
+    const el=f(id); if(el) el.value='';
+  });
+  if(isAction&&mktCurrentBook){
+    const plans=mktBookData(mktCurrentBook).plans||[];
+    const sel=f('ma-plan-ref');
+    sel.innerHTML='<option value="">— 선택 안 함 —</option>'+
+      plans.map(p=>'<option value="'+p.id+'">'+mktE(p.name)+' ('+mktChLabel(p.channel)+')</option>').join('');
+    if(planRef){
+      sel.value=planRef;
+      // 제목 자동 완성 (신규일 때만)
+      if(!editId){
+        const plan=plans.find(p=>p.id===planRef);
+        if(plan){ f('ma-title').value='[ACT] '+plan.name+' 개선'; mktActUpdateDoKpiLabels(plan.channel); }
+      }
+    }
+  }
+  if(editId&&mktCurrentBook){
+    const a=(mktBookData(mktCurrentBook).acts||[]).find(x=>x.id===editId);
+    if(a){
+      f('ma-title').value=a.title||''; f('ma-body').value=a.body||'';
+      f('ma-status').value=a.status||'open';
+      const sr=f('ma-plan-ref'); if(sr) sr.value=a.planRef||'';
+      // 저장된 상태가 do이면 DO 영역 복원
+      if(a.status==='do'&&a.doData){
+        if(doSec) doSec.style.display='block';
+        f('ma-do-date').value=a.doData.date||'';
+        f('ma-do-view').value=a.doData.view||'';
+        f('ma-do-engage').value=a.doData.engage||'';
+        f('ma-do-convert').value=a.doData.convert||'';
+        f('ma-do-reviewer').value=a.doData.reviewer||'';
+        const plan=mktCurrentBook?(mktBookData(mktCurrentBook).plans||[]).find(p=>p.id===a.planRef):null;
+        if(plan) mktActUpdateDoKpiLabels(plan.channel);
+      }
+    }
+  }
+  f('mkt-act-modal').classList.add('open');
+};
+window.editMktAct=function(id){ openMktActModal(mktActTab,id); };
+window.saveMktAct=function(){
+  if(!mktCurrentBook){ alert('도서를 먼저 선택하세요.'); return; }
+  const bd=mktBookData(mktCurrentBook);
+  if(!bd.acts) bd.acts=[];
+  const editId=document.getElementById('ma-edit-id').value;
+  const sr=document.getElementById('ma-plan-ref');
+  const status=document.getElementById('ma-status').value;
+  const obj={
+    id:editId||mktUID(),
+    type:document.getElementById('ma-type').value,
+    title:document.getElementById('ma-title').value.trim(),
+    body:document.getElementById('ma-body').value.trim(),
+    planRef:sr?sr.value:'',
+    status,
+    updatedAt:new Date().toISOString(),
+  };
+  if(!obj.title){ alert('제목을 입력하세요.'); return; }
+  // Do 재투입: DO 데이터도 함께 저장 + dos 배열에 신규 DO 등록
+  if(status==='do'){
+    const doDate=document.getElementById('ma-do-date').value;
+    const doView=Number(document.getElementById('ma-do-view').value)||0;
+    const doEngage=Number(document.getElementById('ma-do-engage').value)||0;
+    const doConvert=Number(document.getElementById('ma-do-convert').value)||0;
+    const doReviewer=document.getElementById('ma-do-reviewer').value.trim();
+    obj.doData={date:doDate,view:doView,engage:doEngage,convert:doConvert,reviewer:doReviewer};
+    // DOS 배열에 자동 추가
+    if(obj.planRef){
+      if(!bd.dos) bd.dos=[];
+      const plan=(bd.plans||[]).find(p=>p.id===obj.planRef);
+      bd.dos.push({
+        id:mktUID(),
+        planRef:obj.planRef,
+        date:doDate,
+        title:'[재투입] '+(plan?plan.name:'기획'),
+        actView:doView, actEngage:doEngage, actConvert:doConvert,
+        reviewer:doReviewer,
+        status:'ongoing',
+        memo:'ACT 개선 재투입: '+obj.title,
+        updatedAt:new Date().toISOString(),
+      });
+    }
+  }
+  if(editId){ const idx=bd.acts.findIndex(x=>x.id===editId); if(idx>=0) bd.acts[idx]=obj; else bd.acts.push(obj); }
+  else bd.acts.push(obj);
+  mktSave(mktCurrentBook);
+  closeMktModal('act');
+  renderMktAct(); renderMktDo(); mktUpdateSummaryCards();
+};
+window.deleteMktItem=function(type,id){
+  if(!mktCurrentBook||!confirm('삭제하시겠습니까?')) return;
+  const bd=mktBookData(mktCurrentBook);
+  if(type==='plan')     bd.plans=(bd.plans||[]).filter(x=>x.id!==id);
+  else if(type==='do')  bd.dos=(bd.dos||[]).filter(x=>x.id!==id);
+  else if(type==='act') bd.acts=(bd.acts||[]).filter(x=>x.id!==id);
+  mktSave(mktCurrentBook);
+  switchMktTab(mktCurrentTab); mktUpdateSummaryCards();
+};
+
+// ── 채널 목표 설정 ────────────────────────────────────────────────
+window.openMktChannelSettingsModal=function(){
+  if(!mktCurrentBook){ alert('도서를 먼저 선택하세요.'); return; }
+  const bd=mktBookData(mktCurrentBook);
+  const el=document.getElementById('mkt-ch-body');
+  el.innerHTML='<div class="ch-goal-row" style="font-weight:700;font-size:11px;border-bottom:2px solid var(--border);padding-bottom:8px;">'
+    +'<span>채널</span><span>기본 목표</span><span>사용자 정의</span><span>설명</span></div>'
+    +MKT_CHANNELS.map(c=>'<div class="ch-goal-row"><span style="font-weight:600;">'+c.label+'</span>'
+    +'<span style="color:var(--text2);">'+c.goal+'</span>'
+    +'<input type="text" id="chg-'+c.k+'" value="'+mktE((bd.channels||{})[c.k]||'')+'" placeholder="'+c.goal+'" style="font-size:11px;padding:4px 6px;" />'
+    +'<span style="color:var(--text3);">'+c.sub+'</span></div>').join('');
+  document.getElementById('mkt-ch-modal').classList.add('open');
+};
+window.saveMktChannelSettings=function(){
+  if(!mktCurrentBook) return;
+  const bd=mktBookData(mktCurrentBook);
+  if(!bd.channels) bd.channels={};
+  MKT_CHANNELS.forEach(c=>{ const v=document.getElementById('chg-'+c.k); if(v) bd.channels[c.k]=v.value.trim()||''; });
+  mktSave(mktCurrentBook);
+  closeMktModal('ch');
+  mktUpdateSummaryCards();
+};
+
+
+// ═══════════════════════════════════════════════════════════════════
+// 판매·손익 + 마케팅 통합 리포트
+// ═══════════════════════════════════════════════════════════════════
+window.openSalesReport = function(){
+  const modal  = document.getElementById('sales-report-modal');
+  const selEl  = document.getElementById('report-book-sel');
+  if(!modal || !selEl) return;
+
+  // 도서 목록 구성: 판매 데이터 있는 도서 우선, 없으면 전체 프로젝트 도서
+  const books = getProjectProposals();
+  selEl.innerHTML = books.map(p =>
+    '<option value="' + escAttr(p.id) + '">' + escAttr(p.title) +
+    (p.author ? ' (' + escAttr(p.author) + ')' : '') + '</option>'
+  ).join('');
+
+  // 판매 데이터가 있는 첫 번째 도서 기본 선택
+  const withSales = books.filter(p => salesData[p.id]);
+  if(withSales.length)      selEl.value = withSales[0].id;
+  else if(books.length)     selEl.value = books[0].id;
+
+  modal.classList.add('open');
+  loadSalesReport();
+};
+
+window.loadSalesReport = function(){
+  const selEl = document.getElementById('report-book-sel');
+  const body  = document.getElementById('sales-report-body');
+  const title = document.getElementById('sales-report-title');
+  if(!selEl || !body) return;
+
+  const bookId = selEl.value;
+  if(!bookId){ body.innerHTML = '<p style="color:var(--text3);text-align:center;padding:40px;">도서를 선택하세요</p>'; return; }
+
+  const book   = proposals.find(p => p.id === bookId);
+  const bookTitle = book ? book.title : '도서';
+  if(title) title.textContent = '📄 ' + bookTitle + ' — 마케팅·손익 통합 리포트';
+  body.innerHTML = buildSalesReport(bookId, book);
+};
+
+window.printSalesReport = function(){
+  const body = document.getElementById('sales-report-body');
+  const title = document.getElementById('sales-report-title');
+  if(!body) return;
+  const w = window.open('', '_blank');
+  w.document.write(
+    '<!DOCTYPE html><html><head><meta charset="utf-8">'
+    + '<title>' + (title ? title.textContent : '리포트') + '</title>'
+    + '<style>'
+    + 'body{font-family:"Pretendard","Noto Sans KR",sans-serif;font-size:12px;color:#1C2028;padding:20px 28px;max-width:800px;margin:0 auto;line-height:1.7;}'
+    + 'h2{font-size:14px;color:#7A1F2B;border-bottom:2px solid #7A1F2B;padding-bottom:5px;margin:22px 0 10px;}'
+    + 'h3{font-size:12px;color:#1560B8;margin:14px 0 5px;}'
+    + 'table{width:100%;border-collapse:collapse;margin:6px 0;font-size:11px;}'
+    + 'th{background:#f5ede0;padding:5px 9px;text-align:left;font-weight:700;border:1px solid #d5c5b0;}'
+    + 'td{padding:5px 9px;border:1px solid #d5c5b0;vertical-align:top;}'
+    + 'tr:nth-child(even) td{background:#faf8f5;}'
+    + '.ok{color:#1A7A3A;}.miss{color:#8A1A2A;}.blue{color:#1560B8;}'
+    + '.badge{display:inline-block;padding:1px 7px;border-radius:9px;font-size:10px;font-weight:700;}'
+    + '.ins-ok{background:#e7f6ec;color:#1A7A3A;} .ins-miss{background:#fdeef0;color:#8A1A2A;} .ins-warn{background:#e7f0fb;color:#1560B8;}'
+    + '.ins-row{padding:7px 11px;border-radius:5px;margin-bottom:5px;display:flex;gap:8px;align-items:flex-start;}'
+    + '.bar-wrap{background:#e5e7ea;border-radius:3px;height:5px;margin-top:3px;}'
+    + '.bar-fill{height:100%;border-radius:3px;}'
+    + '@media print{@page{margin:15mm;}}'
+    + '</style></head><body>'
+    + '<h1 style="font-size:15px;color:#7A1F2B;margin-bottom:4px;">'
+    + (title ? title.textContent : '') + '</h1>'
+    + '<div style="font-size:11px;color:#888;margin-bottom:18px;">발행: '
+    + new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'}) + '</div>'
+    + body.innerHTML
+    + '</body></html>'
+  );
+  w.document.close();
+  setTimeout(()=>{ w.focus(); w.print(); }, 600);
+};
+
+function buildSalesReport(bookId, book){
+  const E = escAttr;   // html escape
+  const N = n => Number(n||0).toLocaleString();
+  const M = n => Math.round(Number(n||0)/10000).toLocaleString() + '만';
+
+  // ── 데이터 수집 ──────────────────────────────────────
+  const sd  = salesData[bookId] || null;
+  const bep = sd ? calcBEP(sd) : null;
+  mktLoad();
+  const bd    = mktBookData(bookId);
+  const plans = bd.plans || [];
+  const dos   = bd.dos   || [];
+  const acts  = bd.acts  || [];
+  const now   = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+
+  // ── 채널별 집계 ───────────────────────────────────────
+  const chMap = {};
+  plans.forEach(p => {
+    if(!chMap[p.channel]) chMap[p.channel] = {label:mktChLabel(p.channel), kpiV:0,kpiE:0,kpiC:0, actV:0,actE:0,actC:0, plans:[], doCnt:0};
+    const m = chMap[p.channel];
+    m.kpiV += Number(p.kpiView||0); m.kpiE += Number(p.kpiEngage||0); m.kpiC += Number(p.kpiConvert||0);
+    m.plans.push(p);
+  });
+  dos.forEach(d => {
+    const plan = plans.find(p => p.id === d.planRef); if(!plan) return;
+    const m = chMap[plan.channel]; if(!m) return;
+    m.actV += Number(d.actView||0); m.actE += Number(d.actEngage||0); m.actC += Number(d.actConvert||0); m.doCnt++;
+  });
+  const chKeys = Object.keys(chMap);
+  let totKV=0,totAV=0,totKE=0,totAE=0,totKC=0,totAC=0;
+  chKeys.forEach(k=>{ const m=chMap[k]; totKV+=m.kpiV; totAV+=m.actV; totKE+=m.kpiE; totAE+=m.actE; totKC+=m.kpiC; totAC+=m.actC; });
+  const overallPct = totKV>0 ? Math.min(Math.round(totAV/totKV*100),999) : 0;
+  const achCh = chKeys.filter(k => chMap[k].kpiV>0 && chMap[k].actV>=chMap[k].kpiV).length;
+  const actActions = acts.filter(a=>a.type==='action');
+  const actOpen = actActions.filter(a=>a.status!=='done').length;
+
+  // ── 인사이트 생성 ─────────────────────────────────────
+  const insights = [];
+  if(overallPct>=100) insights.push({t:'ok', msg:'전체 조회 KPI '+overallPct+'% 달성. 성공 채널의 콘텐츠 포맷을 확산하세요.'});
+  else if(overallPct>=60) insights.push({t:'warn', msg:'전체 달성률 '+overallPct+'%. 미달 채널 콘텐츠 전략 재검토가 필요합니다.'});
+  else if(totKV>0) insights.push({t:'miss', msg:'전체 달성률 '+overallPct+'% — 저조합니다. ACT 개선 액션을 우선 진행하세요.'});
+  if(chKeys.length){
+    const top = chKeys.reduce((a,b) => (chMap[a].kpiV>0?chMap[a].actV/chMap[a].kpiV:0) >= (chMap[b].kpiV>0?chMap[b].actV/chMap[b].kpiV:0) ? a : b);
+    const topPct = chMap[top].kpiV>0 ? Math.round(chMap[top].actV/chMap[top].kpiV*100) : 0;
+    if(topPct>0) insights.push({t:'ok', msg:'최고 채널: '+chMap[top].label+' (달성률 '+topPct+'%)'});
+  }
+  if(actOpen>0) insights.push({t:'miss', msg:'미완료 개선 액션 '+actOpen+'건 — 실행이 필요합니다.'});
+  if(bep){
+    if(bep.bepAchieved>=100) insights.push({t:'ok', msg:'BEP 달성 완료 ('+N(bep.totalSalesQty)+'부 / BEP '+N(bep.bep)+'부). 마케팅 ROI 검증됨.'});
+    else insights.push({t:'warn', msg:'BEP 달성률 '+bep.bepAchieved+'% ('+N(bep.totalSalesQty)+'/'+N(bep.bep)+'부). 판매 촉진 필요.'});
+    if(sd && sd.marketing>0){
+      const roas = bep.totalRevenue>0 ? (bep.totalRevenue/sd.marketing).toFixed(2) : '0';
+      insights.push({t:'warn', msg:'마케팅비 ROAS '+roas+'x (투자 '+M(sd.marketing)+' → 매출 '+M(bep.totalRevenue)+')'});
+    }
+  }
+
+  const INS_CLS = {ok:'ins-ok', miss:'ins-miss', warn:'ins-warn'};
+  const INS_ICN = {ok:'✓', miss:'!', warn:'△'};
+
+  let H = '';
+
+  // ① 도서 개요
+  H += '<h2>① 도서 개요</h2>';
+  H += '<table><tr><th style="width:110px">항목</th><th>내용</th><th style="width:110px">항목</th><th>내용</th></tr>';
+  H += '<tr><td>도서명</td><td><strong>'+E(book?book.title:'-')+'</strong></td><td>저자</td><td>'+E(book?book.author||'-':'-')+'</td></tr>';
+  if(sd){
+    H += '<tr><td>정가</td><td>'+N(sd.price)+'원</td><td>출간일</td><td>'+E(sd.publishDate||'-')+'</td></tr>';
+    H += '<tr><td>인쇄 부수</td><td>'+N(sd.printQty)+'부</td><td>ISBN</td><td>'+E(sd.isbn||'-')+'</td></tr>';
+  }
+  H += '<tr><td>PLAN</td><td>'+plans.length+'건</td><td>DO 발행</td><td>'+dos.length+'건</td></tr>';
+  H += '<tr><td>개선 액션</td><td>'+actActions.length+'건 (미완료 '+actOpen+'건)</td><td>회고 노트</td><td>'+acts.filter(a=>a.type==='retro').length+'건</td></tr>';
+  H += '</table>';
+
+  // ② 핵심 인사이트
+  H += '<h2>② 핵심 인사이트</h2>';
+  insights.forEach(ins => {
+    H += '<div class="ins-row '+INS_CLS[ins.t]+'">'
+      + '<span class="badge '+INS_CLS[ins.t]+'">'+INS_ICN[ins.t]+'</span>'
+      + '<span>'+E(ins.msg)+'</span></div>';
+  });
+  if(!insights.length) H += '<p style="color:#888">데이터를 입력하면 인사이트가 표시됩니다.</p>';
+
+  // ③ 판매·손익 요약
+  if(bep){
+    H += '<h2>③ 판매·손익 요약</h2>';
+    H += '<table><tr><th style="width:130px">항목</th><th>수치</th><th style="width:130px">항목</th><th>수치</th></tr>';
+    H += '<tr><td>총 제작 비용</td><td>'+M(bep.totalCost)+'</td><td>총 판매 수익</td><td class="ok">'+M(bep.totalRevenue)+'</td></tr>';
+    H += '<tr><td>순 손익</td><td class="'+(bep.profit>=0?'ok':'miss')+'" style="font-weight:700;">'+(bep.profit>=0?'+':'')+M(bep.profit)+'</td><td>BEP 부수</td><td>'+N(bep.bep)+'부</td></tr>';
+    H += '<tr><td>판매 부수</td><td>'+N(bep.totalSalesQty)+'부</td><td>BEP 달성률</td><td class="'+(bep.bepAchieved>=100?'ok':'miss')+'" style="font-weight:700;">'+bep.bepAchieved+'%</td></tr>';
+    H += '<tr><td>재고 소진율</td><td>'+bep.sellRate+'%</td><td>정산 단가</td><td>'+N(bep.pricePerBook)+'원</td></tr>';
+    H += '</table>';
+    // 비용 구성 상세
+    const costFields = [['royalty','선인세'],['translation','번역비'],['editing','편집비'],['typesetting','조판비'],['printing','인쇄비'],['paper','용지비'],['design','디자인비'],['marketing','마케팅비'],['other','기타']];
+    const activeCosts = costFields.filter(([k]) => Number(sd[k]||0)>0);
+    if(activeCosts.length){
+      H += '<h3>비용 구성</h3><table><tr>';
+      activeCosts.forEach(([,label]) => { H += '<th>'+label+'</th>'; });
+      H += '</tr><tr>';
+      activeCosts.forEach(([k]) => { H += '<td>'+M(sd[k])+'</td>'; });
+      H += '</tr></table>';
+    }
+    // 쇄별 판매
+    if(sd.sales && sd.sales.length){
+      H += '<h3>쇄별 판매 현황</h3>';
+      H += '<table><tr><th>쇄</th><th>판매 부수</th><th>판매 금액</th><th>출고일</th></tr>';
+      sd.sales.forEach(s => {
+        H += '<tr><td>'+E(s.label||'-')+'</td><td>'+N(s.qty)+'부</td><td>'+M(s.amount)+'</td><td>'+E(s.date||'-')+'</td></tr>';
+      });
+      H += '</table>';
+    }
+  } else {
+    H += '<h2>③ 판매·손익 요약</h2><p style="color:#888">판매 데이터가 없습니다. 판매·손익 관리에서 입력하세요.</p>';
+  }
+
+  // ④ 채널별 마케팅 KPI
+  H += '<h2>④ 채널별 마케팅 KPI</h2>';
+  if(!chKeys.length){
+    H += '<p style="color:#888">마케팅 기획이 없습니다. 마케팅 관리에서 PLAN을 등록하세요.</p>';
+  } else {
+    H += '<table><tr><th>채널</th><th>기획</th><th>발행</th><th>KPI 1 목표→실적</th><th>달성률</th><th>KPI 2</th><th>KPI 3</th></tr>';
+    chKeys.forEach(k => {
+      const m = chMap[k]; const ki = mktKpi(k);
+      const pct = m.kpiV>0 ? Math.min(Math.round(m.actV/m.kpiV*100),999) : 0;
+      const cls = pct>=100?'ok':pct>=60?'blue':'miss';
+      H += '<tr><td><strong>'+m.label+'</strong></td><td style="text-align:center">'+m.plans.length+'</td><td style="text-align:center">'+m.doCnt+'</td>'
+        +'<td>'+N(m.kpiV)+ki.vp+' → '+N(m.actV)+ki.vp+'</td>'
+        +'<td class="'+cls+'" style="font-weight:700;text-align:center;">'+pct+'%</td>'
+        +'<td>'+N(m.actE)+ki.ep+'/'+N(m.kpiE)+ki.ep+'</td>'
+        +'<td>'+N(m.actC)+ki.cp+'/'+N(m.kpiC)+ki.cp+'</td></tr>';
+    });
+    // 합계행
+    H += '<tr style="background:#f5ede0;font-weight:700;">'
+      +'<td colspan="3">합계</td>'
+      +'<td>'+N(totKV)+' → '+N(totAV)+'</td>'
+      +'<td class="'+(overallPct>=100?'ok':overallPct>=60?'blue':'miss')+'" style="font-weight:700;text-align:center;">'+overallPct+'%</td>'
+      +'<td>'+N(totAE)+'/'+N(totKE)+'</td>'
+      +'<td>'+N(totAC)+'/'+N(totKC)+'</td></tr>';
+    H += '</table>';
+  }
+
+  // ⑤ PDCA 개선 액션
+  H += '<h2>⑤ PDCA 개선 액션 이력</h2>';
+  if(!actActions.length){
+    H += '<p style="color:#888">등록된 개선 액션이 없습니다.</p>';
+  } else {
+    H += '<table><tr><th>제목</th><th>상태</th><th>연결 기획</th><th>재투입 실적</th></tr>';
+    const SL={open:'등록',do:'Do 재투입',done:'달성 완료'};
+    actActions.forEach(a => {
+      const plan = plans.find(p=>p.id===a.planRef);
+      const ki   = mktKpi(plan?plan.channel:'');
+      const doInfo = a.doData
+        ? ki.v+' '+N(a.doData.view)+ki.vp+' / '+ki.e+' '+N(a.doData.engage)+ki.ep
+        : '-';
+      H += '<tr><td>'+E(a.title)+'</td><td>'+(SL[a.status]||a.status)+'</td>'
+        +'<td>'+E(plan?plan.name:'-')+'</td><td>'+E(doInfo)+'</td></tr>';
+    });
+    H += '</table>';
+  }
+
+  // ⑥ 회고 노트
+  const retros = acts.filter(a=>a.type==='retro');
+  if(retros.length){
+    H += '<h2>⑥ 회고 노트</h2>';
+    retros.forEach(r => {
+      H += '<div style="margin-bottom:10px;padding:10px 14px;background:#faf8f5;border-left:3px solid #B89B54;border-radius:0 6px 6px 0;">'
+        +'<strong>'+E(r.title)+'</strong>'
+        +(r.body?'<p style="margin:4px 0 0;color:#555;">'+E(r.body)+'</p>':'')
+        +'</div>';
+    });
+  }
+
+  return H;
+}
+
+
+function closeMktModal(type){
+  const ids={plan:'mkt-plan-modal',do:'mkt-do-modal',act:'mkt-act-modal',ch:'mkt-ch-modal'};
+  document.getElementById(ids[type])?.classList.remove('open');
+}
+
+mktLoad();
+
 const _sv = showView;
 showView = function(id){
   currentView = id;
@@ -3660,6 +4841,7 @@ showView = function(id){
   if(id==='dashboard') renderDashboard();
   if(id==='projects') renderProjects();
   if(id==='rights') renderRights();
+  if(id==='marketing') renderMarketing();
   if(id==='sales') renderSales();
   if(id==='quotes') renderQuotes();
   if(id==='contracts') renderContracts();
