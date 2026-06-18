@@ -3371,8 +3371,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <option value="">🏷 주제 전체</option>
         </select>
       </div>
-      <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
-        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">✏️ 새 회의록</button>
+      <div style="display:flex;gap:8px;">
+        <button onclick="mnSyncAll()" style="padding:9px 16px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;" title="localStorage의 모든 회의록을 Supabase에 업로드">☁️ 전체 동기화</button>
+        <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
+          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">✏️ 새 회의록</button>
+      </div>
     </div>
 
     <!-- 진행/완료 탭 -->
@@ -4879,6 +4882,36 @@ function mnNormalize(n){
   if(typeof n.tags==='string'){try{n.tags=JSON.parse(n.tags);}catch(e){n.tags=[];}}
   return n;
 }
+// ── 전체 동기화: localStorage → Supabase ──────────────────────
+function mnSyncAll(){
+  if(!sbOn()){ alert('Supabase가 비활성 상태입니다.'); return; }
+  var all = mnLocalAll();
+  if(!all.length){ alert('동기화할 회의록이 없습니다.'); return; }
+  if(!confirm('localStorage의 회의록 '+all.length+'건을 Supabase에 업로드합니다. (이미 있는 항목은 덮어씁니다)')) return;
+
+  var done=0, fail=0;
+  var promises = all.map(function(note){
+    var sbNote = Object.assign({}, note);
+    if(!Array.isArray(sbNote.threads)) sbNote.threads=[];
+    if(!Array.isArray(sbNote.tags))    sbNote.tags=[];
+    return fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE, {
+      method:'POST',
+      headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+      body:JSON.stringify(sbNote)
+    }).then(function(r){
+      if(r.ok){ done++; console.log('[mn] sync OK:', note.title); }
+      else{ fail++; return r.text().then(function(t){ console.warn('[mn] sync FAIL:', note.title, r.status, t); }); }
+    }).catch(function(e){ fail++; console.warn('[mn] sync ERROR:', note.title, e.message); });
+  });
+
+  Promise.all(promises).then(function(){
+    var msg = '동기화 완료: 성공 '+done+'건'+(fail?' / 실패 '+fail+'건':'');
+    alert(msg);
+    console.log('[mn]', msg);
+    mnLoad();
+  });
+}
+
 function mnLoad(){
   // ① localStorage 즉시 동기 렌더 (브라우저·네트워크 무관)
   MN_ALL = mnLocalAll().map(mnNormalize);
@@ -5137,15 +5170,13 @@ async function notifCreate(type, title, actor, description) {
   if (all.length > 100) all.splice(100); // 최대 100개
   notifSaveAll(all);
 
-  // Supabase fire-and-forget
+  // Supabase fire-and-forget (실패해도 localStorage에 이미 저장됨)
   if (sbOn()) {
-    try {
-      await fetch(SUPABASE_CONFIG.url + '/rest/v1/notifications', {
-        method: 'POST',
-        headers: sbHeaders({ 'Prefer': 'return=minimal' }),
-        body: JSON.stringify(notif),
-      });
-    } catch(e) { /* offline fallback: localStorage만 사용 */ }
+    fetch(SUPABASE_CONFIG.url + '/rest/v1/notifications', {
+      method: 'POST',
+      headers: sbHeaders({ 'Prefer': 'return=minimal' }),
+      body: JSON.stringify(notif),
+    }).catch(function(){}); // 테이블 없거나 스키마 불일치 시 조용히 무시
   }
 
   // 배지 업데이트 + 토스트 표시
