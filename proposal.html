@@ -1565,17 +1565,20 @@ document.addEventListener('click',function(e){
 });
 
 // ── INIT ──────────────────────────────────────────────────────────
-async function init(){
+function init(){
   buildScoreForms();
   updateCTabStatus();
   document.getElementById('f-date').valueAsDate = new Date();
   document.getElementById('f-reg-date').value = new Date().toISOString().slice(0,10);
   renderScoreReadout(getScores());
-  await loadData();
-  if(autoCloseStale()){ try{ await saveData(); }catch(e){} }
-  updateStats();
-  renderDashboard();
-  updateDbStatus();
+  var p = loadData() || Promise.resolve();
+  p.then(function(){
+    if(autoCloseStale()){ return (saveData()||Promise.resolve()).catch(function(){}); }
+  }).then(function(){
+    updateStats();
+    renderDashboard();
+    updateDbStatus();
+  }).catch(function(e){ console.warn('init 오류',e); updateStats(); renderDashboard(); updateDbStatus(); });
 }
 
 function buildScoreForms(){
@@ -2294,126 +2297,125 @@ function writeLocalMirror(list){
   }
 }
 
-async function loadData(){
+function loadData(){
   try{ proposals = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ proposals=[]; }
-  if(!sbOn()) return;
-  try{
-    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id,data,updated_at&order=updated_at.desc`,
-      {headers:sbHeaders({'Cache-Control':'no-cache','Pragma':'no-cache'}),cache:'no-store'});
+  if(!sbOn()) return Promise.resolve();
+  return fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id,data,updated_at&order=updated_at.desc',
+    {headers:sbHeaders({'Cache-Control':'no-cache','Pragma':'no-cache'}),cache:'no-store'}
+  ).then(function(res){
     if(res.ok){
-      const rows=await res.json();
-      proposals=rows.map(r=> (r.data && typeof r.data==='object') ? r.data : r ).filter(Boolean);
-      writeLocalMirror(proposals);   // 가벼운 사본만 로컬에
-    }else{
-      console.warn('Supabase load 실패',res.status,await res.text());
+      return res.json().then(function(rows){
+        proposals=rows.map(function(r){ return (r.data&&typeof r.data==='object')?r.data:r; }).filter(Boolean);
+        writeLocalMirror(proposals);
+      });
+    } else {
+      return res.text().then(function(t){ console.warn('Supabase load 실패',res.status,t); });
     }
-  }catch(e){console.warn('Supabase load 오류 — localStorage 사용',e);}
+  }).catch(function(e){ console.warn('Supabase load 오류 — localStorage 사용',e); });
 }
 
-async function saveData(changed){
-  // 1) 로컬 보조 저장 (Supabase 켜지면 원고 base64 제외한 가벼운 사본)
+function saveData(changed){
+  // 1) 로컬 보조 저장
   writeLocalMirror(proposals);
-  // 2) Supabase 동기화 — 변경분만 업서트(없으면 전체). 페이로드·타임아웃 500 방지
-  if(!sbOn()) return;
-  const targets = changed ? (Array.isArray(changed)?changed:[changed]) : proposals;
-  if(!targets.length) return;
-  const rows=targets.map(p=>({id:String(p.id), data:p, updated_at:new Date().toISOString()}));
-  const body=JSON.stringify(rows);
-  const transient=new Set([408,429,500,502,503,504]);
-  const delays=[0,700,1500];   // 최초 1회 + 일시 오류 시 2회 재시도(백오프)
-  let lastErr;
-  for(let i=0;i<delays.length;i++){
-    if(delays[i]) await new Promise(r=>setTimeout(r,delays[i]));
-    let res;
-    try{
-      res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?on_conflict=id`,{
-        method:'POST',
-        headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-        body
-      });
-    }catch(e){ lastErr=Object.assign(new Error('SB_NETWORK'),{kind:'sb_network'}); continue; }  // 네트워크 → 재시도
-    if(res.ok) return;   // 성공
-    const msg=await res.text().catch(()=> '');
-    if(transient.has(res.status) && i<delays.length-1){          // 일시적 → 재시도
-      console.warn('Supabase 일시 오류, 재시도', res.status);
-      lastErr=Object.assign(new Error('SB_'+res.status),{kind:'sb_error',status:res.status,detail:msg});
-      continue;
-    }
-    console.error('Supabase 저장 실패',res.status,msg);           // 영구 오류 → 표면화
-    const err=new Error('SB_'+res.status);
-    err.kind=(res.status===413 || /too large|payload|exceed/i.test(msg)) ? 'sb_too_large' : 'sb_error';
-    err.status=res.status; err.detail=msg;
-    throw err;
-  }
-  throw (lastErr||Object.assign(new Error('SB_FAIL'),{kind:'sb_error'}));   // 재시도 모두 실패
+  // 2) Supabase 동기화
+  if(!sbOn()) return Promise.resolve();
+  var targets = changed ? (Array.isArray(changed)?changed:[changed]) : proposals;
+  if(!targets.length) return Promise.resolve();
+  var rows = targets.map(function(p){ return {id:String(p.id), data:p, updated_at:new Date().toISOString()}; });
+  var body = JSON.stringify(rows);
+  return fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?on_conflict=id',
+    { method:'POST', headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}), body:body }
+  ).then(function(res){
+    if(res.ok) return;
+    return res.text().then(function(msg){
+      console.error('Supabase 저장 실패',res.status,msg);
+      var err=new Error('SB_'+res.status);
+      err.kind=(res.status===413||/too large|payload|exceed/i.test(msg))?'sb_too_large':'sb_error';
+      err.status=res.status; err.detail=msg;
+      throw err;
+    });
+  }).catch(function(e){
+    if(e.kind) throw e;  // 위에서 throw한 것은 그대로 전파
+    // 네트워크 오류
+    var ne=new Error('SB_NETWORK'); ne.kind='sb_network'; throw ne;
+  });
 }
 
 // 삭제 시 Supabase 행도 함께 제거
-async function sbDelete(id){
-  if(!sbOn()) return;
-  try{
-    await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?id=eq.${encodeURIComponent(String(id))}`,
-      {method:'DELETE',headers:sbHeaders({'Prefer':'return=minimal'})});
-  }catch(e){console.warn('Supabase 삭제 오류',e);}
+function sbDelete(id){
+  if(!sbOn()) return Promise.resolve();
+  return fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?id=eq.'+encodeURIComponent(String(id)),
+    {method:'DELETE', headers:sbHeaders({'Prefer':'return=minimal'})}
+  ).catch(function(e){ console.warn('Supabase 삭제 오류',e); });
 }
 
-async function refreshAllData(){
-  const btn=document.getElementById('btn-refresh');
+function refreshAllData(){
+  var btn=document.getElementById('btn-refresh');
   if(btn){ btn._label=btn.innerHTML; btn.innerHTML='⏳ 불러오는 중…'; btn.disabled=true; }
-  try{
-    await loadData();                                  // Supabase 최신본 (no-store)
-    if(autoCloseStale()){ try{ await saveData(); }catch(e){} }
+  function done(){ if(btn){ btn.innerHTML=btn._label||'🔄 새로고침'; btn.disabled=false; } }
+  function render(){
     updateStats(); renderDashboard();
-    const act=id=>document.getElementById(id)?.classList.contains('active');
+    function act(id){ var e=document.getElementById(id); return e&&e.classList.contains('active'); }
     if(act('view-list')) renderList();
     if(act('view-quotes')) renderQuotes();
     if(act('view-contracts')) renderContracts();
     if(act('view-projects')) renderProjects();
     if(act('view-analytics')) renderAnalytics();
-    await updateDbStatus();
-  }catch(e){ alert('새로고침 실패: '+(e&&e.message||e)); }
-  finally{ if(btn){ btn.innerHTML=btn._label||'🔄 새로고침'; btn.disabled=false; } }
+    updateDbStatus();
+  }
+  var p = loadData() || Promise.resolve();
+  return p.then(function(){
+    if(autoCloseStale()){ return (saveData()||Promise.resolve()).catch(function(){}); }
+  }).then(function(){
+    render(); done();
+  }).catch(function(e){
+    alert('새로고침 실패: '+(e&&e.message||e)); done();
+  });
 }
-async function updateDbStatus(){
-  const el=document.getElementById('db-status-badge');
-  if(!el) return;
+function updateDbStatus(){
+  var el=document.getElementById('db-status-badge');
+  if(!el) return Promise.resolve();
   el.style.cursor='pointer';
   el.title='클릭하면 연결 상태를 다시 확인합니다';
-  el.onclick=()=>updateDbStatus();
+  el.onclick=function(){ updateDbStatus(); };
 
-  // 1) 미설정 — 무엇이 비었는지 표시
   if(!sbOn()){
-    const miss=[];
+    var miss=[];
     if(!SUPABASE_CONFIG.enabled) miss.push('enabled=false');
     if(!SUPABASE_CONFIG.url) miss.push('url 비어있음');
     if(!SUPABASE_CONFIG.key) miss.push('key 비어있음');
     el.className='db-status local';
-    el.innerHTML=`<div class="db-dot" style="background:var(--gold2)"></div>localStorage 모드 <span style="opacity:.7;font-weight:400">(${miss.join(', ')})</span>`;
-    return;
+    el.innerHTML='<div class="db-dot" style="background:var(--gold2)"></div>localStorage 모드 <span style="opacity:.7;font-weight:400">('+miss.join(', ')+')</span>';
+    return Promise.resolve();
   }
 
-  // 2) 설정됨 — 실제 접속 테스트
   el.className='db-status local';
   el.innerHTML='<div class="db-dot" style="background:#9aa0a6"></div>Supabase 확인 중…';
-  try{
-    const res=await fetch(`${SUPABASE_CONFIG.url}/rest/v1/${SUPABASE_CONFIG.table}?select=id&limit=1`,{headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'});
+  return fetch(
+    SUPABASE_CONFIG.url+'/rest/v1/'+SUPABASE_CONFIG.table+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(res){
     if(res.ok){
       el.className='db-status cloud';
       el.innerHTML='<div class="db-dot" style="background:#50C878"></div>Supabase 연결됨';
-    }else{
-      const body=await res.text();
-      let hint='';
+      return;
+    }
+    return res.text().then(function(body){
+      var hint='';
       if(res.status===401||res.status===403) hint=' · 키 확인';
       else if(res.status===404) hint=' · 테이블(proposals) 없음';
       el.className='db-status local';
-      el.innerHTML=`<div class="db-dot" style="background:var(--ex)"></div>연결 실패 ${res.status}${hint}`;
+      el.innerHTML='<div class="db-dot" style="background:var(--ex)"></div>연결 실패 '+res.status+hint;
       console.error('Supabase 상태 확인 실패',res.status,body);
-    }
-  }catch(e){
+    });
+  }).catch(function(e){
     el.className='db-status local';
     el.innerHTML='<div class="db-dot" style="background:var(--ex)"></div>연결 실패 (네트워크/CORS)';
     console.error('Supabase 상태 확인 오류',e);
-  }
+  });
 }
 
 // ── RENDER LIST ───────────────────────────────────────────────────
@@ -3186,17 +3188,6 @@ function commentMenuLabel(k){ const m=COMMENT_MENUS.find(x=>x.k===k); return m?m
 function saveComments(){ localStorage.setItem(COMMENT_KEY, JSON.stringify(comments)); }
 function cmFillMenuSelect(el, includeAll){
   if(!el) return;
-  // 상단 요약 카드 업데이트
-  const overallPct2 = totalKpiV > 0 ? Math.min(Math.round(totalActV / totalKpiV * 100), 999) : 0;
-  const achCh = chKeys.filter(k => chMap[k].kpiV > 0 && chMap[k].actV >= chMap[k].kpiV).length;
-  const actOpen2 = acts.filter(a => a.type === 'action' && a.status !== 'done').length;
-  const sc = id => document.getElementById(id);
-  if(sc('mkt-sc-overall'))  sc('mkt-sc-overall').textContent  = overallPct2 + '%';
-  if(sc('mkt-sc-channels')) sc('mkt-sc-channels').textContent = achCh + '/' + chKeys.length;
-  if(sc('mkt-sc-plando'))   sc('mkt-sc-plando').textContent   = plans.length + '/' + dos.length;
-  if(sc('mkt-sc-act'))      sc('mkt-sc-act').textContent      = actOpen2;
-  if(sc('mkt-sc-act'))      sc('mkt-sc-act').style.color      = actOpen2 > 0 ? 'var(--ex)' : 'var(--ok)';
-
   el.innerHTML = (includeAll?'<option value="">전체 메뉴</option>':'') + COMMENT_MENUS.map(m=>'<option value="'+m.k+'">'+m.label+'</option>').join('');
 }
 // 등록/수정 모달
