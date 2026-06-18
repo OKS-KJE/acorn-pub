@@ -4841,16 +4841,24 @@ function mnLocalSave(n){localStorage.setItem('mn_notes',JSON.stringify(n));}
 function mnUID(){return 'mn_'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 
 function mnUpsert(note){
+  // localStorage는 그대로 객체로 저장
   var all=mnLocalAll(),idx=all.findIndex(function(n){return n.id===note.id;});
   if(idx>=0)all[idx]=note;else all.unshift(note);
   all.sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
   mnLocalSave(all);
   if(!sbOn())return;
-  var ctrl=new AbortController();setTimeout(function(){ctrl.abort();},3000);
+  // Supabase용: threads/tags는 jsonb로 전송 (배열 그대로 OK)
+  var sbNote = Object.assign({}, note);
+  if(!Array.isArray(sbNote.threads)) sbNote.threads = [];
+  if(!Array.isArray(sbNote.tags))    sbNote.tags    = [];
+  var ctrl=new AbortController();setTimeout(function(){ctrl.abort();},5000);
   fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE,{
-    method:'POST',headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
-    body:JSON.stringify(note),signal:ctrl.signal
-  }).catch(function(){});
+    method:'POST',
+    headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify(sbNote),signal:ctrl.signal
+  }).then(function(r){
+    if(!r.ok) r.text().then(function(t){ console.warn('[mn] upsert failed:',r.status,t); });
+  }).catch(function(e){ console.warn('[mn] upsert error:',e); });
 }
 function mnDelete(id){
   mnLocalSave(mnLocalAll().filter(function(n){return n.id!==id;}));
@@ -4860,18 +4868,37 @@ function mnDelete(id){
 }
 
 // ── 로드 ─────────────────────────────────────────────────────
+function mnNormalize(n){
+  // threads가 문자열로 저장된 경우 파싱
+  if(typeof n.threads==='string'){try{n.threads=JSON.parse(n.threads);}catch(e){n.threads=[];}}
+  if(!Array.isArray(n.threads)) n.threads=[];
+  if(!n.tags) n.tags=[];
+  if(typeof n.tags==='string'){try{n.tags=JSON.parse(n.tags);}catch(e){n.tags=[];}}
+  return n;
+}
 function mnLoad(){
-  MN_ALL=mnLocalAll();
-  try{mnRebuildFilters();mnFilter();}catch(e){}
-  if(!sbOn())return;
+  // ① localStorage 즉시 동기 렌더 (브라우저·네트워크 무관)
+  MN_ALL = mnLocalAll().map(mnNormalize);
+  try{ mnRebuildFilters(); mnFilter(); } catch(e){ console.warn('[mn] filter err',e); }
+
+  // ② Supabase 병합 (비동기, 실패해도 ①이 이미 표시됨)
+  if(!sbOn()){ console.log('[mn] Supabase 비활성 — localStorage만 사용'); return; }
+  console.log('[mn] Supabase 병합 시작…');
   mnFetchAll().then(function(remote){
-    if(!remote||!remote.length)return;
-    var ids={};remote.forEach(function(n){ids[n.id]=true;});
-    MN_ALL=remote.concat(MN_ALL.filter(function(n){return!ids[n.id];}));
+    console.log('[mn] Supabase 응답 rows:', remote?remote.length:'null');
+    if(!remote) return;
+    var normalized = remote.map(mnNormalize);
+    var ids={};
+    normalized.forEach(function(n){ ids[n.id]=true; });
+    var localOnly = MN_ALL.filter(function(n){ return !ids[n.id]; });
+    MN_ALL = normalized.concat(localOnly);
     MN_ALL.sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
     mnLocalSave(MN_ALL);
-    try{mnRebuildFilters();mnFilter();}catch(e){}
-  }).catch(function(){});
+    try{ mnRebuildFilters(); mnFilter(); } catch(e){}
+    console.log('[mn] 병합 완료, total:', MN_ALL.length);
+  }).catch(function(err){
+    console.warn('[mn] Supabase 실패 (localStorage 유지):', err);
+  });
 }
 
 // ── 탭 ───────────────────────────────────────────────────────
