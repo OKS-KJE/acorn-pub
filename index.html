@@ -5043,7 +5043,11 @@ function mnSaveThread(){
   if(threadId){var idx=n.threads.findIndex(function(t){return t.id===threadId;});if(idx>=0)n.threads[idx]={id:threadId,date,author,attendees:document.getElementById('mn-th-attendees').value.trim(),body,actions:document.getElementById('mn-th-actions').value.trim(),created_at:n.threads[idx].created_at||now};}
   else n.threads.push({id:mnUID(),date,author,attendees:document.getElementById('mn-th-attendees').value.trim(),body,actions:document.getElementById('mn-th-actions').value.trim(),created_at:now});
   n.threads.sort(function(a,b){return(a.date||'').localeCompare(b.date||'');});
-  n.updated_at=now;mnUpsert(n);mnLoad();mnCloseThread();mnView(noteId);
+  n.updated_at=now;
+  mnUpsert(n);          // localStorage + Supabase 저장
+  mnCloseThread();       // 스레드 모달 닫기
+  mnView(noteId);        // MN_ALL은 이미 메모리상 업데이트됨 → 즉시 반영
+  mnLoad();              // 백그라운드에서 Supabase 동기화만 (UI 재렌더 없음)
 }
 
 // ── 보기 모달 ─────────────────────────────────────────────────
@@ -5079,7 +5083,10 @@ function mnRemoveThread(noteId,threadId){
   if(!confirm('이 스레드를 삭제하시겠습니까?'))return;
   var n=MN_ALL.find(function(x){return x.id===noteId;});if(!n)return;
   n.threads=(n.threads||[]).filter(function(t){return t.id!==threadId;});
-  n.updated_at=new Date().toISOString();mnUpsert(n);mnLoad();mnView(noteId);
+  n.updated_at=new Date().toISOString();
+  mnUpsert(n);
+  mnView(noteId);   // 즉시 반영
+  mnLoad();         // 백그라운드 동기화
 }
 
 
