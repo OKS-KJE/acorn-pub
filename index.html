@@ -5439,7 +5439,8 @@ function orgFilter(tabIdx){
   // 빌트인 기관 (숨겨지지 않은 것 + user 오버라이드 병합)
   Object.keys(orgsData).forEach(function(orgName){
     var bid='bo'+tabIdx+'_'+orgName;
-    if(hidden.includes(bid)) return;  // 완전 삭제된 기관
+    var userOverrideOrg=REF_USER.find(function(x){return x.id===bid+'_e';});
+    if(hidden.includes(bid) && !userOverrideOrg) return;  // 완전 삭제된 기관
     var d=refGetOrgData(bid,tabIdx);
     // user 오버라이드가 있으면 그 id를 카드 id로 (클릭 시 정확히 찾아감)
     var userOverride=REF_USER.find(function(x){return x.id===bid+'_e';});
@@ -5496,9 +5497,10 @@ function renderAgencySection(){
   var cards=[];
 
   AGENCY_ORGS.forEach(function(a){
-    if(hidden.includes(a.id)) return;
-    // user 오버라이드가 있으면 그 id 사용
+    // user 오버라이드가 있으면 빌트인이 숨겨져도 카드 표시
     var userOverride=REF_USER.find(function(x){return x.id===a.id+'_e';});
+    // 빌트인 숨김 + user 오버라이드도 없으면 스킵
+    if(hidden.includes(a.id) && !userOverride) return;
     var cardId=userOverride?a.id+'_e':a.id;
     seen[a.id]=true; seen[a.id+'_e']=true;
     var d=refGetOrgData(a.id,5);
@@ -5789,7 +5791,12 @@ function refModalSave(){
       refSaveOrg(newOrg4);
       REF_DETAIL_OID=targetId;
     }
-    refCloseModal(); refRenderCurrentTab();
+    refCloseModal();
+    refRenderCurrentTab();
+    // 상세 모달이 열려있던 기관이면 즉시 재열기
+    if(REF_DETAIL_OID){
+      refOpenDetail(REF_DETAIL_OID, REF_DETAIL_TAB);
+    }
   }
 }
 
