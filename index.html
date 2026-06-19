@@ -3505,43 +3505,46 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
 
-    <!-- ── 보기 모달 ── -->
-    <div id="mn-view-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
-      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:700px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-        <div style="padding:20px 24px 0;flex-shrink:0;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-            <div style="flex:1;padding-right:12px;">
-              <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);text-transform:uppercase;margin-bottom:5px;">📝 회의록</div>
-              <div id="mnv-title" style="font-size:18px;font-weight:800;color:var(--text);line-height:1.3;"></div>
-            </div>
-            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-              <span id="mnv-status-badge"></span>
-              <button onclick="mnCloseView()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;padding:4px;">✕</button>
-            </div>
+    <!-- ── 보기 모달 (2-패널) ── -->
+    <div id="mn-view-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:960px;height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.35);">
+
+        <!-- 헤더 -->
+        <div style="padding:16px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);margin-bottom:4px;">📝 회의록</div>
+            <div id="mnv-title" style="font-size:17px;font-weight:800;color:var(--text);line-height:1.3;"></div>
+            <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;"></div>
           </div>
-          <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;"></div>
-          <div style="height:1px;background:var(--border);"></div>
-        </div>
-        <div style="flex:1;overflow-y:auto;padding:16px 24px;">
-          <!-- 스레드 타임라인 -->
-          <div id="mnv-thread-list"></div>
-          <!-- 하단 액션 버튼 -->
-          <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
-            <button id="mnv-thread-btn" onclick="mnOpenThread(document.getElementById('mnv-edit-btn').dataset.id)"
-              style="padding:8px 16px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.35);border-radius:8px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;">
-              🔗 스레드 추가
-            </button>
+          <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+            <span id="mnv-status-badge"></span>
             <button id="mnv-done-btn" onclick="mnToggleDone(document.getElementById('mnv-edit-btn').dataset.id)"
-              style="padding:8px 16px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.35);border-radius:8px;font-size:12px;font-weight:700;color:var(--teal);cursor:pointer;">
-              ✅ 완료 처리
-            </button>
+              style="padding:5px 12px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.3);border-radius:7px;font-size:11px;font-weight:700;color:var(--teal);cursor:pointer;">✅ 완료</button>
+            <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)"
+              style="padding:5px 12px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">✏️ 수정</button>
+            <button onclick="mnCloseView()" style="background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;padding:2px 4px;line-height:1;">✕</button>
           </div>
         </div>
-        <div style="padding:12px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:var(--s2);">
-          <button onclick="mnCloseView()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">닫기</button>
-          <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)"
-            style="padding:8px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">✏️ 수정</button>
+
+        <!-- 2-패널 바디 -->
+        <div style="flex:1;display:flex;overflow:hidden;">
+
+          <!-- 왼쪽: 스레드 네비게이션 -->
+          <div style="width:220px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg);">
+            <div style="padding:12px 14px 8px;font-size:10px;font-weight:800;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;">스레드</div>
+            <div id="mnv-thread-nav" style="flex:1;overflow-y:auto;padding:0 8px 12px;display:flex;flex-direction:column;gap:4px;"></div>
+            <div style="padding:10px 12px;border-top:1px solid var(--border);">
+              <button onclick="mnOpenThread(document.getElementById('mnv-edit-btn').dataset.id)"
+                style="width:100%;padding:8px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.3);border-radius:8px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;">
+                ＋ 스레드 추가
+              </button>
+            </div>
+          </div>
+
+          <!-- 오른쪽: 선택된 스레드 본문 -->
+          <div style="flex:1;overflow-y:auto;padding:20px 26px;" id="mnv-thread-body"></div>
         </div>
+
       </div>
     </div>
 
@@ -5048,40 +5051,81 @@ function mnSaveThread(){
   else n.threads.push({id:mnUID(),date,author,attendees:document.getElementById('mn-th-attendees').value.trim(),body,actions:document.getElementById('mn-th-actions').value.trim(),created_at:now});
   n.threads.sort(function(a,b){return(a.date||'').localeCompare(b.date||'');});
   n.updated_at=now;
-  mnUpsert(n);          // localStorage + Supabase 저장
-  mnCloseThread();       // 스레드 모달 닫기
-  mnView(noteId);        // MN_ALL은 이미 메모리상 업데이트됨 → 즉시 반영
-  mnLoad();              // 백그라운드에서 Supabase 동기화만 (UI 재렌더 없음)
+  mnUpsert(n);
+  mnCloseThread();
+  mnView(noteId, n.threads.length); // 새 스레드(=마지막+1) 선택하여 표시
+  mnLoad();
 }
 
 // ── 보기 모달 ─────────────────────────────────────────────────
-function mnView(id){
+function mnView(id, selIdx){
   var n=MN_ALL.find(function(x){return x.id===id;});if(!n)return;
   var isDone=(n.status||'active')==='done';
   var TC={'편집':{bg:'rgba(10,62,132,.12)',c:'var(--blue)'},'기획':{bg:'rgba(13,148,136,.12)',c:'var(--teal)'},'마케팅':{bg:'rgba(124,58,237,.12)',c:'var(--purple)'},'디자인':{bg:'rgba(239,68,68,.12)',c:'#DC2626'},'플랫폼':{bg:'rgba(184,134,11,.12)',c:'var(--gold2)'},'KPI':{bg:'rgba(10,120,96,.12)',c:'var(--teal)'},'경영':{bg:'rgba(30,58,138,.12)',c:'#1E3A8A'},'기타':{bg:'rgba(100,100,100,.12)',c:'var(--text3)'}};
   function tb(t){var c=TC[t]||{bg:'rgba(100,100,100,.12)',c:'var(--text3)'};return'<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:'+c.bg+';color:'+c.c+';border:1px solid rgba(0,0,0,.06);font-weight:600;">'+t+'</span>';}
+  function bh(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/[\r\n]/g,'<br>');}
+  function actHtml(t){return t?'<div style="margin-top:12px;padding:10px 13px;background:var(--s2);border-left:3px solid var(--gold2);border-radius:0 7px 7px 0;"><div style="font-size:10px;font-weight:700;color:var(--gold2);margin-bottom:5px;">⚡ 액션 아이템</div><div style="font-size:12px;color:var(--text2);line-height:1.7;">'+bh(t)+'</div></div>':'';}
+
+  // 헤더
   document.getElementById('mnv-title').textContent=n.title||'(제목 없음)';
   document.getElementById('mnv-tags').innerHTML=(n.tags||[]).map(tb).join('');
   var badge=document.getElementById('mnv-status-badge');
   if(badge)badge.innerHTML=isDone?'<span style="font-size:11px;padding:2px 10px;border-radius:100px;background:rgba(13,148,136,.15);color:var(--teal);font-weight:700;">✅ 완료</span>':'<span style="font-size:11px;padding:2px 10px;border-radius:100px;background:rgba(124,58,237,.12);color:var(--purple);font-weight:700;">🔵 진행중</span>';
   var db=document.getElementById('mnv-done-btn');
-  if(db){db.textContent=isDone?'↩ 진행중으로':'✅ 완료 처리';db.style.color=isDone?'var(--text3)':'var(--teal)';}
+  if(db){db.textContent=isDone?'↩ 진행중':'✅ 완료';db.style.color=isDone?'var(--text3)':'var(--teal)';}
   document.getElementById('mnv-edit-btn').dataset.id=id;
-  function bh(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');}
-  function actHtml(t){return t?'<div style="margin-top:10px;padding:10px 12px;background:var(--s2);border-left:3px solid var(--gold2);border-radius:0 6px 6px 0;"><div style="font-size:10px;font-weight:700;color:var(--gold2);margin-bottom:5px;">⚡ 액션 아이템</div><div style="font-size:12px;color:var(--text2);line-height:1.7;">'+bh(t)+'</div></div>':'';}
-  function metaRow(d,a,att){return'<div style="display:flex;gap:14px;flex-wrap:wrap;padding:7px 12px;background:var(--s2);border-radius:6px;margin-bottom:10px;font-size:11px;color:var(--text3);"><span>📅 <strong style="color:var(--text);">'+d+'</strong></span><span>✍️ <strong style="color:var(--text);">'+a+'</strong></span>'+(att?'<span>👥 '+att+'</span>':'')+'</div>';}
+
+  // 스레드 목록 (ORIGIN + 스레드들)
   var threads=n.threads||[];
-  var html='<div style="position:relative;padding-left:20px;border-left:2px solid var(--purple);margin-bottom:20px;"><div style="position:absolute;left:-7px;top:0;width:12px;height:12px;border-radius:50%;background:var(--purple);"></div><div style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.08em;margin-bottom:6px;padding-left:4px;">ORIGIN</div>'+metaRow(n.date,n.author,n.attendees)+'<div style="font-size:13px;line-height:1.8;color:var(--text);">'+bh(n.body)+'</div>'+actHtml(n.actions)+'</div>';
-  threads.forEach(function(th,i){
-    var isLast=i===threads.length-1;
-    var lc=isLast&&isDone?'var(--teal)':'rgba(124,58,237,.4)';
-    var dc=isLast&&isDone?'var(--teal)':'rgba(124,58,237,.6)';
-    html+='<div style="position:relative;padding-left:20px;border-left:2px solid '+lc+';margin-bottom:18px;"><div style="position:absolute;left:-6px;top:0;width:10px;height:10px;border-radius:50%;background:'+dc+'"></div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;padding-left:4px;"><span style="font-size:10px;font-weight:700;color:var(--purple);letter-spacing:.08em;">THREAD '+(i+1)+'</span><button onclick="mnOpenThread(\''+id+'\',\''+th.id+'\')" style="font-size:10px;padding:1px 8px;border:1px solid var(--border);border-radius:100px;background:none;cursor:pointer;color:var(--text3);">수정</button><button onclick="mnRemoveThread(\''+id+'\',\''+th.id+'\')" style="font-size:10px;padding:1px 8px;border:1px solid var(--border);border-radius:100px;background:none;cursor:pointer;color:#DC2626;">삭제</button></div>'+metaRow(th.date,th.author,th.attendees)+'<div style="font-size:13px;line-height:1.8;color:var(--text);">'+bh(th.body)+'</div>'+actHtml(th.actions)+'</div>';
-  });
-  document.getElementById('mnv-thread-list').innerHTML=html;
+  var items=[{type:'origin',idx:-1,date:n.date,author:n.author,attendees:n.attendees,body:n.body,actions:n.actions}]
+    .concat(threads.map(function(th,i){return Object.assign({type:'thread',idx:i},th);}));
+
+  // 선택 인덱스 (기본: 마지막 스레드)
+  var sel=(selIdx!=null)?selIdx:(items.length-1);
+
+  // 왼쪽 네비게이션
+  var nav=document.getElementById('mnv-thread-nav');
+  if(nav){
+    nav.innerHTML=items.map(function(it,i){
+      var isOrig=it.type==='origin';
+      var isSel=i===sel;
+      var lc=isOrig?'var(--purple)':'rgba(124,58,237,.5)';
+      var bg=isSel?'rgba(124,58,237,.12)':'transparent';
+      var fw=isSel?'700':'500';
+      return '<div onclick="mnViewSel(\''+id+'\','+i+')" style="padding:9px 11px;border-radius:8px;cursor:pointer;background:'+bg+';border-left:3px solid '+(isSel?'var(--purple)':'transparent')+';transition:.1s;">'
+        +'<div style="font-size:10px;font-weight:'+fw+';color:var(--purple);">'+(isOrig?'📝 원본':'🔗 스레드 '+(it.idx+1))+'</div>'
+        +'<div style="font-size:11px;color:var(--text3);margin-top:2px;">'+(it.date||'')+'</div>'
+        +'<div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(it.author||'')+'</div>'
+        +'</div>';
+    }).join('');
+  }
+
+  // 오른쪽 본문
+  var it=items[sel]||items[0];
+  var body=document.getElementById('mnv-thread-body');
+  if(body){
+    var isOrig=it.type==='origin';
+    var editBtn=isOrig
+      ?''
+      :'<div style="display:flex;gap:6px;margin-bottom:14px;">'
+        +'<button onclick="mnOpenThread(\''+id+'\',\''+it.id+'\')" style="padding:5px 13px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;cursor:pointer;color:var(--text3);">✏️ 수정</button>'
+        +'<button onclick="mnRemoveThread(\''+id+'\',\''+it.id+'\')" style="padding:5px 13px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;cursor:pointer;color:#DC2626;">🗑 삭제</button>'
+        +'</div>';
+    body.innerHTML=editBtn
+      +'<div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 12px;background:var(--s2);border-radius:8px;margin-bottom:14px;font-size:12px;color:var(--text3);">'
+      +'<span>📅 <strong style="color:var(--text);">'+(it.date||'')+'</strong></span>'
+      +'<span>✍️ <strong style="color:var(--text);">'+(it.author||'')+'</strong></span>'
+      +(it.attendees?'<span>👥 '+it.attendees+'</span>':'')
+      +'</div>'
+      +'<div style="font-size:14px;line-height:1.85;color:var(--text);white-space:pre-wrap;">'+bh(it.body)+'</div>'
+      +actHtml(it.actions);
+  }
+
   document.getElementById('mn-view-modal').style.display='flex';
   document.body.style.overflow='hidden';
 }
+function mnViewSel(id,idx){ mnView(id,idx); }
+
 function mnCloseView(){document.getElementById('mn-view-modal').style.display='none';document.body.style.overflow='';}
 function mnRemoveThread(noteId,threadId){
   if(!confirm('이 스레드를 삭제하시겠습니까?'))return;
@@ -5089,8 +5133,8 @@ function mnRemoveThread(noteId,threadId){
   n.threads=(n.threads||[]).filter(function(t){return t.id!==threadId;});
   n.updated_at=new Date().toISOString();
   mnUpsert(n);
-  mnView(noteId);   // 즉시 반영
-  mnLoad();         // 백그라운드 동기화
+  mnView(noteId, 0); // 삭제 후 원본으로 이동
+  mnLoad();
 }
 
 
