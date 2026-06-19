@@ -4835,7 +4835,11 @@ function mnLocalSave(n){localStorage.setItem('mn_notes',JSON.stringify(n));}
 function mnUID(){return 'mn_'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 
 function mnUpsert(note){
-  // localStorage는 그대로 객체로 저장
+  // ① MN_ALL 메모리 즉시 업데이트
+  var mi=MN_ALL.findIndex(function(n){return n.id===note.id;});
+  if(mi>=0) MN_ALL[mi]=note; else MN_ALL.unshift(note);
+
+  // ② localStorage 업데이트
   var all=mnLocalAll(),idx=all.findIndex(function(n){return n.id===note.id;});
   if(idx>=0)all[idx]=note;else all.unshift(note);
   all.sort(function(a,b){return(b.date||'').localeCompare(a.date||'');});
