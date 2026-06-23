@@ -2642,6 +2642,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <button class="pill-tab" onclick="pilotTab(4)">⚠️ 리스크 &amp; Gate</button>
       <button class="pill-tab" onclick="pilotTab(5)">🌏 글로벌 로드맵</button>
       <button class="pill-tab" onclick="pilotTab(6)" style="background:linear-gradient(135deg,rgba(30,95,173,.15),rgba(13,148,136,.1));border-color:rgba(30,95,173,.35);color:var(--blue);font-weight:700;">📖 eBook 제작 가이드</button>
+      <button class="pill-tab" onclick="pilotTab(7)" style="background:linear-gradient(135deg,rgba(122,31,43,.12),rgba(184,155,84,.08));border-color:rgba(122,31,43,.3);color:#7A1F2B;font-weight:700;">📌 기능 & 업데이트</button>
     </div>
 
     <!-- ─── 탭 0: 개요 & 역할 ─── -->
@@ -3345,6 +3346,107 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
 
     </div><!-- /pt6 -->
+
+    <!-- ─── 탭 7: 기능 & 업데이트 관리 ─── -->
+    <div class="pill-content" id="pt7">
+
+      <!-- 헤더 -->
+      <div style="background:linear-gradient(135deg,rgba(122,31,43,.08),rgba(184,155,84,.06));border:1.5px solid rgba(122,31,43,.2);border-radius:var(--rL);padding:20px 24px;margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:#7A1F2B;text-transform:uppercase;margin-bottom:6px;">DESIGNRR FEATURES & UPDATES</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;">기능 발견 & 업데이트 노트</div>
+          <div style="font-size:12px;color:var(--text3);">파일럿 중 발견한 유용한 기능, 신규 업데이트, 개선 사항을 기록합니다.</div>
+        </div>
+        <button onclick="drOpenAdd()" style="padding:9px 18px;background:#7A1F2B;color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">➕ 항목 추가</button>
+      </div>
+
+      <!-- 필터 바 -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+        <input id="dr-search" type="text" placeholder="🔍 검색…" oninput="drFilter()" style="flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+        <select id="dr-cat" onchange="drFilter()" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">전체 카테고리</option>
+          <option value="변환">📄 변환</option>
+          <option value="AI">🤖 AI</option>
+          <option value="템플릿">🎨 템플릿</option>
+          <option value="내보내기">📱 내보내기</option>
+          <option value="협업">🏢 협업</option>
+          <option value="업데이트">🔔 업데이트</option>
+          <option value="이슈">⚠️ 이슈</option>
+          <option value="기타">💡 기타</option>
+        </select>
+        <select id="dr-status" onchange="drFilter()" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">전체 상태</option>
+          <option value="유용">⭐ 유용</option>
+          <option value="검토중">🔍 검토중</option>
+          <option value="적용완료">✅ 적용완료</option>
+          <option value="보류">⏸ 보류</option>
+        </select>
+        <span id="dr-count" style="font-size:11px;color:var(--text3);"></span>
+      </div>
+
+      <!-- 카드 목록 -->
+      <div id="dr-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+
+    </div><!-- /pt7 -->
+
+    <!-- ── Designrr 항목 편집 모달 ── -->
+    <div id="dr-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--surface);border-radius:14px;width:100%;max-width:560px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+        <div style="padding:14px 20px;background:#7A1F2B;display:flex;align-items:center;">
+          <span id="dr-modal-title" style="font-size:14px;font-weight:800;color:#fff;flex:1;"></span>
+          <button onclick="drCloseModal()" style="background:none;border:none;color:rgba(255,255,255,.8);font-size:20px;cursor:pointer;">✕</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:18px 20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">제목 *</div>
+              <input id="dr-f-title" type="text" placeholder="기능/업데이트명" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">카테고리</div>
+              <select id="dr-f-cat" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;">
+                <option value="변환">📄 변환</option>
+                <option value="AI">🤖 AI</option>
+                <option value="템플릿">🎨 템플릿</option>
+                <option value="내보내기">📱 내보내기</option>
+                <option value="협업">🏢 협업</option>
+                <option value="업데이트">🔔 업데이트</option>
+                <option value="이슈">⚠️ 이슈</option>
+                <option value="기타">💡 기타</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">상태</div>
+              <select id="dr-f-status" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;">
+                <option value="유용">⭐ 유용</option>
+                <option value="검토중">🔍 검토중</option>
+                <option value="적용완료">✅ 적용완료</option>
+                <option value="보류">⏸ 보류</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">발견일</div>
+              <input id="dr-f-date" type="date" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div style="margin-bottom:10px;">
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">내용 / 메모</div>
+            <textarea id="dr-f-body" rows="4" placeholder="기능 설명, 사용법, 발견 경위 등…" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;box-sizing:border-box;"></textarea>
+          </div>
+          <div style="margin-bottom:10px;">
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">관련 URL</div>
+            <input id="dr-f-url" type="url" placeholder="https://" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+          </div>
+          <div id="dr-msg" style="font-size:11px;color:var(--ex);min-height:14px;"></div>
+        </div>
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:var(--s2);">
+          <button onclick="drCloseModal()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+          <button onclick="drSave()" style="padding:8px 22px;background:#7A1F2B;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">💾 저장</button>
+        </div>
+      </div>
+    </div>
 
   </div><!-- /content -->
 </div><!-- /s9 -->
@@ -4329,12 +4431,168 @@ function setLang(lang) {
 // ══════════════════════════════════════
 // Pilot Test 탭 전환
 // ══════════════════════════════════════
+// ════════════════════════════════════════════════════════
+// Designrr 기능 & 업데이트 관리 (탭 7)
+// ════════════════════════════════════════════════════════
+var DR_KEY   = 'acorn_designrr_v1';
+var DR_TABLE = 'designrr_notes';
+var DR_ALL   = [];
+var DR_EDIT_ID = null;
+
+var DR_CAT_CLR = {
+  '변환':'var(--blue)','AI':'var(--purple)','템플릿':'var(--gold2)',
+  '내보내기':'var(--teal)','협업':'#7A1F2B','업데이트':'#10B981',
+  '이슈':'#DC2626','기타':'var(--text3)'
+};
+var DR_ST_CLR = {
+  '유용':'var(--gold2)','검토중':'var(--blue)','적용완료':'var(--teal)','보류':'var(--text3)'
+};
+
+function drUID(){ return 'dr'+Date.now().toString(36)+Math.random().toString(36).slice(2,4); }
+function drLocalLoad(){ try{ DR_ALL=JSON.parse(localStorage.getItem(DR_KEY)||'[]'); }catch(e){ DR_ALL=[]; } }
+function drLocalSave(){ localStorage.setItem(DR_KEY, JSON.stringify(DR_ALL)); }
+
+function drLoad(){
+  drLocalLoad();
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+DR_TABLE+'?select=*&order=created_at.desc',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(r){return r.ok?r.json():null;})
+  .then(function(rows){
+    if(!rows||!rows.length) return;
+    DR_ALL=rows.map(function(r){
+      return {id:r.id,title:r.title||'',cat:r.cat||'기타',status:r.status||'검토중',
+        date:r.date||'',body:r.body||'',url:r.url||''};
+    });
+    drLocalSave(); drFilter();
+    console.log('[DR] Supabase 동기화:',DR_ALL.length+'건');
+  }).catch(function(e){console.warn('[DR] load:',e.message);});
+}
+
+function drUpsert(item){
+  var idx=DR_ALL.findIndex(function(x){return x.id===item.id;});
+  if(idx>=0) DR_ALL[idx]=item; else DR_ALL.unshift(item);
+  drLocalSave();
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+DR_TABLE,{
+    method:'POST',
+    headers:sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify({id:item.id,title:item.title,cat:item.cat,status:item.status,
+      date:item.date,body:item.body,url:item.url,updated_at:new Date().toISOString()})
+  }).then(function(r){
+    if(r.ok) console.log('[DR] saved:',item.title);
+    else r.text().then(function(t){console.warn('[DR] fail:',r.status,t);});
+  }).catch(function(e){console.warn('[DR] err:',e.message);});
+}
+
+function drDelete(id){
+  DR_ALL=DR_ALL.filter(function(x){return x.id!==id;});
+  drLocalSave(); drFilter();
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+DR_TABLE+'?id=eq.'+encodeURIComponent(id),
+    {method:'DELETE',headers:sbHeaders()}).catch(function(e){console.warn('[DR] del:',e.message);});
+}
+
+function drFilter(){
+  var q=(document.getElementById('dr-search')?.value||'').toLowerCase();
+  var cat=document.getElementById('dr-cat')?.value||'';
+  var st=document.getElementById('dr-status')?.value||'';
+  var list=document.getElementById('dr-list');
+  var cnt=document.getElementById('dr-count');
+  if(!list) return;
+  var filtered=DR_ALL.filter(function(d){
+    if(cat&&d.cat!==cat) return false;
+    if(st&&d.status!==st) return false;
+    if(q&&!(d.title+d.body+d.cat).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if(cnt) cnt.textContent='총 '+filtered.length+'건';
+  if(!filtered.length){
+    list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3);">항목이 없습니다. ➕ 버튼으로 추가하세요.</div>';
+    return;
+  }
+  list.innerHTML=filtered.map(function(d){
+    var cc=DR_CAT_CLR[d.cat]||'var(--text3)';
+    var sc=DR_ST_CLR[d.status]||'var(--text3)';
+    return '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:4px solid '+cc+';border-radius:12px;padding:14px 16px;">'
+      +'<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">'
+      +'<div style="flex:1;">'
+      +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">'
+      +'<span style="font-size:10px;padding:2px 9px;border-radius:100px;background:rgba(0,0,0,.07);color:'+cc+';font-weight:700;">'+escH(d.cat)+'</span>'
+      +'<span style="font-size:10px;padding:2px 9px;border-radius:100px;background:rgba(0,0,0,.05);color:'+sc+';font-weight:700;">'+escH(d.status)+'</span>'
+      +(d.date?'<span style="font-size:10px;color:var(--text3);">'+d.date+'</span>':'')
+      +'</div>'
+      +'<div style="font-size:14px;font-weight:800;color:var(--text);">'+escH(d.title)+'</div>'
+      +'</div>'
+      +'<div style="display:flex;gap:4px;flex-shrink:0;">'
+      +'<button onclick="drOpenEdit(\''+d.id+'\')" style="padding:4px 10px;background:none;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--text3);">✏️</button>'
+      +'<button onclick="drConfirmDelete(\''+d.id+'\')" style="padding:4px 10px;background:none;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;color:var(--ex);">🗑</button>'
+      +'</div></div>'
+      +(d.body?'<div style="font-size:12px;color:var(--text2);line-height:1.7;white-space:pre-wrap;margin-bottom:6px;">'+escH(d.body)+'</div>':'')
+      +(d.url?'<a href="'+d.url+'" target="_blank" rel="noopener" style="font-size:11px;color:var(--blue);">🔗 '+escH(d.url)+'</a>':'')
+      +'</div>';
+  }).join('');
+}
+
+function drOpenAdd(){
+  DR_EDIT_ID=null;
+  document.getElementById('dr-modal-title').textContent='➕ 기능 / 업데이트 추가';
+  document.getElementById('dr-f-title').value='';
+  document.getElementById('dr-f-cat').value='기타';
+  document.getElementById('dr-f-status').value='검토중';
+  document.getElementById('dr-f-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('dr-f-body').value='';
+  document.getElementById('dr-f-url').value='';
+  document.getElementById('dr-msg').textContent='';
+  document.getElementById('dr-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function drOpenEdit(id){
+  var d=DR_ALL.find(function(x){return x.id===id;});if(!d)return;
+  DR_EDIT_ID=id;
+  document.getElementById('dr-modal-title').textContent='✏️ 수정';
+  document.getElementById('dr-f-title').value=d.title||'';
+  document.getElementById('dr-f-cat').value=d.cat||'기타';
+  document.getElementById('dr-f-status').value=d.status||'검토중';
+  document.getElementById('dr-f-date').value=d.date||'';
+  document.getElementById('dr-f-body').value=d.body||'';
+  document.getElementById('dr-f-url').value=d.url||'';
+  document.getElementById('dr-msg').textContent='';
+  document.getElementById('dr-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function drCloseModal(){
+  document.getElementById('dr-modal').style.display='none';
+  document.body.style.overflow='';
+}
+
+function drSave(){
+  var title=document.getElementById('dr-f-title').value.trim();
+  if(!title){document.getElementById('dr-msg').textContent='제목을 입력하세요.';return;}
+  var item={id:DR_EDIT_ID||drUID(),title,
+    cat:document.getElementById('dr-f-cat').value,
+    status:document.getElementById('dr-f-status').value,
+    date:document.getElementById('dr-f-date').value,
+    body:document.getElementById('dr-f-body').value.trim(),
+    url:document.getElementById('dr-f-url').value.trim()};
+  drUpsert(item); drCloseModal(); drFilter();
+}
+
+function drConfirmDelete(id){
+  var d=DR_ALL.find(function(x){return x.id===id;});if(!d)return;
+  if(!confirm(d.title+' 항목을 삭제하시겠습니까?'))return;
+  drDelete(id);
+}
+
 function pilotTab(idx) {
   document.querySelectorAll('#pilot-tabs .pill-tab').forEach((b,i) => b.classList.toggle('active', i===idx));
-  ['pt0','pt1','pt2','pt3','pt4','pt5','pt6'].forEach((id,i) => {
+  ['pt0','pt1','pt2','pt3','pt4','pt5','pt6','pt7'].forEach((id,i) => {
     var el = document.getElementById(id);
     if (el) el.classList.toggle('active', i===idx);
   });
+  if(idx===7){ drLoad(); drFilter(); }
 }
 
 // ══════════════════════════════════════
