@@ -3577,7 +3577,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">제안서 페이지 기본 URL</div>
           <input id="lg-base-url" type="url" placeholder="https://oks-kje.github.io/acorn-pub/kdp-form.html" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;" value="https://oks-kje.github.io/acorn-pub/kdp-form.html">
         </div>
-        <button onclick="generateLink()" style="padding:10px 22px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">🔗 링크 생성</button>
+        <div style="display:flex;gap:8px;">
+          <button onclick="generateLink()" style="padding:10px 22px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">🔗 링크 생성</button>
+          <button onclick="resetLinkForm()" style="padding:10px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text3);">↺ 초기화</button>
+        </div>
       </div>
 
       <!-- 생성된 링크 -->
@@ -3614,6 +3617,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <button onclick="kpSetStatus('publishing')" style="padding:5px 12px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.25);border-radius:6px;font-size:11px;font-weight:700;color:var(--teal);cursor:pointer;">📚 출간 진행</button>
             <button onclick="kpSetStatus('published')" style="padding:5px 12px;background:rgba(21,96,184,.15);border:1.5px solid rgba(21,96,184,.3);border-radius:6px;font-size:11px;font-weight:700;color:var(--blue);cursor:pointer;">🌍 출간 완료</button>
             <button onclick="kpSetStatus('rejected')" style="padding:5px 12px;background:rgba(220,38,38,.1);border:1.5px solid rgba(220,38,38,.25);border-radius:6px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">❌ 계약 실패</button>
+          <button onclick="kpDelete()" style="padding:5px 12px;background:none;border:1.5px solid rgba(220,38,38,.4);border-radius:6px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;margin-left:auto;">🗑 삭제</button>
           </div>
           <div style="margin-top:10px;">
             <input id="kp-memo-input" type="text" placeholder="메모 추가 (Enter로 저장)" style="width:100%;padding:7px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')kpAddMemo()">
@@ -6693,8 +6697,35 @@ function kpCloseModal(){
   document.body.style.overflow='';
 }
 
+function kpDelete(){
+  if(!KP_CURRENT_ID) return;
+  var d=KP_ALL.find(function(x){return x.id===KP_CURRENT_ID;});
+  if(!d) return;
+  if(!confirm((d.author_name||'이 항목')+'을(를) 삭제하시겠습니까? 복구할 수 없습니다.')) return;
+  KP_ALL=KP_ALL.filter(function(x){return x.id!==KP_CURRENT_ID;});
+  kpSaveLocal();
+  if(sbOn()){
+    fetch(SUPABASE_CONFIG.url+'/rest/v1/'+KP_TABLE+'?id=eq.'+encodeURIComponent(KP_CURRENT_ID),
+      {method:'DELETE',headers:sbHeaders()}).catch(function(){});
+  }
+  kpCloseModal(); kpFilter(); kpKpi();
+}
+
 // ── 저자 링크 생성 ────────────────────────────────────
 var _lgUrl = '';
+function resetLinkForm(){
+  ['lg-name','lg-email','lg-book'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  var base=document.getElementById('lg-base-url');
+  if(base) base.value='https://oks-kje.github.io/acorn-pub/kdp-form.html';
+  var result=document.getElementById('lg-result');
+  if(result) result.style.display='none';
+  _lgUrl='';
+  var nameEl=document.getElementById('lg-name');
+  if(nameEl) nameEl.focus();
+}
+
 function generateLink(){
   var name  = (document.getElementById('lg-name')?.value||'').trim();
   var email = (document.getElementById('lg-email')?.value||'').trim();
