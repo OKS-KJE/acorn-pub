@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amazon KDP 출간 제안서 — 에이콘출판사</title>
+<style>
+:root{
+  --blue:#1560B8;--teal:#0D9488;--gold:#B8930A;--purple:#5B21B6;
+  --red:#DC2626;--green:#10B981;
+  --text:#1C2028;--text2:#374151;--text3:#6B7280;
+  --bg:#F5EEE1;--sur:#FFFDF8;--bdr:#E2D9C8;--s2:#F8F3EA;
+  --r:10px;--rL:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR','Malgun Gothic',sans-serif;min-height:100vh;}
+
+/* 헤더 */
+.hdr{background:linear-gradient(135deg,#0F1923,#1A3A5C,#0D2137);padding:32px 20px 28px;text-align:center;}
+.hdr-eye{font-size:10px;font-weight:700;letter-spacing:.18em;color:rgba(184,212,234,.6);text-transform:uppercase;margin-bottom:10px;}
+.hdr h1{font-size:clamp(18px,4vw,26px);font-weight:900;color:#fff;line-height:1.3;margin-bottom:7px;}
+.hdr p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;max-width:500px;margin:0 auto;}
+
+/* 단계 표시기 */
+.stepbar{display:flex;justify-content:center;max-width:560px;margin:24px auto;padding:0 20px;gap:0;}
+.sb{flex:1;text-align:center;position:relative;}
+.sb:not(:last-child)::after{content:'';position:absolute;top:13px;left:55%;width:90%;height:2px;background:var(--bdr);z-index:0;}
+.sb.done:not(:last-child)::after,.sb.active:not(:last-child)::after{background:var(--blue);}
+.sb-dot{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;position:relative;z-index:1;background:var(--bdr);color:var(--text3);}
+.sb.active .sb-dot{background:var(--blue);color:#fff;}
+.sb.done .sb-dot{background:var(--teal);color:#fff;}
+.sb-lbl{font-size:10px;color:var(--text3);margin-top:4px;font-weight:600;}
+.sb.active .sb-lbl{color:var(--blue);}
+.sb.done .sb-lbl{color:var(--teal);}
+
+/* 컨테이너 */
+.wrap{max-width:620px;margin:0 auto;padding:0 16px 60px;}
+
+/* 카드 */
+.card{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--rL);padding:24px 26px;margin-bottom:18px;}
+.sec{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;padding-bottom:6px;border-bottom:1.5px solid rgba(21,96,184,.15);}
+
+/* 필드 */
+.fld{margin-bottom:13px;}
+.fld label{display:block;font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;}
+.fld .req{color:var(--red);}
+.fld input,.fld select,.fld textarea{width:100%;padding:9px 12px;border:1.5px solid var(--bdr);border-radius:var(--r);font-size:13px;color:var(--text);background:var(--s2);outline:none;font-family:inherit;transition:border-color .15s;}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--blue);}
+.fld.err input,.fld.err select,.fld.err textarea{border-color:var(--red);}
+.fld .hint{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.5;}
+.fld .errmsg{font-size:11px;color:var(--red);margin-top:3px;display:none;}
+.fld.err .errmsg{display:block;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* 체크박스 */
+.chk-group{display:flex;flex-direction:column;gap:7px;}
+.chk-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;}
+.chk-item input{margin-top:2px;width:14px;height:14px;accent-color:var(--blue);flex-shrink:0;cursor:pointer;}
+
+/* 동의 */
+.consent{background:rgba(21,96,184,.04);border:1.5px solid rgba(21,96,184,.15);border-radius:var(--r);padding:13px 15px;}
+.consent p{font-size:11px;color:var(--text3);line-height:1.7;margin-bottom:10px;}
+
+/* 버튼 */
+.btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.btn{padding:10px 24px;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{opacity:.88;}
+.btn-primary:disabled{background:var(--bdr);color:var(--text3);cursor:not-allowed;}
+.btn-ghost{background:none;border:1.5px solid var(--bdr);color:var(--text3);}
+
+/* 완료 */
+.done-box{text-align:center;padding:40px 20px;}
+.done-ico{font-size:52px;margin-bottom:14px;}
+.done-ttl{font-size:20px;font-weight:900;color:var(--text);margin-bottom:8px;}
+.done-sub{font-size:13px;color:var(--text3);line-height:1.7;max-width:380px;margin:0 auto 16px;}
+.done-id{padding:10px 16px;background:var(--s2);border-radius:var(--r);font-size:11px;color:var(--text3);font-family:monospace;margin-top:10px;}
+
+/* 스피너 */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* 정보 박스 */
+.info{background:rgba(13,148,136,.06);border:1.5px solid rgba(13,148,136,.2);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:14px;}
+.info strong{color:var(--teal);}
+
+/* 리뷰 테이블 */
+.rv-table{width:100%;border-collapse:collapse;font-size:12px;}
+.rv-table td{padding:7px 10px;border-bottom:1px solid var(--bdr);}
+.rv-table td:first-child{font-weight:700;color:var(--text3);width:110px;white-space:nowrap;}
+
+@media(max-width:500px){.g2{grid-template-columns:1fr;}.card{padding:18px 14px;}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-eye">ACORN PUBLISHING · ACORNON</div>
+  <h1>Amazon KDP 글로벌 출간 제안서</h1>
+  <p>에이콘 저자의 아마존 KDP 출간을 지원합니다. 양식을 작성하시면 담당자가 검토 후 연락드립니다.</p>
+</div>
+
+<!-- 단계 표시기 -->
+<div class="stepbar">
+  <div class="sb active" id="sb1"><div class="sb-dot">1</div><div class="sb-lbl">저자 정보</div></div>
+  <div class="sb" id="sb2"><div class="sb-dot">2</div><div class="sb-lbl">도서 정보</div></div>
+  <div class="sb" id="sb3"><div class="sb-dot">3</div><div class="sb-lbl">제출 자료</div></div>
+  <div class="sb" id="sb4"><div class="sb-dot">4</div><div class="sb-lbl">확인&제출</div></div>
+</div>
+
+<div class="wrap">
+
+<!-- ── STEP 1 ── -->
+<div id="pg1">
+  <div class="card">
+    <div class="sec">저자 기본 정보</div>
+    <div class="g2">
+      <div class="fld" id="w-name">
+        <label>이름 (실명) <span class="req">*</span></label>
+        <input id="f-name" type="text" placeholder="홍길동" maxlength="50">
+        <div class="errmsg">이름을 입력해 주세요.</div>
+      </div>
+      <div class="fld">
+        <label>필명 / 영문 저자명</label>
+        <input id="f-penname" type="text" placeholder="Gil-dong Hong">
+      </div>
+    </div>
+    <div class="g2">
+      <div class="fld" id="w-email">
+        <label>이메일 <span class="req">*</span></label>
+        <input id="f-email" type="email" placeholder="author@example.com">
+        <div class="errmsg">이메일을 입력해 주세요.</div>
+      </div>
+      <div class="fld">
+        <label>연락처</label>
+        <input id="f-phone" type="tel" placeholder="010-0000-0000">
+      </div>
+    </div>
+    <div class="fld">
+      <label>소속 / 직함</label>
+      <input id="f-org" type="text" placeholder="회사명 또는 직함">
+    </div>
+    <div class="fld" id="w-bio">
+      <label>저자 소개 <span class="req">*</span></label>
+      <textarea id="f-bio" rows="4" placeholder="독자와 아마존에 소개할 저자 소개를 작성해 주세요. 전문 분야, 경력, 주요 저서를 포함하면 좋습니다. (약 100~300자)"></textarea>
+      <div class="errmsg">저자 소개를 입력해 주세요.</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="nextPage(2)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ── STEP 2 ── -->
+<div id="pg2" style="display:none;">
+  <div class="card">
+    <div class="sec">출간 도서 정보</div>
+    <div class="fld" id="w-title">
+      <label>도서 제목 (국문) <span class="req">*</span></label>
+      <input id="f-title" type="text" placeholder="에이콘 출간 도서 제목">
+      <div class="errmsg">도서 제목을 입력해 주세요.</div>
+    </div>
+    <div class="g2">
+      <div class="fld">
+        <label>영문 제목 (있는 경우)</label>
+        <input id="f-title-en" type="text" placeholder="English Title">
+      </div>
+      <div class="fld">
+        <label>에이콘 출간 ISBN</label>
+        <input id="f-isbn" type="text" placeholder="979-11-000-0000-0">
+      </div>
+    </div>
+    <div class="fld" id="w-desc">
+      <label>도서 소개 <span class="req">*</span></label>
+      <textarea id="f-desc" rows="5" placeholder="아마존 제품 페이지에 올라갈 책 소개입니다. 독자가 이 책을 읽어야 하는 이유, 주요 내용, 타깃 독자를 포함해 주세요. (약 150~500자)"></textarea>
+      <div class="errmsg">도서 소개를 입력해 주세요.</div>
+    </div>
+    <div class="g2">
+      <div class="fld">
+        <label>카테고리 후보</label>
+        <input id="f-category" type="text" placeholder="예: Computers &gt; AI &gt; Machine Learning">
+        <div class="hint">아마존 카테고리 경로. 모르면 비워두세요.</div>
+      </div>
+      <div class="fld">
+        <label>키워드 후보 (최대 7개)</label>
+        <input id="f-keywords" type="text" placeholder="AI, 머신러닝, 파이썬 …">
+        <div class="hint">콤마로 구분. 검색 노출에 사용됩니다.</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="fld">
+        <label>희망 판매가 (USD)</label>
+        <select id="f-price">
+          <option value="">에이콘 권고에 따름</option>
+          <option value="2.99">$2.99</option>
+          <option value="4.99">$4.99</option>
+          <option value="6.99">$6.99</option>
+          <option value="9.99">$9.99</option>
+          <option value="12.99">$12.99</option>
+          <option value="14.99">$14.99</option>
+        </select>
+      </div>
+      <div class="fld">
+        <label>KDP Select 가입 의향</label>
+        <select id="f-kdp-select">
+          <option value="">안내 요청</option>
+          <option value="yes">예 — 가입하겠습니다</option>
+          <option value="no">아니요</option>
+        </select>
+        <div class="hint">KDP Select 가입 시 Kindle Unlimited 수익 추가.</div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goPage(1)">← 이전</button>
+    <button class="btn btn-primary" onclick="nextPage(3)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ── STEP 3 ── -->
+<div id="pg3" style="display:none;">
+  <div class="info"><strong>📋 에이콘 의뢰인 제공 자료 목록</strong><br>현재 준비된 자료에 체크해 주세요. 미준비 항목은 담당자가 안내드립니다.</div>
+  <div class="card">
+    <div class="sec">자료 준비 현황</div>
+    <div class="chk-group" id="chklist"></div>
+  </div>
+  <div class="card">
+    <div class="sec">AI 생성물 및 저작권</div>
+    <div class="fld">
+      <label>AI 생성 콘텐츠 포함 여부 <span class="req">*</span></label>
+      <select id="f-ai">
+        <option value="">선택해 주세요</option>
+        <option value="none">없음 — 전체 인간 창작물</option>
+        <option value="partial">일부 있음 (텍스트/이미지 등)</option>
+        <option value="assisted">AI 보조 사용 (편집·교정 등)</option>
+      </select>
+      <div class="hint">아마존 KDP 정책 준수를 위해 정확하게 선택해 주세요.</div>
+    </div>
+    <div class="fld">
+      <label>이미지·도표·인용문 출처 확인</label>
+      <select id="f-copyright">
+        <option value="">선택해 주세요</option>
+        <option value="all_original">모두 직접 제작/촬영</option>
+        <option value="licensed">라이선스 취득 완료</option>
+        <option value="cc">Creative Commons 사용</option>
+        <option value="need_review">일부 확인 필요</option>
+      </select>
+    </div>
+    <div class="fld">
+      <label>추가 메모</label>
+      <textarea id="f-note" rows="3" placeholder="자료 준비 상황, 특이 사항, 문의 사항을 자유롭게 작성해 주세요."></textarea>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goPage(2)">← 이전</button>
+    <button class="btn btn-primary" onclick="goPage(4)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ── STEP 4 ── -->
+<div id="pg4" style="display:none;">
+  <div class="card">
+    <div class="sec">최종 확인</div>
+    <table class="rv-table" id="rv-table"></table>
+  </div>
+  <div class="card">
+    <div class="sec">개인정보 수집 및 이용 동의</div>
+    <div class="consent">
+      <p><strong>수집 항목:</strong> 이름, 이메일, 연락처, 도서 관련 정보<br>
+      <strong>이용 목적:</strong> KDP 출간 제안 검토 및 담당자 연락<br>
+      <strong>보유 기간:</strong> 검토 완료 후 1년, 계약 시 법령에 따름</p>
+      <label class="chk-item">
+        <input type="checkbox" id="f-consent">
+        <span style="font-weight:700;color:var(--text);">위 내용에 동의합니다 <span class="req">*</span></span>
+      </label>
+    </div>
+  </div>
+  <div id="consent-err" style="color:var(--red);font-size:11px;text-align:right;margin-top:-8px;margin-bottom:8px;display:none;">동의가 필요합니다.</div>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="goPage(3)">← 이전</button>
+    <button class="btn btn-primary" id="submit-btn" onclick="submitForm()">📤 제안서 제출</button>
+  </div>
+</div>
+
+<!-- ── 완료 ── -->
+<div id="pg-done" style="display:none;">
+  <div class="card done-box">
+    <div class="done-ico">🎉</div>
+    <div class="done-ttl">제출 완료!</div>
+    <div class="done-sub">제안서가 에이콘출판사 담당자에게 전달되었습니다.<br>영업일 기준 3~5일 내로 이메일로 연락드립니다.</div>
+    <a href="https://www.acornpub.co.kr" target="_blank" style="color:var(--blue);font-size:13px;font-weight:700;">acornpub.co.kr 방문하기 →</a>
+    <div class="done-id" id="done-id"></div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── URL 파라미터 자동 채우기 ─────────────────────────────
+(function prefillFromURL(){
+  try{
+    var p = new URLSearchParams(window.location.search);
+    var name  = p.get('name');
+    var email = p.get('email');
+    var book  = p.get('book');
+    if(name)  { var el=document.getElementById('f-name');  if(el) el.value=name; }
+    if(email) { var el=document.getElementById('f-email'); if(el) el.value=email; }
+    if(book)  { var el=document.getElementById('f-title'); if(el) el.value=book; }
+    // URL 파라미터로 들어온 경우 안내 배너 표시
+    if(name||email||book){
+      var banner=document.createElement('div');
+      banner.style.cssText='background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.25);border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:12px;color:var(--teal);font-weight:600;';
+      banner.textContent='✅ 에이콘출판사 담당자가 전달한 링크입니다. 정보를 확인하고 작성을 완료해 주세요.';
+      var wrap=document.querySelector('.wrap');
+      if(wrap) wrap.insertBefore(banner, wrap.firstChild);
+    }
+  }catch(e){}
+})();
+
+// ── 설정 ──────────────────────────────────────────────────
+var SB_URL   = 'https://edwfljyybrrccbxccvdh.supabase.co';
+var SB_KEY   = 'sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl';
+var SB_TABLE = 'kdp_proposals';
+
+// ── 체크리스트 ───────────────────────────────────────────
+var CHECKLIST = [
+  '최종 원고 파일 (PDF/DOCX/EPUB)',
+  '표지 이미지 또는 표지 제작용 자료',
+  '저자명 및 필명 확정',
+  '저자 소개 (국문)',
+  '책 소개 텍스트',
+  '키워드 후보 (최대 7개)',
+  '카테고리 후보',
+  '판매가 희망 안',
+  'KDP Select 가입 여부 결정',
+  'AI 생성물 사용 여부 확인',
+  '이미지·도표·인용문 출처 자료',
+  '저작권 또는 이용권 증빙 자료',
+  'KDP 계정 개설용 이메일 주소',
+  'Tax Profile 입력 관련 정보',
+  '지급 계정 관련 정보',
+  '기타 대행사 요청 자료'
+];
+
+(function buildChecklist(){
+  var el = document.getElementById('chklist');
+  if(!el) return;
+  var html = '';
+  CHECKLIST.forEach(function(item, i){
+    html += '<label class="chk-item"><input type="checkbox" id="cl'+i+'"><span>'+item+'</span></label>';
+  });
+  el.innerHTML = html;
+})();
+
+// ── 페이지 상태 ──────────────────────────────────────────
+var curPage = 1;
+
+function g(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+
+// ── 유효성 검사 ──────────────────────────────────────────
+function validate(page){
+  var ok = true;
+  var checks = page===1
+    ? [{id:'f-name',w:'w-name'},{id:'f-email',w:'w-email'},{id:'f-bio',w:'w-bio'}]
+    : page===2
+    ? [{id:'f-title',w:'w-title'},{id:'f-desc',w:'w-desc'}]
+    : [];
+
+  checks.forEach(function(c){
+    var val = g(c.id);
+    var wrap = document.getElementById(c.w);
+    if(!wrap) return;
+    if(!val){
+      wrap.classList.add('err');
+      ok = false;
+    } else {
+      wrap.classList.remove('err');
+    }
+  });
+
+  if(!ok){
+    // 첫 번째 에러 필드로 스크롤
+    var first = document.querySelector('#pg'+page+' .fld.err input, #pg'+page+' .fld.err textarea');
+    if(first){ first.focus(); first.scrollIntoView({behavior:'smooth',block:'center'}); }
+  }
+  return ok;
+}
+
+// ── 페이지 이동 ──────────────────────────────────────────
+function goPage(n){
+  var cur = document.getElementById('pg'+curPage);
+  var next = document.getElementById('pg'+n);
+  if(!cur || !next) return;
+  cur.style.display = 'none';
+  next.style.display = 'block';
+  curPage = n;
+  updateBar();
+  if(n===4) buildReview();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function nextPage(n){
+  if(!validate(curPage)) return;
+  goPage(n);
+}
+
+function updateBar(){
+  for(var i=1;i<=4;i++){
+    var el = document.getElementById('sb'+i);
+    if(!el) continue;
+    el.className = 'sb' + (i < curPage ? ' done' : i===curPage ? ' active' : '');
+  }
+}
+
+// ── 리뷰 빌드 ────────────────────────────────────────────
+function buildReview(){
+  var docs = [];
+  CHECKLIST.forEach(function(_,i){
+    var el=document.getElementById('cl'+i);
+    if(el&&el.checked) docs.push(CHECKLIST[i]);
+  });
+  var rows = [
+    ['저자명', g('f-name')+(g('f-penname')?' ('+g('f-penname')+')':'')],
+    ['이메일', g('f-email')],
+    ['연락처', g('f-phone')||'—'],
+    ['소속', g('f-org')||'—'],
+    ['도서 제목', g('f-title')+(g('f-title-en')?' / '+g('f-title-en'):'')],
+    ['ISBN', g('f-isbn')||'—'],
+    ['희망 가격', g('f-price')||'에이콘 권고'],
+    ['KDP Select', g('f-kdp-select')||'미정'],
+    ['AI 생성물', g('f-ai')||'미답변'],
+    ['준비 자료', docs.length?docs.join(', '):'없음'],
+    ['추가 메모', g('f-note')||'—'],
+  ];
+  var html = '';
+  rows.forEach(function(r){
+    html += '<tr><td>'+r[0]+'</td><td style="color:var(--text);">'+r[1]+'</td></tr>';
+  });
+  document.getElementById('rv-table').innerHTML = html;
+}
+
+// ── 제출 ─────────────────────────────────────────────────
+function submitForm(){
+  var consentEl = document.getElementById('f-consent');
+  var consentErr = document.getElementById('consent-err');
+  if(!consentEl.checked){
+    consentErr.style.display = 'block';
+    return;
+  }
+  consentErr.style.display = 'none';
+
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>제출 중…';
+
+  var docs = [];
+  CHECKLIST.forEach(function(_,i){
+    var el=document.getElementById('cl'+i);
+    if(el&&el.checked) docs.push(CHECKLIST[i]);
+  });
+
+  var id = 'kdp-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+  var data = {
+    id:id, author_name:g('f-name'), pen_name:g('f-penname'),
+    email:g('f-email'), phone:g('f-phone'), org:g('f-org'), bio:g('f-bio'),
+    book_title:g('f-title'), book_title_en:g('f-title-en'), isbn:g('f-isbn'),
+    book_desc:g('f-desc'), category:g('f-category'), keywords:g('f-keywords'),
+    price_usd:g('f-price'), kdp_select:g('f-kdp-select'), ai_content:g('f-ai'),
+    copyright_note:g('f-copyright'), docs_ready:JSON.stringify(docs),
+    extra_note:g('f-note'), status:'new',
+    submitted_at:new Date().toISOString()
+  };
+
+  // localStorage 저장 (항상)
+  try{
+    var saved=JSON.parse(localStorage.getItem('kdp_proposals_local')||'[]');
+    saved.push(data);
+    localStorage.setItem('kdp_proposals_local',JSON.stringify(saved));
+  }catch(e){}
+
+  // Supabase 시도
+  fetch(SB_URL+'/rest/v1/'+SB_TABLE, {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'apikey':SB_KEY,
+      'Authorization':'Bearer '+SB_KEY,
+      'Prefer':'return=minimal'
+    },
+    body:JSON.stringify(data)
+  }).then(function(r){
+    showDone(id, !r.ok);
+  }).catch(function(){
+    showDone(id, true);
+  });
+}
+
+function showDone(id, localOnly){
+  document.getElementById('pg4').style.display='none';
+  document.getElementById('pg-done').style.display='block';
+  document.getElementById('done-id').textContent='접수번호: '+id+(localOnly?' (로컬 저장)':'');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
