@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="version" content="20260626-dr">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>에이콘 온보딩 가이드 2026</title>
@@ -482,6 +483,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="nav-item" onclick="nav('s9')" style="color:#5DD6B3;border-left:2px solid rgba(93,214,179,.4);">
       <span class="nav-icon">🧪</span>Pilot Test
     </div>
+    <div class="nav-item" onclick="nav('s15')">
+      <span class="nav-icon">🌍</span>Amazon KDP
+    </div>
   </div>
   <div class="sidebar-footer">
     <div id="db-status-badge" class="db-status local" onclick="updatePilotDbStatus()" title="클릭하면 연결 상태를 다시 확인합니다" style="cursor:pointer;margin-bottom:8px;justify-content:center;">
@@ -662,21 +666,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">기획편집팀</span></td>
           <td>기술서 편집<br>해외 저작권 관리</td><td>기술서 편집 실무 · 해외 저작권 행정 관리</td><td>서울</td>
         </tr>
-        <tr>
-          <td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">임</div>임승경 대리</div></td>
-          <td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">기획편집팀</span></td>
-          <td>일반서 편집<br>일정·품질 관리</td><td>출간 일정·원고 조율 및 편집 연계</td><td>서울</td>
-        </tr>
+        
         <tr>
           <td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">김</div>김광우 대리</div></td>
           <td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">기획편집팀</span></td>
           <td>일반서 기획·편집<br>일정·품질 관리</td><td>일반서 국내외 저자 발굴 및 기획 상담<br>플랫폼 업무 개발 보조</td><td><span class="location-badge">부산</span></td>
         </tr>
-        <tr>
-          <td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">윤</div>윤서빈 대리</div></td>
-          <td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">기획편집팀</span></td>
-          <td>표지·내지·홍보물 디자인</td><td>마케팅 시각물 제작 / 커버·내지 디자인</td><td>서울</td>
-        </tr>
+        
         <tr class="org-group-hdr"><td colspan="5">📢 마케팅팀</td></tr>
         <tr>
           <td><div class="emp-name"><div class="emp-avatar" style="background:#7A0A1A">김</div>김희지 사원</div></td>
@@ -3451,6 +3447,183 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div><!-- /content -->
 </div><!-- /s9 -->
 
+<!-- ══ S15: AMAZON KDP ══ -->
+<div id="s15" class="section">
+  <div class="page-header" style="background:linear-gradient(135deg,#0F1923 0%,#1A3A5C 50%,#0D2137 100%);">
+    <div class="ph-eyebrow">AMAZON KDP · GLOBAL PUBLISHING</div>
+    <h1 class="ph-title">Amazon KDP <span style="font-size:.6em;font-weight:400;opacity:.75">저자 글로벌 출간 지원</span></h1>
+    <p class="ph-sub">에이콘 저자의 아마존 KDP 글로벌 출간을 단계별로 지원합니다 — 소개부터 출간 확정까지</p>
+  </div>
+  <div class="content">
+
+    <!-- KDP 탭 -->
+    <div style="display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:0;">
+      <button id="kdptab-btn-0" onclick="kdpTab(0)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:700;color:var(--blue);border-bottom:2.5px solid var(--blue);margin-bottom:-2px;cursor:pointer;">🗺 지원 프로세스</button>
+      <button id="kdptab-btn-1" onclick="kdpTab(1)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">📋 파이프라인 관리</button>
+      <button id="kdptab-btn-2" onclick="kdpTab(2)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">🔗 저자 링크 생성</button>
+    </div>
+
+    <!-- TAB 0: 지원 프로세스 -->
+    <div id="kdptab-0">
+    <div style="background:linear-gradient(135deg,rgba(21,96,184,.08),rgba(13,148,136,.05));border:1.5px solid rgba(21,96,184,.2);border-radius:var(--rL);padding:20px 24px;margin-bottom:24px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">PROCESS OVERVIEW</div>
+      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;">5단계 KDP 출간 지원 프로세스</div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.7;">이메일 또는 SNS를 통해 저자에게 Amazon KDP를 소개하고, 관심 표명 시 계약 또는 거절 확정까지 전 과정을 지원합니다.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:28px;">
+      <!-- STEP 1 -->
+      <div style="display:flex;gap:14px;">
+        <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">1</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--blue),rgba(21,96,184,.15));margin:4px 0;min-height:24px;"></div></div>
+        <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 20px;">
+          <div style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700;background:rgba(21,96,184,.1);color:var(--blue);margin-bottom:7px;">📣 소개 — 이메일 / SNS</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:7px;">저자에게 Amazon KDP 소개</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px;">에이콘 저자에게 아마존 KDP 글로벌 출간 기회를 소개합니다. <strong>채널:</strong> 이메일 · 카카오톡 · SNS DM</div>
+          <div style="background:var(--s2);border-radius:var(--r);padding:11px 13px;font-size:11px;color:var(--text2);line-height:1.7;"><strong style="color:var(--blue);">핵심 메시지</strong><br>· 기출간 도서의 영문판·글로벌 확장 기회 &nbsp;· 로열티 최대 70%<br>· 에이콘이 KDP 계정 개설·업로드·세금 설정 전 과정 지원</div>
+        </div>
+      </div>
+      <!-- STEP 2 -->
+      <div style="display:flex;gap:14px;">
+        <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">2</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--teal),rgba(13,148,136,.15));margin:4px 0;min-height:24px;"></div></div>
+        <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 20px;">
+          <div style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700;background:rgba(13,148,136,.1);color:var(--teal);margin-bottom:7px;">💬 저자 관심 표명 → 정보 수집</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:7px;">저자 사이트 링크 전달 + 기본 정보 작성 안내</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;">🔗 탭에서 맞춤 링크를 생성하여 저자에게 전달합니다. 저자는 링크를 통해 기본 정보 및 도서 정보를 온라인으로 작성합니다.</div>
+        </div>
+      </div>
+      <!-- STEP 3 -->
+      <div style="display:flex;gap:14px;">
+        <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">3</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--purple),rgba(74,26,124,.15));margin:4px 0;min-height:24px;"></div></div>
+        <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 20px;">
+          <div style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700;background:rgba(74,26,124,.1);color:var(--purple);margin-bottom:7px;">🔍 내부 접수 및 검토</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:7px;">제안서 자동 접수 + 의뢰인 제공 자료 16종 확인</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.7;">저자가 제출하면 <strong>파이프라인 탭</strong>에 자동 등록됩니다. 담당자가 적합성을 검토하고 영업일 3~5일 내 회신합니다.</div>
+        </div>
+      </div>
+      <!-- STEP 4 -->
+      <div style="display:flex;gap:14px;">
+        <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">4</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--gold2),rgba(184,114,10,.15));margin:4px 0;min-height:24px;"></div></div>
+        <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 20px;">
+          <div style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700;background:rgba(184,114,10,.1);color:var(--gold2);margin-bottom:7px;">📄 제안 내용 전달</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:7px;">출간 조건 제안 + 계약 초안 전달</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.7;">로열티 구조·출간 조건은 <strong>전화/미팅에서 협의</strong>합니다 (서면 기재 제외). 이메일로 계약서 초안을 발송합니다.</div>
+        </div>
+      </div>
+      <!-- STEP 5 -->
+      <div style="display:flex;gap:14px;">
+        <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:#10B981;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">5</div></div>
+        <div style="flex:1;background:var(--surface);border:1.5px solid rgba(16,185,129,.3);border-left:4px solid #10B981;border-radius:var(--rL);padding:16px 20px;">
+          <div style="display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;font-weight:700;background:rgba(16,185,129,.1);color:#10B981;margin-bottom:7px;">✅ 확정 / ❌ 거절</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px;">최종 확정</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:rgba(16,185,129,.06);border:1.5px solid rgba(16,185,129,.2);border-radius:var(--r);padding:11px 13px;font-size:11px;color:var(--text2);line-height:1.6;"><strong style="color:#10B981;">✅ 계약 확정</strong><br>KDP 계정 개설 지원<br>원고·표지 업로드 대행<br>Tax·지급 계정 설정<br>출간 승인 후 결과 공유</div>
+            <div style="background:rgba(220,38,38,.04);border:1.5px solid rgba(220,38,38,.18);border-radius:var(--r);padding:11px 13px;font-size:11px;color:var(--text2);line-height:1.6;"><strong style="color:#DC2626;">❌ 거절·보류</strong><br>거절 사유 기록<br>저자 관계 유지<br>차기작 재검토 가능<br>제공 자료 반환</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /kdptab-0 -->
+
+    <!-- TAB 1: 파이프라인 관리 -->
+    <div id="kdptab-1" style="display:none;">
+
+      <!-- 요약 KPI -->
+      <div id="kp-kpi" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:20px;"></div>
+
+      <!-- 검색/필터 -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <input id="kp-q" type="text" placeholder="🔍 저자명·도서명·이메일" oninput="kpFilter()" style="flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+        <select id="kp-status" onchange="kpFilter()" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">전체 상태</option>
+          <option value="new">🆕 신규 접수</option>
+          <option value="reviewing">🔍 검토중</option>
+          <option value="proposing">📄 제안 전달</option>
+          <option value="negotiating">🤝 협의중</option>
+          <option value="confirmed">✅ 계약 확정</option>
+          <option value="publishing">📚 출간 진행</option>
+          <option value="published">🌍 출간 완료</option>
+          <option value="rejected">❌ 계약 실패</option>
+        </select>
+        <button onclick="kpLoad()" style="padding:8px 13px;background:var(--s2);border:1.5px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;color:var(--text3);">🔄</button>
+        <span id="kp-cnt" style="font-size:11px;color:var(--text3);"></span>
+      </div>
+
+      <div id="kp-table" style="min-height:80px;"></div>
+    </div><!-- /kdptab-1 -->
+
+    <!-- TAB 2: 저자 링크 생성 -->
+    <div id="kdptab-2" style="display:none;">
+      <div style="background:linear-gradient(135deg,rgba(21,96,184,.07),rgba(13,148,136,.05));border:1.5px solid rgba(21,96,184,.18);border-radius:var(--rL);padding:22px 26px;margin-bottom:22px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:8px;">AUTHOR LINK GENERATOR</div>
+        <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;">저자 맞춤 제안서 링크 생성</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7;">저자 정보를 입력하면 해당 저자에게 보낼 맞춤 링크를 생성합니다. 저자는 링크를 클릭하면 제안서 작성 페이지로 이동합니다.</div>
+      </div>
+
+      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:22px 26px;margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">저자명 *</div>
+            <input id="lg-name" type="text" placeholder="홍길동" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">이메일</div>
+            <input id="lg-email" type="email" placeholder="author@example.com" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;">
+          </div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">도서명 (선택)</div>
+          <input id="lg-book" type="text" placeholder="에이콘 출간 도서 제목" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;">
+        </div>
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">제안서 페이지 기본 URL</div>
+          <input id="lg-base-url" type="url" placeholder="https://oks-kje.github.io/acorn-pub/kdp-form.html" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;" value="https://oks-kje.github.io/acorn-pub/kdp-form.html">
+        </div>
+        <button onclick="generateLink()" style="padding:10px 22px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">🔗 링크 생성</button>
+      </div>
+
+      <!-- 생성된 링크 -->
+      <div id="lg-result" style="display:none;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:20px 24px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px;letter-spacing:.06em;">생성된 링크</div>
+        <div id="lg-url-box" style="background:var(--s2);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--text);word-break:break-all;margin-bottom:12px;font-family:monospace;line-height:1.6;"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="copyLink()" style="padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;">📋 링크 복사</button>
+          <button onclick="openLink()" style="padding:8px 16px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);">↗ 미리보기</button>
+        </div>
+        <div style="margin-top:14px;padding:12px 14px;background:rgba(13,148,136,.06);border-radius:8px;">
+          <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:6px;">📧 이메일 문구 (복사 후 사용)</div>
+          <div id="lg-email-text" style="font-size:12px;color:var(--text2);line-height:1.8;white-space:pre-wrap;"></div>
+          <button onclick="copyEmailText()" style="margin-top:8px;padding:6px 13px;background:none;border:1.5px solid rgba(13,148,136,.3);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:var(--teal);">📋 이메일 문구 복사</button>
+        </div>
+      </div>
+    </div><!-- /kdptab-2 -->
+
+    <!-- 제안서 상세 모달 -->
+    <div id="kp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--surface);border-radius:14px;width:100%;max-width:720px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);">
+        <div style="padding:14px 20px;background:linear-gradient(135deg,#1A3A5C,#0D2137);display:flex;align-items:center;">
+          <span id="kp-modal-title" style="font-size:14px;font-weight:800;color:#fff;flex:1;"></span>
+          <button onclick="kpCloseModal()" style="background:none;border:none;color:rgba(255,255,255,.8);font-size:20px;cursor:pointer;">✕</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:18px 22px;" id="kp-modal-body"></div>
+        <div style="padding:12px 20px;border-top:1px solid var(--border);background:var(--s2);">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px;">상태 변경</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button onclick="kpSetStatus('reviewing')" style="padding:5px 12px;background:rgba(21,96,184,.1);border:1.5px solid rgba(21,96,184,.25);border-radius:6px;font-size:11px;font-weight:700;color:var(--blue);cursor:pointer;">🔍 검토중</button>
+            <button onclick="kpSetStatus('proposing')" style="padding:5px 12px;background:rgba(184,114,10,.1);border:1.5px solid rgba(184,114,10,.25);border-radius:6px;font-size:11px;font-weight:700;color:var(--gold2);cursor:pointer;">📄 제안 전달</button>
+            <button onclick="kpSetStatus('negotiating')" style="padding:5px 12px;background:rgba(74,26,124,.1);border:1.5px solid rgba(74,26,124,.25);border-radius:6px;font-size:11px;font-weight:700;color:var(--purple);cursor:pointer;">🤝 협의중</button>
+            <button onclick="kpSetStatus('confirmed')" style="padding:5px 12px;background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.25);border-radius:6px;font-size:11px;font-weight:700;color:#10B981;cursor:pointer;">✅ 계약 확정</button>
+            <button onclick="kpSetStatus('publishing')" style="padding:5px 12px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.25);border-radius:6px;font-size:11px;font-weight:700;color:var(--teal);cursor:pointer;">📚 출간 진행</button>
+            <button onclick="kpSetStatus('published')" style="padding:5px 12px;background:rgba(21,96,184,.15);border:1.5px solid rgba(21,96,184,.3);border-radius:6px;font-size:11px;font-weight:700;color:var(--blue);cursor:pointer;">🌍 출간 완료</button>
+            <button onclick="kpSetStatus('rejected')" style="padding:5px 12px;background:rgba(220,38,38,.1);border:1.5px solid rgba(220,38,38,.25);border-radius:6px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">❌ 계약 실패</button>
+          </div>
+          <div style="margin-top:10px;">
+            <input id="kp-memo-input" type="text" placeholder="메모 추가 (Enter로 저장)" style="width:100%;padding:7px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')kpAddMemo()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /s15 -->
 
 <!-- ══ S10: 회의록 ══ -->
 <div id="s10" class="section">
@@ -3939,7 +4112,7 @@ function tab(section, tabId, btn) {
 const SECTIONS = ['s1','s3','s4','s8'];
 function nav(id, subTabId) {
   // hide all sections
-  ['s1','s3','s4','s8','s9','s10','s11'].forEach(s => {
+  ['s1','s3','s4','s8','s9','s10','s11','s15'].forEach(s => {
     const el = document.getElementById(s);
     if(el) { el.classList.remove('active'); }
   });
@@ -3997,6 +4170,7 @@ function nav(id, subTabId) {
   }
   if (id === 's11') { setTimeout(function(){ if(typeof refInit==='function') refInit(); }, 60); }
   if (id === 's12') { setTimeout(function(){ if(typeof pplInit==='function') pplInit(); }, 80); }
+  if (id === 's15') { setTimeout(function(){ if(typeof kdpLoad==='function') kdpLoad(); if(typeof kpLoad==='function') kpLoad(); }, 80); }
 }
 
 // ── LANGUAGE SYSTEM ──────────────────────────────────────────
@@ -6309,6 +6483,273 @@ function pplSave(){
   pplCloseModal();
   pplFilter();
 }
+// ════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════
+// Amazon KDP 통합 관리 (S15)
+// ════════════════════════════════════════════════════════
+
+// ── KDP 탭 전환 ───────────────────────────────────────
+function kdpTab(n){
+  [0,1,2].forEach(function(i){
+    var btn = document.getElementById('kdptab-btn-'+i);
+    var panel = document.getElementById('kdptab-'+i);
+    var active = i===n;
+    if(btn){
+      btn.style.fontWeight = active?'700':'600';
+      btn.style.color = active?'var(--blue)':'var(--text3)';
+      btn.style.borderBottomColor = active?'var(--blue)':'transparent';
+    }
+    if(panel) panel.style.display = active?'block':'none';
+  });
+  if(n===1) kpLoad();
+}
+
+// ── 상태 정의 ─────────────────────────────────────────
+var KP_STATUS = {
+  new:       {lbl:'🆕 신규 접수', clr:'var(--blue)'},
+  reviewing: {lbl:'🔍 검토중',   clr:'var(--purple)'},
+  proposing: {lbl:'📄 제안 전달', clr:'var(--gold2)'},
+  negotiating:{lbl:'🤝 협의중',  clr:'#8B5CF6'},
+  confirmed: {lbl:'✅ 계약 확정', clr:'#10B981'},
+  publishing:{lbl:'📚 출간 진행', clr:'var(--teal)'},
+  published: {lbl:'🌍 출간 완료', clr:'var(--blue)'},
+  rejected:  {lbl:'❌ 계약 실패', clr:'#DC2626'},
+};
+var KP_TABLE  = 'kdp_proposals';
+var KP_ALL    = [];
+var KP_CURRENT_ID = null;
+
+function kpLoad(){
+  var el = document.getElementById('kp-table');
+  if(el) el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:12px;">불러오는 중…</div>';
+  // localStorage 먼저
+  try{ KP_ALL = JSON.parse(localStorage.getItem('kdp_proposals_local')||'[]'); }catch(e){ KP_ALL=[]; }
+  kpFilter(); kpKpi();
+  // Supabase
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+KP_TABLE+'?select=*&order=submitted_at.desc',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}),cache:'no-store'}
+  ).then(function(r){return r.ok?r.json():[];})
+  .then(function(rows){
+    if(rows&&rows.length){
+      KP_ALL = rows;
+      try{localStorage.setItem('kdp_proposals_local',JSON.stringify(KP_ALL));}catch(e){}
+    }
+    kpFilter(); kpKpi();
+    console.log('[KP] 제안서',KP_ALL.length,'건 로드');
+  }).catch(function(){kpFilter(); kpKpi();});
+}
+
+function kpKpi(){
+  var el = document.getElementById('kp-kpi');
+  if(!el) return;
+  var counts = {};
+  Object.keys(KP_STATUS).forEach(function(k){ counts[k]=0; });
+  KP_ALL.forEach(function(d){ if(counts[d.status||'new']!==undefined) counts[d.status||'new']++; });
+  var total = KP_ALL.length;
+  var confirmed = counts.confirmed + counts.publishing + counts.published;
+  var rejected  = counts.rejected;
+  el.innerHTML =
+    kpiCard('전체', total, 'var(--blue)')
+    + kpiCard('신규', counts.new, 'var(--purple)')
+    + kpiCard('검토중', counts.reviewing + counts.proposing + counts.negotiating, 'var(--gold2)')
+    + kpiCard('계약 확정', confirmed, '#10B981')
+    + kpiCard('계약 실패', rejected, '#DC2626');
+}
+function kpiCard(label, n, clr){
+  return '<div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid '+clr+';border-radius:10px;padding:12px 14px;text-align:center;">'
+    +'<div style="font-size:20px;font-weight:900;color:'+clr+';">'+n+'</div>'
+    +'<div style="font-size:10px;font-weight:700;color:var(--text3);margin-top:2px;">'+label+'</div>'
+    +'</div>';
+}
+
+function kpFilter(){
+  var q = (document.getElementById('kp-q')?.value||'').toLowerCase();
+  var st = document.getElementById('kp-status')?.value||'';
+  var el = document.getElementById('kp-table');
+  var cnt = document.getElementById('kp-cnt');
+  if(!el) return;
+  var filtered = KP_ALL.filter(function(d){
+    if(st && (d.status||'new')!==st) return false;
+    if(q && !(d.author_name+d.book_title+d.email+'').toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if(cnt) cnt.textContent = '총 '+filtered.length+'건';
+  if(!filtered.length){
+    el.innerHTML='<div style="padding:30px;text-align:center;color:var(--text3);font-size:12px;">접수된 제안서가 없습니다.<br>저자 링크 탭에서 링크를 생성하여 저자에게 전달하세요.</div>';
+    return;
+  }
+  el.innerHTML='<table style="width:100%;border-collapse:collapse;font-size:12px;">'
+    +'<thead><tr style="background:var(--bg);">'
+    +'<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);">저자명</th>'
+    +'<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);">도서명</th>'
+    +'<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);">이메일</th>'
+    +'<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);">상태</th>'
+    +'<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);">접수일</th>'
+    +'<th></th></tr></thead><tbody>'
+    +filtered.map(function(d){
+      var s = KP_STATUS[d.status||'new']||{lbl:d.status,clr:'var(--text3)'};
+      var dt = (d.submitted_at||'').slice(0,10);
+      return '<tr style="border-top:1px solid var(--border);cursor:pointer;" onclick="kpOpenDetail(\''+escH(d.id)+'\')">'
+        +'<td style="padding:9px 12px;font-weight:700;color:var(--text);">'+escH(d.author_name||'')+'</td>'
+        +'<td style="padding:9px 12px;color:var(--text2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escH(d.book_title||'')+'</td>'
+        +'<td style="padding:9px 12px;color:var(--text3);">'+escH(d.email||'')+'</td>'
+        +'<td style="padding:9px 12px;"><span style="font-size:10px;padding:2px 9px;border-radius:100px;background:rgba(0,0,0,.07);color:'+s.clr+';font-weight:700;">'+s.lbl+'</span></td>'
+        +'<td style="padding:9px 12px;color:var(--text3);">'+dt+'</td>'
+        +'<td style="padding:9px 8px;"><button onclick="event.stopPropagation();kpOpenDetail(\''+escH(d.id)+'\')" style="padding:3px 9px;background:none;border:1px solid var(--border);border-radius:5px;font-size:10px;cursor:pointer;color:var(--text3);">상세</button></td>'
+        +'</tr>';
+    }).join('')+'</tbody></table>';
+}
+
+function kpOpenDetail(id){
+  var d = KP_ALL.find(function(x){return x.id===id;});
+  if(!d) return;
+  KP_CURRENT_ID = id;
+  var s = KP_STATUS[d.status||'new']||{lbl:'신규',clr:'var(--blue)'};
+  document.getElementById('kp-modal-title').textContent = d.author_name+' — '+d.book_title;
+  var docs=[];try{docs=JSON.parse(d.docs_ready||'[]');}catch(e){}
+  var memos=[];try{memos=JSON.parse(d.memos||'[]');}catch(e){}
+  var body = document.getElementById('kp-modal-body');
+  body.innerHTML =
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">'
+    +'<span style="font-size:11px;padding:3px 12px;border-radius:100px;background:rgba(0,0,0,.08);color:'+s.clr+';font-weight:700;">'+s.lbl+'</span>'
+    +(d.submitted_at?'<span style="font-size:11px;color:var(--text3);">접수: '+(d.submitted_at||'').slice(0,16).replace('T',' ')+'</span>':'')
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">'
+    +kpCard2('저자명', escH(d.author_name||'')+(d.pen_name?' ('+escH(d.pen_name)+')':''))
+    +kpCard2('이메일', d.email?'<a href="mailto:'+d.email+'" style="color:var(--blue);">'+escH(d.email)+'</a>':'—')
+    +kpCard2('연락처', escH(d.phone||'—'))
+    +kpCard2('소속', escH(d.org||'—'))
+    +kpCard2('도서 제목', escH(d.book_title||'')+(d.book_title_en?' / '+escH(d.book_title_en):''))
+    +kpCard2('ISBN', escH(d.isbn||'—'))
+    +kpCard2('희망 가격', d.price_usd?'$'+escH(d.price_usd):'에이콘 권고')
+    +kpCard2('KDP Select', escH(d.kdp_select||'미정'))
+    +kpCard2('AI 생성물', escH(d.ai_content||'미답변'))
+    +kpCard2('저작권', escH(d.copyright_note||'—'))
+    +'</div>'
+    +(d.bio?'<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:5px;letter-spacing:.06em;">저자 소개</div><div style="font-size:12px;color:var(--text2);line-height:1.7;background:var(--s2);border-radius:8px;padding:10px 13px;white-space:pre-wrap;">'+escH(d.bio)+'</div></div>':'')
+    +(d.book_desc?'<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:5px;letter-spacing:.06em;">도서 소개</div><div style="font-size:12px;color:var(--text2);line-height:1.7;background:var(--s2);border-radius:8px;padding:10px 13px;white-space:pre-wrap;">'+escH(d.book_desc)+'</div></div>':'')
+    +(docs.length?'<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:5px;letter-spacing:.06em;">준비된 자료 ('+docs.length+'종)</div><div style="display:flex;flex-wrap:wrap;gap:5px;">'+docs.map(function(doc){return'<span style="font-size:11px;padding:2px 9px;border-radius:100px;background:rgba(13,148,136,.1);color:var(--teal);font-weight:600;">'+escH(doc)+'</span>';}).join('')+'</div></div>':'')
+    +(d.extra_note?'<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:5px;letter-spacing:.06em;">추가 메모</div><div style="font-size:12px;color:var(--text2);line-height:1.7;background:var(--s2);border-radius:8px;padding:10px 13px;">'+escH(d.extra_note)+'</div></div>':'')
+    +'<div id="kp-memo-list" style="margin-bottom:10px;">'
+    +memos.map(function(m){return'<div style="font-size:11px;color:var(--text3);padding:5px 0;border-bottom:1px solid var(--border);">'+escH(m.dt||'')+'&nbsp;&nbsp;'+escH(m.text||'')+'</div>';}).join('')
+    +'</div>';
+  document.getElementById('kp-memo-input').value='';
+  document.getElementById('kp-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function kpCard2(k,v){
+  return '<div style="background:var(--s2);border-radius:8px;padding:9px 12px;">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:2px;">'+k+'</div>'
+    +'<div style="font-size:12px;color:var(--text);">'+(v||'—')+'</div></div>';
+}
+
+function kpSetStatus(status){
+  if(!KP_CURRENT_ID) return;
+  var d = KP_ALL.find(function(x){return x.id===KP_CURRENT_ID;});
+  if(!d) return;
+  d.status = status;
+  kpSaveLocal();
+  if(sbOn()){
+    fetch(SUPABASE_CONFIG.url+'/rest/v1/'+KP_TABLE+'?id=eq.'+encodeURIComponent(KP_CURRENT_ID),{
+      method:'PATCH',
+      headers:sbHeaders({'Prefer':'return=minimal'}),
+      body:JSON.stringify({status:status,updated_at:new Date().toISOString()})
+    }).then(function(r){if(r.ok)console.log('[KP] 상태→',status);});
+  }
+  kpCloseModal(); kpFilter(); kpKpi();
+}
+
+function kpAddMemo(){
+  if(!KP_CURRENT_ID) return;
+  var inp = document.getElementById('kp-memo-input');
+  var text = inp?inp.value.trim():'';
+  if(!text) return;
+  var d = KP_ALL.find(function(x){return x.id===KP_CURRENT_ID;});
+  if(!d) return;
+  var memos=[];try{memos=JSON.parse(d.memos||'[]');}catch(e){}
+  var entry={dt:new Date().toISOString().slice(0,16).replace('T',' '),text:text};
+  memos.push(entry); d.memos=JSON.stringify(memos);
+  kpSaveLocal();
+  if(sbOn()){
+    fetch(SUPABASE_CONFIG.url+'/rest/v1/'+KP_TABLE+'?id=eq.'+encodeURIComponent(KP_CURRENT_ID),{
+      method:'PATCH',headers:sbHeaders({'Prefer':'return=minimal'}),
+      body:JSON.stringify({memos:d.memos,updated_at:new Date().toISOString()})
+    }).catch(function(){});
+  }
+  var ml=document.getElementById('kp-memo-list');
+  if(ml) ml.innerHTML+='<div style="font-size:11px;color:var(--text3);padding:5px 0;border-bottom:1px solid var(--border);">'+escH(entry.dt)+'&nbsp;&nbsp;'+escH(entry.text)+'</div>';
+  inp.value='';
+}
+
+function kpSaveLocal(){
+  try{localStorage.setItem('kdp_proposals_local',JSON.stringify(KP_ALL));}catch(e){}
+}
+
+function kpCloseModal(){
+  document.getElementById('kp-modal').style.display='none';
+  document.body.style.overflow='';
+}
+
+// ── 저자 링크 생성 ────────────────────────────────────
+var _lgUrl = '';
+function generateLink(){
+  var name  = (document.getElementById('lg-name')?.value||'').trim();
+  var email = (document.getElementById('lg-email')?.value||'').trim();
+  var book  = (document.getElementById('lg-book')?.value||'').trim();
+  var base  = (document.getElementById('lg-base-url')?.value||'').trim();
+  if(!name){ alert('저자명을 입력하세요.'); return; }
+  if(!base){ alert('제안서 페이지 URL을 입력하세요.'); return; }
+  var params = new URLSearchParams();
+  params.set('ref','acorn-kdp');
+  if(name)  params.set('name', name);
+  if(email) params.set('email', email);
+  if(book)  params.set('book', book);
+  _lgUrl = base + '?' + params.toString();
+  var box = document.getElementById('lg-url-box');
+  if(box) box.textContent = _lgUrl;
+  var emailTxt = document.getElementById('lg-email-text');
+  if(emailTxt) emailTxt.textContent =
+    name+' 저자님께\n\n안녕하세요, 에이콘출판사 편집부입니다.\n\n'
+    +'아마존 KDP 글로벌 출간 지원 프로그램을 소개드립니다.\n'
+    +'저자님의 도서를 영문 전자첸으로 아마존에 출간하여 글로벌 독자에게 선보일 수 있습니다.\n\n'
+    +'아래 링크에서 간단한 정보를 입력해 주시면 담당자가 검토 후 3~5일 내로 연락드립니다.\n\n'
+    +'▶ '+_lgUrl+'\n\n'
+    +'감사합니다.\n에이콘출판사 편집부 드림';
+  var result = document.getElementById('lg-result');
+  if(result) result.style.display='block';
+}
+
+function copyLink(){
+  if(!_lgUrl) return;
+  navigator.clipboard.writeText(_lgUrl).then(function(){
+    var btn = event.target; var orig = btn.textContent;
+    btn.textContent='✅ 복사됨'; btn.style.background='var(--teal)';
+    setTimeout(function(){btn.textContent=orig;btn.style.background='var(--teal)';},1500);
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=_lgUrl;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+}
+
+function openLink(){
+  if(_lgUrl) window.open(_lgUrl,'_blank');
+}
+
+function copyEmailText(){
+  var el=document.getElementById('lg-email-text');
+  if(!el) return;
+  var text=el.textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn=event.target; var orig=btn.textContent;
+    btn.textContent='✅ 복사됨';
+    setTimeout(function(){btn.textContent=orig;},1500);
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+  });
+}
+
 </script>
 </body>
 </html>
