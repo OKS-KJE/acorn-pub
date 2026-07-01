@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
-<title>바다이야기</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>바다이야기 [PC TEST]</title>
 <meta name="theme-color" content="#032135">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -751,6 +751,34 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 #training-btn{background:rgba(200,162,74,.15)!important;border:1px solid rgba(200,162,74,.35)!important;}
 #training-btn:hover{background:rgba(200,162,74,.3)!important;}
 
+
+/* ══════ PC TEST PANEL ══════ */
+@media(min-width:960px){
+  html,body{overflow-x:hidden;}
+  .app{margin:0 auto 0 calc(50% - 460px);}
+  .nav{left:calc(50% - 460px - 260px)!important;margin-left:260px;}
+  .fab{right:calc(50% - 460px + var(--max) + 20px)!important;}
+}
+#pc-test{display:none;position:fixed;top:0;right:0;width:340px;height:100vh;background:#0e1a28;border-left:2px solid #1e3a52;z-index:9999;overflow-y:auto;font-size:12px;color:#c8d8e8;font-family:'Pretendard',sans-serif;flex-direction:column;}
+@media(min-width:960px){#pc-test{display:flex;}}
+#pc-test *{box-sizing:border-box;}
+.tp-hd{background:#012B4A;padding:12px 14px;font-size:14px;font-weight:800;color:#FFD96A;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:1;}
+.tp-hd span{font-size:18px;}
+.tp-sec{padding:10px 14px 6px;font-size:11px;font-weight:700;color:#4A8AB8;text-transform:uppercase;letter-spacing:.08em;border-top:1px solid #1e3a52;margin-top:2px;}
+.tp-row{display:flex;flex-wrap:wrap;gap:5px;padding:4px 14px 6px;}
+.tp-btn{border:1px solid #1e3a52;background:#0a1520;color:#8cb8d8;padding:5px 9px;border-radius:6px;font-size:11px;cursor:pointer;white-space:nowrap;font-family:inherit;}
+.tp-btn:hover{background:#1a3a52;color:#fff;border-color:#3a7ab8;}
+.tp-btn.on{background:#006FA8;color:#fff;border-color:#006FA8;}
+.tp-btn.danger{border-color:#8a2a3a;color:#d88a8a;}
+.tp-btn.danger:hover{background:#5a1a2a;color:#faa;border-color:#d88a8a;}
+.tp-btn.gold{border-color:#5a4a1a;color:#d8b84a;}
+.tp-btn.gold:hover{background:#3a2a0a;color:#ffd96a;border-color:#d8b84a;}
+.tp-info{padding:6px 14px;font-size:11px;color:#6a8aa8;line-height:1.5;}
+.tp-info b{color:#8cb8d8;}
+#tp-ls{max-height:180px;overflow-y:auto;background:#060e16;margin:0 14px 8px;border-radius:6px;padding:8px;font-family:monospace;font-size:10px;color:#5a8a5a;word-break:break-all;}
+.tp-badge{display:inline-block;background:#1a3a52;color:#8cb8d8;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:4px;}
+#tp-frame-label{padding:6px 14px;font-size:11px;text-align:center;color:#4A8AB8;}
+
 </style>
 </head>
 <body>
@@ -1242,6 +1270,76 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
   </div>
   <div class="field"><input id="onb-affil-name" placeholder="소속명 (선박명, 회사명, 기관명 등)" style="background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);color:#fff;"></div>
   <button class="btn btn-gold btn-block" style="margin-top:8px;" onclick="startApp()">바다 여정 시작하기 ⚓</button>
+</div>
+
+
+<!-- ══════ PC TEST PANEL ══════ -->
+<div id="pc-test">
+  <div class="tp-hd"><span>🖥️</span> PC 기능 테스트 패널</div>
+
+  <div class="tp-sec">📱 화면 전환 (Navigation)</div>
+  <div class="tp-row">
+    <button class="tp-btn on" onclick="tpGo('home')">🏠 홈</button>
+    <button class="tp-btn" onclick="tpGo('books')">📚 도서</button>
+    <button class="tp-btn" onclick="tpGo('proposal')">📝 제안</button>
+    <button class="tp-btn" onclick="tpGo('location')">📍 위치</button>
+    <button class="tp-btn" onclick="tpGo('record')">📸 기록</button>
+    <button class="tp-btn" onclick="tpGo('chat')">💬 채팅</button>
+    <button class="tp-btn" onclick="tpGo('role-select')">👤 역할선택</button>
+  </div>
+
+  <div class="tp-sec">📑 시트/팝업 (Sheets)</div>
+  <div class="tp-row">
+    <button class="tp-btn" onclick="openSheet('write-sheet')">✏️ 글쓰기</button>
+    <button class="tp-btn" onclick="openHelp()">❓ 도움말</button>
+    <button class="tp-btn" onclick="openSheet('search-sheet')">🔍 검색</button>
+    <button class="tp-btn" onclick="openSheet('noti-sheet')">🔔 알림</button>
+    <button class="tp-btn" onclick="openSheet('me-sheet')">👤 프로필</button>
+    <button class="tp-btn" onclick="openSheet('crew-sheet')">⚓ 크루등급</button>
+    <button class="tp-btn" onclick="openSheet('criteria-sheet')">⭐ 선정기준</button>
+    <button class="tp-btn" onclick="openPublishSheet()">📖 출간신청</button>
+    <button class="tp-btn" onclick="openPubLinkSheet()">🔗 출판사연동</button>
+    <button class="tp-btn" onclick="openBookDetail('b1')">📕 도서상세</button>
+    <button class="tp-btn" onclick="openSheet('proposal-sheet')">✍️ 기획안</button>
+    <button class="tp-btn" onclick="openFullMap()">🗺️ 전체맵</button>
+  </div>
+
+  <div class="tp-sec">🎮 게임/보상 (Games)</div>
+  <div class="tp-row">
+    <button class="tp-btn gold" onclick="openGame()">🎣 낚시왕</button>
+    <button class="tp-btn gold" onclick="openCasino()">🎰 오션카지노</button>
+    <button class="tp-btn gold" onclick="openShop()">🛒 포인트샵</button>
+    <button class="tp-btn gold" onclick="window.open('onboarding.html','_blank')">🎓 온보딩교육</button>
+  </div>
+
+  <div class="tp-sec">⚙️ 세션/데이터 (Data Control)</div>
+  <div class="tp-info" id="tp-session-info">세션: 로딩 중...</div>
+  <div class="tp-row">
+    <button class="tp-btn" onclick="tpQuickLogin('저자')">즉시 로그인 (저자)</button>
+    <button class="tp-btn" onclick="tpQuickLogin('저자후보')">즉시 로그인 (후보)</button>
+    <button class="tp-btn" onclick="tpQuickLogin('독자')">즉시 로그인 (독자)</button>
+  </div>
+  <div class="tp-row">
+    <button class="tp-btn" onclick="tpRefreshInfo()">🔄 정보 갱신</button>
+    <button class="tp-btn danger" onclick="logout()">🚪 로그아웃</button>
+    <button class="tp-btn danger" onclick="tpClearAll()">🗑️ 전체 초기화</button>
+  </div>
+
+  <div class="tp-sec">💾 LocalStorage 상태</div>
+  <div id="tp-ls">로딩 중...</div>
+  <div class="tp-row">
+    <button class="tp-btn" onclick="tpShowLS()">🔄 새로고침</button>
+    <button class="tp-btn" onclick="tpExportLS()">📋 복사</button>
+  </div>
+
+  <div class="tp-sec">📐 뷰포트 프레임</div>
+  <div id="tp-frame-label">현재: 데스크톱</div>
+  <div class="tp-row">
+    <button class="tp-btn" onclick="tpFrame(375,'iPhone SE')">iPhone SE</button>
+    <button class="tp-btn" onclick="tpFrame(390,'iPhone 14')">iPhone 14</button>
+    <button class="tp-btn" onclick="tpFrame(430,'iPhone 15 Pro Max')">15 Pro Max</button>
+    <button class="tp-btn on" onclick="tpFrame(520,'Default 520')">기본 520</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -3772,6 +3870,62 @@ function bindPublishEvents() {
 /* ═══════════ BOOT ═══════════ */
 function boot(){seedAll();updateOffline();updateBadge();go('home');updatePtsDisplayAll();bindGameEvents();bindCasinoEvents();startGeoWatch();bindAffilSeg('onb-affil-seg','atype');updateLiveGeoDisplays();checkDailyBonus();updateCrewHomeDisplay();bindHelpEvents();bindPublishEvents();}
 (function(){if(!session){$('onb').classList.add('on');}else boot();})();
+
+/* ══════ PC TEST PANEL JS ══════ */
+function tpGo(v){
+  go(v);
+  document.querySelectorAll('#pc-test .tp-row:first-of-type .tp-btn').forEach(function(b){b.classList.remove('on');});
+  tpRefreshInfo();
+}
+function tpQuickLogin(role){
+  var name=role==='독자'?'테스트독자':'테스트저자';
+  session={name:name,email:'test@acornpub.co.kr',role:role,specialty:'해양학',affilType:'company',affilName:'에이콘출판사',since:Date.now()};
+  save(K.sess,session);
+  var onb=$('onb');if(onb)onb.classList.remove('on');
+  boot();
+  tpRefreshInfo();
+  toast('PC 테스트: '+role+' 역할로 로그인됨');
+}
+function tpRefreshInfo(){
+  var el=document.getElementById('tp-session-info');
+  if(!el)return;
+  if(!session){el.innerHTML='세션: <b>미로그인</b>';return;}
+  el.innerHTML='세션: <b>'+esc(session.name)+'</b> ('+esc(session.role)+') · '+esc(session.email||'-');
+  tpShowLS();
+}
+function tpClearAll(){
+  if(!confirm('모든 localStorage 데이터를 삭제하고 새로고침합니다.'))return;
+  localStorage.clear();
+  location.reload();
+}
+function tpShowLS(){
+  var el=document.getElementById('tp-ls');if(!el)return;
+  var keys=[];for(var i=0;i<localStorage.length;i++)keys.push(localStorage.key(i));
+  keys.sort();
+  if(keys.length===0){el.textContent='(비어 있음)';return;}
+  var html='';
+  keys.forEach(function(k){
+    var v=localStorage.getItem(k)||'';
+    var sz=v.length;
+    var preview=v.length>80?v.substring(0,80)+'...':v;
+    html+='<div style="margin-bottom:4px;"><span style="color:#8cb8d8;">'+esc(k)+'</span> <span style="color:#4a6a4a;">('+sz+')</span><br>'+esc(preview)+'</div>';
+  });
+  el.innerHTML=html;
+}
+function tpExportLS(){
+  var obj={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);obj[k]=localStorage.getItem(k);}
+  if(navigator.clipboard){navigator.clipboard.writeText(JSON.stringify(obj,null,2));toast('localStorage 복사됨');}
+  else{toast('클립보드 미지원');}
+}
+function tpFrame(w,label){
+  document.documentElement.style.setProperty('--max',w+'px');
+  document.getElementById('tp-frame-label').textContent='현재: '+label+' ('+w+'px)';
+  document.querySelectorAll('#pc-test .tp-row:last-of-type .tp-btn').forEach(function(b){b.classList.remove('on');});
+  event.target.classList.add('on');
+}
+/* 초기화 */
+setTimeout(function(){tpRefreshInfo();tpShowLS();},500);
+
 </script>
 </body>
 </html>
