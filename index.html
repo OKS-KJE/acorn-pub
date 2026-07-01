@@ -6703,36 +6703,68 @@ function kpDownloadFile(proposalId, fileIdx){
   if(!d){alert('제안서를 찾을 수 없습니다.');return;}
   var btn=event.target; btn.textContent='⏳'; btn.disabled=true;
 
-  function doDownload(filesB64){
-    d.files_b64=JSON.stringify(filesB64);
-    var f=filesB64[fileIdx];
-    if(!f||!f.data){btn.textContent='⬇ 다운로드';btn.disabled=false;alert('파일 데이터가 없습니다.');return;}
+  function triggerDownload(f){
+    if(!f||!f.data){
+      btn.textContent='⬇ 다운로드';btn.disabled=false;
+      alert('파일 데이터가 없습니다.\n\nSupabase에 files_b64 컬럼이 없거나 비어 있을 수 있습니다.\n아래 SQL을 실행해 주세요:\nALTER TABLE kdp_proposals ADD COLUMN IF NOT EXISTS files_b64 text DEFAULT \'[]\';');
+      return;
+    }
     try{
-      var bs=atob(f.data);var ab=new ArrayBuffer(bs.length);var ia=new Uint8Array(ab);
-      for(var i=0;i<bs.length;i++)ia[i]=bs.charCodeAt(i);
+      var bs=atob(f.data);
+      var ab=new ArrayBuffer(bs.length);
+      var ia=new Uint8Array(ab);
+      for(var i=0;i<bs.length;i++) ia[i]=bs.charCodeAt(i);
       var blob=new Blob([ab],{type:f.type||'application/octet-stream'});
       var url=URL.createObjectURL(blob);
-      var a=document.createElement('a');a.href=url;a.download=f.name||'download';
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
-      setTimeout(function(){URL.revokeObjectURL(url);},1000);
-    }catch(e){alert('다운로드 오류: '+e.message);}
-    btn.textContent='⬇ 다운로드';btn.disabled=false;
+      var a=document.createElement('a');
+      a.href=url; a.download=f.name||'download';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(url);},2000);
+      btn.textContent='⬇ 다운로드'; btn.disabled=false;
+    }catch(e){
+      btn.textContent='⬇ 다운로드'; btn.disabled=false;
+      alert('다운로드 오류: '+e.message);
+    }
   }
 
-  // 메모리 캐시 확인
-  var cached=[];try{cached=JSON.parse(d.files_b64||'[]');}catch(e){}
-  if(cached.length>fileIdx){doDownload(cached);return;}
+  // 항상 Supabase에서 fresh하게 로드 (files_b64는 크기 때문에 캐시 불신뢰)
+  if(!sbOn()){
+    // localStorage fallback
+    var local=[];
+    try{
+      var allLocal=JSON.parse(localStorage.getItem('kdp_proposals_local')||'[]');
+      var localRow=allLocal.find(function(x){return x.id===proposalId;});
+      if(localRow) local=JSON.parse(localRow.files_b64||'[]');
+    }catch(e){}
+    if(local.length>fileIdx){ triggerDownload(local[fileIdx]); }
+    else { btn.textContent='⬇ 다운로드'; btn.disabled=false; alert('로컬 저장소에서 파일을 찾을 수 없습니다.'); }
+    return;
+  }
 
-  // Supabase에서 로드
-  if(!sbOn()){btn.textContent='⬇ 다운로드';btn.disabled=false;alert('Supabase 미연결 상태입니다.');return;}
-  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+KP_TABLE+'?id=eq.'+encodeURIComponent(proposalId)+'&select=files_b64',
-    {headers:sbHeaders({'Cache-Control':'no-cache'})}
-  ).then(function(r){return r.ok?r.json():[];})
-  .then(function(rows){
-    var b64=[];try{b64=JSON.parse((rows&&rows[0]&&rows[0].files_b64)||'[]');}catch(e){}
-    if(!b64.length){btn.textContent='⬇ 다운로드';btn.disabled=false;alert('저장된 파일이 없습니다.');return;}
-    doDownload(b64);
-  }).catch(function(e){btn.textContent='⬇ 다운로드';btn.disabled=false;alert('다운로드 실패: '+e.message);});
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+KP_TABLE
+    +'?id=eq.'+encodeURIComponent(proposalId)
+    +'&select=id,files_b64',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+  ).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(rows){
+    console.log('[KP Download] rows:', rows&&rows.length, 'fileIdx:', fileIdx);
+    var raw=(rows&&rows[0]&&rows[0].files_b64)||'[]';
+    var files=[];
+    try{ files=JSON.parse(raw); }catch(e){ console.error('parse error',e); }
+    console.log('[KP Download] files count:', files.length, 'first keys:', files[0]?Object.keys(files[0]):[]);
+    if(!files.length){
+      btn.textContent='⬇ 다운로드'; btn.disabled=false;
+      alert('Supabase에 파일 데이터가 없습니다.\n\n1) kdp_proposals 테이블에 files_b64 컬럼이 있는지 확인:\n   ALTER TABLE kdp_proposals ADD COLUMN IF NOT EXISTS files_b64 text DEFAULT \'[]\';\n\n2) 제안서 재제출이 필요할 수 있습니다.');
+      return;
+    }
+    triggerDownload(files[fileIdx]);
+  }).catch(function(e){
+    btn.textContent='⬇ 다운로드'; btn.disabled=false;
+    alert('다운로드 실패: '+e.message);
+    console.error('[KP Download] error:', e);
+  });
 }
 
 function kpCloseModal(){
