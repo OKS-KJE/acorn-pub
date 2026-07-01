@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
-<title>바다이야기 (BADA STORY)</title>
+<title>바다이야기</title>
 <meta name="theme-color" content="#032135">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -746,47 +746,12 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 .ms-step.done{background:var(--sea2);}
 .ms-step.cur{background:var(--gold);}
 
+
+/* 교육 자료 버튼 */
+#training-btn{background:rgba(200,162,74,.15)!important;border:1px solid rgba(200,162,74,.35)!important;}
+#training-btn:hover{background:rgba(200,162,74,.3)!important;}
+
 </style>
-
-  <!-- ══ Supabase JS Client ══ -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- ══ 앱 설정 (GitHub Secrets로 자동 주입) ══ -->
-  <script>
-    /* ──────────────────────────────────────────────────────
-       바다이야기 Supabase 설정
-       로컬 개발: 아래 값을 직접 입력하거나 .env 사용
-       GitHub Pages: Repository → Settings → Secrets에 등록
-         SUPABASE_URL     = https://xxxx.supabase.co
-         SUPABASE_ANON_KEY = eyJhbGci...
-    ────────────────────────────────────────────────────── */
-    var SUPABASE_URL      = '__SUPABASE_URL__';
-    var SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
-
-    /* 플레이스홀더 상태면 로컬 모드로 동작 */
-    var SUPABASE_ENABLED = (
-      SUPABASE_URL      !== '__SUPABASE_URL__' &&
-      SUPABASE_ANON_KEY !== '__SUPABASE_ANON_KEY__' &&
-      SUPABASE_URL.startsWith('https://')
-    );
-
-    var _supabase = null;
-    if (SUPABASE_ENABLED) {
-      try {
-        _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: { persistSession: true, autoRefreshToken: true },
-          realtime: { params: { eventsPerSecond: 10 } }
-        });
-        console.log('[BADA] Supabase 연결됨:', SUPABASE_URL);
-      } catch(e) {
-        console.warn('[BADA] Supabase 초기화 실패 (LocalStorage 모드):', e.message);
-        SUPABASE_ENABLED = false;
-      }
-    } else {
-      console.log('[BADA] LocalStorage 모드 (Supabase 미설정)');
-    }
-  </script>
-
 </head>
 <body>
 <div class="app">
@@ -801,6 +766,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
   <div class="top-search" onclick="openSheet('search-sheet')">
     <span>🔍</span><span>저자 · 도서 · 태그 검색</span>
   </div>
+  <button class="top-help-btn" id="training-btn" title="Employee Onboarding Training" style="background:rgba(200,162,74,.2);border-color:rgba(200,162,74,.4);font-size:12px;" onclick="window.open('onboarding.html','_blank')">🎓</button>
   <button class="top-help-btn" id="help-open-btn">?</button>
   <button class="iBtn" onclick="openSheet('noti-sheet')">🔔<span class="badge" id="noti-badge"></span></button>
   <button class="iBtn" onclick="openSheet('me-sheet')">👤</button>
@@ -1287,7 +1253,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
    ①TopNav ②뉴스 ③이야기(나/동료/커뮤) ④도서 ⑤BottomNav
    오프라인 우선 · PWA · LocalStorage · Supabase scaffold
    ══════════════════════════════════════════════════ */
-/* Supabase 연결은 상단 SUPABASE_ENABLED 변수로 제어 */
+const SYNC={enabled:false,url:'https://YOUR.supabase.co',key:'YOUR_KEY'};
 const K={sess:'oa_session',feed:'oa_feed3',rec:'oa_rec3',props:'oa_prop3',noti:'oa_noti3',likes:'oa_likes3',outbox:'oa_outbox3'};
 
 const $=id=>document.getElementById(id);
@@ -1931,191 +1897,8 @@ function doSearch(){
 
 /* ═══════════ OFFLINE / SYNC ═══════════ */
 function enqueue(kind,payload){const ob=load(K.outbox,[]);ob.push({id:uid(),kind,payload,t:now()});save(K.outbox,ob);flush();}
-
-/* ══ Supabase 동기화 (outbox 패턴) ══ */
-async function flush() {
-  if (!SUPABASE_ENABLED || !navigator.onLine || !_supabase) return;
-  var ob = load(K.outbox, []);
-  if (!ob.length) return;
-  var syncBar = $('sync-bar');
-  if (syncBar) syncBar.classList.add('show');
-  var failed = [];
-  for (var i = 0; i < ob.length; i++) {
-    var item = ob[i];
-    try {
-      var ok = await pushToSupabase(item.kind, item.payload);
-      if (!ok) failed.push(item);
-    } catch(e) {
-      failed.push(item);
-      console.warn('[BADA] sync failed:', item.kind, e.message);
-    }
-  }
-  save(K.outbox, failed);
-  if (syncBar) syncBar.classList.remove('show');
-  if (!failed.length) toast('동기화 완료 ✓');
-}
-
-async function pushToSupabase(kind, payload) {
-  if (!_supabase) return false;
-  var user = await getCurrentUser();
-  if (!user) return false;
-  var uid = user.id;
-  try {
-    if (kind === 'feed') {
-      var r = await _supabase.from('posts').upsert({
-        id: payload.id, user_id: uid,
-        author_name: payload.author||'', author_init: payload.init,
-        role: payload.role, scope: payload.scope||'all',
-        text_body: payload.text, tags: payload.tags||[],
-        propose: !!payload.propose,
-        geo_lat: payload.geo?payload.geo.lat:null,
-        geo_lng: payload.geo?payload.geo.lng:null,
-        dt_str: payload.dtStr, affil_type: payload.affilType,
-        affil_name: payload.affilName, crew_dept: payload.crewDept,
-        pts_snapshot: payload.pts||0, pending: false,
-        created_at: new Date(payload.t).toISOString()
-      });
-      return !r.error;
-    }
-    if (kind === 'records') {
-      var r2 = await _supabase.from('field_records').upsert({
-        id: payload.id, user_id: uid,
-        title: payload.title, record_type: payload.type,
-        memo: payload.memo,
-        geo_lat: payload.geo?payload.geo.lat:null,
-        geo_lng: payload.geo?payload.geo.lng:null,
-        dt_str: payload.dtStr, affil_type: payload.affilType,
-        affil_name: payload.affilName, pending: false,
-        created_at: new Date(payload.t).toISOString()
-      });
-      return !r2.error;
-    }
-    if (kind === 'proposals') {
-      var r3 = await _supabase.from('pub_applications').upsert({
-        id: payload.id, user_id: uid,
-        pub_type: payload.type, type_name: payload.typeName,
-        title: payload.title, field: payload.field,
-        intent: payload.intent, target_reader: payload.reader,
-        toc: payload.toc, manu_status: payload.manu,
-        budget: payload.budget, status: payload.status||'검토 중',
-        stage_idx: payload.stageIdx||0,
-        stages: payload.stages||[], pending: false,
-        created_at: new Date(payload.t).toISOString()
-      });
-      return !r3.error;
-    }
-    if (kind === 'points') {
-      var r4 = await _supabase.from('points_log').insert({
-        user_id: uid, amount: payload.amount,
-        reason: payload.reason,
-        created_at: new Date(payload.t||Date.now()).toISOString()
-      });
-      return !r4.error;
-    }
-    return true;
-  } catch(e) {
-    console.warn('[BADA] pushToSupabase error:', e);
-    return false;
-  }
-}
-
-/* ══ Supabase 인증 헬퍼 ══ */
-var _currentUser = null;
-async function getCurrentUser() {
-  if (!_supabase) return null;
-  if (_currentUser) return _currentUser;
-  var res = await _supabase.auth.getUser();
-  _currentUser = res.data && res.data.user ? res.data.user : null;
-  return _currentUser;
-}
-
-async function signInWithEmail(email, password) {
-  if (!_supabase) { toast('Supabase 미연결'); return false; }
-  var res = await _supabase.auth.signInWithPassword({email, password});
-  if (res.error) { toast('로그인 실패: ' + res.error.message); return false; }
-  _currentUser = res.data.user;
-  await syncProfileFromSupabase();
-  toast('로그인 완료 ✓');
-  return true;
-}
-
-async function signUpWithEmail(email, password, name) {
-  if (!_supabase) { toast('Supabase 미연결'); return false; }
-  var res = await _supabase.auth.signUp({
-    email, password,
-    options: { data: { name: name } }
-  });
-  if (res.error) { toast('가입 실패: ' + res.error.message); return false; }
-  toast('가입 완료! 이메일을 확인해 주세요 ✉️');
-  return true;
-}
-
-async function signInAnonymously() {
-  if (!_supabase) return;
-  var res = await _supabase.auth.signInAnonymously();
-  if (!res.error) _currentUser = res.data.user;
-}
-
-async function syncProfileFromSupabase() {
-  if (!_supabase || !_currentUser) return;
-  var res = await _supabase.from('profiles').select('*').eq('id', _currentUser.id).single();
-  if (res.data) {
-    session = session || {};
-    session.name      = res.data.name      || session.name;
-    session.role      = res.data.role      || session.role;
-    session.specialty = res.data.specialty || session.specialty;
-    session.affilType = res.data.affil_type;
-    session.affilName = res.data.affil_name;
-    session.crewDept  = res.data.crew_dept;
-    save(K.sess, session);
-  }
-}
-
-async function upsertProfile() {
-  if (!_supabase || !_currentUser || !session) return;
-  await _supabase.from('profiles').upsert({
-    id: _currentUser.id,
-    name: session.name||'',
-    email: session.email||'',
-    role: session.role||'독자',
-    specialty: session.specialty,
-    affil_type: session.affilType,
-    affil_name: session.affilName,
-    crew_dept: session.crewDept||'deck'
-  });
-}
-
-/* ══ addPts 훅 — Supabase 포인트 내역 전송 ══ */
-var _origAddPtsBase = addPts;
-/* addPts는 이미 여러 번 래핑됐으므로 outbox에 추가만 */
-var _origEnqueue = enqueue;
-enqueue = function(kind, payload) {
-  _origEnqueue(kind, payload);
-  /* 온라인이고 Supabase 활성화 시 즉시 동기화 시도 */
-  if (SUPABASE_ENABLED && navigator.onLine) {
-    setTimeout(flush, 800);
-  }
-};
-
-/* ══ 실시간 채팅 구독 ══ */
-var _chatSubscription = null;
-function subscribeRealtime(roomId, onMessage) {
-  if (!_supabase || !SUPABASE_ENABLED) return;
-  if (_chatSubscription) _supabase.removeChannel(_chatSubscription);
-  _chatSubscription = _supabase
-    .channel('chat-' + roomId)
-    .on('postgres_changes', {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'chat_messages',
-      filter: 'room_id=eq.' + roomId
-    }, function(payload) {
-      if (onMessage) onMessage(payload.new);
-    })
-    .subscribe();
-}
-
-function manualSync(){if(!SUPABASE_ENABLED){toast('Supabase 미설정 — LocalStorage 모드');return;}if(!navigator.onLine){toast('오프라인입니다');return;}flush();}
+async function flush(){if(!SYNC.enabled||!navigator.onLine)return;let ob=load(K.outbox,[]);if(!ob.length)return;$('sync-bar').classList.add('show');save(K.outbox,[]);$('sync-bar').classList.remove('show');}
+function manualSync(){if(!SYNC.enabled){toast('Supabase 미연동 (로컬 저장 중)');return;}if(!navigator.onLine){toast('오프라인입니다');return;}flush();}
 function updateOffline(){const off=!navigator.onLine;$('offline-bar').classList.toggle('show',off);}
 function exportData(){const data={session,feed:load(K.feed,[]),records:load(K.rec,[]),proposals:load(K.props,[])};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ocean-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('데이터 내보내기 완료');}
 window.addEventListener('online',()=>{updateOffline();toast('연결됨 — 동기화합니다');flush();});
