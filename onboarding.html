@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BADA STORY — 임직원 온보딩 / Employee Onboarding</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --deep:#012B4A;--sea:#006FA8;--sea2:#0094D4;--sea3:#00BCEE;
+  --bright:#C8EDFF;--brighter:#E4F6FF;--brightest:#F0FAFF;
+  --ink:#012033;--ink2:#1A4A6A;--mute:#4A7A9A;
+  --gold:#C8A24A;--gold2:#FFD96A;
+  --ok:#0A7A4A;--warn:#C97C2D;--rose:#A33145;--violet:#6B4FA0;
+  --card:#FFFFFF;--line:#9ECEE8;--radius:16px;
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
+  background:var(--brighter);color:var(--ink);line-height:1.6;}
+.wrap{display:flex;min-height:100vh;}
+
+/* ── Sidebar */
+#sidebar{
+  position:fixed;top:0;left:0;width:230px;height:100vh;
+  background:linear-gradient(180deg,var(--deep) 0%,#013558 100%);
+  overflow-y:auto;z-index:100;
+}
+#sidebar .logo{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
+#sidebar .logo .title{font-size:17px;font-weight:800;color:var(--gold2);font-family:'Georgia',serif;}
+#sidebar .logo .sub{font-size:10.5px;color:rgba(255,255,255,.45);margin-top:3px;}
+#sidebar nav a{
+  display:flex;align-items:center;gap:10px;padding:10px 18px;
+  font-size:12.5px;color:rgba(255,255,255,.65);text-decoration:none;
+  cursor:pointer;transition:.14s;border-left:3px solid transparent;
+}
+#sidebar nav a:hover{background:rgba(255,255,255,.06);color:#fff;}
+#sidebar nav a.active{background:rgba(0,148,212,.2);color:var(--gold2);border-left-color:var(--gold);font-weight:700;}
+#sidebar nav a .n{
+  width:21px;height:21px;border-radius:50%;background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;
+}
+#sidebar nav a.active .n{background:var(--gold);color:var(--deep);}
+#sidebar .prog-wrap{padding:14px 18px 22px;}
+#sidebar .prog-lbl{font-size:10.5px;color:rgba(255,255,255,.35);margin-bottom:7px;}
+#sidebar .prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;}
+#sidebar .prog-fill{height:100%;background:var(--gold);border-radius:4px;transition:.4s;width:0;}
+
+/* ── Main */
+#main{margin-left:230px;flex:1;}
+.section{min-height:100vh;padding:56px 52px;display:flex;gap:56px;align-items:center;}
+.section:nth-child(odd){background:var(--brighter);}
+.section:nth-child(even){background:var(--brightest);}
+.sec-text{flex:1;max-width:560px;}
+.sec-diagram{flex-shrink:0;display:flex;justify-content:center;align-items:center;}
+
+/* Hero */
+#s1{
+  background:linear-gradient(140deg,var(--deep) 0%,#014070 55%,#015A88 100%);
+  flex-direction:column;align-items:flex-start;justify-content:center;
+  position:relative;overflow:hidden;gap:0;
+}
+#s1::before{content:"⚓";position:absolute;right:-80px;bottom:-100px;font-size:360px;opacity:.04;pointer-events:none;}
+#s1 .sec-diagram{position:absolute;right:48px;top:50%;transform:translateY(-50%);}
+@media(max-width:1100px){#s1 .sec-diagram{display:none;}}
+
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(200,162,74,.15);border:1px solid rgba(200,162,74,.3);border-radius:999px;padding:5px 13px;font-size:11.5px;font-weight:700;color:var(--gold2);letter-spacing:.05em;margin-bottom:20px;}
+.hero-title{font-family:'Georgia',serif;font-size:50px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:10px;}
+.hero-en{font-size:18px;color:rgba(255,255,255,.45);margin-bottom:24px;}
+.hero-desc{font-size:16px;color:rgba(255,255,255,.78);line-height:1.7;max-width:520px;margin-bottom:36px;}
+.kpi-row{display:flex;gap:14px;flex-wrap:wrap;}
+.kpi{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 20px;text-align:center;}
+.kpi .kv{font-family:'Georgia',serif;font-size:26px;font-weight:700;color:var(--gold2);display:block;}
+.kpi .kl{font-size:10.5px;color:rgba(255,255,255,.45);margin-top:2px;}
+
+/* Section headers */
+.sec-num{font-size:10.5px;letter-spacing:.2em;font-weight:800;color:var(--sea3);margin-bottom:7px;}
+.sec-title{font-family:'Georgia',serif;font-size:30px;font-weight:700;color:var(--deep);margin-bottom:7px;line-height:1.25;}
+.sec-sub{font-size:14px;color:var(--mute);margin-bottom:28px;line-height:1.6;}
+.divider{width:48px;height:4px;background:var(--sea2);border-radius:4px;margin-bottom:28px;}
+
+/* Cards */
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.cc{background:var(--card);border-radius:14px;padding:18px;border:1px solid var(--line);transition:.18s;}
+.cc:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,100,160,.1);}
+.cc .ico{font-size:26px;margin-bottom:9px;}
+.cc h3{font-size:14px;font-weight:700;color:var(--deep);margin-bottom:6px;}
+.cc p{font-size:12.5px;color:var(--mute);line-height:1.55;}
+
+/* Role cards */
+.role-stack{display:flex;flex-direction:column;gap:12px;}
+.rc{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+.rc-head{padding:14px 18px;color:#fff;display:flex;align-items:center;gap:12px;}
+.rc-head .ri{font-size:24px;}
+.rc-head .rn{font-size:15px;font-weight:800;font-family:'Georgia',serif;}
+.rc-head .re{font-size:11px;opacity:.65;margin-left:auto;}
+.rc-body{padding:12px 18px;font-size:12.5px;color:var(--ink2);line-height:1.6;}
+.rc-body ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;}
+.rc-body ul li{background:var(--brighter);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--sea2);border:1px solid var(--line);}
+
+/* Book tiers */
+.tier-list{display:flex;flex-direction:column;gap:10px;}
+.tier{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+.tier-head{padding:14px 18px;color:#fff;display:flex;align-items:center;gap:12px;}
+.tier-head .ti{font-size:24px;}
+.tier-head .tn{font-size:15px;font-weight:800;font-family:'Georgia',serif;}
+.tier-head .te{font-size:10px;opacity:.6;margin-left:auto;letter-spacing:.08em;}
+.tier-specs{display:flex;gap:0;padding:10px 18px;flex-wrap:wrap;}
+.ts{padding:4px 14px;font-size:12px;border-right:1px solid var(--line);}
+.ts:last-child{border-right:none;}
+.ts .sk{color:var(--mute);font-size:10.5px;}
+.ts .sv{font-weight:700;color:var(--ink);}
+
+/* Points */
+.pts-list{display:flex;flex-direction:column;gap:7px;}
+.pi{display:flex;justify-content:space-between;align-items:center;background:var(--card);border-radius:10px;padding:9px 14px;border:1px solid var(--line);font-size:13px;}
+.pi .pl{color:var(--ink2);}
+.pi .pv{font-weight:800;color:var(--ok);font-size:14px;}
+
+/* Crew tabs */
+.crew-tabs{display:flex;gap:6px;margin-bottom:18px;}
+.crew-tab{padding:7px 15px;border-radius:999px;border:1.5px solid var(--line);background:transparent;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--mute);transition:.14s;}
+.crew-tab.on{background:var(--sea);color:#fff;border-color:var(--sea);}
+.crew-table{display:none;}
+.crew-table.on{display:block;}
+.crew-table table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.crew-table th{background:var(--deep);color:var(--gold2);padding:8px 12px;text-align:left;}
+.crew-table td{padding:7px 12px;border-bottom:1px solid var(--line);}
+.crew-table tr:nth-child(even) td{background:rgba(0,100,150,.03);}
+.crew-table tr:last-child td{background:rgba(200,162,74,.07);font-weight:700;}
+
+/* Pub types */
+.pub-list{display:flex;flex-direction:column;gap:10px;}
+.pub{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+.pub-head{padding:13px 18px;color:#fff;display:flex;align-items:center;gap:10px;}
+.pub-head .pi2{font-size:22px;}
+.pub-head .pn{font-size:15px;font-weight:800;font-family:'Georgia',serif;}
+.pub-head .pe{font-size:10px;opacity:.6;margin-left:auto;}
+.pub-specs{display:flex;flex-wrap:wrap;padding:10px 18px;gap:4px;}
+.ps{padding:3px 12px;background:var(--brighter);border-radius:999px;font-size:12px;border:1px solid var(--line);}
+.ps .pk{color:var(--mute);}
+.ps .pv2{font-weight:700;color:var(--ink);}
+
+/* Tech grid */
+.tech-list{display:flex;flex-direction:column;gap:9px;}
+.ti2{background:var(--card);border-radius:12px;padding:13px 16px;display:flex;gap:12px;border:1px solid var(--line);}
+.ti2 .tico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ti2 h4{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:2px;}
+.ti2 p{font-size:12px;color:var(--mute);line-height:1.4;}
+
+/* Quiz */
+.quiz-q{background:var(--card);border-radius:14px;padding:22px;margin-bottom:16px;border:1px solid var(--line);}
+.qnum{font-size:10.5px;font-weight:800;color:var(--mute);margin-bottom:7px;letter-spacing:.1em;}
+.qtxt{font-size:15px;font-weight:700;color:var(--deep);margin-bottom:14px;}
+.quiz-opts{display:flex;flex-direction:column;gap:7px;}
+.quiz-opt{padding:10px 15px;border-radius:10px;border:1.5px solid var(--line);background:var(--brighter);font-size:13px;color:var(--ink2);cursor:pointer;transition:.13s;text-align:left;}
+.quiz-opt:hover{border-color:var(--sea2);background:rgba(0,148,212,.05);}
+.quiz-opt.correct{background:#e4f7ef;border-color:var(--ok);color:var(--ok);font-weight:700;}
+.quiz-opt.wrong{background:#fff0f2;border-color:var(--rose);color:var(--rose);font-weight:700;}
+.quiz-opt.disabled{pointer-events:none;}
+.quiz-fb{display:none;margin-top:10px;padding:9px 13px;border-radius:8px;font-size:12.5px;line-height:1.5;}
+.quiz-fb.show{display:block;}
+.quiz-fb.ok{background:#e4f7ef;color:var(--ok);}
+.quiz-fb.ng{background:#fff0f2;color:var(--rose);}
+.quiz-score{background:linear-gradient(135deg,var(--deep),#013558);border-radius:14px;padding:26px;text-align:center;color:#fff;margin-top:20px;display:none;}
+.quiz-score.show{display:block;}
+.qs-ico{font-size:48px;margin-bottom:10px;}
+.qs-msg{font-size:20px;font-weight:800;color:var(--gold2);margin-bottom:6px;}
+.qs-sub{font-size:13px;color:rgba(255,255,255,.65);}
+.quiz-btn{margin-top:18px;background:var(--sea);color:#fff;border:none;border-radius:999px;padding:11px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+/* Completion */
+#s10{background:linear-gradient(140deg,var(--deep),#014070);flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.end-ico{font-size:60px;margin-bottom:18px;}
+.end-title{font-family:'Georgia',serif;font-size:34px;font-weight:700;color:var(--gold2);margin-bottom:10px;}
+.end-msg{font-size:15px;color:rgba(255,255,255,.72);max-width:480px;line-height:1.7;margin-bottom:28px;}
+.cert-box{background:rgba(255,255,255,.06);border:1px solid rgba(200,162,74,.3);border-radius:var(--radius);padding:22px 40px;display:inline-block;}
+.ct{font-size:11px;color:var(--gold);letter-spacing:.15em;margin-bottom:7px;}
+.cn{font-size:18px;font-weight:800;color:#fff;}
+.cd{font-size:11px;color:rgba(255,255,255,.35);margin-top:5px;}
+
+/* note box */
+.note{background:rgba(0,100,160,.06);border-left:4px solid var(--sea2);border-radius:0 10px 10px 0;padding:12px 16px;font-size:13px;color:var(--ink2);margin-top:16px;line-height:1.6;}
+.note strong{color:var(--sea);}
+
+/* Highlight */
+.hl{background:rgba(200,162,74,.14);padding:1px 7px;border-radius:4px;font-weight:700;color:var(--warn);}
+
+/* Mobile */
+#sidebar-toggle{display:none;}
+@media(max-width:960px){
+  #sidebar{transform:translateX(-100%);z-index:200;}
+  #sidebar.open{transform:translateX(0);}
+  #sidebar-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:300;width:38px;height:38px;background:var(--deep);border-radius:9px;align-items:center;justify-content:center;border:none;color:var(--gold2);font-size:17px;cursor:pointer;}
+  #main{margin-left:0;}
+  .section{flex-direction:column;padding:44px 22px;gap:32px;}
+  .sec-diagram{width:100%;}
+  #s1 .sec-diagram{position:relative;right:auto;top:auto;transform:none;display:flex;}
+}
+
+/* ── Language toggle ── */
+#lang-toggle{position:fixed;top:14px;right:16px;z-index:400;display:flex;gap:0;
+  background:rgba(1,43,74,.9);border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;padding:3px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  box-shadow:0 4px 14px rgba(0,30,60,.25);}
+#lang-toggle button{border:none;background:transparent;color:rgba(255,255,255,.6);
+  font-size:12px;font-weight:800;padding:5px 14px;border-radius:999px;cursor:pointer;
+  font-family:inherit;transition:.14s;letter-spacing:.02em;}
+#lang-toggle button.on{background:var(--gold);color:var(--deep);}
+.tg{color:var(--gold2);}
+@media(max-width:960px){#lang-toggle{top:14px;right:14px;}#lang-toggle button{padding:5px 11px;font-size:11.5px;}}
+</style>
+</head>
+<body>
+
+<button id="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<div id="lang-toggle">
+  <button id="lang-ko" class="on" onclick="setLang('ko')">한국어</button>
+  <button id="lang-en" onclick="setLang('en')">EN</button>
+</div>
+
+<aside id="sidebar">
+  <div class="logo">
+    <div class="title">⚓ BADA STORY</div>
+    <div class="sub" data-ko="해양 저자 플랫폼 · 임직원 온보딩" data-en="Maritime Author Platform · Employee Onboarding">해양 저자 플랫폼 · 임직원 온보딩</div>
+  </div>
+  <nav id="nav-list">
+    <a href="#s1" class="active"><span class="n">1</span><span data-ko="소개" data-en="Introduction">소개</span></a>
+    <a href="#s2"><span class="n">2</span><span data-ko="플랫폼 개념" data-en="Platform Concepts">플랫폼 개념</span></a>
+    <a href="#s3"><span class="n">3</span><span data-ko="사용자 역할" data-en="User Roles">사용자 역할</span></a>
+    <a href="#s4"><span class="n">4</span><span data-ko="도서 등급 체계" data-en="Book Tier System">도서 등급 체계</span></a>
+    <a href="#s5"><span class="n">5</span><span data-ko="포인트 시스템" data-en="Points System">포인트 시스템</span></a>
+    <a href="#s6"><span class="n">6</span><span data-ko="크루 등급 체계" data-en="Crew Rank System">크루 등급 체계</span></a>
+    <a href="#s7"><span class="n">7</span><span data-ko="출간 신청 마법사" data-en="Publication Wizard">출간 신청 마법사</span></a>
+    <a href="#s8"><span class="n">8</span><span data-ko="기술 아키텍처" data-en="Technical Architecture">기술 아키텍처</span></a>
+    <a href="#s9"><span class="n">9</span><span data-ko="이해도 점검" data-en="Knowledge Check">이해도 점검</span></a>
+    <a href="#s10"><span class="n">✓</span><span data-ko="수료" data-en="Completion">수료</span></a>
+  </nav>
+  <div class="prog-wrap">
+    <div class="prog-lbl" data-ko="학습 진행률" data-en="Learning Progress">학습 진행률</div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+</aside>
+
+<main id="main">
+
+<!-- ══ S1 INTRODUCTION ══ -->
+<section class="section" id="s1">
+  <div class="sec-text">
+    <div class="hero-tag" data-ko="📚 에이콘출판사 | 플랫폼 개요" data-en="📚 Acorn Publishing | Platform Overview">📚 에이콘출판사 | 플랫폼 개요</div>
+    <div class="hero-title">BADA STORY<br>바다이야기</div>
+    <div class="hero-en" data-ko="해양·수산 전문 저자 플랫폼" data-en="Maritime &amp; Fisheries Author Platform">해양·수산 전문 저자 플랫폼</div>
+    <div class="hero-desc" data-html="1" data-ko="해양·수산 분야 전문 저자와 독자를 연결하는 <strong class='tg'>오프라인 우선(PWA) 플랫폼</strong>입니다. 이 온보딩 가이드를 통해 플랫폼의 개념, 구조, 핵심 기능을 학습합니다." data-en="An <strong class='tg'>offline-first PWA platform</strong> connecting maritime and fisheries expert authors with readers. Learn the platform's concepts, structure, and key features through this onboarding guide.">해양·수산 분야 전문 저자와 독자를 연결하는 <strong class="tg">오프라인 우선(PWA) 플랫폼</strong>입니다. 이 온보딩 가이드를 통해 플랫폼의 개념, 구조, 핵심 기능을 학습합니다.</div>
+    <div class="kpi-row">
+      <div class="kpi"><span class="kv">3</span><span class="kl" data-ko="사용자 역할" data-en="User Roles">사용자 역할</span></div>
+      <div class="kpi"><span class="kv">3</span><span class="kl" data-ko="도서 등급" data-en="Book Tiers">도서 등급</span></div>
+      <div class="kpi"><span class="kv">8</span><span class="kl" data-ko="크루 레벨" data-en="Crew Levels">크루 레벨</span></div>
+      <div class="kpi"><span class="kv">15+</span><span class="kl" data-ko="화면" data-en="Screens">화면</span></div>
+      <div class="kpi"><span class="kv">PWA</span><span class="kl" data-ko="오프라인 우선" data-en="Offline-First">오프라인 우선</span></div>
+    </div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="300" height="380" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity=".15"/></filter></defs>
+      <ellipse cx="150" cy="190" rx="62" ry="62" fill="#012B4A" stroke="#FFD96A" stroke-width="2" filter="url(#sh)"/>
+      <text x="150" y="183" text-anchor="middle" fill="#FFD96A" font-size="22">⚓</text>
+      <text x="150" y="201" text-anchor="middle" fill="#FFD96A" font-size="10" font-weight="bold">BADA STORY</text>
+      <g>
+        <circle cx="150" cy="48" r="34" fill="#006FA8" filter="url(#sh)"/>
+        <text x="150" y="44" text-anchor="middle" fill="#fff" font-size="16">✍️</text>
+        <text x="150" y="58" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" data-ko="저자" data-en="Author">저자</text>
+        <line x1="150" y1="82" x2="150" y2="128" stroke="#00BCEE" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </g>
+      <g>
+        <circle cx="270" cy="130" r="30" fill="#0A7A4A" filter="url(#sh)"/>
+        <text x="270" y="126" text-anchor="middle" fill="#fff" font-size="14">🌱</text>
+        <text x="270" y="139" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" data-ko="후보" data-en="Candidate">후보</text>
+        <line x1="242" y1="148" x2="196" y2="176" stroke="#00BCEE" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </g>
+      <g>
+        <circle cx="270" cy="252" r="30" fill="#6B4FA0" filter="url(#sh)"/>
+        <text x="270" y="248" text-anchor="middle" fill="#fff" font-size="14">📖</text>
+        <text x="270" y="261" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" data-ko="독자" data-en="Reader">독자</text>
+        <line x1="242" y1="234" x2="196" y2="206" stroke="#00BCEE" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </g>
+      <g>
+        <circle cx="150" cy="332" r="30" fill="#C97C2D" filter="url(#sh)"/>
+        <text x="150" y="328" text-anchor="middle" fill="#fff" font-size="14">📗</text>
+        <text x="150" y="341" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" data-ko="출판" data-en="Publish">출판</text>
+        <line x1="150" y1="302" x2="150" y2="252" stroke="#00BCEE" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </g>
+      <g>
+        <circle cx="30" cy="252" r="30" fill="#013558" filter="url(#sh)"/>
+        <text x="30" y="248" text-anchor="middle" fill="#FFD96A" font-size="14">🪙</text>
+        <text x="30" y="261" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" data-ko="포인트" data-en="Points">포인트</text>
+        <line x1="58" y1="234" x2="104" y2="206" stroke="#00BCEE" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </g>
+      <g>
+        <circle cx="30" cy="130" r="30" fill="#013558" filter="url(#sh)"/>
+        <text x="30" y="126" text-anchor="middle" fill="#FFD96A" font-size="14">⚓</text>
+        <text x="30" y="139" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold" data-ko="크루" data-en="Crew">크루</text>
+        <line x1="58" y1="148" x2="104" y2="176" stroke="#00BCEE" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S2 PLATFORM CONCEPTS ══ -->
+<section class="section" id="s2">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 02</div>
+    <div class="sec-title" data-ko="플랫폼 개념" data-en="Platform Concepts">플랫폼 개념</div>
+    <div class="sec-sub" data-ko="바다이야기가 무엇을 해결하며 왜 만들어졌는지 이해합니다." data-en="Understanding what BADA STORY solves and why it was built.">바다이야기가 무엇을 해결하며 왜 만들어졌는지 이해합니다.</div>
+    <div class="divider"></div>
+    <div class="concept-grid">
+      <div class="cc"><div class="ico">🌊</div><h3 data-ko="해양 특화" data-en="Maritime-Focused">해양 특화</h3><p data-ko="선원·연구자·수산 전문가가 자신의 전문성을 출판하고 독자와 연결되도록 설계했습니다." data-en="Designed for mariners, researchers, and fisheries experts to publish their expertise and connect with readers.">선원·연구자·수산 전문가가 자신의 전문성을 출판하고 독자와 연결되도록 설계했습니다.</p></div>
+      <div class="cc"><div class="ico">📡</div><h3 data-ko="오프라인 우선" data-en="Offline-First">오프라인 우선</h3><p data-ko="인터넷이 없는 바다 위에서도 완전히 작동합니다. 이야기는 로컬에 저장되고 입항 시 자동 동기화됩니다." data-en="Works fully at sea with no internet. Stories are saved locally and auto-synced when the ship reaches port.">인터넷이 없는 바다 위에서도 완전히 작동합니다. 이야기는 로컬에 저장되고 입항 시 자동 동기화됩니다.</p></div>
+      <div class="cc"><div class="ico">📚</div><h3 data-ko="출판 파이프라인" data-en="Publishing Pipeline">출판 파이프라인</h3><p data-ko="이야기도서 → 이야기선정 → 출간도서. 독자 반응이 편집 선정을 이끕니다." data-en="Story Book → Selected Story → Published Book. Reader engagement drives editorial selection.">이야기도서 → 이야기선정 → 출간도서. 독자 반응이 편집 선정을 이끕니다.</p></div>
+      <div class="cc"><div class="ico">🪙</div><h3 data-ko="포인트 경제" data-en="Points Economy">포인트 경제</h3><p data-ko="모든 활동이 포인트를 적립합니다. 포인트로 도서를 교환하거나 할인받고 크루 등급을 올립니다." data-en="Every activity earns points. Use points to exchange books, get discounts, or climb crew ranks.">모든 활동이 포인트를 적립합니다. 포인트로 도서를 교환하거나 할인받고 크루 등급을 올립니다.</p></div>
+      <div class="cc"><div class="ico">⚓</div><h3 data-ko="크루 커뮤니티" data-en="Crew Community">크루 커뮤니티</h3><p data-ko="선박 승무원을 모티프로 한 3개 부서 × 8단계 등급제. 최고 등급은 에이콘 공식 협력 저자입니다." data-en="A ship crew-inspired 3-dept × 8-level rank system. Top rank = Acorn official collaborative author.">선박 승무원을 모티프로 한 3개 부서 × 8단계 등급제. 최고 등급은 에이콘 공식 협력 저자입니다.</p></div>
+      <div class="cc"><div class="ico">🔗</div><h3 data-ko="퍼블리셔 연동" data-en="Publisher-On Link">퍼블리셔 연동</h3><p data-ko="저자가 에이콘 내부 시스템과 계정을 연동해 원고 진행과 인세 대시보드를 실시간으로 확인합니다." data-en="Authors link their account to Acorn's internal system for real-time manuscript tracking and royalty dashboards.">저자가 에이콘 내부 시스템과 계정을 연동해 원고 진행과 인세 대시보드를 실시간으로 확인합니다.</p></div>
+    </div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="260" height="360" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="sh2"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity=".12"/></filter></defs>
+      <text x="130" y="22" text-anchor="middle" fill="#006FA8" font-size="11" font-weight="bold" data-ko="오프라인 우선 동기화 흐름" data-en="Offline-First Sync Flow">오프라인 우선 동기화 흐름</text>
+      <g filter="url(#sh2)">
+        <rect x="30" y="35" width="200" height="52" rx="12" fill="#012B4A"/>
+        <text x="130" y="56" text-anchor="middle" fill="#FFD96A" font-size="19">✍️</text>
+        <text x="130" y="73" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="사용자 활동" data-en="User Action">사용자 활동</text>
+        <text x="130" y="84" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" data-ko="이야기 게시 · 기록 저장 · 제안 제출" data-en="Post story · Save record · Submit proposal">이야기 게시 · 기록 저장 · 제안 제출</text>
+      </g>
+      <path d="M130 87 L130 107" stroke="#00BCEE" stroke-width="2" marker-end="url(#arr)"/>
+      <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00BCEE"/></marker></defs>
+      <g filter="url(#sh2)">
+        <rect x="30" y="107" width="200" height="52" rx="12" fill="#C97C2D"/>
+        <text x="130" y="128" text-anchor="middle" fill="#fff" font-size="19">💾</text>
+        <text x="130" y="145" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="로컬 아웃박스" data-en="LocalStorage Outbox">로컬 아웃박스</text>
+        <text x="130" y="155" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9" data-ko="즉시 저장 · 인터넷 불필요" data-en="Instant save · No internet needed">즉시 저장 · 인터넷 불필요</text>
+      </g>
+      <path d="M130 159 L130 179" stroke="#00BCEE" stroke-width="2" marker-end="url(#arr)"/>
+      <g filter="url(#sh2)">
+        <rect x="30" y="179" width="200" height="52" rx="12" fill="#0A7A4A"/>
+        <text x="130" y="200" text-anchor="middle" fill="#fff" font-size="19">📡</text>
+        <text x="130" y="217" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="연결 감지" data-en="Connection Detected">연결 감지</text>
+        <text x="130" y="227" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9" data-ko="입항 · WiFi · 4G LTE" data-en="Port arrival · WiFi · 4G LTE">입항 · WiFi · 4G LTE</text>
+      </g>
+      <path d="M130 231 L130 251" stroke="#00BCEE" stroke-width="2" marker-end="url(#arr)"/>
+      <g filter="url(#sh2)">
+        <rect x="30" y="251" width="200" height="52" rx="12" fill="#006FA8"/>
+        <text x="130" y="272" text-anchor="middle" fill="#fff" font-size="19">☁️</text>
+        <text x="130" y="289" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="Supabase 자동 동기화" data-en="Supabase Auto-Sync">Supabase 자동 동기화</text>
+        <text x="130" y="299" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9" data-ko="아웃박스 → PostgreSQL · 전체 동기화" data-en="Outbox → PostgreSQL · All data synced">아웃박스 → PostgreSQL · 전체 동기화</text>
+      </g>
+      <text x="130" y="345" text-anchor="middle" fill="#0A7A4A" font-size="10" font-weight="bold" data-ko="✓ 데이터 보존, 독자에게 게시물 노출" data-en="✓ Data preserved, readers can see posts">✓ 데이터 보존, 독자에게 게시물 노출</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S3 USER ROLES ══ -->
+<section class="section" id="s3">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 03</div>
+    <div class="sec-title" data-ko="사용자 역할" data-en="User Roles">사용자 역할</div>
+    <div class="sec-sub" data-ko="서로 다른 기능 권한을 가진 세 가지 역할. 역할은 프로필 설정에서 언제든 변경할 수 있습니다." data-en="Three distinct roles with different feature access. Roles can be changed anytime in Profile settings.">서로 다른 기능 권한을 가진 세 가지 역할. 역할은 프로필 설정에서 언제든 변경할 수 있습니다.</div>
+    <div class="divider"></div>
+    <div class="role-stack">
+      <div class="rc">
+        <div class="rc-head" style="background:linear-gradient(90deg,#012B4A,#006FA8)">
+          <span class="ri">✍️</span><span class="rn" data-ko="저자" data-en="Author">저자</span><span class="re" data-ko="Author" data-en="저자">Author</span>
+        </div>
+        <div class="rc-body"><span data-ko="출간 경험이 있거나(출판사 무관) 해양 원고를 집필 중인 분." data-en="Published (any publisher) or currently writing a maritime manuscript.">출간 경험이 있거나(출판사 무관) 해양 원고를 집필 중인 분.</span>
+          <ul><li data-ko="인세 대시보드" data-en="Royalty dashboard">인세 대시보드</li><li data-ko="원고 단계 추적" data-en="Manuscript stage tracking">원고 단계 추적</li><li data-ko="편집자 직접 채팅" data-en="Editor direct chat">편집자 직접 채팅</li><li data-ko="제안 제출" data-en="Proposal submission">제안 제출</li><li data-ko="퍼블리셔 연동" data-en="Publisher-On link">퍼블리셔 연동</li></ul>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-head" style="background:linear-gradient(90deg,#0F2A1A,#0A7A4A)">
+          <span class="ri">🌱</span><span class="rn" data-ko="저자후보" data-en="Author Candidate">저자후보</span><span class="re" data-ko="Author Candidate" data-en="저자후보">Author Candidate</span>
+        </div>
+        <div class="rc-body"><span data-ko="출간 경험 없이 집필을 준비하는 해양 전문가." data-en="Maritime expert preparing to write without prior publication.">출간 경험 없이 집필을 준비하는 해양 전문가.</span>
+          <ul><li data-ko="이야기 연재" data-en="Story serialization">이야기 연재</li><li data-ko="이야기선정 승격" data-en="Selected story promotion">이야기선정 승격</li><li data-ko="제안 제출" data-en="Proposal submission">제안 제출</li><li data-ko="현장 기록 → 초고 전환" data-en="Field record → draft conversion">현장 기록 → 초고 전환</li></ul>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-head" style="background:linear-gradient(90deg,#1A0C36,#6B4FA0)">
+          <span class="ri">📖</span><span class="rn" data-ko="독자" data-en="Reader">독자</span><span class="re" data-ko="Reader" data-en="독자">Reader</span>
+        </div>
+        <div class="rc-body"><span data-ko="해양·수산 주제에 관심 있는 일반 독자." data-en="General readers interested in maritime and fisheries topics.">해양·수산 주제에 관심 있는 일반 독자.</span>
+          <ul><li data-ko="무료 이야기 열람" data-en="Free story reading">무료 이야기 열람</li><li data-ko="포인트 할인 구매" data-en="Point-discounted book purchase">포인트 할인 구매</li><li data-ko="저자 팔로우 & 도서 토론" data-en="Author follow & book discussion">저자 팔로우 & 도서 토론</li><li data-ko="게임 포인트 적립" data-en="Game points accumulation">게임 포인트 적립</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="210" height="390" rx="24" fill="#1A1A2E" stroke="#333" stroke-width="1.5"/>
+      <rect x="12" y="12" width="196" height="376" rx="20" fill="#012B4A"/>
+      <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
+      <text x="110" y="48" text-anchor="middle" fill="#FFD96A" font-size="20">⚓</text>
+      <text x="110" y="64" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="바다이야기에 오신 것을 환영합니다" data-en="Welcome to BADA STORY">바다이야기에 오신 것을 환영합니다</text>
+      <text x="110" y="76" text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="8" data-ko="역할을 선택해 시작하세요" data-en="Select your role to get started">역할을 선택해 시작하세요</text>
+      <g>
+        <rect x="22" y="88" width="176" height="54" rx="10" fill="#006FA8"/>
+        <text x="40" y="110" fill="#fff" font-size="18">✍️</text>
+        <text x="62" y="108" fill="#fff" font-size="11" font-weight="bold" data-ko="저자" data-en="Author">저자</text>
+        <text x="62" y="120" fill="rgba(255,255,255,.65)" font-size="8" data-ko="출간 경험 또는 집필 중" data-en="Published or writing a book">출간 경험 또는 집필 중</text>
+        <text x="62" y="132" fill="rgba(255,255,255,.45)" font-size="7" data-ko="출판사 무관" data-en="Any publisher accepted">출판사 무관</text>
+      </g>
+      <g>
+        <rect x="22" y="148" width="176" height="54" rx="10" fill="#0A7A4A"/>
+        <text x="40" y="170" fill="#fff" font-size="18">🌱</text>
+        <text x="62" y="168" fill="#fff" font-size="11" font-weight="bold" data-ko="저자후보" data-en="Author Candidate">저자후보</text>
+        <text x="62" y="180" fill="rgba(255,255,255,.65)" font-size="8" data-ko="출간 경험 없이 집필 준비" data-en="Preparing to write, no publication">출간 경험 없이 집필 준비</text>
+        <text x="62" y="192" fill="rgba(255,255,255,.45)" font-size="7" data-ko="이야기 연재 시작" data-en="Start serializing stories">이야기 연재 시작</text>
+      </g>
+      <g>
+        <rect x="22" y="208" width="176" height="54" rx="10" fill="#6B4FA0"/>
+        <text x="40" y="230" fill="#fff" font-size="18">📖</text>
+        <text x="62" y="228" fill="#fff" font-size="11" font-weight="bold" data-ko="독자" data-en="Reader">독자</text>
+        <text x="62" y="240" fill="rgba(255,255,255,.65)" font-size="8" data-ko="해양·수산 관심" data-en="Maritime & fisheries interest">해양·수산 관심</text>
+        <text x="62" y="252" fill="rgba(255,255,255,.45)" font-size="7" data-ko="이야기 읽고 포인트 적립" data-en="Read stories, earn points">이야기 읽고 포인트 적립</text>
+      </g>
+      <text x="22" y="282" fill="rgba(255,255,255,.5)" font-size="8" data-ko="이름" data-en="Name">이름</text>
+      <rect x="22" y="287" width="176" height="26" rx="7" fill="rgba(255,255,255,.08)" stroke="#00BCEE" stroke-width="1"/>
+      <text x="30" y="304" fill="rgba(255,255,255,.3)" font-size="9" data-ko="이름 입력..." data-en="Your full name...">이름 입력...</text>
+      <rect x="22" y="324" width="176" height="32" rx="10" fill="#FFD96A"/>
+      <text x="110" y="344" text-anchor="middle" fill="#012B4A" font-size="11" font-weight="bold" data-ko="시작하기 ▶" data-en="Get Started ▶">시작하기 ▶</text>
+      <rect x="12" y="365" width="196" height="23" rx="0" fill="rgba(255,255,255,.04)"/>
+      <text x="110" y="381" text-anchor="middle" fill="rgba(255,255,255,.3)" font-size="9">🏠  📚  📍  📸  💬</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S4 BOOK TIER SYSTEM ══ -->
+<section class="section" id="s4">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 04</div>
+    <div class="sec-title" data-ko="도서 등급 체계" data-en="Book Tier System">도서 등급 체계</div>
+    <div class="sec-sub" data-ko="세 등급이 독자 반응으로 이어지는 연속적 출판 파이프라인을 형성합니다." data-en="Three tiers form a continuous publishing pipeline driven by reader engagement.">세 등급이 독자 반응으로 이어지는 연속적 출판 파이프라인을 형성합니다.</div>
+    <div class="divider"></div>
+    <div class="tier-list">
+      <div class="tier">
+        <div class="tier-head" style="background:linear-gradient(90deg,#012B4A,#014070)">
+          <span class="ti">📚</span><span class="tn" data-ko="출간도서" data-en="Published Book">출간도서</span><span class="te" data-ko="Published Book" data-en="출간도서">Published Book</span>
+        </div>
+        <div class="tier-specs">
+          <div class="ts"><div class="sk" data-ko="인세" data-en="Royalty">인세</div><div class="sv">8–10%</div></div>
+          <div class="ts"><div class="sk" data-ko="유통" data-en="Distribution">유통</div><div class="sv" data-ko="서점 + Amazon KDP" data-en="Bookstores + Amazon KDP">서점 + Amazon KDP</div></div>
+          <div class="ts"><div class="sk" data-ko="저자 비용" data-en="Author cost">저자 비용</div><div class="sv" data-ko="없음" data-en="None">없음</div></div>
+          <div class="ts"><div class="sk" data-ko="정산" data-en="Settlement">정산</div><div class="sv" data-ko="분기별" data-en="Quarterly">분기별</div></div>
+        </div>
+      </div>
+      <div class="tier">
+        <div class="tier-head" style="background:linear-gradient(90deg,#2D1A00,#7A3A00)">
+          <span class="ti">⭐</span><span class="tn" data-ko="이야기선정" data-en="Selected Story">이야기선정</span><span class="te" data-ko="Selected Story" data-en="이야기선정">Selected Story</span>
+        </div>
+        <div class="tier-specs">
+          <div class="ts"><div class="sk" data-ko="저자 수익" data-en="Author revenue">저자 수익</div><div class="sv" style="color:#C97C2D">70%</div></div>
+          <div class="ts"><div class="sk" data-ko="플랫폼 수수료" data-en="Platform fee">플랫폼 수수료</div><div class="sv">30%</div></div>
+          <div class="ts"><div class="sk" data-ko="가격" data-en="Price">가격</div><div class="sv" data-ko="저자 설정 ₩1천–₩5만" data-en="Author-set ₩1K–₩50K">저자 설정 ₩1천–₩5만</div></div>
+          <div class="ts"><div class="sk" data-ko="유통" data-en="Distribution">유통</div><div class="sv" data-ko="플랫폼 전용" data-en="Platform only">플랫폼 전용</div></div>
+        </div>
+      </div>
+      <div class="tier">
+        <div class="tier-head" style="background:linear-gradient(90deg,#0A2010,#1A5A30)">
+          <span class="ti">✍️</span><span class="tn" data-ko="이야기도서" data-en="Story Book">이야기도서</span><span class="te" data-ko="Story Book" data-en="이야기도서">Story Book</span>
+        </div>
+        <div class="tier-specs">
+          <div class="ts"><div class="sk" data-ko="이용" data-en="Access">이용</div><div class="sv" data-ko="전 독자 무료" data-en="Free to all readers">전 독자 무료</div></div>
+          <div class="ts"><div class="sk" data-ko="회차당" data-en="Per episode">회차당</div><div class="sv" data-ko="+25P 적립" data-en="+25P earned">+25P 적립</div></div>
+          <div class="ts"><div class="sk" data-ko="승격" data-en="Promotion">승격</div><div class="sv" data-ko="기준 충족 → 선정" data-en="Meet criteria → Selected">기준 충족 → 선정</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="note" data-html="1" data-ko="<strong>선정 기준 (이야기 → 선정):</strong> ❤️ 좋아요 50+ · 📖 5회차+ · ⭐ 평점 4.0+ · ✍️ 편집팀 심사 · 💰 저자 가격 설정" data-en="<strong>Selection Criteria (Story → Selected):</strong> ❤️ 50+ likes · 📖 5+ episodes · ⭐ Rating 4.0+ · ✍️ Editorial team review · 💰 Author sets price"><strong>선정 기준 (이야기 → 선정):</strong> ❤️ 좋아요 50+ · 📖 5회차+ · ⭐ 평점 4.0+ · ✍️ 편집팀 심사 · 💰 저자 가격 설정</div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="210" height="390" rx="24" fill="#1A1A2E" stroke="#333" stroke-width="1.5"/>
+      <rect x="12" y="12" width="196" height="376" rx="20" fill="#E4F6FF"/>
+      <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
+      <rect x="12" y="12" width="196" height="32" rx="0" fill="#012B4A"/>
+      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold">⚓ BADA STORY</text>
+      <text x="170" y="32" fill="rgba(255,255,255,.6)" font-size="10">🔍</text>
+      <rect x="12" y="44" width="196" height="22" fill="#C8EDFF"/>
+      <rect x="15" y="47" width="34" height="16" rx="8" fill="#006FA8"/>
+      <text x="32" y="58" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" data-ko="전체" data-en="All">전체</text>
+      <text x="63" y="58" text-anchor="middle" fill="#006FA8" font-size="7.5" data-ko="📚 출간" data-en="📚 Published">📚 출간</text>
+      <text x="105" y="58" text-anchor="middle" fill="#C97C2D" font-size="7.5" data-ko="⭐ 선정" data-en="⭐ Selected">⭐ 선정</text>
+      <text x="147" y="58" text-anchor="middle" fill="#0A7A4A" font-size="7.5" data-ko="✍️ 이야기" data-en="✍️ Story">✍️ 이야기</text>
+      <g>
+        <rect x="17" y="70" width="88" height="115" rx="10" fill="#fff" filter="url(#sh2)"/>
+        <rect x="17" y="70" width="88" height="4" rx="4" fill="#006FA8"/>
+        <rect x="17" y="74" width="88" height="52" rx="0" fill="#012B4A"/>
+        <text x="61" y="106" text-anchor="middle" fill="#FFD96A" font-size="26">🚢</text>
+        <rect x="20" y="78" width="40" height="12" rx="6" fill="#014070"/>
+        <text x="40" y="87" text-anchor="middle" fill="#60B8FF" font-size="6.5" font-weight="bold" data-ko="📚 출간" data-en="📚 Published">📚 출간</text>
+        <text x="61" y="140" text-anchor="middle" fill="#012B4A" font-size="7.5" font-weight="bold" data-ko="항해일지" data-en="Voyage Logbook">항해일지</text>
+        <text x="61" y="150" text-anchor="middle" fill="#4A7A9A" font-size="6.5" data-ko="AI &amp; 항해" data-en="AI &amp; Navigation">AI &amp; 항해</text>
+        <text x="61" y="162" text-anchor="middle" fill="#006FA8" font-size="9" font-weight="bold">₩26,000</text>
+        <rect x="20" y="170" width="68" height="12" rx="6" fill="#006FA8"/>
+        <text x="54" y="179" text-anchor="middle" fill="#fff" font-size="7" font-weight="bold" data-ko="구매" data-en="Purchase">구매</text>
+      </g>
+      <g>
+        <rect x="114" y="70" width="88" height="115" rx="10" fill="#fff" filter="url(#sh2)"/>
+        <rect x="114" y="70" width="88" height="4" rx="4" fill="#C97C2D"/>
+        <rect x="114" y="74" width="88" height="52" rx="0" fill="#2D1A00"/>
+        <text x="158" y="106" text-anchor="middle" fill="#FFB347" font-size="26">🤿</text>
+        <rect x="117" y="78" width="42" height="12" rx="6" fill="#7A3A00"/>
+        <text x="138" y="87" text-anchor="middle" fill="#FFB347" font-size="6.5" font-weight="bold" data-ko="⭐ 선정" data-en="⭐ Selected">⭐ 선정</text>
+        <text x="158" y="140" text-anchor="middle" fill="#012B4A" font-size="7.5" font-weight="bold" data-ko="해녀" data-en="Sea Woman">해녀</text>
+        <text x="158" y="150" text-anchor="middle" fill="#4A7A9A" font-size="6.5" data-ko="해양 인문" data-en="Maritime Humanities">해양 인문</text>
+        <text x="158" y="162" text-anchor="middle" fill="#C97C2D" font-size="9" font-weight="bold">₩8,900</text>
+        <rect x="117" y="170" width="68" height="12" rx="6" fill="#C97C2D"/>
+        <text x="151" y="179" text-anchor="middle" fill="#fff" font-size="7" font-weight="bold" data-ko="플랫폼 구매" data-en="Buy on Platform">플랫폼 구매</text>
+      </g>
+      <g>
+        <rect x="17" y="192" width="88" height="115" rx="10" fill="#fff" filter="url(#sh2)"/>
+        <rect x="17" y="192" width="88" height="4" rx="4" fill="#0A7A4A"/>
+        <rect x="17" y="196" width="88" height="52" rx="0" fill="#0A2010"/>
+        <text x="61" y="228" text-anchor="middle" fill="#52D68A" font-size="26">🎣</text>
+        <rect x="20" y="200" width="38" height="12" rx="6" fill="#1A5A30"/>
+        <text x="39" y="209" text-anchor="middle" fill="#52D68A" font-size="6.5" font-weight="bold" data-ko="✍️ 이야기" data-en="✍️ Story">✍️ 이야기</text>
+        <text x="61" y="262" text-anchor="middle" fill="#012B4A" font-size="7.5" font-weight="bold" data-ko="어촌의 봄" data-en="Spring in the Village">어촌의 봄</text>
+        <text x="61" y="272" text-anchor="middle" fill="#4A7A9A" font-size="6.5" data-ko="어업·에세이" data-en="Fishing·Essay">어업·에세이</text>
+        <text x="61" y="284" text-anchor="middle" fill="#0A7A4A" font-size="9" font-weight="bold" data-ko="🆓 무료" data-en="🆓 Free">🆓 무료</text>
+        <rect x="20" y="291" width="68" height="12" rx="6" fill="#0A7A4A"/>
+        <text x="54" y="300" text-anchor="middle" fill="#fff" font-size="7" font-weight="bold" data-ko="무료 읽기" data-en="Read Free">무료 읽기</text>
+      </g>
+      <g>
+        <rect x="114" y="192" width="88" height="115" rx="10" fill="#fff" filter="url(#sh2)"/>
+        <rect x="114" y="192" width="88" height="52" rx="10" fill="#E4F6FF"/>
+        <text x="158" y="224" text-anchor="middle" fill="#9ECEE8" font-size="26">⚙️</text>
+        <rect x="117" y="200" width="42" height="12" rx="6" fill="#C8EDFF"/>
+        <text x="138" y="209" text-anchor="middle" fill="#006FA8" font-size="6.5" font-weight="bold" data-ko="🖊️ 집필중" data-en="🖊️ Writing">🖊️ 집필중</text>
+        <text x="158" y="262" text-anchor="middle" fill="#012B4A" font-size="7" font-weight="bold" data-ko="해양 DX 가이드" data-en="Maritime DX Guide">해양 DX 가이드</text>
+        <text x="158" y="272" text-anchor="middle" fill="#4A7A9A" font-size="6.5" data-ko="해운·기술" data-en="Shipping·Tech">해운·기술</text>
+        <rect x="117" y="283" width="68" height="12" rx="6" fill="#E4F6FF" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="151" y="292" text-anchor="middle" fill="#006FA8" font-size="7" font-weight="bold" data-ko="🔔 알림 신청" data-en="🔔 Notify Me">🔔 알림 신청</text>
+      </g>
+      <rect x="12" y="364" width="196" height="24" fill="#fff" rx="0"/>
+      <text x="110" y="380" text-anchor="middle" fill="#006FA8" font-size="9">🏠  📚  📍  📸  💬</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S5 POINTS SYSTEM ══ -->
+<section class="section" id="s5">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 05</div>
+    <div class="sec-title" data-ko="포인트 시스템" data-en="Points System">포인트 시스템</div>
+    <div class="sec-sub" data-ko="모든 활동이 포인트를 적립합니다. 도서 교환, 구매 할인, 크루 등급 상승에 사용합니다." data-en="Every activity earns points. Use them for book exchange, purchase discounts, and crew rank progression.">모든 활동이 포인트를 적립합니다. 도서 교환, 구매 할인, 크루 등급 상승에 사용합니다.</div>
+    <div class="divider"></div>
+    <div class="pts-list">
+      <div class="pi"><span class="pl" data-ko="✍️ 이야기 게시" data-en="✍️ Post a story">✍️ 이야기 게시</span><span class="pv">+20P</span></div>
+      <div class="pi"><span class="pl" data-ko="📩 출판사 제안 게시" data-en="📩 Publisher proposal post">📩 출판사 제안 게시</span><span class="pv">+30P</span></div>
+      <div class="pi"><span class="pl" data-ko="📗 출간 제안 제출" data-en="📗 Submit book proposal">📗 출간 제안 제출</span><span class="pv">+50P</span></div>
+      <div class="pi"><span class="pl" data-ko="📡 회차 발행 (회차당)" data-en="📡 Publish episode (per ep.)">📡 회차 발행 (회차당)</span><span class="pv">+25P</span></div>
+      <div class="pi"><span class="pl" data-ko="📸 현장 기록 저장" data-en="📸 Save field record">📸 현장 기록 저장</span><span class="pv">+10P</span></div>
+      <div class="pi"><span class="pl" data-ko="💬 댓글 작성" data-en="💬 Write a comment">💬 댓글 작성</span><span class="pv">+5P</span></div>
+      <div class="pi"><span class="pl" data-ko="🎣 낚시왕 게임" data-en="🎣 Fishing King game">🎣 낚시왕 게임</span><span class="pv" data-ko="점수 ÷ 2" data-en="Score ÷ 2">점수 ÷ 2</span></div>
+      <div class="pi"><span class="pl" data-ko="🎰 오션 카지노 게임" data-en="🎰 Ocean Casino game">🎰 오션 카지노 게임</span><span class="pv" data-ko="점수 ÷ 3" data-en="Score ÷ 3">점수 ÷ 3</span></div>
+      <div class="pi"><span class="pl" data-ko="🔔 매일 로그인" data-en="🔔 Daily login">🔔 매일 로그인</span><span class="pv">+3P</span></div>
+      <div class="pi" style="border-color:var(--gold);"><span class="pl" data-ko="🔗 출판사 계정 연동 (1회)" data-en="🔗 Publisher account link (1x)">🔗 출판사 계정 연동 (1회)</span><span class="pv">+100P</span></div>
+    </div>
+    <div class="note" data-html="1" data-ko="<strong>포인트 사용:</strong> 📖 포인트샵에서 도서 교환 · 📚 도서 구매 최대 70% 할인(슬라이더) · ⚓ 누적 포인트에 따른 크루 등급 자동 상승" data-en="<strong>Point usage:</strong> 📖 Exchange for books in Point Shop · 📚 Up to 70% off book purchases (slider) · ⚓ Automatic crew rank progression (cumulative)"><strong>포인트 사용:</strong> 📖 포인트샵에서 도서 교환 · 📚 도서 구매 최대 70% 할인(슬라이더) · ⚓ 누적 포인트에 따른 크루 등급 자동 상승</div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="210" height="390" rx="24" fill="#1A1A2E" stroke="#333" stroke-width="1.5"/>
+      <rect x="12" y="12" width="196" height="376" rx="20" fill="#E4F6FF"/>
+      <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
+      <rect x="12" y="12" width="196" height="32" rx="0" fill="#012B4A"/>
+      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold">⚓ BADA STORY</text>
+      <rect x="17" y="48" width="186" height="120" rx="12" fill="#012B4A"/>
+      <text x="30" y="66" fill="rgba(255,255,255,.45)" font-size="7" font-weight="bold" letter-spacing="2" data-ko="🎮 바다이야기 게임" data-en="🎮 BADA STORY GAMES">🎮 바다이야기 게임</text>
+      <text x="30" y="80" fill="#fff" font-size="10.5" font-weight="bold" data-ko="게임으로 포인트 적립" data-en="Earn Points Through Games">게임으로 포인트 적립</text>
+      <text x="160" y="68" fill="rgba(255,255,255,.4)" font-size="7" data-ko="내 포인트" data-en="My Points">내 포인트</text>
+      <text x="155" y="82" fill="#FFD96A" font-size="13" font-weight="bold">🪙 350</text>
+      <rect x="17" y="96" width="91" height="56" rx="0" fill="#042e1f"/>
+      <text x="45" y="118" fill="#52D68A" font-size="18">🎣</text>
+      <text x="72" y="115" fill="#fff" font-size="9" font-weight="bold" data-ko="낚시왕" data-en="Fishing King">낚시왕</text>
+      <text x="72" y="126" fill="rgba(255,255,255,.5)" font-size="7" data-ko="점수 ÷ 2 = P" data-en="Score ÷ 2 = P">점수 ÷ 2 = P</text>
+      <rect x="17" y="96" width="3" height="56" fill="#0b5e38"/>
+      <rect x="112" y="96" width="91" height="56" rx="0" fill="#0d1a3a"/>
+      <text x="140" y="118" fill="#60B8FF" font-size="18">🎰</text>
+      <text x="168" y="115" fill="#fff" font-size="9" font-weight="bold" data-ko="오션 카지노" data-en="Ocean Casino">오션 카지노</text>
+      <text x="168" y="126" fill="rgba(255,255,255,.5)" font-size="7" data-ko="점수 ÷ 3 = P" data-en="Score ÷ 3 = P">점수 ÷ 3 = P</text>
+      <rect x="17" y="152" width="186" height="16" rx="0" fill="rgba(0,148,212,.15)" stroke="#0094D4" stroke-width="1"/>
+      <text x="110" y="163" text-anchor="middle" fill="#00BCEE" font-size="8" font-weight="bold" data-ko="🛒 포인트샵" data-en="🛒 Point Shop">🛒 포인트샵</text>
+      <text x="22" y="186" fill="#006FA8" font-size="9" font-weight="bold" data-ko="🛒 포인트샵" data-en="🛒 Point Shop">🛒 포인트샵</text>
+      <g>
+        <rect x="17" y="192" width="186" height="32" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="28" y="213" fill="#012B4A" font-size="18">🚢</text>
+        <text x="52" y="205" fill="#012B4A" font-size="8.5" font-weight="bold" data-ko="항해일지" data-en="Voyage Logbook">항해일지</text>
+        <text x="52" y="216" fill="#4A7A9A" font-size="7.5" data-ko="출간 · IT&amp;항해" data-en="Published · IT&amp;Navigation">출간 · IT&amp;항해</text>
+        <rect x="165" y="198" width="32" height="18" rx="6" fill="#006FA8"/>
+        <text x="181" y="210" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold">800P</text>
+      </g>
+      <g>
+        <rect x="17" y="228" width="186" height="32" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="28" y="249" fill="#012B4A" font-size="18">🤖</text>
+        <text x="52" y="241" fill="#012B4A" font-size="8.5" font-weight="bold" data-ko="피지컬 AI 프런티어" data-en="Physical AI Frontier">피지컬 AI 프런티어</text>
+        <text x="52" y="252" fill="#4A7A9A" font-size="7.5" data-ko="출간 · AI&amp;기술" data-en="Published · AI&amp;Tech">출간 · AI&amp;기술</text>
+        <rect x="165" y="234" width="32" height="18" rx="6" fill="#006FA8"/>
+        <text x="181" y="246" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold">950P</text>
+      </g>
+      <g>
+        <rect x="17" y="264" width="186" height="32" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="28" y="285" fill="#012B4A" font-size="18">🧭</text>
+        <text x="52" y="277" fill="#012B4A" font-size="8.5" font-weight="bold" data-ko="속도보다 방향" data-en="Direction Over Speed">속도보다 방향</text>
+        <text x="52" y="288" fill="#4A7A9A" font-size="7.5" data-ko="출간 · 에세이" data-en="Published · Essay">출간 · 에세이</text>
+        <rect x="165" y="270" width="32" height="18" rx="6" fill="#006FA8"/>
+        <text x="181" y="282" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold">550P</text>
+      </g>
+      <text x="110" y="316" text-anchor="middle" fill="#4A7A9A" font-size="8" data-ko="포인트 부족 시 버튼 비활성화" data-en="Insufficient points = button inactive">포인트 부족 시 버튼 비활성화</text>
+      <rect x="12" y="364" width="196" height="24" fill="#fff"/>
+      <text x="110" y="380" text-anchor="middle" fill="#006FA8" font-size="9">🏠  📚  📍  📸  💬</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S6 CREW RANK SYSTEM ══ -->
+<section class="section" id="s6">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 06</div>
+    <div class="sec-title" data-ko="크루 등급 체계" data-en="Crew Rank System">크루 등급 체계</div>
+    <div class="sec-sub" data-ko="선박 승무원을 모티프로 한 3개 부서 × 8단계 위계. 누적 포인트에 따라 자동 승급됩니다." data-en="A ship-crew-inspired 3-department × 8-level hierarchy. Auto-promoted based on cumulative points.">선박 승무원을 모티프로 한 3개 부서 × 8단계 위계. 누적 포인트에 따라 자동 승급됩니다.</div>
+    <div class="divider"></div>
+    <div class="crew-tabs">
+      <button class="crew-tab on" onclick="showCrew('deck',this)" data-ko="🚢 갑판·기관부" data-en="🚢 Deck & Engine">🚢 갑판·기관부</button>
+      <button class="crew-tab" onclick="showCrew('hotel',this)" data-ko="🏨 호텔·서비스부" data-en="🏨 Hotel & Service">🏨 호텔·서비스부</button>
+      <button class="crew-tab" onclick="showCrew('special',this)" data-ko="🏥 특수부서" data-en="🏥 Special Dept.">🏥 특수부서</button>
+    </div>
+    <div id="crew-deck" class="crew-table on">
+      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
+        <tr><td>1</td><td data-ko="🧹 갑판원" data-en="🧹 Deck Hand">🧹 갑판원</td><td>0–99P</td><td data-ko="기본 이야기 게시" data-en="Basic story posting">기본 이야기 게시</td></tr>
+        <tr><td>2</td><td data-ko="⚓ 갑판장(CPO)" data-en="⚓ C.P.O.">⚓ 갑판장(CPO)</td><td>100–299P</td><td data-ko="좋아요 & 댓글" data-en="Likes & comments">좋아요 & 댓글</td></tr>
+        <tr><td>3</td><td data-ko="🔱 직장" data-en="🔱 Bosun">🔱 직장</td><td>300–599P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
+        <tr><td>4</td><td data-ko="🗺️ 3등 항해사" data-en="🗺️ 3rd Officer">🗺️ 3등 항해사</td><td>600–999P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
+        <tr><td>5</td><td data-ko="📡 2등 항해사" data-en="📡 2nd Officer">📡 2등 항해사</td><td>1,000–1,999P</td><td data-ko="출간 전 도서 열람" data-en="Pre-release book access">출간 전 도서 열람</td></tr>
+        <tr><td>6</td><td data-ko="🧭 1등 항해사" data-en="🧭 1st Officer">🧭 1등 항해사</td><td>2,000–3,999P</td><td data-ko="표지 크레딧 등재" data-en="Cover credit listing">표지 크레딧 등재</td></tr>
+        <tr><td>7</td><td data-ko="⚙️ 기관장" data-en="⚙️ Chief Engineer">⚙️ 기관장</td><td>4,000–7,999P</td><td data-ko="전담 편집자 배정" data-en="Dedicated editor assigned">전담 편집자 배정</td></tr>
+        <tr><td>8</td><td data-ko="🎖️ 선장" data-en="🎖️ Captain">🎖️ 선장</td><td>8,000P+</td><td data-ko="에이콘 공식 협력 저자 · 박람회 파견" data-en="Official Acorn Collaborative Author · Exhibition dispatch">에이콘 공식 협력 저자 · 박람회 파견</td></tr>
+      </table>
+    </div>
+    <div id="crew-hotel" class="crew-table">
+      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
+        <tr><td>1</td><td data-ko="🛏️ 객실 스튜어드" data-en="🛏️ Cabin Steward">🛏️ 객실 스튜어드</td><td>0–99P</td><td data-ko="기본 이야기 게시" data-en="Basic story posting">기본 이야기 게시</td></tr>
+        <tr><td>2</td><td data-ko="🛍️ 기프트샵" data-en="🛍️ Gift Shop">🛍️ 기프트샵</td><td>100–299P</td><td data-ko="좋아요 & 댓글" data-en="Likes & comments">좋아요 & 댓글</td></tr>
+        <tr><td>3</td><td data-ko="💆 스파" data-en="💆 Spa">💆 스파</td><td>300–599P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
+        <tr><td>4</td><td data-ko="🎰 카지노 딜러" data-en="🎰 Casino Dealer">🎰 카지노 딜러</td><td>600–999P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
+        <tr><td>5</td><td data-ko="🏠 하우스키퍼" data-en="🏠 Housekeeper">🏠 하우스키퍼</td><td>1,000–1,999P</td><td data-ko="출간 전 도서 열람" data-en="Pre-release book access">출간 전 도서 열람</td></tr>
+        <tr><td>6</td><td data-ko="📋 퍼서" data-en="📋 Purser">📋 퍼서</td><td>2,000–3,999P</td><td data-ko="표지 크레딧 등재" data-en="Cover credit listing">표지 크레딧 등재</td></tr>
+        <tr><td>7</td><td data-ko="🎭 크루즈 디렉터" data-en="🎭 Cruise Director">🎭 크루즈 디렉터</td><td>4,000–7,999P</td><td data-ko="전담 편집자 배정" data-en="Dedicated editor assigned">전담 편집자 배정</td></tr>
+        <tr><td>8</td><td data-ko="🏨 호텔 디렉터" data-en="🏨 Hotel Director">🏨 호텔 디렉터</td><td>8,000P+</td><td data-ko="에이콘 공식 협력 저자 · 박람회 파견" data-en="Official Acorn Collaborative Author · Exhibition dispatch">에이콘 공식 협력 저자 · 박람회 파견</td></tr>
+      </table>
+    </div>
+    <div id="crew-special" class="crew-table">
+      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
+        <tr><td>1</td><td data-ko="🎒 인턴" data-en="🎒 Intern">🎒 인턴</td><td>0–99P</td><td data-ko="기본 이야기 게시" data-en="Basic story posting">기본 이야기 게시</td></tr>
+        <tr><td>2</td><td data-ko="🏪 기프트 매니저" data-en="🏪 Gift Mgr.">🏪 기프트 매니저</td><td>100–299P</td><td data-ko="좋아요 & 댓글" data-en="Likes & comments">좋아요 & 댓글</td></tr>
+        <tr><td>3</td><td data-ko="💅 스파 매니저" data-en="💅 Spa Manager">💅 스파 매니저</td><td>300–599P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
+        <tr><td>4</td><td data-ko="🃏 카지노 매니저" data-en="🃏 Casino Mgr.">🃏 카지노 매니저</td><td>600–999P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
+        <tr><td>5</td><td data-ko="💉 선박 간호사" data-en="💉 Ship Nurse">💉 선박 간호사</td><td>1,000–1,999P</td><td data-ko="출간 전 도서 열람" data-en="Pre-release book access">출간 전 도서 열람</td></tr>
+        <tr><td>6</td><td data-ko="🩺 선의(船醫)" data-en="🩺 Ship Doctor">🩺 선의(船醫)</td><td>2,000–3,999P</td><td data-ko="표지 크레딧 등재" data-en="Cover credit listing">표지 크레딧 등재</td></tr>
+        <tr><td>7</td><td data-ko="🔬 선임 전문가" data-en="🔬 Sr. Specialist">🔬 선임 전문가</td><td>4,000–7,999P</td><td data-ko="전담 편집자 배정" data-en="Dedicated editor assigned">전담 편집자 배정</td></tr>
+        <tr><td>8</td><td data-ko="🏅 수석 전문가" data-en="🏅 Chief Specialist">🏅 수석 전문가</td><td>8,000P+</td><td data-ko="에이콘 공식 협력 저자 · 박람회 파견" data-en="Official Acorn Collaborative Author · Exhibition dispatch">에이콘 공식 협력 저자 · 박람회 파견</td></tr>
+      </table>
+    </div>
+    <div class="note" data-html="1" data-ko="<strong>레벨 8(선장/디렉터/수석) 혜택:</strong> 🎖️ 전담 편집자 배정 · 웹사이트에 에이콘 해양 공식 협력 저자로 등재 · 해양 컨퍼런스·박람회 파견 · 신규 시리즈 기획 우선권" data-en="<strong>Level 8 (Admiral/Chief) benefits:</strong> 🎖️ Dedicated editor assigned · Listed as official Acorn Maritime Collaborative Author on website · Dispatched to maritime conferences and exhibitions · Priority for new series planning"><strong>레벨 8(선장/디렉터/수석) 혜택:</strong> 🎖️ 전담 편집자 배정 · 웹사이트에 에이콘 해양 공식 협력 저자로 등재 · 해양 컨퍼런스·박람회 파견 · 신규 시리즈 기획 우선권</div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="210" height="390" rx="24" fill="#1A1A2E" stroke="#333" stroke-width="1.5"/>
+      <rect x="12" y="12" width="196" height="376" rx="20" fill="#E4F6FF"/>
+      <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
+      <rect x="12" y="12" width="196" height="32" rx="0" fill="#012B4A"/>
+      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold" data-ko="⚓ 내 프로필" data-en="⚓ My Profile">⚓ 내 프로필</text>
+      <rect x="12" y="44" width="196" height="72" fill="#012B4A"/>
+      <circle cx="46" cy="80" r="22" fill="#006FA8"/>
+      <text x="46" y="86" text-anchor="middle" fill="#fff" font-size="20">⚓</text>
+      <text x="76" y="68" fill="#fff" font-size="10.5" font-weight="bold" data-ko="이도현" data-en="Lee Do-hyeon">이도현</text>
+      <text x="76" y="80" fill="rgba(255,255,255,.6)" font-size="8" data-ko="✍️ 저자 · 해양 전문가" data-en="✍️ Author · Maritime Expert">✍️ 저자 · 해양 전문가</text>
+      <text x="76" y="92" fill="#FFD96A" font-size="8" font-weight="bold" data-ko="🪙 650P 누적" data-en="🪙 650P accumulated">🪙 650P 누적</text>
+      <rect x="17" y="120" width="186" height="60" rx="10" fill="#006FA8"/>
+      <text x="28" y="138" fill="rgba(255,255,255,.6)" font-size="7.5" data-ko="부서" data-en="Department">부서</text>
+      <text x="28" y="150" fill="#FFD96A" font-size="10" font-weight="bold" data-ko="🚢 갑판·기관부" data-en="🚢 Deck &amp; Engine Dept.">🚢 갑판·기관부</text>
+      <text x="28" y="162" fill="rgba(255,255,255,.7)" font-size="8" data-ko="현재: 🗺️ 3등 항해사 → 다음: 2등 항해사 (350P)" data-en="Current: 🗺️ 3rd Officer → Next: 2nd Officer (350P)">현재: 🗺️ 3등 항해사 → 다음: 2등 항해사 (350P)</text>
+      <rect x="28" y="169" width="165" height="6" rx="3" fill="rgba(255,255,255,.2)"/>
+      <rect x="28" y="169" width="107" height="6" rx="3" fill="#FFD96A"/>
+      <text x="200" y="175" text-anchor="end" fill="#fff" font-size="7">65%</text>
+      <rect x="17" y="185" width="60" height="22" rx="6" fill="#012B4A"/>
+      <text x="47" y="199" text-anchor="middle" fill="#FFD96A" font-size="8.5" font-weight="bold" data-ko="🚢 갑판" data-en="🚢 Deck">🚢 갑판</text>
+      <rect x="81" y="185" width="60" height="22" rx="6" fill="rgba(0,0,0,.05)"/>
+      <text x="111" y="199" text-anchor="middle" fill="#4A7A9A" font-size="8.5" data-ko="🏨 호텔" data-en="🏨 Hotel">🏨 호텔</text>
+      <rect x="145" y="185" width="58" height="22" rx="6" fill="rgba(0,0,0,.05)"/>
+      <text x="174" y="199" text-anchor="middle" fill="#4A7A9A" font-size="8.5" data-ko="🏥 특수" data-en="🏥 Special">🏥 특수</text>
+      <text x="22" y="224" fill="#4A7A9A" font-size="8" font-weight="bold" data-ko="활동 통계" data-en="Activity Stats">활동 통계</text>
+      <g>
+        <rect x="17" y="228" width="59" height="38" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="46" y="242" text-anchor="middle" fill="#006FA8" font-size="12" font-weight="bold">650</text>
+        <text x="46" y="254" text-anchor="middle" fill="#4A7A9A" font-size="7" data-ko="포인트" data-en="Points">포인트</text>
+      </g>
+      <g>
+        <rect x="80" y="228" width="59" height="38" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="109" y="242" text-anchor="middle" fill="#006FA8" font-size="12" font-weight="bold">3</text>
+        <text x="109" y="254" text-anchor="middle" fill="#4A7A9A" font-size="7" data-ko="이야기" data-en="Stories">이야기</text>
+      </g>
+      <g>
+        <rect x="143" y="228" width="60" height="38" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+        <text x="173" y="242" text-anchor="middle" fill="#006FA8" font-size="12" font-weight="bold">2</text>
+        <text x="173" y="254" text-anchor="middle" fill="#4A7A9A" font-size="7" data-ko="제안" data-en="Proposals">제안</text>
+      </g>
+      <rect x="17" y="272" width="186" height="44" rx="10" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+      <text x="30" y="287" fill="#012B4A" font-size="8.5" font-weight="bold" data-ko="🔗 출판사 연동" data-en="🔗 Publisher Link">🔗 출판사 연동</text>
+      <rect x="160" y="278" width="36" height="12" rx="6" fill="#E4F7EF"/>
+      <text x="178" y="287" text-anchor="middle" fill="#0A7A4A" font-size="7" font-weight="bold" data-ko="연동됨" data-en="Linked">연동됨</text>
+      <text x="30" y="300" fill="#4A7A9A" font-size="8" data-ko="에이콘출판사 · 담당 편집자: 김OO" data-en="Acorn Publishing · Editor: Kim">에이콘출판사 · 담당 편집자: 김OO</text>
+      <text x="30" y="311" fill="#4A7A9A" font-size="7.5" data-ko="📗 출간  🪙 포인트  🔔 알림  🚪 로그아웃" data-en="📗 Publish  🪙 Points  🔔 Notify  🚪 Logout">📗 출간  🪙 포인트  🔔 알림  🚪 로그아웃</text>
+      <rect x="12" y="364" width="196" height="24" fill="#fff"/>
+      <text x="110" y="380" text-anchor="middle" fill="#006FA8" font-size="9">🏠  📚  📍  📸  💬</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S7 PUBLICATION WIZARD ══ -->
+<section class="section" id="s7">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 07</div>
+    <div class="sec-title" data-ko="출간 신청 마법사" data-en="Publication Wizard">출간 신청 마법사</div>
+    <div class="sec-sub" data-ko="저자는 3단계 마법사로 출간을 신청합니다. 제출 시 +50P가 적립됩니다." data-en="Authors apply for publication through a 3-step wizard. Submission earns +50P.">저자는 3단계 마법사로 출간을 신청합니다. 제출 시 +50P가 적립됩니다.</div>
+    <div class="divider"></div>
+    <div class="pub-list">
+      <div class="pub">
+        <div class="pub-head" style="background:linear-gradient(90deg,#012B4A,#006FA8)">
+          <span class="pi2">📗</span><span class="pn" data-ko="기획출판" data-en="Publisher-Funded">기획출판</span><span class="pe" data-ko="Publisher-Funded" data-en="기획출판">Publisher-Funded</span>
+        </div>
+        <div class="pub-specs">
+          <div class="ps"><span class="pk" data-ko="인세 " data-en="Royalty ">인세 </span><span class="pv2">8–10%</span></div>
+          <div class="ps"><span class="pk" data-ko="저자 비용 " data-en="Author cost ">저자 비용 </span><span class="pv2" style="color:#0A7A4A" data-ko="없음" data-en="None">없음</span></div>
+          <div class="ps"><span class="pk" data-ko="유통 " data-en="Distribution ">유통 </span><span class="pv2" data-ko="서점 + Amazon KDP" data-en="Bookstores + Amazon KDP">서점 + Amazon KDP</span></div>
+          <div class="ps"><span class="pk" data-ko="판권 " data-en="Rights ">판권 </span><span class="pv2" data-ko="공동 소유" data-en="Co-owned">공동 소유</span></div>
+          <div class="ps"><span class="pk" data-ko="심사 " data-en="Review ">심사 </span><span class="pv2" data-ko="약 14일" data-en="~14 days">약 14일</span></div>
+        </div>
+      </div>
+      <div class="pub">
+        <div class="pub-head" style="background:linear-gradient(90deg,#0F2A1A,#0A7A4A)">
+          <span class="pi2">📘</span><span class="pn" data-ko="반기획출판" data-en="Co-Published">반기획출판</span><span class="pe" data-ko="Co-Published" data-en="반기획출판">Co-Published</span>
+        </div>
+        <div class="pub-specs">
+          <div class="ps"><span class="pk" data-ko="인세 " data-en="Royalty ">인세 </span><span class="pv2" style="color:#0A7A4A">15–20%</span></div>
+          <div class="ps"><span class="pk" data-ko="편집비 " data-en="Editing fee ">편집비 </span><span class="pv2" data-ko="₩150만–₩300만" data-en="₩1.5M–₩3M">₩150만–₩300만</span></div>
+          <div class="ps"><span class="pk" data-ko="유통 " data-en="Distribution ">유통 </span><span class="pv2" data-ko="전국 서점" data-en="National bookstores">전국 서점</span></div>
+          <div class="ps"><span class="pk" data-ko="판권 " data-en="Rights ">판권 </span><span class="pv2" data-ko="저자 60%" data-en="Author 60%">저자 60%</span></div>
+          <div class="ps"><span class="pk" data-ko="심사 " data-en="Review ">심사 </span><span class="pv2" data-ko="약 10일" data-en="~10 days">약 10일</span></div>
+        </div>
+      </div>
+      <div class="pub">
+        <div class="pub-head" style="background:linear-gradient(90deg,#2D1A00,#7A3A00)">
+          <span class="pi2">📙</span><span class="pn" data-ko="자비출판" data-en="Self-Published">자비출판</span><span class="pe" data-ko="Self-Published" data-en="자비출판">Self-Published</span>
+        </div>
+        <div class="pub-specs">
+          <div class="ps"><span class="pk" data-ko="수익 " data-en="Revenue ">수익 </span><span class="pv2" style="color:#C97C2D">50–70%</span></div>
+          <div class="ps"><span class="pk" data-ko="제작비 " data-en="Production ">제작비 </span><span class="pv2" data-ko="₩500만–₩1,500만" data-en="₩5M–₩15M">₩500만–₩1,500만</span></div>
+          <div class="ps"><span class="pk" data-ko="유통 " data-en="Distribution ">유통 </span><span class="pv2" data-ko="유연" data-en="Flexible">유연</span></div>
+          <div class="ps"><span class="pk" data-ko="판권 " data-en="Rights ">판권 </span><span class="pv2" data-ko="저자 100%" data-en="Author 100%">저자 100%</span></div>
+          <div class="ps"><span class="pk" data-ko="심사 " data-en="Review ">심사 </span><span class="pv2" data-ko="약 5일" data-en="~5 days">약 5일</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note" data-html="1" data-ko="<strong>제출 후 8단계 진행:</strong> 심사 → 편집자 미팅 → 계약 → 집필 → 편집 → 디자인/제작 → 인쇄 → 출간 & 유통" data-en="<strong>8-stage process after submission:</strong> Review → Editor Meeting → Contract → Writing → Editing → Design/Production → Printing → Publication & Distribution"><strong>제출 후 8단계 진행:</strong> 심사 → 편집자 미팅 → 계약 → 집필 → 편집 → 디자인/제작 → 인쇄 → 출간 & 유통</div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="210" height="390" rx="24" fill="#1A1A2E" stroke="#333" stroke-width="1.5"/>
+      <rect x="12" y="12" width="196" height="376" rx="20" fill="#E4F6FF"/>
+      <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
+      <rect x="12" y="12" width="196" height="32" rx="0" fill="#012B4A"/>
+      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold" data-ko="📗 출간 신청" data-en="📗 Publication Application">📗 출간 신청</text>
+      <rect x="22" y="48" width="176" height="28" rx="8" fill="#C8EDFF"/>
+      <circle cx="58" cy="62" r="10" fill="#006FA8"/>
+      <text x="58" y="66" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">1</text>
+      <text x="58" y="80" text-anchor="middle" fill="#006FA8" font-size="7" font-weight="bold" data-ko="유형" data-en="Type">유형</text>
+      <line x1="68" y1="62" x2="108" y2="62" stroke="#9ECEE8" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <circle cx="118" cy="62" r="10" fill="#9ECEE8"/>
+      <text x="118" y="66" text-anchor="middle" fill="#fff" font-size="9">2</text>
+      <text x="118" y="80" text-anchor="middle" fill="#4A7A9A" font-size="7" data-ko="제안" data-en="Proposal">제안</text>
+      <line x1="128" y1="62" x2="168" y2="62" stroke="#9ECEE8" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <circle cx="178" cy="62" r="10" fill="#9ECEE8"/>
+      <text x="178" y="66" text-anchor="middle" fill="#fff" font-size="9">3</text>
+      <text x="178" y="80" text-anchor="middle" fill="#4A7A9A" font-size="7" data-ko="심사" data-en="Review">심사</text>
+      <text x="22" y="102" fill="#012B4A" font-size="9" font-weight="bold" data-ko="출판 유형 선택" data-en="Select Publication Type">출판 유형 선택</text>
+      <rect x="17" y="108" width="186" height="52" rx="10" fill="#fff" stroke="#9ECEE8" stroke-width="1.5"/>
+      <rect x="17" y="108" width="186" height="52" rx="10" fill="rgba(0,111,168,.05)" stroke="#006FA8" stroke-width="1.5"/>
+      <text x="30" y="128" fill="#006FA8" font-size="16">📗</text>
+      <text x="52" y="126" fill="#012B4A" font-size="9.5" font-weight="bold" data-ko="기획출판" data-en="Publisher-Funded">기획출판</text>
+      <text x="52" y="137" fill="#4A7A9A" font-size="7.5" data-ko="인세 8–10% · 저자 비용 없음" data-en="Royalty 8–10% · No author cost">인세 8–10% · 저자 비용 없음</text>
+      <text x="52" y="148" fill="#4A7A9A" font-size="7.5" data-ko="서점 + Amazon KDP" data-en="Bookstores + Amazon KDP">서점 + Amazon KDP</text>
+      <circle cx="193" cy="134" r="7" fill="#006FA8"/>
+      <text x="193" y="137" text-anchor="middle" fill="#fff" font-size="8">✓</text>
+      <rect x="17" y="164" width="186" height="52" rx="10" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+      <text x="30" y="184" fill="#0A7A4A" font-size="16">📘</text>
+      <text x="52" y="182" fill="#012B4A" font-size="9.5" font-weight="bold" data-ko="반기획출판" data-en="Co-Published">반기획출판</text>
+      <text x="52" y="193" fill="#4A7A9A" font-size="7.5" data-ko="인세 15–20% · 편집비" data-en="Royalty 15–20% · Editing fee">인세 15–20% · 편집비</text>
+      <text x="52" y="204" fill="#4A7A9A" font-size="7.5" data-ko="전국 서점" data-en="National bookstores">전국 서점</text>
+      <rect x="17" y="220" width="186" height="52" rx="10" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+      <text x="30" y="240" fill="#C97C2D" font-size="16">📙</text>
+      <text x="52" y="238" fill="#012B4A" font-size="9.5" font-weight="bold" data-ko="자비출판" data-en="Self-Published">자비출판</text>
+      <text x="52" y="249" fill="#4A7A9A" font-size="7.5" data-ko="수익 50–70% · 전액 제작비" data-en="Revenue 50–70% · Full production cost">수익 50–70% · 전액 제작비</text>
+      <text x="52" y="260" fill="#4A7A9A" font-size="7.5" data-ko="저자 판권 100% 소유" data-en="Author owns 100% rights">저자 판권 100% 소유</text>
+      <rect x="22" y="280" width="176" height="30" rx="10" fill="#006FA8"/>
+      <text x="110" y="299" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold" data-ko="다음 단계 → (제출 시 +50P)" data-en="Next Step → (+50P on submit)">다음 단계 → (제출 시 +50P)</text>
+      <text x="22" y="326" fill="#4A7A9A" font-size="8" font-weight="bold" data-ko="8단계 진행 추적" data-en="8-Stage Progress Tracker">8단계 진행 추적</text>
+      <rect x="17" y="330" width="186" height="24" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
+      <g>
+        <rect x="22" y="335" width="20" height="14" rx="4" fill="#006FA8"/>
+        <text x="32" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="심사" data-en="Review">심사</text>
+        <rect x="46" y="335" width="20" height="14" rx="4" fill="#9ECEE8"/>
+        <text x="56" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="미팅" data-en="Meet">미팅</text>
+        <rect x="70" y="335" width="20" height="14" rx="4" fill="#9ECEE8"/>
+        <text x="80" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="계약" data-en="Contract">계약</text>
+        <rect x="94" y="335" width="20" height="14" rx="4" fill="#9ECEE8"/>
+        <text x="104" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="집필" data-en="Write">집필</text>
+        <rect x="118" y="335" width="20" height="14" rx="4" fill="#9ECEE8"/>
+        <text x="128" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="편집" data-en="Edit">편집</text>
+        <rect x="142" y="335" width="20" height="14" rx="4" fill="#9ECEE8"/>
+        <text x="152" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="디자인" data-en="Design">디자인</text>
+        <rect x="166" y="335" width="16" height="14" rx="4" fill="#9ECEE8"/>
+        <text x="174" y="345" text-anchor="middle" fill="#fff" font-size="6.5" data-ko="인쇄" data-en="Print">인쇄</text>
+      </g>
+      <rect x="12" y="364" width="196" height="24" fill="#fff"/>
+      <text x="110" y="380" text-anchor="middle" fill="#006FA8" font-size="9">🏠  📚  📍  📸  💬</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ S8 TECHNICAL ARCHITECTURE ══ -->
+<section class="section" id="s8">
+  <div class="sec-text">
+    <div class="sec-num">SECTION 08</div>
+    <div class="sec-title" data-ko="기술 아키텍처" data-en="Technical Architecture">기술 아키텍처</div>
+    <div class="sec-sub" data-ko="빌드 도구 없는 단일 HTML 파일 — 오프라인으로 작동하고 연결 시 Supabase와 동기화됩니다." data-en="A single HTML file with no build tools — works offline and syncs to Supabase when connected.">빌드 도구 없는 단일 HTML 파일 — 오프라인으로 작동하고 연결 시 Supabase와 동기화됩니다.</div>
+    <div class="divider"></div>
+    <div class="tech-list">
+      <div class="ti2"><div class="tico" style="background:#E4F6FF">📄</div><div><h4 data-ko="단일 파일 HTML PWA" data-en="Single-File HTML PWA">단일 파일 HTML PWA</h4><p data-ko="HTML·CSS·JS를 한 파일에. 설치 없이 URL로 접속. PWA 매니페스트로 설치형 앱으로도 동작." data-en="All HTML·CSS·JS in one file. No install — access via URL. Works as installable app via PWA manifest.">HTML·CSS·JS를 한 파일에. 설치 없이 URL로 접속. PWA 매니페스트로 설치형 앱으로도 동작.</p></div></div>
+      <div class="ti2"><div class="tico" style="background:#E4F7EF">📡</div><div><h4 data-ko="오프라인 우선 (로컬스토리지 + 아웃박스)" data-en="Offline-First (LocalStorage + outbox)">오프라인 우선 (로컬스토리지 + 아웃박스)</h4><p data-ko="모든 입력을 즉시 로컬스토리지에 저장. 인터넷 감지 시 Supabase로 자동 동기화." data-en="All user input saved to LocalStorage immediately. Auto-syncs to Supabase when internet detected.">모든 입력을 즉시 로컬스토리지에 저장. 인터넷 감지 시 Supabase로 자동 동기화.</p></div></div>
+      <div class="ti2"><div class="tico" style="background:#EBF3FB">🗺️</div><div><h4 data-ko="GPS + 카메라 API" data-en="GPS + Camera APIs">GPS + 카메라 API</h4><p data-ko="watchPosition()으로 실시간 좌표 추적. 카메라 API로 사진/영상. 모든 게시물에 자동 태깅." data-en="Geolocation watchPosition() tracks real-time coordinates. Camera API for photos/video. Auto-tagged on every post.">watchPosition()으로 실시간 좌표 추적. 카메라 API로 사진/영상. 모든 게시물에 자동 태깅.</p></div></div>
+      <div class="ti2"><div class="tico" style="background:#012B4A">🎮</div><div><h4 data-ko="HTML5 Canvas2D 게임" data-en="HTML5 Canvas2D Games">HTML5 Canvas2D 게임</h4><p data-ko="낚시왕: DOM 애니메이션. 오션 카지노: Canvas2D 물리 엔진(공·핀·슬롯). 포인트 자동 적립." data-en="Fishing King: DOM animation. Ocean Casino: Canvas2D physics engine (ball, pins, slots). Points auto-credited.">낚시왕: DOM 애니메이션. 오션 카지노: Canvas2D 물리 엔진(공·핀·슬롯). 포인트 자동 적립.</p></div></div>
+      <div class="ti2"><div class="tico" style="background:#E4F7EF">🔐</div><div><h4 data-ko="Supabase 백엔드" data-en="Supabase Backend">Supabase 백엔드</h4><p data-ko="PostgreSQL DB · 인증 · 실시간(채팅) · 스토리지(파일). RLS로 모든 사용자 데이터 보호." data-en="PostgreSQL database · Auth · Realtime (chat) · Storage (files). Row Level Security protects all user data.">PostgreSQL DB · 인증 · 실시간(채팅) · 스토리지(파일). RLS로 모든 사용자 데이터 보호.</p></div></div>
+      <div class="ti2"><div class="tico" style="background:#E4F6FF">⚙️</div><div><h4 data-ko="GitHub Pages + Actions" data-en="GitHub Pages + Actions">GitHub Pages + Actions</h4><p data-ko="main 푸시 시 자동 배포. GitHub Secrets로 Supabase 키 주입. 서버 비용 0원." data-en="Auto-deploy on push to main. Supabase keys injected via GitHub Secrets. Zero server cost.">main 푸시 시 자동 배포. GitHub Secrets로 Supabase 키 주입. 서버 비용 0원.</p></div></div>
+    </div>
+  </div>
+  <div class="sec-diagram">
+    <svg width="260" height="380" viewBox="0 0 260 380" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="sh3"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity=".1"/></filter></defs>
+      <text x="130" y="20" text-anchor="middle" fill="#006FA8" font-size="11" font-weight="bold" data-ko="시스템 아키텍처" data-en="System Architecture">시스템 아키텍처</text>
+      <rect x="10" y="30" width="240" height="130" rx="12" fill="#012B4A" filter="url(#sh3)"/>
+      <text x="20" y="48" fill="rgba(255,255,255,.45)" font-size="8" font-weight="bold" data-ko="브라우저 (PWA)" data-en="BROWSER (PWA)">브라우저 (PWA)</text>
+      <rect x="18" y="53" width="66" height="98" rx="8" fill="rgba(255,255,255,.06)"/>
+      <text x="51" y="70" text-anchor="middle" fill="#FFD96A" font-size="14">📄</text>
+      <text x="51" y="82" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold">index.html</text>
+      <text x="51" y="92" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5">HTML+CSS+JS</text>
+      <text x="51" y="103" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5" data-ko="단일 파일" data-en="Single file">단일 파일</text>
+      <text x="51" y="114" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5" data-ko="빌드 도구 없음" data-en="No build tools">빌드 도구 없음</text>
+      <text x="51" y="125" text-anchor="middle" fill="#52D68A" font-size="6.5" data-ko="✓ 오프라인 작동" data-en="✓ Runs offline">✓ 오프라인 작동</text>
+      <rect x="92" y="53" width="66" height="98" rx="8" fill="rgba(255,255,255,.06)"/>
+      <text x="125" y="70" text-anchor="middle" fill="#FFD96A" font-size="14">💾</text>
+      <text x="125" y="82" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold">LocalStorage</text>
+      <text x="125" y="92" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5" data-ko="피드 게시물" data-en="Feed posts">피드 게시물</text>
+      <text x="125" y="103" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5" data-ko="현장 기록" data-en="Field records">현장 기록</text>
+      <text x="125" y="114" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5" data-ko="제안" data-en="Proposals">제안</text>
+      <text x="125" y="125" text-anchor="middle" fill="#FFD96A" font-size="6.5" data-ko="아웃박스 큐" data-en="outbox queue">아웃박스 큐</text>
+      <rect x="166" y="53" width="76" height="98" rx="8" fill="rgba(255,255,255,.06)"/>
+      <text x="204" y="70" text-anchor="middle" fill="#FFD96A" font-size="14">📡</text>
+      <text x="204" y="82" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" data-ko="브라우저 API" data-en="Browser APIs">브라우저 API</text>
+      <text x="204" y="92" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5">Geolocation</text>
+      <text x="204" y="103" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5">Camera API</text>
+      <text x="204" y="114" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5">ServiceWorker</text>
+      <text x="204" y="125" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="6.5" data-ko="알림(Push)" data-en="Notifications">알림(Push)</text>
+      <path d="M130 160 L130 185" stroke="#00BCEE" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="140" y="176" fill="#00BCEE" font-size="8" data-ko="자동 동기화" data-en="auto-sync">자동 동기화</text>
+      <rect x="10" y="185" width="240" height="130" rx="12" fill="#3FCF8E22" stroke="#3FCF8E" stroke-width="1" filter="url(#sh3)"/>
+      <text x="20" y="203" fill="#3FCF8E" font-size="8" font-weight="bold" data-ko="SUPABASE (클라우드)" data-en="SUPABASE (Cloud)">SUPABASE (클라우드)</text>
+      <rect x="18" y="208" width="54" height="98" rx="8" fill="rgba(63,207,142,.1)"/>
+      <text x="45" y="226" text-anchor="middle" fill="#3FCF8E" font-size="14">🗄️</text>
+      <text x="45" y="238" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold">PostgreSQL</text>
+      <text x="45" y="249" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6">posts</text>
+      <text x="45" y="258" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6">profiles</text>
+      <text x="45" y="267" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6">proposals</text>
+      <text x="45" y="276" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6">points_log</text>
+      <text x="45" y="296" text-anchor="middle" fill="#FFD96A" font-size="6" data-ko="+RLS 보안" data-en="+RLS security">+RLS 보안</text>
+      <rect x="76" y="208" width="54" height="98" rx="8" fill="rgba(63,207,142,.1)"/>
+      <text x="103" y="226" text-anchor="middle" fill="#3FCF8E" font-size="14">🔐</text>
+      <text x="103" y="238" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" data-ko="인증" data-en="Auth">인증</text>
+      <text x="103" y="249" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="이메일 로그인" data-en="Email login">이메일 로그인</text>
+      <text x="103" y="258" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="익명" data-en="Anonymous">익명</text>
+      <text x="103" y="267" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="세션 관리" data-en="Session mgmt">세션 관리</text>
+      <rect x="134" y="208" width="54" height="98" rx="8" fill="rgba(63,207,142,.1)"/>
+      <text x="161" y="226" text-anchor="middle" fill="#3FCF8E" font-size="14">⚡</text>
+      <text x="161" y="238" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" data-ko="실시간" data-en="Realtime">실시간</text>
+      <text x="161" y="249" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="채팅 메시지" data-en="Chat messages">채팅 메시지</text>
+      <text x="161" y="258" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="알림" data-en="Notifications">알림</text>
+      <text x="161" y="267" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="실시간 게시물" data-en="Live posts">실시간 게시물</text>
+      <rect x="192" y="208" width="54" height="98" rx="8" fill="rgba(63,207,142,.1)"/>
+      <text x="219" y="226" text-anchor="middle" fill="#3FCF8E" font-size="14">📁</text>
+      <text x="219" y="238" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" data-ko="스토리지" data-en="Storage">스토리지</text>
+      <text x="219" y="249" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="사진/영상" data-en="Photos/videos">사진/영상</text>
+      <text x="219" y="258" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="현장 기록" data-en="Field records">현장 기록</text>
+      <text x="219" y="267" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="6" data-ko="첨부파일" data-en="Attachments">첨부파일</text>
+      <text x="130" y="350" text-anchor="middle" fill="#006FA8" font-size="9" font-weight="bold" data-ko="배포: GitHub Pages + GitHub Actions" data-en="Deployment: GitHub Pages + GitHub Actions">배포: GitHub Pages + GitHub Actions</text>
+      <text x="130" y="364" text-anchor="middle" fill="#4A7A9A" font-size="8" data-ko="푸시 시 GitHub Secrets로 Supabase 키 주입" data-en="Supabase keys injected via GitHub Secrets on push">푸시 시 GitHub Secrets로 Supabase 키 주입</text>
+    </svg>
+  </div>
+</section>
+<!-- ══ S9 KNOWLEDGE CHECK ══ -->
+<section class="section" id="s9" style="flex-direction:column;align-items:flex-start;">
+  <div class="sec-text" style="max-width:100%;width:100%;">
+    <div class="sec-num">SECTION 09</div>
+    <div class="sec-title" data-ko="이해도 점검" data-en="Knowledge Check">이해도 점검</div>
+    <div class="sec-sub" data-ko="바다이야기에 대한 이해도를 확인하세요. 총 7문항입니다." data-en="Verify your understanding of BADA STORY. 7 questions in total.">바다이야기에 대한 이해도를 확인하세요. 총 7문항입니다.</div>
+    <div class="divider"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="quiz-wrap">
+      <div>
+        <div class="quiz-q" id="q1">
+          <div class="qnum">Q1 / 7</div>
+          <div class="qtxt" data-ko="이야기선정 도서에서 저자가 받는 수익 비율은 얼마입니까?" data-en="What percentage of revenue does an author receive from a Selected Story book?">이야기선정 도서에서 저자가 받는 수익 비율은 얼마입니까?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="30%" data-en="30%" onclick="answer(this,'q1',false,'30%는 저자 몫이 아니라 플랫폼 수수료입니다.','30% is the platform fee, not the author share.')">30%</button>
+            <button class="quiz-opt" data-ko="50%" data-en="50%" onclick="answer(this,'q1',false,'50%는 자비출판 최소 비율에 해당합니다.','50% applies to self-publishing minimum.')">50%</button>
+            <button class="quiz-opt" data-ko="70%" data-en="70%" onclick="answer(this,'q1',true,'정답! 이야기선정 도서는 저자 70%, 플랫폼 수수료 30%입니다.','Correct! Selected Story books give authors 70%, with a 30% platform fee.')">70%</button>
+            <button class="quiz-opt" data-ko="90%" data-en="90%" onclick="answer(this,'q1',false,'90%는 이 시스템에 없는 비율입니다.','90% is not a valid tier in this system.')">90%</button>
+          </div>
+          <div class="quiz-fb" id="fb-q1"></div>
+        </div>
+        <div class="quiz-q" id="q2">
+          <div class="qnum">Q2 / 7</div>
+          <div class="qtxt" data-ko="이야기도서가 이야기선정으로 승격되려면 좋아요가 몇 개 필요합니까?" data-en="How many likes does a Story Book need to qualify for Selected Story promotion?">이야기도서가 이야기선정으로 승격되려면 좋아요가 몇 개 필요합니까?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="좋아요 30개" data-en="30 likes" onclick="answer(this,'q2',false,'좋아요 30개는 선정 기준에 없습니다.','30 likes is not in the selection criteria.')">좋아요 30개</button>
+            <button class="quiz-opt" data-ko="좋아요 50개" data-en="50 likes" onclick="answer(this,'q2',true,'정답! 좋아요 50개 이상은 6가지 선정 기준 중 하나입니다.','Correct! 50+ likes is one of the six selection criteria.')">좋아요 50개</button>
+            <button class="quiz-opt" data-ko="좋아요 100개" data-en="100 likes" onclick="answer(this,'q2',false,'좋아요 100개는 요구 기준을 초과합니다.','100 likes exceeds the required threshold.')">좋아요 100개</button>
+            <button class="quiz-opt" data-ko="좋아요 500개" data-en="500 likes" onclick="answer(this,'q2',false,'좋아요 500개는 요구 기준을 크게 초과합니다.','500 likes far exceeds the requirement.')">좋아요 500개</button>
+          </div>
+          <div class="quiz-fb" id="fb-q2"></div>
+        </div>
+        <div class="quiz-q" id="q3">
+          <div class="qnum">Q3 / 7</div>
+          <div class="qtxt" data-ko="저자 역할에 대한 설명으로 옳은 것은?" data-en="Which statement about the Author role is correct?">저자 역할에 대한 설명으로 옳은 것은?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="에이콘출판사에서 출간한 저자만" data-en="Only authors published by Acorn Publishing" onclick="answer(this,'q3',false,'저자 역할은 에이콘뿐 아니라 모든 출판사 저자에게 열려 있습니다.','Author role is open to authors from any publisher, not just Acorn.')">에이콘출판사에서 출간한 저자만</button>
+            <button class="quiz-opt" data-ko="에이콘 또는 모든 출판사에서 출간했거나 해양 원고를 집필 중인 사람" data-en="Published by Acorn or any publisher, or currently writing a maritime manuscript" onclick="answer(this,'q3',true,'정답! 저자는 에이콘 또는 다른 출판사에서 출간했거나 현재 집필 중인 사람을 포함합니다.','Correct! Author includes anyone published by Acorn or any other publisher, or currently writing.')">에이콘 또는 모든 출판사에서 출간했거나 해양 원고를 집필 중인 사람</button>
+            <button class="quiz-opt" data-ko="해양 주제에 관심 있는 일반 독자" data-en="General readers interested in maritime topics" onclick="answer(this,'q3',false,'이것은 독자 역할에 대한 설명입니다.','This describes the Reader role.')">해양 주제에 관심 있는 일반 독자</button>
+            <button class="quiz-opt" data-ko="출간 경험 없이 집필을 준비하는 해양 전문가" data-en="Maritime experts preparing to write without prior publication" onclick="answer(this,'q3',false,'이것은 저자후보 역할에 대한 설명입니다.','This describes the Author Candidate role.')">출간 경험 없이 집필을 준비하는 해양 전문가</button>
+          </div>
+          <div class="quiz-fb" id="fb-q3"></div>
+        </div>
+        <div class="quiz-q" id="q4">
+          <div class="qnum">Q4 / 7</div>
+          <div class="qtxt" data-ko="출판사 계정 연동 시 지급되는 포인트(일회성 보너스)는 얼마입니까?" data-en="How many points are awarded for linking a publisher account (one-time bonus)?">출판사 계정 연동 시 지급되는 포인트(일회성 보너스)는 얼마입니까?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="+50P" data-en="+50P" onclick="answer(this,'q4',false,'+50P는 출간 기획서 제출 시 지급됩니다.','+50P is for submitting a book proposal.')">+50P</button>
+            <button class="quiz-opt" data-ko="+100P" data-en="+100P" onclick="answer(this,'q4',true,'정답! +100P는 출판사 계정 연동 시 지급되는 일회성 보너스입니다.','Correct! +100P is the one-time bonus for linking a publisher account.')">+100P</button>
+            <button class="quiz-opt" data-ko="+200P" data-en="+200P" onclick="answer(this,'q4',false,'+200P는 제공되는 보상이 아닙니다.','+200P is not an available reward.')">+200P</button>
+            <button class="quiz-opt" data-ko="+500P" data-en="+500P" onclick="answer(this,'q4',false,'+500P는 제공되는 보상이 아닙니다.','+500P is not an available reward.')">+500P</button>
+          </div>
+          <div class="quiz-fb" id="fb-q4"></div>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-q" id="q5">
+          <div class="qnum">Q5 / 7</div>
+          <div class="qtxt" data-ko="기획출판 도서의 올바른 유통 범위는 무엇입니까?" data-en="What is the correct distribution scope for Publisher-Funded (기획출판) books?">기획출판 도서의 올바른 유통 범위는 무엇입니까?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="플랫폼 판매 전용" data-en="Platform sales only" onclick="answer(this,'q5',false,'플랫폼 전용은 이야기선정 도서의 유통 방식입니다.','Platform-only is the Selected Story distribution method.')">플랫폼 판매 전용</button>
+            <button class="quiz-opt" data-ko="전국 서점 전용" data-en="National bookstores only" onclick="answer(this,'q5',false,'전국 서점만으로는 기획출판의 전체 범위가 아닙니다.','National bookstores alone is not the full scope for Publisher-Funded.')">전국 서점 전용</button>
+            <button class="quiz-opt" data-ko="전국 서점 + 아마존 KDP" data-en="National bookstores + Amazon KDP" onclick="answer(this,'q5',true,'정답! 기획출판 도서는 전국 서점과 아마존 KDP를 통해 전 세계로 유통됩니다.','Correct! Publisher-Funded books are distributed via national bookstores and Amazon KDP globally.')">전국 서점 + 아마존 KDP</button>
+            <button class="quiz-opt" data-ko="저자 직접 판매" data-en="Author direct sales" onclick="answer(this,'q5',false,'저자 직접 판매는 기획출판 방식이 아닙니다.','Direct author sales is not the Publisher-Funded model.')">저자 직접 판매</button>
+          </div>
+          <div class="quiz-fb" id="fb-q5"></div>
+        </div>
+        <div class="quiz-q" id="q6">
+          <div class="qnum">Q6 / 7</div>
+          <div class="qtxt" data-ko="크루 레벨 8에 도달하는 데 필요한 최소 누적 포인트는 얼마입니까?" data-en="What is the minimum cumulative point total required to reach Crew Level 8?">크루 레벨 8에 도달하는 데 필요한 최소 누적 포인트는 얼마입니까?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="4,000P+" data-en="4,000P+" onclick="answer(this,'q6',false,'4,000P는 레벨 7의 진입 기준입니다.','4,000P is the entry threshold for Level 7.')">4,000P+</button>
+            <button class="quiz-opt" data-ko="5,000P+" data-en="5,000P+" onclick="answer(this,'q6',false,'5,000P는 시스템에 정의된 기준이 아닙니다.','5,000P is not a defined threshold in the system.')">5,000P+</button>
+            <button class="quiz-opt" data-ko="8,000P+" data-en="8,000P+" onclick="answer(this,'q6',true,'정답! 누적 8,000P 이상이면 레벨 8(선장/호텔총괄/수석전문가)이 해금됩니다.','Correct! 8,000+ cumulative points unlocks Level 8: Captain / Hotel Director / Chief Specialist.')">8,000P+</button>
+            <button class="quiz-opt" data-ko="10,000P+" data-en="10,000P+" onclick="answer(this,'q6',false,'10,000P는 정의된 기준이 아닙니다.','10,000P is not a defined threshold.')">10,000P+</button>
+          </div>
+          <div class="quiz-fb" id="fb-q6"></div>
+        </div>
+        <div class="quiz-q" id="q7">
+          <div class="qnum">Q7 / 7</div>
+          <div class="qtxt" data-ko="바다이야기가 완전한 오프라인 상태(예: 먼바다)에서도 데이터를 저장할 수 있는 이유는?" data-en="Why can BADA STORY save data even when completely offline (e.g., in open ocean)?">바다이야기가 완전한 오프라인 상태(예: 먼바다)에서도 데이터를 저장할 수 있는 이유는?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-ko="Supabase에 실시간으로 저장한다" data-en="It saves to Supabase in real time" onclick="answer(this,'q7',false,'Supabase는 인터넷 연결이 필요하며 오프라인에서는 접근할 수 없습니다.','Supabase requires an active internet connection — it cannot be accessed offline.')">Supabase에 실시간으로 저장한다</button>
+            <button class="quiz-opt" data-ko="LocalStorage 아웃박스 패턴 — 로컬 저장 후 재연결 시 Supabase로 자동 동기화" data-en="LocalStorage outbox pattern — saves locally, auto-syncs to Supabase on reconnection" onclick="answer(this,'q7',true,'정답! LocalStorage 아웃박스 패턴은 데이터를 브라우저에 로컬 저장한 뒤, 인터넷이 복구되면 Supabase로 자동 동기화합니다.','Correct! The LocalStorage outbox pattern saves data to the browser locally, then auto-syncs to Supabase when internet is restored.')">LocalStorage 아웃박스 패턴 — 로컬 저장 후 재연결 시 Supabase로 자동 동기화</button>
+            <button class="quiz-opt" data-ko="전용 오프라인 서버가 저장을 처리한다" data-en="A dedicated offline server handles storage" onclick="answer(this,'q7',false,'전용 오프라인 서버는 없습니다 — 브라우저 자체를 사용합니다.','There is no dedicated offline server — the browser itself is used.')">전용 오프라인 서버가 저장을 처리한다</button>
+            <button class="quiz-opt" data-ko="데이터는 USB 저장장치에 백업된다" data-en="Data is backed up to USB storage" onclick="answer(this,'q7',false,'USB 저장장치는 이 시스템에서 사용되지 않습니다.','USB storage is not used in this system.')">데이터는 USB 저장장치에 백업된다</button>
+          </div>
+          <div class="quiz-fb" id="fb-q7"></div>
+        </div>
+        <button class="quiz-btn" id="quiz-submit-btn" onclick="showScore()" style="display:none;" data-ko="결과 보기 🎉" data-en="View Results 🎉">결과 보기 🎉</button>
+        <div class="quiz-score" id="quiz-score">
+          <div class="qs-ico" id="qs-ico">🎉</div>
+          <div class="qs-msg" id="qs-msg"></div>
+          <div class="qs-sub" id="qs-sub"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S10 COMPLETION ══ -->
+<section class="section" id="s10">
+  <div class="end-ico">🌊</div>
+  <div class="end-title" data-ko="온보딩 수료" data-en="Onboarding Complete">온보딩 수료</div>
+  <div class="end-msg" data-ko="바다이야기 플랫폼 온보딩을 모두 마쳤습니다. 환영합니다 — 함께 해양 출판의 미래를 만들어 갑시다." data-en="You have completed the BADA STORY platform onboarding. Welcome aboard — let's build the future of maritime publishing together.">바다이야기 플랫폼 온보딩을 모두 마쳤습니다. 환영합니다 — 함께 해양 출판의 미래를 만들어 갑시다.</div>
+  <div class="cert-box">
+    <div class="ct" data-ko="바다이야기 · 임직원 온보딩 프로그램" data-en="BADA STORY · EMPLOYEE ONBOARDING PROGRAM">바다이야기 · 임직원 온보딩 프로그램</div>
+    <div class="cn" data-ko="플랫폼 기초 과정 — 수료" data-en="Platform Fundamentals — Certified">플랫폼 기초 과정 — 수료</div>
+    <div class="cd">Acorn Publishing Co., Ltd. · 에이콘출판사 · 2025</div>
+  </div>
+</section>
+
+</main>
+<script>
+// Language state
+var LANG='ko';
+function setLang(l){
+  LANG=l;
+  document.documentElement.lang=l;
+  var kb=document.getElementById('lang-ko'),eb=document.getElementById('lang-en');
+  if(kb)kb.classList.toggle('on',l==='ko');
+  if(eb)eb.classList.toggle('on',l==='en');
+  var nodes=document.querySelectorAll('[data-ko]');
+  for(var i=0;i<nodes.length;i++){
+    var n=nodes[i];
+    var val=(l==='ko')?n.getAttribute('data-ko'):n.getAttribute('data-en');
+    if(val===null)continue;
+    if(n.getAttribute('data-html')==='1')n.innerHTML=val;
+    else n.textContent=val;
+  }
+}
+
+// Crew tabs
+function showCrew(dept,btn){
+  document.querySelectorAll('.crew-table').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.crew-tab').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('crew-'+dept).classList.add('on');
+  btn.classList.add('on');
+}
+
+// Quiz
+var quizAnswers={},totalQ=7;
+function answer(btn,qid,correct,fbKo,fbEn){
+  if(quizAnswers[qid]!==undefined)return;
+  quizAnswers[qid]=correct;
+  btn.closest('.quiz-q').querySelectorAll('.quiz-opt').forEach(function(o){o.classList.add('disabled');});
+  btn.classList.add(correct?'correct':'wrong');
+  var fb=(LANG==='ko')?fbKo:fbEn;
+  var el=document.getElementById('fb-'+qid);
+  el.textContent=(correct?'✅ ':'❌ ')+fb;
+  el.className='quiz-fb show '+(correct?'ok':'ng');
+  if(Object.keys(quizAnswers).length===totalQ)
+    document.getElementById('quiz-submit-btn').style.display='inline-block';
+}
+function showScore(){
+  var score=Object.values(quizAnswers).filter(function(v){return v;}).length;
+  var pct=Math.round(score/totalQ*100);
+  document.getElementById('qs-ico').textContent=pct===100?'🏆':pct>=70?'🎉':pct>=40?'📚':'💡';
+  var msg=(LANG==='ko')
+    ? score+' / '+totalQ+'문항 정답 ('+pct+'%)'
+    : score+' / '+totalQ+' correct  ('+pct+'%)';
+  document.getElementById('qs-msg').textContent=msg;
+  var sub;
+  if(LANG==='ko'){
+    sub=pct===100?'만점입니다! 바다이야기 전문가입니다 🌊':pct>=70?'잘하셨습니다! 놓친 섹션을 복습해 보세요.':'자료를 복습한 뒤 다시 시도해 주세요.';
+  }else{
+    sub=pct===100?'Perfect score! You are a BADA STORY expert 🌊':pct>=70?'Great work! Review any sections you missed.':'Please review the material and try again.';
+  }
+  document.getElementById('qs-sub').textContent=sub;
+  document.getElementById('quiz-score').classList.add('show');
+  document.getElementById('quiz-submit-btn').style.display='none';
+}
+
+// Progress & active nav
+var sections=document.querySelectorAll('.section');
+var navLinks=document.querySelectorAll('#nav-list a');
+function onScroll(){
+  var sy=window.scrollY+window.innerHeight*.35;
+  var cur=0;
+  sections.forEach(function(s,i){if(sy>=s.offsetTop)cur=i;});
+  navLinks.forEach(function(a){a.classList.remove('active');});
+  if(navLinks[cur])navLinks[cur].classList.add('active');
+  document.getElementById('prog-fill').style.width=Math.round((cur+1)/sections.length*100)+'%';
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+// Smooth scroll
+document.querySelectorAll('#nav-list a').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var el=document.getElementById(a.getAttribute('href').replace('#',''));
+    if(el)el.scrollIntoView({behavior:'smooth'});
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
