@@ -237,6 +237,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR','Malgun G
         <option value="none">없음 — 전체 인간 창작물</option>
         <option value="partial">일부 있음 (텍스트/이미지 등)</option>
         <option value="assisted">AI 보조 사용 (편집·교정 등)</option>
+        <option value="copyright_check">저작권 항목 있음 — 삭제 검토 필요</option>
       </select>
       <div class="hint">아마존 KDP 정책 준수를 위해 정확하게 선택해 주세요.</div>
     </div>
@@ -245,6 +246,25 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR','Malgun G
       <label>추가 메모</label>
       <textarea id="f-note" rows="3" placeholder="영문 원고의 총 글자 수(Word Count), 페이지 수, 종이책 크기/컬러/흑백 여부, 혹은 기타 대행사 요청 사항 및 특이 사항을 자유롭게 작성해 주세요."></textarea>
     </div>
+  </div>
+  <div class="card">
+    <div class="sec">원고 파일 첨부 (선택)</div>
+    <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:14px;">
+      원고, 표지 이미지 등 준비된 파일을 첨부해 주세요.<br>
+      <strong style="color:var(--text2);">파일 3개 이하 / 각 10MB 미만 / PDF·DOCX·EPUB·JPG·PNG·ZIP 허용</strong>
+    </div>
+    <div id="file-drop-zone" style="border:2px dashed var(--bdr);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:.15s;background:var(--s2);"
+      onclick="document.getElementById('f-files').click()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--blue)';this.style.background='rgba(21,96,184,.05)'"
+      ondragleave="this.style.borderColor='var(--bdr)';this.style.background='var(--s2)'"
+      ondrop="handleFileDrop(event)">
+      <div style="font-size:28px;margin-bottom:8px;">📎</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:4px;">클릭하거나 파일을 드래그하여 첨부</div>
+      <div style="font-size:11px;color:var(--text3);">PDF · DOCX · EPUB · JPG · PNG · ZIP · 최대 3개 · 각 10MB 미만</div>
+    </div>
+    <input id="f-files" type="file" multiple accept=".pdf,.docx,.epub,.jpg,.jpeg,.png,.zip" style="display:none" onchange="handleFileSelect(this.files)">
+    <div id="file-list" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"></div>
+    <div id="file-err" style="font-size:11px;color:var(--red);margin-top:4px;"></div>
   </div>
   <div class="btn-row">
     <button class="btn btn-ghost" onclick="goPage(2)">← 이전</button>
@@ -486,6 +506,7 @@ function buildReview(){
     ['AI 생성물', g('f-ai')||'미답변'],
     ['준비 자료', docs.length?docs.join(', '):'없음'],
     ['추가 메모', g('f-note')||'—'],
+    ['첨부 파일', ATTACHED_FILES.length ? ATTACHED_FILES.map(function(f){return f.name;}).join(', ') : '없음'],
   ];
   var html = '';
   rows.forEach(function(r){
@@ -495,6 +516,83 @@ function buildReview(){
 }
 
 // ── 제출 ─────────────────────────────────────────────────
+// ── 파일 첨부 관리 ─────────────────────────────────────────
+var ATTACHED_FILES = [];
+var MAX_FILES = 3;
+var MAX_SIZE  = 10 * 1024 * 1024; // 10MB
+var ALLOWED   = ['pdf','docx','epub','jpg','jpeg','png','zip'];
+
+function handleFileDrop(e){
+  e.preventDefault();
+  var zone = document.getElementById('file-drop-zone');
+  zone.style.borderColor='var(--bdr)'; zone.style.background='var(--s2)';
+  addFiles(Array.from(e.dataTransfer.files));
+}
+function handleFileSelect(files){ addFiles(Array.from(files)); }
+
+function addFiles(newFiles){
+  var errEl = document.getElementById('file-err');
+  errEl.textContent = '';
+  newFiles.forEach(function(f){
+    if(ATTACHED_FILES.length >= MAX_FILES){
+      errEl.textContent = '파일은 최대 '+MAX_FILES+'개까지 첨부할 수 있습니다.'; return;
+    }
+    var ext = f.name.split('.').pop().toLowerCase();
+    if(ALLOWED.indexOf(ext) < 0){
+      errEl.textContent = f.name+' — 허용되지 않는 파일 형식입니다.'; return;
+    }
+    if(f.size > MAX_SIZE){
+      errEl.textContent = f.name+' — 10MB를 초과합니다 ('+Math.round(f.size/1024/1024*10)/10+'MB).'; return;
+    }
+    if(ATTACHED_FILES.some(function(x){return x.name===f.name;})){
+      errEl.textContent = f.name+' — 이미 첨부된 파일입니다.'; return;
+    }
+    ATTACHED_FILES.push(f);
+  });
+  renderFileList();
+  // input 초기화 (같은 파일 재선택 허용)
+  var inp = document.getElementById('f-files');
+  if(inp) inp.value = '';
+}
+
+function removeFile(idx){
+  ATTACHED_FILES.splice(idx, 1);
+  renderFileList();
+  document.getElementById('file-err').textContent = '';
+}
+
+function renderFileList(){
+  var el = document.getElementById('file-list');
+  if(!el) return;
+  if(!ATTACHED_FILES.length){ el.innerHTML=''; return; }
+  el.innerHTML = ATTACHED_FILES.map(function(f, i){
+    var size = f.size > 1024*1024 ? Math.round(f.size/1024/1024*10)/10+'MB' : Math.round(f.size/1024)+'KB';
+    var ext = f.name.split('.').pop().toLowerCase();
+    var ico = {'pdf':'📄','docx':'📝','epub':'📖','jpg':'🖼','jpeg':'🖼','png':'🖼','zip':'📦'}[ext]||'📎';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r);">'
+      +'<span style="font-size:18px;">'+ico+'</span>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+f.name+'</div>'
+      +'<div style="font-size:10px;color:var(--text3);">'+size+'</div>'
+      +'</div>'
+      +'<button onclick="removeFile('+i+')" style="padding:3px 9px;background:none;border:1px solid var(--bdr);border-radius:5px;font-size:11px;cursor:pointer;color:var(--red);flex-shrink:0;">✕</button>'
+      +'</div>';
+  }).join('');
+}
+
+// 파일을 Base64로 변환하여 Supabase Storage 또는 JSON으로 저장
+function filesToBase64Promise(){
+  return Promise.all(ATTACHED_FILES.map(function(f){
+    return new Promise(function(resolve){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        resolve({name:f.name, size:f.size, type:f.type, data:e.target.result.split(',')[1]});
+      };
+      reader.readAsDataURL(f);
+    });
+  }));
+}
+
 function submitForm(){
   var consentEl = document.getElementById('f-consent');
   var consentErr = document.getElementById('consent-err');
@@ -523,6 +621,7 @@ function submitForm(){
     price_usd:g('f-price'), kdp_select:g('f-kdp-select'), ai_content:g('f-ai'),
     copyright_note:g('f-copyright'), docs_ready:JSON.stringify(docs),
     extra_note:g('f-note'), status:'new',
+    files_info: JSON.stringify(ATTACHED_FILES.map(function(f){return {name:f.name,size:f.size,type:f.type};})),
     submitted_at:new Date().toISOString()
   };
 
@@ -532,6 +631,12 @@ function submitForm(){
     saved.push(data);
     localStorage.setItem('kdp_proposals_local',JSON.stringify(saved));
   }catch(e){}
+
+  // 파일 → Base64 변환 후 제출
+  filesToBase64Promise().then(function(fileDataArr){
+    if(fileDataArr.length > 0){
+      data.files_b64 = JSON.stringify(fileDataArr);
+    }
 
   // Supabase 시도
   fetch(SB_URL+'/rest/v1/'+SB_TABLE, {
@@ -543,11 +648,12 @@ function submitForm(){
       'Prefer':'return=minimal'
     },
     body:JSON.stringify(data)
-  }).then(function(r){
-    showDone(id, !r.ok);
-  }).catch(function(){
-    showDone(id, true);
-  });
+    }).then(function(r){
+      showDone(id, !r.ok);
+    }).catch(function(){
+      showDone(id, true);
+    });
+  }); // filesToBase64Promise
 }
 
 function showDone(id, localOnly){
