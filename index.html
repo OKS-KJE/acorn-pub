@@ -6643,6 +6643,15 @@ function kpOpenDetail(id){
     +'<div id="kp-memo-list" style="margin-bottom:10px;">'
     +memos.map(function(m){return'<div style="font-size:11px;color:var(--text3);padding:5px 0;border-bottom:1px solid var(--border);">'+escH(m.dt||'')+'&nbsp;&nbsp;'+escH(m.text||'')+'</div>';}).join('')
     +'</div>';
+    +'</div>';
+  var memoInp = document.getElementById('kp-memo-input');
+  if(memoInp) memoInp.value='';
+  document.getElementById('kp-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function kpCard2(k,v){
+  return '<div style="background:var(--s2);border-radius:8px;padding:9px 12px;">'
     +'<div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:2px;">'+k+'</div>'
     +'<div style="font-size:12px;color:var(--text);">'+(v||'—')+'</div></div>';
 }
