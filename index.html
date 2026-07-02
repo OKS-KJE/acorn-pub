@@ -3458,9 +3458,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
     <!-- KDP 탭 -->
     <div style="display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:0;">
-      <button id="kdptab-btn-0" onclick="kdpTab(0)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:700;color:var(--blue);border-bottom:2.5px solid var(--blue);margin-bottom:-2px;cursor:pointer;">🗺 지원 프로세스</button>
-      <button id="kdptab-btn-1" onclick="kdpTab(1)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">📋 파이프라인 관리</button>
-      <button id="kdptab-btn-2" onclick="kdpTab(2)" style="padding:10px 18px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">🔗 저자 링크 생성</button>
+      <button id="kdptab-btn-0" onclick="kdpTab(0)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:700;color:var(--blue);border-bottom:2.5px solid var(--blue);margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🗺 지원 프로세스</button>
+      <button id="kdptab-btn-1" onclick="kdpTab(1)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📋 파이프라인 관리</button>
+      <button id="kdptab-btn-2" onclick="kdpTab(2)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📖 KDP 제작 가이드</button>
+      <button id="kdptab-btn-3" onclick="kdpTab(3)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">✅ 출간 체크리스트</button>
+      <button id="kdptab-btn-4" onclick="kdpTab(4)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🔗 저자 링크 생성</button>
     </div>
 
     <!-- TAB 0: 지원 프로세스 -->
@@ -3521,6 +3523,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
     </div>
+
+
     </div><!-- /kdptab-0 -->
 
     <!-- TAB 1: 파이프라인 관리 -->
@@ -3550,8 +3554,71 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div id="kp-table" style="min-height:80px;"></div>
     </div><!-- /kdptab-1 -->
 
-    <!-- TAB 2: 저자 링크 생성 -->
+    <!-- TAB 2: KDP 제작 가이드 -->
     <div id="kdptab-2" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:4px;">PRODUCTION GUIDE</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);">KDP 표지 · 내지 제작 가이드</div>
+        </div>
+        <a href="KDP_표지제작가이드_에이콘.docx" download style="padding:8px 16px;background:var(--blue);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">⬇ DOCX</a>
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:18px;background:var(--s2);border-radius:10px;padding:4px;">
+        <button id="gt-0" onclick="guideTab(0)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;">📱 전자책 표지</button>
+        <button id="gt-1" onclick="guideTab(1)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);">📚 POD 표지</button>
+        <button id="gt-2" onclick="guideTab(2)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);">📝 전자책 내지</button>
+        <button id="gt-3" onclick="guideTab(3)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);">🖨 종이책 내지</button>
+      </div>
+      <div id="gp-0">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(21,96,184,.15);">📐 기본 규격</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 권장: <strong>1600 × 2560px</strong></div><div>• 최소 해상도: <strong>300 DPI</strong></div><div>• 형식: <strong>JPEG 권장</strong>, 5MB 이하</div></div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(21,96,184,.15);">🎨 색상·구성</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• <strong>RGB 필수</strong> (CMYK 불가)</div><div>• 제목·저자명 반드시 포함</div><div>• <span style="color:#DC2626;font-weight:700;">금지</span>: 책등·바코드·뒷표지</div><div>• 밝은 배경 시 3~4px 테두리 권장</div><div>• 썸네일(85px) 가독성 필수 확인</div></div></div>
+        </div>
+      </div>
+      <div id="gp-1" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(13,148,136,.15);">📐 구조·해상도</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 앞표지+책등+뒤표지 <strong>통합 1장</strong></div><div>• 레이어 <strong>평면화(flatten)</strong> 필수</div><div>• 최소 <strong>300 DPI</strong>, 최대 600 DPI</div><div>• 파일: <strong>PDF 권장</strong></div><div>• <span style="color:#DC2626;font-weight:700;">금지</span>: 재단선·워터마크·placeholder</div></div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(13,148,136,.15);">📏 Bleed·여백</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• Bleed: 사방 <strong>0.125인치(3.2mm)</strong></div><div>• 안전여백: 외곽 <strong>0.25인치(6.4mm)</strong> 안쪽</div></div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(13,148,136,.15);">📏 책등·판형</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 백색지 × <strong>0.002252인치</strong>/p</div><div>• 크림지 × <strong>0.0025인치</strong>/p</div><div>• 컬러지 × <strong>0.002347인치</strong>/p</div><div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);"><div>• <strong>148×210mm</strong>(5.83"×8.27") 에이콘 권장</div><div>• <strong>152.4×228.6mm</strong>(6"×9")</div></div></div></div>
+        </div>
+      </div>
+      <div id="gp-2" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(91,33,182,.15);">📄 파일·구조</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 형식: <strong>DOCX 또는 EPUB</strong></div><div>• 페이지번호·머리말·꼬리말 <strong>제거</strong></div><div>• 장 제목: <strong>Heading 1~3</strong> 스타일</div><div>• 탭 들여쓰기 금지 → Word 스타일로</div><div>• 첫줄 들여쓰기 0.2인치, 줄간격 단일</div></div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(91,33,182,.15);">🖼 이미지·각주</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 텍스트박스·도형 <strong>금지</strong> → 이미지 변환</div><div>• 각주 링크 작동 확인 (미주 자동변환)</div><div>• 목차·내부링크 하이퍼링크 연결</div><div>• 이미지 원본 <strong>300 DPI 이상</strong></div><div>• Kindle Previewer 검수 완료</div></div></div>
+        </div>
+      </div>
+      <div id="gp-3" style="display:none;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(184,155,84,.2);">📄 파일·폰트</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• bleed 없음: PDF·DOCX·RTF·HTML·TXT</div><div>• bleed 있음: <strong>PDF 필수</strong></div><div>• 최소 글자: <strong>7pt</strong></div><div>• 폰트·이미지 <strong>임베드 필수</strong></div><div>• <strong>단면(single page)</strong> PDF — 펼침면 금지</div></div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(184,155,84,.2);">📏 여백 기준</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 24~150p: gutter <strong>0.375인치</strong></div><div>• 151~300p: gutter <strong>0.5인치</strong></div><div>• 바깥: no-bleed <strong>0.25인치</strong>, bleed <strong>0.375인치</strong></div><div>• 이미지: <strong>300~600 DPI</strong></div><div>• 선 두께: <strong>최소 0.75pt</strong>(0.3mm)</div></div></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:10px 14px;background:var(--s2);border-radius:var(--r);display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="https://kdp.amazon.com/en_US/help/topic/G6GTK3T3NUHKLEFX" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 전자책 표지</a>
+        <a href="https://kdp.amazon.com/en_US/help/topic/G201857950" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 종이책 표지</a>
+        <a href="https://kdp.amazon.com/help/topic/G201605700" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 전자책 내지</a>
+        <a href="https://kdp.amazon.com/help/topic/G201953020" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 종이책 내지</a>
+        <a href="https://kdp.amazon.com/cover-calculator" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ Cover Calculator</a>
+      </div>
+    </div><!-- /kdptab-2 -->
+
+    <!-- TAB 3: 출간 체크리스트 -->
+    <div id="kdptab-3" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;">PUBLISHING CHECKLIST</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);">KDP 전자책·종이책 출간 체크리스트</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px;">진행 상황은 브라우저에 자동 저장됩니다.</div>
+        </div>
+        <button onclick="kdpResetChecklist()" style="padding:7px 14px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 초기화</button>
+      </div>
+      <div id="kdp-checklist-body" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </div><!-- /kdptab-3 -->
+
+
+    <!-- TAB 4: 저자 링크 생성 -->
+    <div id="kdptab-4" style="display:none;">
       <div style="background:linear-gradient(135deg,rgba(21,96,184,.07),rgba(13,148,136,.05));border:1.5px solid rgba(21,96,184,.18);border-radius:var(--rL);padding:22px 26px;margin-bottom:22px;">
         <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:8px;">AUTHOR LINK GENERATOR</div>
         <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;">저자 맞춤 제안서 링크 생성</div>
@@ -3597,7 +3664,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <button onclick="copyEmailText()" style="margin-top:8px;padding:6px 13px;background:none;border:1.5px solid rgba(13,148,136,.3);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:var(--teal);">📋 이메일 문구 복사</button>
         </div>
       </div>
-    </div><!-- /kdptab-2 -->
+    </div><!-- /kdptab-4 -->
 
     <!-- 제안서 상세 모달 -->
     <div id="kp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
@@ -6495,7 +6562,7 @@ function pplSave(){
 
 // ── KDP 탭 전환 ───────────────────────────────────────
 function kdpTab(n){
-  [0,1,2].forEach(function(i){
+  [0,1,2,3,4].forEach(function(i){
     var btn = document.getElementById('kdptab-btn-'+i);
     var panel = document.getElementById('kdptab-'+i);
     var active = i===n;
@@ -6507,6 +6574,123 @@ function kdpTab(n){
     if(panel) panel.style.display = active?'block':'none';
   });
   if(n===1) kpLoad();
+  if(n===3) kdpBuildChecklist();
+}
+
+// ── 가이드 서브탭 ─────────────────────────────────────────
+function guideTab(n){
+  [0,1,2,3].forEach(function(i){
+    var btn=document.getElementById('gt-'+i);
+    var panel=document.getElementById('gp-'+i);
+    if(btn){btn.style.background=i===n?'var(--blue)':'transparent';btn.style.color=i===n?'#fff':'var(--text3)';btn.style.fontWeight=i===n?'700':'600';}
+    if(panel) panel.style.display=i===n?'block':'none';
+  });
+}
+
+// ── 출간 체크리스트 ────────────────────────────────────────
+var KDP_CL_KEY = 'kdp_checklist_v1';
+var KDP_CL_GROUPS = [
+  {title:'1. 출간 기본 정보', color:'var(--blue)', items:[
+    '출간 형태 확정: 전자책 / 종이책 / 동시 출간 여부',
+    '제목, 부제, 저자명, 기여자명 최종 확정',
+    '도서 소개문, 저자 소개문, 키워드, 카테고리 초안 작성',
+    'ISBN 사용 방식 결정: KDP 무료 ISBN 또는 자체 ISBN',
+    'KDP 계정, 세금, 지급 정보 등록 완료',
+  ]},
+  {title:'2. 전자책 원고(내지)', color:'var(--purple)', items:[
+    'EPUB 또는 DOCX 원고 최종본 준비',
+    '장/절 스타일(Heading) 구조화 완료',
+    '목차(TOC) 링크 및 내부 하이퍼링크 점검',
+    '페이지 번호, 머리말, 꼬리말 제거',
+    '이미지, 표, 각주 링크 Kindle Previewer 기준 검수 완료',
+  ]},
+  {title:'3. 종이책 원고(내지)', color:'var(--gold2)', items:[
+    '판형(trim size) 확정',
+    '페이지 수 최종 확정 및 안쪽 여백(gutter) 반영',
+    'bleed 여부 결정, bleed 사용 시 PDF 출력 준비',
+    '폰트 임베드 및 최소 7pt 이상 가독성 확인',
+    '이미지 300DPI 이상, 단면(single page) PDF 검수 완료',
+  ]},
+  {title:'4. 전자책 표지', color:'var(--blue)', items:[
+    '전자책 표지 1600×2560px 권장 규격 확인',
+    'RGB, JPEG 형식으로 저장',
+    '제목·저자명 썸네일 가독성 확인',
+    '책등, 뒤표지, 바코드 요소 제외 확인',
+  ]},
+  {title:'5. 종이책 표지', color:'var(--teal)', items:[
+    '최종 페이지 수 기준 Cover Calculator 템플릿 다운로드',
+    '앞표지·책등·뒤표지 통합 파일 제작 완료',
+    'bleed 0.125인치 및 안전 여백 반영',
+    '바코드 영역 비워두기 확인',
+    '300DPI PDF 출력 및 워터마크/재단선 제거 완료',
+  ]},
+  {title:'6. KDP 업로드', color:'#10B981', items:[
+    'Bookshelf에서 eBook/Paperback 프로젝트 생성',
+    '제목, 설명, 키워드, 카테고리, 권리 정보 입력',
+    '원고 파일 및 표지 파일 업로드 완료',
+    'eBook Previewer / Print Previewer 검수 완료',
+    '가격 및 로열티 옵션 설정 완료',
+  ]},
+  {title:'7. 최종 검수 및 출간', color:'#DC2626', items:[
+    '메타데이터와 표지 표기가 일치하는지 확인',
+    '오탈자, 링크 오류, 잘림, 이미지 깨짐 여부 최종 확인',
+    '종이책 proof copy 필요 여부 결정 및 주문',
+    'Publish 실행 또는 예약 출간 설정',
+    '라이브 페이지 생성 후 상품 페이지 재검수',
+  ]},
+];
+
+var _clBuilt = false;
+function kdpBuildChecklist(){
+  if(_clBuilt) return;
+  _clBuilt = true;
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(KDP_CL_KEY)||'{}'); }catch(e){}
+  var el = document.getElementById('kdp-checklist-body');
+  if(!el) return;
+  var html = '';
+  KDP_CL_GROUPS.forEach(function(grp, gi){
+    var done = grp.items.filter(function(_,ii){ return saved[gi+'_'+ii]; }).length;
+    html += '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:4px solid '+grp.color+';border-radius:var(--rL);overflow:hidden;">'
+      +'<div style="padding:12px 16px;background:var(--s2);display:flex;align-items:center;justify-content:space-between;">'
+      +'<div style="font-size:13px;font-weight:800;color:var(--text);">'+grp.title+'</div>'
+      +'<span id="cl-prog-'+gi+'" style="font-size:11px;font-weight:700;color:'+grp.color+';">'+done+'/'+grp.items.length+'</span>'
+      +'</div>'
+      +'<div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;">'
+      +grp.items.map(function(item,ii){
+        var key=gi+'_'+ii;
+        var checked = saved[key]?'checked':'';
+        return '<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.6;">'
+          +'<input type="checkbox" id="cl-'+key+'" '+checked+' onchange="clSave('+gi+','+ii+')" '
+          +'style="margin-top:2px;width:15px;height:15px;accent-color:'+grp.color+';flex-shrink:0;cursor:pointer;">'
+          +'<span id="cls-'+key+'" style="'+(checked?'text-decoration:line-through;color:var(--text3);':'')+'">'+item+'</span>'
+          +'</label>';
+      }).join('')
+      +'</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function clSave(gi, ii){
+  var key=gi+'_'+ii;
+  var cb=document.getElementById('cl-'+key);
+  var sp=document.getElementById('cls-'+key);
+  var saved={};try{saved=JSON.parse(localStorage.getItem(KDP_CL_KEY)||'{}');}catch(e){}
+  if(cb.checked){saved[key]=true;if(sp){sp.style.textDecoration='line-through';sp.style.color='var(--text3)';}}
+  else{delete saved[key];if(sp){sp.style.textDecoration='';sp.style.color='var(--text2)';}}
+  localStorage.setItem(KDP_CL_KEY,JSON.stringify(saved));
+  // 진행률 업데이트
+  var grp=KDP_CL_GROUPS[gi];
+  var done=grp.items.filter(function(_,i){return saved[gi+'_'+i];}).length;
+  var prog=document.getElementById('cl-prog-'+gi);
+  if(prog) prog.textContent=done+'/'+grp.items.length;
+}
+
+function kdpResetChecklist(){
+  if(!confirm('체크리스트를 초기화하시겠습니까?')) return;
+  localStorage.removeItem(KDP_CL_KEY);
+  _clBuilt=false;
+  kdpBuildChecklist();
 }
 
 // ── 상태 정의 ─────────────────────────────────────────
