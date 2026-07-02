@@ -480,11 +480,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="nav-item" onclick="nav('s10')" style="color:#A78BFA;border-left:2px solid rgba(167,139,250,.4);">
       <span class="nav-icon">📝</span>회의록
     </div>
-    <div class="nav-item" onclick="nav('s9')" style="color:#5DD6B3;border-left:2px solid rgba(93,214,179,.4);">
-      <span class="nav-icon">🧪</span>Pilot Test
-    </div>
     <div class="nav-item" onclick="nav('s15')">
       <span class="nav-icon">🌍</span>Amazon KDP
+    </div>
+    <div class="nav-item" onclick="nav('s9')">
+      <span class="nav-icon">🧪</span>Pilot Test
     </div>
   </div>
   <div class="sidebar-footer">
@@ -3555,51 +3555,235 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div><!-- /kdptab-1 -->
 
     <!-- TAB 2: KDP 제작 가이드 -->
+    <!-- TAB 2: KDP 제작 가이드 -->
     <div id="kdptab-2" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+
+      <!-- 헤더 -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
         <div>
           <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:4px;">PRODUCTION GUIDE</div>
-          <div style="font-size:15px;font-weight:800;color:var(--text);">KDP 표지 · 내지 제작 가이드</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);">KDP 표지·내지 제작 가이드</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px;">전자책 + POD 종이책 통합 실무 기준 — 에이콘출판사 기획편집부</div>
         </div>
-        <a href="KDP_표지제작가이드_에이콘.docx" download style="padding:8px 16px;background:var(--blue);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">⬇ DOCX</a>
+        <a href="Acorn_KDP_Production_Guide.docx" download style="padding:8px 16px;background:var(--blue);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;">⬇ DOCX 다운로드</a>
       </div>
-      <div style="display:flex;gap:4px;margin-bottom:18px;background:var(--s2);border-radius:10px;padding:4px;">
-        <button id="gt-0" onclick="guideTab(0)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;">📱 전자책 표지</button>
-        <button id="gt-1" onclick="guideTab(1)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);">📚 POD 표지</button>
-        <button id="gt-2" onclick="guideTab(2)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);">📝 전자책 내지</button>
-        <button id="gt-3" onclick="guideTab(3)" style="flex:1;padding:8px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);">🖨 종이책 내지</button>
+
+      <!-- 서브탭 -->
+      <div style="display:flex;gap:3px;margin-bottom:18px;background:var(--s2);border-radius:10px;padding:4px;overflow-x:auto;">
+        <button id="gt-0" onclick="guideTab(0)" style="flex:1;min-width:90px;padding:8px 6px;border:none;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;white-space:nowrap;">📱 전자책 표지</button>
+        <button id="gt-1" onclick="guideTab(1)" style="flex:1;min-width:90px;padding:8px 6px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);white-space:nowrap;">📚 POD 표지</button>
+        <button id="gt-2" onclick="guideTab(2)" style="flex:1;min-width:90px;padding:8px 6px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);white-space:nowrap;">📝 전자책 내지</button>
+        <button id="gt-3" onclick="guideTab(3)" style="flex:1;min-width:90px;padding:8px 6px;border:none;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--text3);white-space:nowrap;">🖨 종이책 내지</button>
       </div>
+
+      <!-- ── 전자책 표지 ── -->
       <div id="gp-0">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(21,96,184,.15);">📐 기본 규격</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 권장: <strong>1600 × 2560px</strong></div><div>• 최소 해상도: <strong>300 DPI</strong></div><div>• 형식: <strong>JPEG 권장</strong>, 5MB 이하</div></div></div>
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(21,96,184,.15);">🎨 색상·구성</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• <strong>RGB 필수</strong> (CMYK 불가)</div><div>• 제목·저자명 반드시 포함</div><div>• <span style="color:#DC2626;font-weight:700;">금지</span>: 책등·바코드·뒷표지</div><div>• 밝은 배경 시 3~4px 테두리 권장</div><div>• 썸네일(85px) 가독성 필수 확인</div></div></div>
+        <!-- 비주얼 다이어그램 -->
+        <div style="margin-bottom:18px;background:linear-gradient(135deg,rgba(21,96,184,.06),rgba(21,96,184,.02));border:1.5px solid rgba(21,96,184,.2);border-radius:var(--rL);padding:20px 24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;">📐 표지 구조</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+            <!-- 표지 미리보기 -->
+            <div style="text-align:center;">
+              <div style="width:90px;height:144px;border:3px solid var(--blue);border-radius:4px;background:linear-gradient(160deg,#1560B8 0%,#0D2137 100%);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;box-shadow:4px 4px 12px rgba(0,0,0,.2);">
+                <div style="font-size:9px;font-weight:800;color:#fff;text-align:center;padding:0 6px;line-height:1.3;">BOOK TITLE</div>
+                <div style="width:50px;height:1px;background:rgba(255,255,255,.3);"></div>
+                <div style="font-size:7px;color:rgba(255,255,255,.7);">Author Name</div>
+                <div style="position:absolute;bottom:4px;right:4px;font-size:6px;color:rgba(255,255,255,.4);">ACORN</div>
+              </div>
+              <div style="font-size:10px;color:var(--blue);font-weight:700;margin-top:6px;">앞표지만</div>
+            </div>
+            <!-- 화살표+설명 -->
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);">
+                <span style="width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
+                <span><strong>1,600 × 2,560 px</strong> 권장 (비율 1:1.6)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);">
+                <span style="width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
+                <span><strong>RGB</strong> 필수 — CMYK 업로드 즉시 거절</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);">
+                <span style="width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:800;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
+                <span><strong>JPEG</strong> 권장 · <strong>5MB</strong> 이하 · 300 DPI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 스펙 카드 -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:14px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:8px;">✅ 필수 포함</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 제목(Title)</div><div>• 저자명(Author Name)</div>
+              <div>• 출판사 로고(선택)</div>
+            </div>
+          </div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid #DC2626;border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#DC2626;margin-bottom:8px;">🚫 절대 금지</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 책등(Spine)</div><div>• 뒤표지(Back Cover)</div>
+              <div>• 바코드 · 워터마크</div>
+            </div>
+          </div>
+          <div style="background:rgba(245,158,11,.07);border:1.5px solid rgba(245,158,11,.3);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#B45309;margin-bottom:8px;">⚠ 주의사항</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 흰 배경 → 회색 테두리 3px 추가</div>
+              <div>• 썸네일(85px) 가독성 필수 확인</div>
+              <div>• 텍스트 명도 대비 충분히 확보</div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- ── POD 종이책 표지 ── -->
       <div id="gp-1" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(13,148,136,.15);">📐 구조·해상도</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 앞표지+책등+뒤표지 <strong>통합 1장</strong></div><div>• 레이어 <strong>평면화(flatten)</strong> 필수</div><div>• 최소 <strong>300 DPI</strong>, 최대 600 DPI</div><div>• 파일: <strong>PDF 권장</strong></div><div>• <span style="color:#DC2626;font-weight:700;">금지</span>: 재단선·워터마크·placeholder</div></div></div>
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(13,148,136,.15);">📏 Bleed·여백</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• Bleed: 사방 <strong>0.125인치(3.2mm)</strong></div><div>• 안전여백: 외곽 <strong>0.25인치(6.4mm)</strong> 안쪽</div></div></div>
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(13,148,136,.15);">📏 책등·판형</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 백색지 × <strong>0.002252인치</strong>/p</div><div>• 크림지 × <strong>0.0025인치</strong>/p</div><div>• 컬러지 × <strong>0.002347인치</strong>/p</div><div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);"><div>• <strong>148×210mm</strong>(5.83"×8.27") 에이콘 권장</div><div>• <strong>152.4×228.6mm</strong>(6"×9")</div></div></div></div>
+        <div style="margin-bottom:18px;background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02));border:1.5px solid rgba(13,148,136,.2);border-radius:var(--rL);padding:20px 24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;">📐 표지 구조 — 3면 통합</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+            <!-- 3면 다이어그램 -->
+            <div style="display:flex;align-items:stretch;gap:0;border:2px solid var(--teal);border-radius:6px;overflow:hidden;box-shadow:4px 4px 12px rgba(0,0,0,.15);">
+              <div style="width:70px;height:110px;background:linear-gradient(160deg,#1A3A5C,#0D2137);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px;">
+                <div style="font-size:8px;color:rgba(255,255,255,.6);font-weight:700;text-align:center;line-height:1.4;">뒤표지<br>Back</div>
+              </div>
+              <div style="width:18px;background:linear-gradient(160deg,#0D9488,#0A5E58);display:flex;align-items:center;justify-content:center;">
+                <div style="font-size:7px;color:#fff;font-weight:800;writing-mode:vertical-rl;letter-spacing:1px;">SPINE</div>
+              </div>
+              <div style="width:80px;height:110px;background:linear-gradient(160deg,#1560B8,#0D2137);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;">
+                <div style="font-size:8px;font-weight:800;color:#fff;text-align:center;line-height:1.3;">BOOK TITLE</div>
+                <div style="font-size:6px;color:rgba(255,255,255,.7);">Author</div>
+              </div>
+            </div>
+            <!-- 설명 -->
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);">
+                <span style="background:var(--teal);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:100px;">Bleed</span>
+                <span>사방 <strong>0.125인치 (3.2mm)</strong></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);">
+                <span style="background:#10B981;color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:100px;">Safety</span>
+                <span>외곽 <strong>0.25인치 (6.4mm)</strong> 안쪽</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);">
+                <span style="background:var(--teal);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:100px;">DPI</span>
+                <span>최소 <strong>300</strong>, 권장 최대 600</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);">
+                <span style="background:var(--teal);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:100px;">File</span>
+                <span><strong>PDF</strong> 권장 (평면화 필수)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:14px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:8px;">📏 책등 계수 (페이지당)</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>백색지 × <strong>0.002252인치</strong></div>
+              <div>크림지 × <strong>0.0025인치</strong></div>
+              <div>컬러지 × <strong>0.002347인치</strong></div>
+            </div>
+          </div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:8px;">📐 에이콘 권장 판형</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div><strong>148×210mm</strong> (5.83"×8.27") ⭐</div>
+              <div><strong>152.4×228.6mm</strong> (6"×9")</div>
+              <div>139.7×215.9mm (5.5"×8.5")</div>
+            </div>
+          </div>
+          <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#DC2626;margin-bottom:8px;">🚫 절대 금지</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 재단선(Crop Marks)</div><div>• 바코드 직접 삽입</div>
+              <div>• 워터마크 · placeholder</div><div>• 레이어 미평면화</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:10px 14px;background:rgba(13,148,136,.07);border-radius:8px;font-size:11px;color:var(--teal);font-weight:600;">
+          💡 가로 = bleed + 뒤표지 너비 + <strong>책등 너비</strong> + 앞표지 너비 + bleed &nbsp;|&nbsp; 세로 = bleed + 재단 높이 + bleed
         </div>
       </div>
+
+      <!-- ── 전자책 내지 ── -->
       <div id="gp-2" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(91,33,182,.15);">📄 파일·구조</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 형식: <strong>DOCX 또는 EPUB</strong></div><div>• 페이지번호·머리말·꼬리말 <strong>제거</strong></div><div>• 장 제목: <strong>Heading 1~3</strong> 스타일</div><div>• 탭 들여쓰기 금지 → Word 스타일로</div><div>• 첫줄 들여쓰기 0.2인치, 줄간격 단일</div></div></div>
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(91,33,182,.15);">🖼 이미지·각주</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 텍스트박스·도형 <strong>금지</strong> → 이미지 변환</div><div>• 각주 링크 작동 확인 (미주 자동변환)</div><div>• 목차·내부링크 하이퍼링크 연결</div><div>• 이미지 원본 <strong>300 DPI 이상</strong></div><div>• Kindle Previewer 검수 완료</div></div></div>
+        <div style="margin-bottom:16px;padding:14px 18px;background:rgba(91,33,182,.05);border:1.5px solid rgba(91,33,182,.2);border-radius:var(--rL);font-size:12px;color:var(--text2);line-height:1.7;">
+          <strong style="color:var(--purple);">💡 핵심 원칙</strong> — 전자책은 화면 크기·글자 크기에 따라 텍스트가 자동 재흐름(Reflow)됩니다. <strong>고정 레이아웃이 아닌 스타일 중심 편집</strong>이 필수입니다.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:14px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:8px;">📄 파일·구조</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 형식: <strong>DOCX 또는 EPUB</strong></div>
+              <div>• 장/절: <strong>Heading 1~3</strong> 스타일</div>
+              <div>• 첫줄 들여쓰기: <strong>0.2인치</strong></div>
+              <div>• 줄간격: 단일(Single)</div>
+            </div>
+          </div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:8px;">✅ 필수 처리</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 페이지 번호 <strong>제거</strong></div>
+              <div>• 머리말·꼬리말 <strong>제거</strong></div>
+              <div>• 목차·각주 <strong>링크 연결</strong></div>
+              <div>• Kindle Previewer <strong>검수</strong></div>
+            </div>
+          </div>
+          <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#DC2626;margin-bottom:8px;">🚫 금지</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 탭(Tab) 들여쓰기</div>
+              <div>• 텍스트 박스·도형</div>
+              <div>• 연속 빈줄(하드리턴)</div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- ── 종이책 내지 ── -->
       <div id="gp-3" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(184,155,84,.2);">📄 파일·폰트</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• bleed 없음: PDF·DOCX·RTF·HTML·TXT</div><div>• bleed 있음: <strong>PDF 필수</strong></div><div>• 최소 글자: <strong>7pt</strong></div><div>• 폰트·이미지 <strong>임베드 필수</strong></div><div>• <strong>단면(single page)</strong> PDF — 펼침면 금지</div></div></div>
-          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:15px 17px;"><div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid rgba(184,155,84,.2);">📏 여백 기준</div><div style="font-size:12px;color:var(--text2);line-height:1.9;"><div>• 24~150p: gutter <strong>0.375인치</strong></div><div>• 151~300p: gutter <strong>0.5인치</strong></div><div>• 바깥: no-bleed <strong>0.25인치</strong>, bleed <strong>0.375인치</strong></div><div>• 이미지: <strong>300~600 DPI</strong></div><div>• 선 두께: <strong>최소 0.75pt</strong>(0.3mm)</div></div></div>
+        <div style="margin-bottom:16px;padding:14px 18px;background:rgba(184,155,84,.07);border:1.5px solid rgba(184,155,84,.25);border-radius:var(--rL);font-size:12px;color:var(--text2);line-height:1.7;">
+          <strong style="color:var(--gold2);">💡 핵심 원칙</strong> — 종이책은 판형·여백·페이지 수를 기준으로 레이아웃을 고정합니다. <strong>전자책과 동일한 파일을 사용하면 오류가 발생</strong>합니다.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:14px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:8px;">📄 파일·폰트</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• bleed 없음: PDF·DOCX·RTF</div>
+              <div>• bleed 있음: <strong>PDF 필수</strong></div>
+              <div>• 최소 글자: <strong>7pt</strong></div>
+              <div>• 폰트·이미지 <strong>임베드 필수</strong></div>
+              <div>• <strong>단면(Single Page)</strong> PDF</div>
+            </div>
+          </div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:8px;">📏 안쪽 여백(Gutter)</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>24~150p: <strong>0.375인치</strong></div>
+              <div>151~300p: <strong>0.5인치</strong></div>
+              <div>301~500p: <strong>0.625인치</strong></div>
+              <div>501p 이상: <strong>0.75인치</strong></div>
+            </div>
+          </div>
+          <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#DC2626;margin-bottom:8px;">🚫 금지·주의</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.85;">
+              <div>• 펼침면(Spread) PDF</div>
+              <div>• 미임베드 폰트</div>
+              <div>• 선 두께 0.75pt 미만</div>
+              <div>• 이미지 300 DPI 미만</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div style="margin-top:16px;padding:10px 14px;background:var(--s2);border-radius:var(--r);display:flex;gap:14px;flex-wrap:wrap;">
-        <a href="https://kdp.amazon.com/en_US/help/topic/G6GTK3T3NUHKLEFX" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 전자책 표지</a>
-        <a href="https://kdp.amazon.com/en_US/help/topic/G201857950" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 종이책 표지</a>
-        <a href="https://kdp.amazon.com/help/topic/G201605700" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 전자책 내지</a>
-        <a href="https://kdp.amazon.com/help/topic/G201953020" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ 종이책 내지</a>
-        <a href="https://kdp.amazon.com/cover-calculator" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none;">↗ Cover Calculator</a>
+
+      <!-- 공통 참고 링크 -->
+      <div style="margin-top:14px;padding:10px 14px;background:var(--s2);border-radius:8px;display:flex;gap:14px;flex-wrap:wrap;font-size:11px;">
+        <a href="https://kdp.amazon.com/en_US/help/topic/G6GTK3T3NUHKLEFX" target="_blank" style="color:var(--blue);text-decoration:none;">↗ 전자책 표지</a>
+        <a href="https://kdp.amazon.com/en_US/help/topic/G201857950" target="_blank" style="color:var(--blue);text-decoration:none;">↗ 종이책 표지</a>
+        <a href="https://kdp.amazon.com/help/topic/G201605700" target="_blank" style="color:var(--blue);text-decoration:none;">↗ 전자책 내지</a>
+        <a href="https://kdp.amazon.com/help/topic/G201953020" target="_blank" style="color:var(--blue);text-decoration:none;">↗ 종이책 내지</a>
+        <a href="https://kdp.amazon.com/cover-calculator" target="_blank" style="color:var(--blue);text-decoration:none;">↗ Cover Calculator</a>
       </div>
     </div><!-- /kdptab-2 -->
 
