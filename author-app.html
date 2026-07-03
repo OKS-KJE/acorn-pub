@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>바다이야기 [PC TEST]</title>
+<title>Acorn SAS</title>
 <meta name="theme-color" content="#032135">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -780,6 +780,8 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 #tp-frame-label{padding:6px 14px;font-size:11px;text-align:center;color:#4A8AB8;}
 
 </style>
+<link rel="manifest" href="author-app.webmanifest">
+<link rel="apple-touch-icon" sizes="192x192" href="author-icon-192.png">
 </head>
 <body>
 <div class="app">
@@ -788,7 +790,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <div class="top">
   <div class="top-logo" onclick="openRoleSelect()">
     <span class="anchor">⚓</span>
-    <div><div class="wordmark">바다이야기</div><div class="tagline">MARITIME PLATFORM</div></div>
+    <div><div class="wordmark">Acorn SAS</div><div class="tagline">MARITIME PLATFORM</div></div>
   </div>
   <div class="top-sp"></div>
   <div class="top-search" onclick="openSheet('search-sheet')">
@@ -1347,7 +1349,7 @@ label.fl{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin:0
 <!-- ════════════════ JAVASCRIPT ════════════════ -->
 <script>
 /* ══════════════════════════════════════════════════
-   바다이야기 플랫폼 v3.0 — 5행 구조 재편
+   Acorn SAS Platform v3.0 — 5행 구조 재편
    ①TopNav ②뉴스 ③이야기(나/동료/커뮤) ④도서 ⑤BottomNav
    오프라인 우선 · PWA · LocalStorage · Supabase scaffold
    ══════════════════════════════════════════════════ */
@@ -2001,7 +2003,7 @@ function updateOffline(){const off=!navigator.onLine;$('offline-bar').classList.
 function exportData(){const data={session,feed:load(K.feed,[]),records:load(K.rec,[]),proposals:load(K.props,[])};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ocean-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('데이터 내보내기 완료');}
 window.addEventListener('online',()=>{updateOffline();toast('연결됨 — 동기화합니다');flush();});
 window.addEventListener('offline',()=>{updateOffline();toast('⚓ 오프라인 — 계속 기록하세요');});
-if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('ocean-sw.js').catch(()=>{}));
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('author-sw.js').catch(()=>{}));
 
 
 /* ═══════════ GAME — 낚시왕 ═══════════ */
