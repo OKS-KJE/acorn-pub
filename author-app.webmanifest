@@ -1,7 +1,7 @@
 {
-  "name": "ACORN 해양 저자 — 바다인의 집필 동반자",
-  "short_name": "해양 저자",
-  "description": "해양·수산 저자/저자 후보를 위한 오프라인 우선 집필·소통·커뮤니티 앱",
+  "name": "Acorn SAS",
+  "short_name": "Acorn SAS",
+  "description": "Maritime & Fisheries Author Platform",
   "lang": "ko",
   "start_url": "./author-app.html",
   "scope": "./",
