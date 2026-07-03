@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BADA STORY — 임직원 온보딩 / Employee Onboarding</title>
+<title>OCEAN STORY — 임직원 온보딩 / Employee Onboarding</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -207,6 +207,51 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 #lang-toggle button.on{background:var(--gold);color:var(--deep);}
 .tg{color:var(--gold2);}
 @media(max-width:960px){#lang-toggle{top:14px;right:14px;}#lang-toggle button{padding:5px 11px;font-size:11.5px;}}
+
+/* ══ SIMULATION ══ */
+.sim-wrap{background:linear-gradient(135deg,#012B4A 0%,#013a5e 100%);border-radius:16px;padding:20px;margin-top:24px;position:relative;overflow:hidden;}
+.sim-wrap::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 80% 20%,rgba(0,111,168,.25),transparent 60%);pointer-events:none;}
+.sim-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:relative;}
+.sim-bal{display:flex;align-items:center;gap:8px;}
+.sim-pts{font-size:28px;font-weight:800;color:#FFD96A;font-family:'Georgia',serif;}
+.sim-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.sim-crew{background:rgba(255,255,255,.08);border:1px solid rgba(200,162,74,.3);border-radius:10px;padding:6px 12px;text-align:center;}
+.sim-crew-rank{font-size:13px;font-weight:700;color:#FFD96A;}
+.sim-crew-lvl{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
+.sim-prog-wrap{margin-bottom:16px;position:relative;}
+.sim-prog-bg{height:6px;background:rgba(255,255,255,.1);border-radius:3px;}
+.sim-prog-fill{height:6px;background:linear-gradient(90deg,#006FA8,#FFD96A);border-radius:3px;transition:width .4s;}
+.sim-prog-txt{font-size:10px;color:rgba(255,255,255,.5);margin-top:3px;text-align:right;}
+.sim-sec{font-size:12px;font-weight:700;color:rgba(255,255,255,.5);margin:14px 0 8px;letter-spacing:.05em;text-transform:uppercase;}
+.sim-acts{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.sim-act{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.15s;}
+.sim-act:hover{background:rgba(255,255,255,.12);border-color:rgba(0,111,168,.4);}
+.sim-act:active{transform:scale(.97);}
+.sim-act-name{font-size:12px;color:#c8d8e8;}
+.sim-act-pts{font-size:12px;font-weight:800;color:#52D68A;}
+.sim-act.disabled{opacity:.4;pointer-events:none;}
+.sim-books{display:flex;flex-direction:column;gap:6px;}
+.sim-book{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.sim-book-ico{font-size:22px;flex-shrink:0;}
+.sim-book-info{flex:1;min-width:0;}
+.sim-book-title{font-size:12px;font-weight:700;color:#e8f0f8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sim-book-meta{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
+.sim-book-buy{border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap;}
+.sim-book-buy.can{background:#006FA8;color:#fff;}
+.sim-book-buy.can:hover{background:#0094D4;}
+.sim-book-buy.cant{background:rgba(255,255,255,.08);color:rgba(255,255,255,.3);cursor:default;}
+.sim-book-buy.owned{background:rgba(82,214,138,.15);color:#52D68A;cursor:default;}
+.sim-log{max-height:120px;overflow-y:auto;background:rgba(0,0,0,.2);border-radius:8px;padding:8px 10px;margin-top:12px;}
+.sim-log-item{font-size:11px;color:rgba(255,255,255,.5);padding:2px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.sim-log-item:last-child{border:none;}
+.sim-log-item .plus{color:#52D68A;font-weight:700;}
+.sim-log-item .minus{color:#FF6B8A;font-weight:700;}
+.sim-log-item .time{color:rgba(255,255,255,.25);margin-right:6px;}
+.sim-reset{border:1px solid rgba(255,100,100,.25);background:transparent;color:rgba(255,150,150,.7);border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;margin-top:10px;}
+.sim-reset:hover{background:rgba(255,100,100,.1);}
+@keyframes ptsPop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-30px);opacity:0}}
+.sim-pop{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:16px;font-weight:800;color:#FFD96A;pointer-events:none;animation:ptsPop .7s forwards;z-index:5;}
+
 </style>
 </head>
 <body>
@@ -220,7 +265,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 
 <aside id="sidebar">
   <div class="logo">
-    <div class="title">⚓ BADA STORY</div>
+    <div class="title">⚓ OCEAN STORY</div>
     <div class="sub" data-ko="해양 저자 플랫폼 · 임직원 온보딩" data-en="Maritime Author Platform · Employee Onboarding">해양 저자 플랫폼 · 임직원 온보딩</div>
   </div>
   <nav id="nav-list">
@@ -247,7 +292,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 <section class="section" id="s1">
   <div class="sec-text">
     <div class="hero-tag" data-ko="📚 에이콘출판사 | 플랫폼 개요" data-en="📚 Acorn Publishing | Platform Overview">📚 에이콘출판사 | 플랫폼 개요</div>
-    <div class="hero-title">BADA STORY<br>바다이야기</div>
+    <div class="hero-title">OCEAN STORY<br>오션스토리</div>
     <div class="hero-en" data-ko="해양·수산 전문 저자 플랫폼" data-en="Maritime &amp; Fisheries Author Platform">해양·수산 전문 저자 플랫폼</div>
     <div class="hero-desc" data-html="1" data-ko="해양·수산 분야 전문 저자와 독자를 연결하는 <strong class='tg'>오프라인 우선(PWA) 플랫폼</strong>입니다. 이 온보딩 가이드를 통해 플랫폼의 개념, 구조, 핵심 기능을 학습합니다." data-en="An <strong class='tg'>offline-first PWA platform</strong> connecting maritime and fisheries expert authors with readers. Learn the platform's concepts, structure, and key features through this onboarding guide.">해양·수산 분야 전문 저자와 독자를 연결하는 <strong class="tg">오프라인 우선(PWA) 플랫폼</strong>입니다. 이 온보딩 가이드를 통해 플랫폼의 개념, 구조, 핵심 기능을 학습합니다.</div>
     <div class="kpi-row">
@@ -263,7 +308,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
       <defs><filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity=".15"/></filter></defs>
       <ellipse cx="150" cy="190" rx="62" ry="62" fill="#012B4A" stroke="#FFD96A" stroke-width="2" filter="url(#sh)"/>
       <text x="150" y="183" text-anchor="middle" fill="#FFD96A" font-size="22">⚓</text>
-      <text x="150" y="201" text-anchor="middle" fill="#FFD96A" font-size="10" font-weight="bold">BADA STORY</text>
+      <text x="150" y="201" text-anchor="middle" fill="#FFD96A" font-size="10" font-weight="bold">OCEAN STORY</text>
       <g>
         <circle cx="150" cy="48" r="34" fill="#006FA8" filter="url(#sh)"/>
         <text x="150" y="44" text-anchor="middle" fill="#fff" font-size="16">✍️</text>
@@ -309,7 +354,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
   <div class="sec-text">
     <div class="sec-num">SECTION 02</div>
     <div class="sec-title" data-ko="플랫폼 개념" data-en="Platform Concepts">플랫폼 개념</div>
-    <div class="sec-sub" data-ko="바다이야기가 무엇을 해결하며 왜 만들어졌는지 이해합니다." data-en="Understanding what BADA STORY solves and why it was built.">바다이야기가 무엇을 해결하며 왜 만들어졌는지 이해합니다.</div>
+    <div class="sec-sub" data-ko="오션스토리가 무엇을 해결하며 왜 만들어졌는지 이해합니다." data-en="Understanding what OCEAN STORY solves and why it was built.">오션스토리가 무엇을 해결하며 왜 만들어졌는지 이해합니다.</div>
     <div class="divider"></div>
     <div class="concept-grid">
       <div class="cc"><div class="ico">🌊</div><h3 data-ko="해양 특화" data-en="Maritime-Focused">해양 특화</h3><p data-ko="선원·연구자·수산 전문가가 자신의 전문성을 출판하고 독자와 연결되도록 설계했습니다." data-en="Designed for mariners, researchers, and fisheries experts to publish their expertise and connect with readers.">선원·연구자·수산 전문가가 자신의 전문성을 출판하고 독자와 연결되도록 설계했습니다.</p></div>
@@ -397,7 +442,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
       <rect x="12" y="12" width="196" height="376" rx="20" fill="#012B4A"/>
       <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
       <text x="110" y="48" text-anchor="middle" fill="#FFD96A" font-size="20">⚓</text>
-      <text x="110" y="64" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="바다이야기에 오신 것을 환영합니다" data-en="Welcome to BADA STORY">바다이야기에 오신 것을 환영합니다</text>
+      <text x="110" y="64" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" data-ko="오션스토리에 오신 것을 환영합니다" data-en="Welcome to OCEAN STORY">오션스토리에 오신 것을 환영합니다</text>
       <text x="110" y="76" text-anchor="middle" fill="rgba(255,255,255,.45)" font-size="8" data-ko="역할을 선택해 시작하세요" data-en="Select your role to get started">역할을 선택해 시작하세요</text>
       <g>
         <rect x="22" y="88" width="176" height="54" rx="10" fill="#006FA8"/>
@@ -480,7 +525,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
       <rect x="12" y="12" width="196" height="376" rx="20" fill="#E4F6FF"/>
       <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
       <rect x="12" y="12" width="196" height="32" rx="0" fill="#012B4A"/>
-      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold">⚓ BADA STORY</text>
+      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold">⚓ OCEAN STORY</text>
       <text x="170" y="32" fill="rgba(255,255,255,.6)" font-size="10">🔍</text>
       <rect x="12" y="44" width="196" height="22" fill="#C8EDFF"/>
       <rect x="15" y="47" width="34" height="16" rx="8" fill="#006FA8"/>
@@ -561,9 +606,90 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
       <div class="pi"><span class="pl" data-ko="🎣 낚시왕 게임" data-en="🎣 Fishing King game">🎣 낚시왕 게임</span><span class="pv" data-ko="점수 ÷ 2" data-en="Score ÷ 2">점수 ÷ 2</span></div>
       <div class="pi"><span class="pl" data-ko="🎰 오션 카지노 게임" data-en="🎰 Ocean Casino game">🎰 오션 카지노 게임</span><span class="pv" data-ko="점수 ÷ 3" data-en="Score ÷ 3">점수 ÷ 3</span></div>
       <div class="pi"><span class="pl" data-ko="🔔 매일 로그인" data-en="🔔 Daily login">🔔 매일 로그인</span><span class="pv">+3P</span></div>
+      <div class="pi" style="border-color:var(--gold);"><span class="pl" data-ko="🎁 초기 로그인 보너스 (1회)" data-en="🎁 Initial login bonus (1x)">🎁 초기 로그인 보너스 (1회)</span><span class="pv">+100P</span></div>
+      <div class="pi"><span class="pl" data-ko="👥 친구 추천 (추천당)" data-en="👥 Friend referral (per referral)">👥 친구 추천 (추천당)</span><span class="pv">+20P</span></div>
       <div class="pi" style="border-color:var(--gold);"><span class="pl" data-ko="🔗 출판사 계정 연동 (1회)" data-en="🔗 Publisher account link (1x)">🔗 출판사 계정 연동 (1회)</span><span class="pv">+20P</span></div>
     </div>
     <div class="note" data-html="1" data-ko="<strong>포인트 사용:</strong> 📖 포인트샵에서 도서 교환 · 📚 도서 구매 최대 70% 할인(슬라이더) · ⚓ 누적 포인트에 따른 크루 등급 자동 상승" data-en="<strong>Point usage:</strong> 📖 Exchange for books in Point Shop · 📚 Up to 70% off book purchases (slider) · ⚓ Automatic crew rank progression (cumulative)"><strong>포인트 사용:</strong> 📖 포인트샵에서 도서 교환 · 📚 도서 구매 최대 70% 할인(슬라이더) · ⚓ 누적 포인트에 따른 크루 등급 자동 상승</div>
+
+    <!-- ══ POINT SIMULATION ══ -->
+    <div class="sim-wrap" id="sim-wrap">
+      <div class="sim-hd">
+        <div class="sim-bal">
+          <div>
+            <div style="display:flex;align-items:baseline;gap:6px;">
+              <span style="font-size:18px;">🪙</span>
+              <span class="sim-pts" id="sim-pts">0</span>
+              <span style="font-size:13px;color:rgba(255,255,255,.4);">P</span>
+            </div>
+            <div class="sim-lbl" data-ko="시뮬레이션 포인트 잔액" data-en="Simulation Point Balance">시뮬레이션 포인트 잔액</div>
+          </div>
+        </div>
+        <div class="sim-crew" id="sim-crew">
+          <div class="sim-crew-rank" id="sim-crew-rank">⚓ Lv.1</div>
+          <div class="sim-crew-lvl" id="sim-crew-lvl" data-ko="갑판원" data-en="Deckhand">갑판원</div>
+        </div>
+      </div>
+      <div class="sim-prog-wrap">
+        <div class="sim-prog-bg"><div class="sim-prog-fill" id="sim-prog-fill" style="width:0%"></div></div>
+        <div class="sim-prog-txt" id="sim-prog-txt">0 / 100P</div>
+      </div>
+
+      <div class="sim-sec" data-ko="✨ 포인트 적립 활동" data-en="✨ Earn Points">✨ 포인트 적립 활동</div>
+      <div class="sim-acts" id="sim-acts">
+        <div class="sim-act" onclick="simEarn('login',100)" id="sim-a-login">
+          <span class="sim-act-name" data-ko="🎁 초기 로그인" data-en="🎁 Initial Login">🎁 초기 로그인</span>
+          <span class="sim-act-pts">+100P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('daily',3)">
+          <span class="sim-act-name" data-ko="🔔 매일 로그인" data-en="🔔 Daily Login">🔔 매일 로그인</span>
+          <span class="sim-act-pts">+3P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('post',20)">
+          <span class="sim-act-name" data-ko="✍️ 이야기 게시" data-en="✍️ Post Story">✍️ 이야기 게시</span>
+          <span class="sim-act-pts">+20P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('episode',25)">
+          <span class="sim-act-name" data-ko="📡 회차 발행" data-en="📡 Publish Episode">📡 회차 발행</span>
+          <span class="sim-act-pts">+25P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('proposal',50)">
+          <span class="sim-act-name" data-ko="📗 출간 제안" data-en="📗 Book Proposal">📗 출간 제안</span>
+          <span class="sim-act-pts">+50P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('record',10)">
+          <span class="sim-act-name" data-ko="📸 현장 기록" data-en="📸 Field Record">📸 현장 기록</span>
+          <span class="sim-act-pts">+10P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('comment',5)">
+          <span class="sim-act-name" data-ko="💬 댓글 작성" data-en="💬 Comment">💬 댓글 작성</span>
+          <span class="sim-act-pts">+5P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('refer',20)">
+          <span class="sim-act-name" data-ko="👥 친구 추천" data-en="👥 Friend Referral">👥 친구 추천</span>
+          <span class="sim-act-pts">+20P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('publink',20)" id="sim-a-publink">
+          <span class="sim-act-name" data-ko="🔗 출판사 연동" data-en="🔗 Publisher Link">🔗 출판사 연동</span>
+          <span class="sim-act-pts">+20P</span>
+        </div>
+        <div class="sim-act" onclick="simEarn('game',0)">
+          <span class="sim-act-name" data-ko="🎣 미니게임" data-en="🎣 Mini Game">🎣 미니게임</span>
+          <span class="sim-act-pts" data-ko="랜덤" data-en="Random">랜덤</span>
+        </div>
+      </div>
+
+      <div class="sim-sec" data-ko="📚 도서 구매 (포인트 차감)" data-en="📚 Buy Books (Spend Points)">📚 도서 구매 (포인트 차감)</div>
+      <div class="sim-books" id="sim-books"></div>
+
+      <div class="sim-sec" data-ko="📋 활동 내역" data-en="📋 Activity Log">📋 활동 내역</div>
+      <div class="sim-log" id="sim-log">
+        <div class="sim-log-item" style="color:rgba(255,255,255,.3);text-align:center;" data-ko="아직 활동 내역이 없습니다" data-en="No activity yet">아직 활동 내역이 없습니다</div>
+      </div>
+      <div style="text-align:right;">
+        <button class="sim-reset" onclick="simReset()" data-ko="🗑️ 초기화" data-en="🗑️ Reset">🗑️ 초기화</button>
+      </div>
+    </div>
   </div>
   <div class="sec-diagram">
     <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
@@ -571,9 +697,9 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
       <rect x="12" y="12" width="196" height="376" rx="20" fill="#E4F6FF"/>
       <rect x="75" y="12" width="70" height="12" rx="6" fill="#1A1A2E"/>
       <rect x="12" y="12" width="196" height="32" rx="0" fill="#012B4A"/>
-      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold">⚓ BADA STORY</text>
+      <text x="30" y="32" fill="#FFD96A" font-size="10" font-weight="bold">⚓ OCEAN STORY</text>
       <rect x="17" y="48" width="186" height="120" rx="12" fill="#012B4A"/>
-      <text x="30" y="66" fill="rgba(255,255,255,.45)" font-size="7" font-weight="bold" letter-spacing="2" data-ko="🎮 바다이야기 게임" data-en="🎮 BADA STORY GAMES">🎮 바다이야기 게임</text>
+      <text x="30" y="66" fill="rgba(255,255,255,.45)" font-size="7" font-weight="bold" letter-spacing="2" data-ko="🎮 오션스토리 게임" data-en="🎮 OCEAN STORY GAMES">🎮 오션스토리 게임</text>
       <text x="30" y="80" fill="#fff" font-size="10.5" font-weight="bold" data-ko="게임으로 포인트 적립" data-en="Earn Points Through Games">게임으로 포인트 적립</text>
       <text x="160" y="68" fill="rgba(255,255,255,.4)" font-size="7" data-ko="내 포인트" data-en="My Points">내 포인트</text>
       <text x="155" y="82" fill="#FFD96A" font-size="13" font-weight="bold">🪙 350</text>
@@ -928,7 +1054,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
   <div class="sec-text" style="max-width:100%;width:100%;">
     <div class="sec-num">SECTION 09</div>
     <div class="sec-title" data-ko="이해도 점검" data-en="Knowledge Check">이해도 점검</div>
-    <div class="sec-sub" data-ko="바다이야기에 대한 이해도를 확인하세요. 총 7문항입니다." data-en="Verify your understanding of BADA STORY. 7 questions in total.">바다이야기에 대한 이해도를 확인하세요. 총 7문항입니다.</div>
+    <div class="sec-sub" data-ko="오션스토리에 대한 이해도를 확인하세요. 총 7문항입니다." data-en="Verify your understanding of OCEAN STORY. 7 questions in total.">오션스토리에 대한 이해도를 확인하세요. 총 7문항입니다.</div>
     <div class="divider"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="quiz-wrap">
       <div>
@@ -1002,7 +1128,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
         </div>
         <div class="quiz-q" id="q7">
           <div class="qnum">Q7 / 7</div>
-          <div class="qtxt" data-ko="바다이야기가 완전한 오프라인 상태(예: 먼바다)에서도 데이터를 저장할 수 있는 이유는?" data-en="Why can BADA STORY save data even when completely offline (e.g., in open ocean)?">바다이야기가 완전한 오프라인 상태(예: 먼바다)에서도 데이터를 저장할 수 있는 이유는?</div>
+          <div class="qtxt" data-ko="오션스토리가 완전한 오프라인 상태(예: 먼바다)에서도 데이터를 저장할 수 있는 이유는?" data-en="Why can OCEAN STORY save data even when completely offline (e.g., in open ocean)?">오션스토리가 완전한 오프라인 상태(예: 먼바다)에서도 데이터를 저장할 수 있는 이유는?</div>
           <div class="quiz-opts">
             <button class="quiz-opt" data-ko="클라우드에 실시간으로 저장한다" data-en="It saves to the cloud in real time" onclick="answer(this,'q7',false,'클라우드는 인터넷 연결이 필요하며 오프라인에서는 접근할 수 없습니다.','The cloud requires an active internet connection — it cannot be accessed offline.')">클라우드에 실시간으로 저장한다</button>
             <button class="quiz-opt" data-ko="LocalStorage 아웃박스 패턴 — 로컬 저장 후 재연결 시 클라우드로 자동 동기화" data-en="LocalStorage outbox pattern — saves locally, auto-syncs to the cloud on reconnection" onclick="answer(this,'q7',true,'정답! LocalStorage 아웃박스 패턴은 데이터를 브라우저에 로컬 저장한 뒤, 인터넷이 복구되면 클라우드로 자동 동기화합니다.','Correct! The LocalStorage outbox pattern saves data to the browser locally, then auto-syncs to the cloud when internet is restored.')">LocalStorage 아웃박스 패턴 — 로컬 저장 후 재연결 시 클라우드로 자동 동기화</button>
@@ -1026,7 +1152,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 <section class="section" id="s10">
   <div class="end-ico">🌊</div>
   <div class="end-title" data-ko="온보딩 완료" data-en="Onboarding Complete">온보딩 완료</div>
-  <div class="end-msg" data-ko="바다이야기 플랫폼 온보딩을 모두 마쳤습니다. 환영합니다 — 함께 해양 출판의 미래를 만들어 갑시다." data-en="You have completed the BADA STORY platform onboarding. Welcome aboard — let's build the future of maritime publishing together.">바다이야기 플랫폼 온보딩을 모두 마쳤습니다. 환영합니다 — 함께 해양 출판의 미래를 만들어 갑시다.</div>
+  <div class="end-msg" data-ko="오션스토리 플랫폼 온보딩을 모두 마쳤습니다. 환영합니다 — 함께 해양 출판의 미래를 만들어 갑시다." data-en="You have completed the OCEAN STORY platform onboarding. Welcome aboard — let's build the future of maritime publishing together.">오션스토리 플랫폼 온보딩을 모두 마쳤습니다. 환영합니다 — 함께 해양 출판의 미래를 만들어 갑시다.</div>
 </section>
 
 </main>
@@ -1081,9 +1207,9 @@ function showScore(){
   document.getElementById('qs-msg').textContent=msg;
   var sub;
   if(LANG==='ko'){
-    sub=pct===100?'만점입니다! 바다이야기 전문가입니다 🌊':pct>=70?'잘하셨습니다! 놓친 섹션을 복습해 보세요.':'자료를 복습한 뒤 다시 시도해 주세요.';
+    sub=pct===100?'만점입니다! 오션스토리 전문가입니다 🌊':pct>=70?'잘하셨습니다! 놓친 섹션을 복습해 보세요.':'자료를 복습한 뒤 다시 시도해 주세요.';
   }else{
-    sub=pct===100?'Perfect score! You are a BADA STORY expert 🌊':pct>=70?'Great work! Review any sections you missed.':'Please review the material and try again.';
+    sub=pct===100?'Perfect score! You are a OCEAN STORY expert 🌊':pct>=70?'Great work! Review any sections you missed.':'Please review the material and try again.';
   }
   document.getElementById('qs-sub').textContent=sub;
   document.getElementById('quiz-score').classList.add('show');
@@ -1113,6 +1239,157 @@ document.querySelectorAll('#nav-list a').forEach(function(a){
     document.getElementById('sidebar').classList.remove('open');
   });
 });
+
+
+/* ══ POINT SIMULATION ══ */
+var SIM_BOOKS=[
+  {id:'sb1',ico:'\u{1F6A2}',ko:'항해일지',en:'Voyage Logbook',price:800,cat:'IT&\u{D56D}\u{D574}'},
+  {id:'sb2',ico:'\u{1F916}',ko:'\u{D53C}\u{C9C0}\u{CEEC} AI \u{D504}\u{B7F0}\u{D2F0}\u{C5B4}',en:'Physical AI Frontier',price:950,cat:'AI&\u{AE30}\u{C220}'},
+  {id:'sb3',ico:'\u{1F9ED}',ko:'\u{D574}\u{C591} \u{B0B4}\u{BE44}\u{AC8C}\u{C774}\u{C158} \u{C785}\u{BB38}',en:'Ocean Navigation Intro',price:600,cat:'\u{D56D}\u{D574}'},
+  {id:'sb4',ico:'\u{1F41F}',ko:'\u{C218}\u{C0B0}\u{C790}\u{C6D0} \u{AD00}\u{B9AC}\u{B860}',en:'Fishery Resource Mgmt',price:1200,cat:'\u{C218}\u{C0B0}'},
+  {id:'sb5',ico:'\u{1F30A}',ko:'\u{D574}\u{C591}\u{D559} \u{AC1C}\u{B860}',en:'Oceanography Overview',price:750,cat:'\u{D574}\u{C591}\u{D559}'},
+  {id:'sb6',ico:'\u{2693}',ko:'\u{C120}\u{BC15} \u{C548}\u{C804} \u{AD00}\u{B9AC}',en:'Ship Safety Management',price:500,cat:'\u{C548}\u{C804}'}
+];
+var simPts=0,simLog=[],simOwned={},simUsedLogin=false,simUsedPublink=false;
+
+function simLoadState(){
+  try{
+    var d=JSON.parse(localStorage.getItem('sim_state'));
+    if(d){simPts=d.pts||0;simLog=d.log||[];simOwned=d.owned||{};simUsedLogin=d.ul||false;simUsedPublink=d.up||false;}
+  }catch(e){}
+}
+function simSaveState(){
+  try{localStorage.setItem('sim_state',JSON.stringify({pts:simPts,log:simLog,owned:simOwned,ul:simUsedLogin,up:simUsedPublink}));}catch(e){}
+}
+
+var SIM_CREW=[
+  {lv:1,min:0,ko:'\u{2693} \u{AC11}\u{D310}\u{C6D0}',en:'\u{2693} Deckhand'},
+  {lv:2,min:100,ko:'\u{2693} \u{C0C1}\u{B4F1}\u{C218}\u{C218}',en:'\u{2693} Able Seaman'},
+  {lv:3,min:300,ko:'\u{2693} \u{C870}\u{D0C0}\u{C218}',en:'\u{2693} Helmsman'},
+  {lv:4,min:600,ko:'\u{2693} 3\u{B4F1}\u{D56D}\u{D574}\u{C0AC}',en:'\u{2693} 3rd Officer'},
+  {lv:5,min:1200,ko:'\u{2693} 2\u{B4F1}\u{D56D}\u{D574}\u{C0AC}',en:'\u{2693} 2nd Officer'},
+  {lv:6,min:2000,ko:'\u{2693} 1\u{B4F1}\u{D56D}\u{D574}\u{C0AC}',en:'\u{2693} Chief Officer'},
+  {lv:7,min:4000,ko:'\u{2693} \u{BD80}\u{C120}\u{C7A5}',en:'\u{2693} First Mate'},
+  {lv:8,min:8000,ko:'\u{1F396}\u{FE0F} \u{C120}\u{C7A5}',en:'\u{1F396}\u{FE0F} Captain'}
+];
+
+function simGetCrew(pts){
+  var c=SIM_CREW[0];
+  for(var i=0;i<SIM_CREW.length;i++){if(pts>=SIM_CREW[i].min)c=SIM_CREW[i];}
+  return c;
+}
+function simGetNext(pts){
+  for(var i=0;i<SIM_CREW.length;i++){if(pts<SIM_CREW[i].min)return SIM_CREW[i];}
+  return null;
+}
+
+function simRender(){
+  document.getElementById('sim-pts').textContent=simPts.toLocaleString();
+  var crew=simGetCrew(simPts);
+  var nxt=simGetNext(simPts);
+  document.getElementById('sim-crew-rank').textContent=(LANG==='ko'?crew.ko:crew.en)+' Lv.'+crew.lv;
+  var crewLvlEl=document.getElementById('sim-crew-lvl');
+  crewLvlEl.textContent=LANG==='ko'?crew.ko.replace(/^[^\s]+ /,''):crew.en.replace(/^[^\s]+ /,'');
+  if(nxt){
+    var prev=crew.min;var pct=Math.min(100,Math.round((simPts-prev)/(nxt.min-prev)*100));
+    document.getElementById('sim-prog-fill').style.width=pct+'%';
+    document.getElementById('sim-prog-txt').textContent=simPts+' / '+nxt.min+'P (Lv.'+nxt.lv+')';
+  }else{
+    document.getElementById('sim-prog-fill').style.width='100%';
+    document.getElementById('sim-prog-txt').textContent=LANG==='ko'?'MAX LEVEL':'MAX LEVEL';
+  }
+  // one-time buttons
+  var loginBtn=document.getElementById('sim-a-login');
+  if(loginBtn){if(simUsedLogin)loginBtn.classList.add('disabled');else loginBtn.classList.remove('disabled');}
+  var publinkBtn=document.getElementById('sim-a-publink');
+  if(publinkBtn){if(simUsedPublink)publinkBtn.classList.add('disabled');else publinkBtn.classList.remove('disabled');}
+  // books
+  var bhtml='';
+  for(var i=0;i<SIM_BOOKS.length;i++){
+    var b=SIM_BOOKS[i];
+    var owned=!!simOwned[b.id];
+    var canBuy=simPts>=b.price&&!owned;
+    var btnClass=owned?'owned':(canBuy?'can':'cant');
+    var btnTxt=owned?(LANG==='ko'?'\u{2705} \u{AD6C}\u{B9E4}\u{C644}\u{B8CC}':'\u{2705} Owned'):(b.price+'P');
+    bhtml+='<div class="sim-book">'
+      +'<div class="sim-book-ico">'+b.ico+'</div>'
+      +'<div class="sim-book-info"><div class="sim-book-title">'+(LANG==='ko'?b.ko:b.en)+'</div><div class="sim-book-meta">'+b.cat+'</div></div>'
+      +'<button class="sim-book-buy '+btnClass+'" '+(canBuy?'onclick="simBuy(\''+b.id+'\')"':'')+'>'+btnTxt+'</button>'
+      +'</div>';
+  }
+  document.getElementById('sim-books').innerHTML=bhtml;
+  // log
+  var lhtml='';
+  if(simLog.length===0){
+    lhtml='<div class="sim-log-item" style="color:rgba(255,255,255,.3);text-align:center;">'+(LANG==='ko'?'\u{C544}\u{C9C1} \u{D65C}\u{B3D9} \u{B0B4}\u{C5ED}\u{C774} \u{C5C6}\u{C2B5}\u{B2C8}\u{B2E4}':'No activity yet')+'</div>';
+  }else{
+    for(var j=simLog.length-1;j>=Math.max(0,simLog.length-20);j--){
+      var e=simLog[j];
+      var cls=e.pts>0?'plus':'minus';
+      var sign=e.pts>0?'+':'';
+      lhtml+='<div class="sim-log-item"><span class="time">'+e.time+'</span>'+(LANG==='ko'?e.ko:e.en)+' <span class="'+cls+'">'+sign+e.pts+'P</span></div>';
+    }
+  }
+  document.getElementById('sim-log').innerHTML=lhtml;
+}
+
+function simTimeStr(){var d=new Date();return (d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+':'+(d.getSeconds()<10?'0':'')+d.getSeconds();}
+
+var SIM_NAMES={
+  login:{ko:'\u{1F381} \u{CD08}\u{AE30} \u{B85C}\u{ADF8}\u{C778} \u{BCF4}\u{B108}\u{C2A4}',en:'\u{1F381} Initial Login Bonus'},
+  daily:{ko:'\u{1F514} \u{B9E4}\u{C77C} \u{B85C}\u{ADF8}\u{C778}',en:'\u{1F514} Daily Login'},
+  post:{ko:'\u{270D}\u{FE0F} \u{C774}\u{C57C}\u{AE30} \u{AC8C}\u{C2DC}',en:'\u{270D}\u{FE0F} Post Story'},
+  episode:{ko:'\u{1F4E1} \u{D68C}\u{CC28} \u{BC1C}\u{D589}',en:'\u{1F4E1} Publish Episode'},
+  proposal:{ko:'\u{1F4D7} \u{CD9C}\u{AC04} \u{C81C}\u{C548}',en:'\u{1F4D7} Book Proposal'},
+  record:{ko:'\u{1F4F8} \u{D604}\u{C7A5} \u{AE30}\u{B85D}',en:'\u{1F4F8} Field Record'},
+  comment:{ko:'\u{1F4AC} \u{B313}\u{AE00}',en:'\u{1F4AC} Comment'},
+  refer:{ko:'\u{1F465} \u{CE5C}\u{AD6C} \u{CD94}\u{CC9C}',en:'\u{1F465} Friend Referral'},
+  publink:{ko:'\u{1F517} \u{CD9C}\u{D310}\u{C0AC} \u{C5F0}\u{B3D9}',en:'\u{1F517} Publisher Link'},
+  game:{ko:'\u{1F3A3} \u{BBF8}\u{B2C8}\u{AC8C}\u{C784}',en:'\u{1F3A3} Mini Game'}
+};
+
+function simEarn(type,pts){
+  if(type==='login'){if(simUsedLogin)return;simUsedLogin=true;}
+  if(type==='publink'){if(simUsedPublink)return;simUsedPublink=true;}
+  if(type==='game'){pts=Math.floor(Math.random()*30)+5;}
+  simPts+=pts;
+  simLog.push({time:simTimeStr(),ko:SIM_NAMES[type].ko,en:SIM_NAMES[type].en,pts:pts});
+  simSaveState();
+  simRender();
+  // pop animation
+  var pop=document.createElement('div');pop.className='sim-pop';pop.textContent='+'+pts+'P';
+  document.getElementById('sim-wrap').appendChild(pop);
+  setTimeout(function(){pop.remove();},700);
+}
+
+function simBuy(bookId){
+  for(var i=0;i<SIM_BOOKS.length;i++){
+    var b=SIM_BOOKS[i];
+    if(b.id===bookId){
+      if(simPts<b.price||simOwned[b.id])return;
+      simPts-=b.price;
+      simOwned[b.id]=true;
+      simLog.push({time:simTimeStr(),ko:'\u{1F4D6} '+b.ko+' \u{AD6C}\u{B9E4}',en:'\u{1F4D6} Bought '+b.en,pts:-b.price});
+      simSaveState();
+      simRender();
+      var pop=document.createElement('div');pop.className='sim-pop';pop.textContent='-'+b.price+'P';
+      pop.style.color='#FF6B8A';
+      document.getElementById('sim-wrap').appendChild(pop);
+      setTimeout(function(){pop.remove();},700);
+      break;
+    }
+  }
+}
+
+function simReset(){
+  simPts=0;simLog=[];simOwned={};simUsedLogin=false;simUsedPublink=false;
+  try{localStorage.removeItem('sim_state');}catch(e){}
+  simRender();
+}
+
+simLoadState();
+simRender();
+
 </script>
 </body>
 </html>
