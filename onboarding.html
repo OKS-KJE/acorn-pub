@@ -298,7 +298,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
     <div class="kpi-row">
       <div class="kpi"><span class="kv">3</span><span class="kl" data-ko="사용자 역할" data-en="User Roles">사용자 역할</span></div>
       <div class="kpi"><span class="kv">3</span><span class="kl" data-ko="도서 등급" data-en="Book Tiers">도서 등급</span></div>
-      <div class="kpi"><span class="kv">8</span><span class="kl" data-ko="크루 레벨" data-en="Crew Levels">크루 레벨</span></div>
+      <div class="kpi"><span class="kv">5</span><span class="kl" data-ko="크루 레벨" data-en="Crew Levels">크루 레벨</span></div>
       <div class="kpi"><span class="kv">15+</span><span class="kl" data-ko="화면" data-en="Screens">화면</span></div>
       <div class="kpi"><span class="kv">PWA</span><span class="kl" data-ko="오프라인 우선" data-en="Offline-First">오프라인 우선</span></div>
     </div>
@@ -751,50 +751,18 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
   <div class="sec-text">
     <div class="sec-num">SECTION 06</div>
     <div class="sec-title" data-ko="크루 등급 체계" data-en="Crew Rank System">크루 등급 체계</div>
-    <div class="sec-sub" data-ko="선박 승무원을 모티프로 한 3개 부서 × 8단계 위계. 누적 포인트에 따라 자동 승급됩니다." data-en="A ship-crew-inspired 3-department × 8-level hierarchy. Auto-promoted based on cumulative points.">선박 승무원을 모티프로 한 3개 부서 × 8단계 위계. 누적 포인트에 따라 자동 승급됩니다.</div>
+    <div class="sec-sub" data-ko="누적 포인트에 따라 5단계로 자동 승급됩니다. 모든 등급에서 이야기 게시 · 좋아요 · 댓글이 가능합니다." data-en="Auto-promoted through 5 levels based on cumulative points. Story posting, likes, and comments are available at all levels.">누적 포인트에 따라 5단계로 자동 승급됩니다. 모든 등급에서 이야기 게시 · 좋아요 · 댓글이 가능합니다.</div>
     <div class="divider"></div>
-    <div class="crew-tabs">
-      <button class="crew-tab on" onclick="showCrew('deck',this)" data-ko="🚢 갑판·기관부" data-en="🚢 Deck & Engine">🚢 갑판·기관부</button>
-      <button class="crew-tab" onclick="showCrew('hotel',this)" data-ko="🏨 호텔·서비스부" data-en="🏨 Hotel & Service">🏨 호텔·서비스부</button>
-      <button class="crew-tab" onclick="showCrew('special',this)" data-ko="🏥 특수부서" data-en="🏥 Special Dept.">🏥 특수부서</button>
-    </div>
-    <div id="crew-deck" class="crew-table on">
-      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
-        <tr><td>1</td><td data-ko="🧹 갑판원" data-en="🧹 Deck Hand">🧹 갑판원</td><td>0–99P</td><td data-ko="기본 이야기 게시" data-en="Basic story posting">기본 이야기 게시</td></tr>
-        <tr><td>2</td><td data-ko="⚓ 갑판장(CPO)" data-en="⚓ C.P.O.">⚓ 갑판장(CPO)</td><td>100–299P</td><td data-ko="좋아요 & 댓글" data-en="Likes & comments">좋아요 & 댓글</td></tr>
-        <tr><td>3</td><td data-ko="🔱 직장" data-en="🔱 Bosun">🔱 직장</td><td>300–599P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
-        <tr><td>4</td><td data-ko="🗺️ 3등 항해사" data-en="🗺️ 3rd Officer">🗺️ 3등 항해사</td><td>600–999P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
-        <tr><td>5</td><td data-ko="📡 2등 항해사" data-en="📡 2nd Officer">📡 2등 항해사</td><td>1,000–1,999P</td><td data-ko="출간 전 도서 열람" data-en="Pre-release book access">출간 전 도서 열람</td></tr>
-        <tr><td>6</td><td data-ko="🧭 1등 항해사" data-en="🧭 1st Officer">🧭 1등 항해사</td><td>2,000–3,999P</td><td data-ko="표지 크레딧 등재" data-en="Cover credit listing">표지 크레딧 등재</td></tr>
-        <tr><td>7</td><td data-ko="⚙️ 기관장" data-en="⚙️ Chief Engineer">⚙️ 기관장</td><td>4,000–7,999P</td><td data-ko="전담 편집자 배정" data-en="Dedicated editor assigned">전담 편집자 배정</td></tr>
-        <tr><td>8</td><td data-ko="🎖️ 선장" data-en="🎖️ Captain">🎖️ 선장</td><td>8,000P+</td><td data-ko="에이콘 공식 협력 저자 · 주요 학회지 소개" data-en="Official Acorn Collaborative Author · Featured in leading journals">에이콘 공식 협력 저자 · 주요 학회지 소개</td></tr>
+    <div class="crew-table on">
+      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="기본 권한" data-en="Base Access">기본 권한</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
+        <tr><td>1</td><td data-ko="⚓ 선원" data-en="⚓ Crew">⚓ 선원</td><td>0–199P</td><td data-ko="✍️ 게시 · ❤️ 좋아요 · 💬 댓글" data-en="✍️ Post · ❤️ Like · 💬 Comment">✍️ 게시 · ❤️ 좋아요 · 💬 댓글</td><td data-ko="포인트샵 이용" data-en="Point Shop access">포인트샵 이용</td></tr>
+        <tr><td>2</td><td data-ko="🔱 직장" data-en="🔱 Bosun">🔱 직장</td><td>200–499P</td><td data-ko="✍️ 게시 · ❤️ 좋아요 · 💬 댓글" data-en="✍️ Post · ❤️ Like · 💬 Comment">✍️ 게시 · ❤️ 좋아요 · 💬 댓글</td><td data-ko="이야기선정 자격 · 포인트샵 5% 할인" data-en="Selected Story eligibility · 5% Shop discount">이야기선정 자격 · 포인트샵 5% 할인</td></tr>
+        <tr><td>3</td><td data-ko="🧭 항해사" data-en="🧭 Navigator">🧭 항해사</td><td>500–1,499P</td><td data-ko="✍️ 게시 · ❤️ 좋아요 · 💬 댓글" data-en="✍️ Post · ❤️ Like · 💬 Comment">✍️ 게시 · ❤️ 좋아요 · 💬 댓글</td><td data-ko="출간 전 도서 미리보기 · 포인트샵 10% 할인" data-en="Pre-release book preview · 10% Shop discount">출간 전 도서 미리보기 · 포인트샵 10% 할인</td></tr>
+        <tr><td>4</td><td data-ko="🧭 1등 항해사" data-en="🧭 Chief Officer">🧭 1등 항해사</td><td>1,500–2,999P</td><td data-ko="✍️ 게시 · ❤️ 좋아요 · 💬 댓글" data-en="✍️ Post · ❤️ Like · 💬 Comment">✍️ 게시 · ❤️ 좋아요 · 💬 댓글</td><td data-ko="전담 편집자 상담 · 도서 표지 크레딧 등재" data-en="Dedicated editor consultation · Book cover credit">전담 편집자 상담 · 도서 표지 크레딧 등재</td></tr>
+        <tr><td>5</td><td data-ko="🎖️ 선장" data-en="🎖️ Captain">🎖️ 선장</td><td>3,000P+</td><td data-ko="✍️ 게시 · ❤️ 좋아요 · 💬 댓글" data-en="✍️ Post · ❤️ Like · 💬 Comment">✍️ 게시 · ❤️ 좋아요 · 💬 댓글</td><td data-ko="에이콘 공식 협력 저자 · 학회지 소개 · 신규 시리즈 기획 우선권" data-en="Official Acorn Collaborative Author · Featured in journals · New series priority">에이콘 공식 협력 저자 · 학회지 소개 · 신규 시리즈 기획 우선권</td></tr>
       </table>
     </div>
-    <div id="crew-hotel" class="crew-table">
-      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
-        <tr><td>1</td><td data-ko="🛏️ 객실 스튜어드" data-en="🛏️ Cabin Steward">🛏️ 객실 스튜어드</td><td>0–99P</td><td data-ko="기본 이야기 게시" data-en="Basic story posting">기본 이야기 게시</td></tr>
-        <tr><td>2</td><td data-ko="🛍️ 기프트샵" data-en="🛍️ Gift Shop">🛍️ 기프트샵</td><td>100–299P</td><td data-ko="좋아요 & 댓글" data-en="Likes & comments">좋아요 & 댓글</td></tr>
-        <tr><td>3</td><td data-ko="💆 스파" data-en="💆 Spa">💆 스파</td><td>300–599P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
-        <tr><td>4</td><td data-ko="🎰 카지노 딜러" data-en="🎰 Casino Dealer">🎰 카지노 딜러</td><td>600–999P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
-        <tr><td>5</td><td data-ko="🏠 하우스키퍼" data-en="🏠 Housekeeper">🏠 하우스키퍼</td><td>1,000–1,999P</td><td data-ko="출간 전 도서 열람" data-en="Pre-release book access">출간 전 도서 열람</td></tr>
-        <tr><td>6</td><td data-ko="📋 퍼서" data-en="📋 Purser">📋 퍼서</td><td>2,000–3,999P</td><td data-ko="표지 크레딧 등재" data-en="Cover credit listing">표지 크레딧 등재</td></tr>
-        <tr><td>7</td><td data-ko="🎭 크루즈 디렉터" data-en="🎭 Cruise Director">🎭 크루즈 디렉터</td><td>4,000–7,999P</td><td data-ko="전담 편집자 배정" data-en="Dedicated editor assigned">전담 편집자 배정</td></tr>
-        <tr><td>8</td><td data-ko="🏨 호텔 디렉터" data-en="🏨 Hotel Director">🏨 호텔 디렉터</td><td>8,000P+</td><td data-ko="에이콘 공식 협력 저자 · 주요 학회지 소개" data-en="Official Acorn Collaborative Author · Featured in leading journals">에이콘 공식 협력 저자 · 주요 학회지 소개</td></tr>
-      </table>
-    </div>
-    <div id="crew-special" class="crew-table">
-      <table><tr><th data-ko="레벨" data-en="Lv.">레벨</th><th data-ko="직급" data-en="Rank">직급</th><th data-ko="포인트" data-en="Points">포인트</th><th data-ko="주요 혜택" data-en="Key Benefit">주요 혜택</th></tr>
-        <tr><td>1</td><td data-ko="🎒 인턴" data-en="🎒 Intern">🎒 인턴</td><td>0–99P</td><td data-ko="기본 이야기 게시" data-en="Basic story posting">기본 이야기 게시</td></tr>
-        <tr><td>2</td><td data-ko="🏪 기프트 매니저" data-en="🏪 Gift Mgr.">🏪 기프트 매니저</td><td>100–299P</td><td data-ko="좋아요 & 댓글" data-en="Likes & comments">좋아요 & 댓글</td></tr>
-        <tr><td>3</td><td data-ko="💅 스파 매니저" data-en="💅 Spa Manager">💅 스파 매니저</td><td>300–599P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
-        <tr><td>4</td><td data-ko="🃏 카지노 매니저" data-en="🃏 Casino Mgr.">🃏 카지노 매니저</td><td>600–999P</td><td data-ko="이야기선정 자격" data-en="Selected story eligibility">이야기선정 자격</td></tr>
-        <tr><td>5</td><td data-ko="💉 선박 간호사" data-en="💉 Ship Nurse">💉 선박 간호사</td><td>1,000–1,999P</td><td data-ko="출간 전 도서 열람" data-en="Pre-release book access">출간 전 도서 열람</td></tr>
-        <tr><td>6</td><td data-ko="🩺 선의(船醫)" data-en="🩺 Ship Doctor">🩺 선의(船醫)</td><td>2,000–3,999P</td><td data-ko="표지 크레딧 등재" data-en="Cover credit listing">표지 크레딧 등재</td></tr>
-        <tr><td>7</td><td data-ko="🔬 선임 전문가" data-en="🔬 Sr. Specialist">🔬 선임 전문가</td><td>4,000–7,999P</td><td data-ko="전담 편집자 배정" data-en="Dedicated editor assigned">전담 편집자 배정</td></tr>
-        <tr><td>8</td><td data-ko="🏅 수석 전문가" data-en="🏅 Chief Specialist">🏅 수석 전문가</td><td>8,000P+</td><td data-ko="에이콘 공식 협력 저자 · 주요 학회지 소개" data-en="Official Acorn Collaborative Author · Featured in leading journals">에이콘 공식 협력 저자 · 주요 학회지 소개</td></tr>
-      </table>
-    </div>
-    <div class="note" data-html="1" data-ko="<strong>레벨 8(선장/디렉터/수석) 혜택:</strong> 🎖️ 전담 편집자 배정 · 웹사이트에 에이콘 해양 공식 협력 저자로 등재 · 주요 학회지 소개 · 신규 시리즈 기획 우선권" data-en="<strong>Level 8 (Admiral/Chief) benefits:</strong> 🎖️ Dedicated editor assigned · Listed as official Acorn Maritime Collaborative Author on website · Featured in leading academic journals · Priority for new series planning"><strong>레벨 8(선장/디렉터/수석) 혜택:</strong> 🎖️ 전담 편집자 배정 · 웹사이트에 에이콘 해양 공식 협력 저자로 등재 · 주요 학회지 소개 · 신규 시리즈 기획 우선권</div>
+    <div class="note" data-html="1" data-ko="<strong>모든 등급 공통:</strong> ✍️ 이야기 게시 · ❤️ 좋아요 · 💬 댓글을 자유롭게 작성할 수 있습니다. 등급이 올라갈수록 포인트샵 할인률 증가, 전담 편집자 상담, 학회지 소개 등 혜택이 확대됩니다." data-en="<strong>All levels:</strong> ✍️ Post stories · ❤️ Like · 💬 Comment freely. Higher levels unlock Shop discounts, editor consultations, and journal features."><strong>모든 등급 공통:</strong> ✍️ 이야기 게시 · ❤️ 좋아요 · 💬 댓글을 자유롭게 작성할 수 있습니다. 등급이 올라갈수록 포인트샵 할인률 증가, 전담 편집자 상담, 학회지 소개 등 혜택이 확대됩니다.</div>
   </div>
   <div class="sec-diagram">
     <svg width="220" height="400" viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg">
@@ -810,18 +778,14 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
       <text x="76" y="80" fill="rgba(255,255,255,.6)" font-size="8" data-ko="✍️ 저자 · 해양 전문가" data-en="✍️ Author · Maritime Expert">✍️ 저자 · 해양 전문가</text>
       <text x="76" y="92" fill="#FFD96A" font-size="8" font-weight="bold" data-ko="🪙 650P 누적" data-en="🪙 650P accumulated">🪙 650P 누적</text>
       <rect x="17" y="120" width="186" height="60" rx="10" fill="#006FA8"/>
-      <text x="28" y="138" fill="rgba(255,255,255,.6)" font-size="7.5" data-ko="부서" data-en="Department">부서</text>
-      <text x="28" y="150" fill="#FFD96A" font-size="10" font-weight="bold" data-ko="🚢 갑판·기관부" data-en="🚢 Deck &amp; Engine Dept.">🚢 갑판·기관부</text>
-      <text x="28" y="162" fill="rgba(255,255,255,.7)" font-size="8" data-ko="현재: 🗺️ 3등 항해사 → 다음: 2등 항해사 (350P)" data-en="Current: 🗺️ 3rd Officer → Next: 2nd Officer (350P)">현재: 🗺️ 3등 항해사 → 다음: 2등 항해사 (350P)</text>
+      <text x="28" y="138" fill="rgba(255,255,255,.6)" font-size="7.5" data-ko="등급" data-en="Rank">등급</text>
+      <text x="28" y="150" fill="#FFD96A" font-size="10" font-weight="bold" data-ko="🧭 항해사 (Lv.3)" data-en="🧭 Navigator (Lv.3)">🧭 항해사 (Lv.3)</text>
+      <text x="28" y="162" fill="rgba(255,255,255,.7)" font-size="8" data-ko="다음: 1등 항해사 (1,500P)" data-en="Next: Chief Officer (1,500P)">다음: 1등 항해사 (1,500P)</text>
       <rect x="28" y="169" width="165" height="6" rx="3" fill="rgba(255,255,255,.2)"/>
       <rect x="28" y="169" width="107" height="6" rx="3" fill="#FFD96A"/>
       <text x="200" y="175" text-anchor="end" fill="#fff" font-size="7">65%</text>
-      <rect x="17" y="185" width="60" height="22" rx="6" fill="#012B4A"/>
-      <text x="47" y="199" text-anchor="middle" fill="#FFD96A" font-size="8.5" font-weight="bold" data-ko="🚢 갑판" data-en="🚢 Deck">🚢 갑판</text>
-      <rect x="81" y="185" width="60" height="22" rx="6" fill="rgba(0,0,0,.05)"/>
-      <text x="111" y="199" text-anchor="middle" fill="#4A7A9A" font-size="8.5" data-ko="🏨 호텔" data-en="🏨 Hotel">🏨 호텔</text>
-      <rect x="145" y="185" width="58" height="22" rx="6" fill="rgba(0,0,0,.05)"/>
-      <text x="174" y="199" text-anchor="middle" fill="#4A7A9A" font-size="8.5" data-ko="🏥 특수" data-en="🏥 Special">🏥 특수</text>
+      <rect x="17" y="185" width="186" height="22" rx="6" fill="#012B4A"/>
+      <text x="110" y="199" text-anchor="middle" fill="#FFD96A" font-size="8.5" font-weight="bold" data-ko="⚓ 크루 등급 체계 (5단계)" data-en="⚓ Crew Rank System (5 Levels)">⚓ 크루 등급 체계 (5단계)</text>
       <text x="22" y="224" fill="#4A7A9A" font-size="8" font-weight="bold" data-ko="활동 통계" data-en="Activity Stats">활동 통계</text>
       <g>
         <rect x="17" y="228" width="59" height="38" rx="8" fill="#fff" stroke="#9ECEE8" stroke-width="1"/>
@@ -1117,12 +1081,12 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
         </div>
         <div class="quiz-q" id="q6">
           <div class="qnum">Q6 / 7</div>
-          <div class="qtxt" data-ko="크루 레벨 8에 도달하는 데 필요한 최소 누적 포인트는 얼마입니까?" data-en="What is the minimum cumulative point total required to reach Crew Level 8?">크루 레벨 8에 도달하는 데 필요한 최소 누적 포인트는 얼마입니까?</div>
+          <div class="qtxt" data-ko="크루 최고 등급(선장)에 도달하는 데 필요한 최소 누적 포인트는?" data-en="What is the minimum cumulative point total required to reach Captain (highest rank)?">크루 최고 등급(선장)에 도달하는 데 필요한 최소 누적 포인트는?</div>
           <div class="quiz-opts">
-            <button class="quiz-opt" data-ko="4,000P+" data-en="4,000P+" onclick="answer(this,'q6',false,'4,000P는 레벨 7의 진입 기준입니다.','4,000P is the entry threshold for Level 7.')">4,000P+</button>
-            <button class="quiz-opt" data-ko="5,000P+" data-en="5,000P+" onclick="answer(this,'q6',false,'5,000P는 시스템에 정의된 기준이 아닙니다.','5,000P is not a defined threshold in the system.')">5,000P+</button>
-            <button class="quiz-opt" data-ko="8,000P+" data-en="8,000P+" onclick="answer(this,'q6',true,'정답! 누적 8,000P 이상이면 레벨 8(선장/호텔총괄/수석전문가)이 해금됩니다.','Correct! 8,000+ cumulative points unlocks Level 8: Captain / Hotel Director / Chief Specialist.')">8,000P+</button>
-            <button class="quiz-opt" data-ko="10,000P+" data-en="10,000P+" onclick="answer(this,'q6',false,'10,000P는 정의된 기준이 아닙니다.','10,000P is not a defined threshold.')">10,000P+</button>
+            <button class="quiz-opt" data-ko="1,500P+" data-en="1,500P+" onclick="answer(this,'q6',false,'1,500P는 1등 항해사의 진입 기준입니다.','1,500P is the entry threshold for Chief Officer.')">1,500P+</button>
+            <button class="quiz-opt" data-ko="2,000P+" data-en="2,000P+" onclick="answer(this,'q6',false,'2,000P는 시스템에 정의된 선장 기준이 아닙니다.','2,000P is not the Captain threshold.')">2,000P+</button>
+            <button class="quiz-opt" data-ko="3,000P+" data-en="3,000P+" onclick="answer(this,'q6',true,'정답! 누적 3,000P 이상이면 선장 등급이 해금됩니다.','Correct! 3,000+ cumulative points unlocks the Captain rank.')">3,000P+</button>
+            <button class="quiz-opt" data-ko="5,000P+" data-en="5,000P+" onclick="answer(this,'q6',false,'5,000P는 정의된 기준이 아닙니다.','5,000P is not a defined threshold.')">5,000P+</button>
           </div>
           <div class="quiz-fb" id="fb-q6"></div>
         </div>
@@ -1176,12 +1140,6 @@ function setLang(l){
 }
 
 // Crew tabs
-function showCrew(dept,btn){
-  document.querySelectorAll('.crew-table').forEach(function(t){t.classList.remove('on');});
-  document.querySelectorAll('.crew-tab').forEach(function(b){b.classList.remove('on');});
-  document.getElementById('crew-'+dept).classList.add('on');
-  btn.classList.add('on');
-}
 
 // Quiz
 var quizAnswers={},totalQ=7;
@@ -1263,14 +1221,11 @@ function simSaveState(){
 }
 
 var SIM_CREW=[
-  {lv:1,min:0,ko:'\u{2693} \u{AC11}\u{D310}\u{C6D0}',en:'\u{2693} Deckhand'},
-  {lv:2,min:100,ko:'\u{2693} \u{C0C1}\u{B4F1}\u{C218}\u{C218}',en:'\u{2693} Able Seaman'},
-  {lv:3,min:300,ko:'\u{2693} \u{C870}\u{D0C0}\u{C218}',en:'\u{2693} Helmsman'},
-  {lv:4,min:600,ko:'\u{2693} 3\u{B4F1}\u{D56D}\u{D574}\u{C0AC}',en:'\u{2693} 3rd Officer'},
-  {lv:5,min:1200,ko:'\u{2693} 2\u{B4F1}\u{D56D}\u{D574}\u{C0AC}',en:'\u{2693} 2nd Officer'},
-  {lv:6,min:2000,ko:'\u{2693} 1\u{B4F1}\u{D56D}\u{D574}\u{C0AC}',en:'\u{2693} Chief Officer'},
-  {lv:7,min:4000,ko:'\u{2693} \u{BD80}\u{C120}\u{C7A5}',en:'\u{2693} First Mate'},
-  {lv:8,min:8000,ko:'\u{1F396}\u{FE0F} \u{C120}\u{C7A5}',en:'\u{1F396}\u{FE0F} Captain'}
+  {lv:1,min:0,ko:'\u{2693} \u{C120}\u{C6D0}',en:'\u{2693} Crew'},
+  {lv:2,min:200,ko:'\u{1F531} \u{C9C1}\u{C7A5}',en:'\u{1F531} Bosun'},
+  {lv:3,min:500,ko:'\u{1F9ED} \u{D56D}\u{D574}\u{C0AC}',en:'\u{1F9ED} Navigator'},
+  {lv:4,min:1500,ko:'\u{1F9ED} 1\u{B4F1} \u{D56D}\u{D574}\u{C0AC}',en:'\u{1F9ED} Chief Officer'},
+  {lv:5,min:3000,ko:'\u{1F396}\u{FE0F} \u{C120}\u{C7A5}',en:'\u{1F396}\u{FE0F} Captain'}
 ];
 
 function simGetCrew(pts){
