@@ -18,37 +18,57 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
   background:var(--brighter);color:var(--ink);line-height:1.6;}
 .wrap{display:flex;min-height:100vh;}
 
-/* ── Sidebar */
-#sidebar{
-  position:fixed;top:0;left:0;width:230px;height:100vh;
+/* ── Top Tab Bar */
+#tab-bar{
+  position:sticky;top:0;z-index:100;
   background:linear-gradient(180deg,var(--deep) 0%,#013558 100%);
-  overflow-y:auto;z-index:100;
+  border-bottom:2px solid rgba(200,162,74,.25);
 }
-#sidebar .logo{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
-#sidebar .logo .title{font-size:17px;font-weight:800;color:var(--gold2);font-family:'Georgia',serif;}
-#sidebar .logo .sub{font-size:10.5px;color:rgba(255,255,255,.45);margin-top:3px;}
-#sidebar nav a{
-  display:flex;align-items:center;gap:10px;padding:10px 18px;
-  font-size:12.5px;color:rgba(255,255,255,.65);text-decoration:none;
-  cursor:pointer;transition:.14s;border-left:3px solid transparent;
+.tab-header{display:flex;align-items:center;padding:10px 18px 0;gap:12px;}
+.tab-title{font-size:15px;font-weight:800;color:var(--gold2);font-family:'Georgia',serif;white-space:nowrap;}
+.tab-sub{font-size:10px;color:rgba(255,255,255,.35);white-space:nowrap;}
+.tab-prog{flex:1;min-width:60px;}
+.tab-prog-bar{height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
+.tab-prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:.4s;width:0;}
+.tab-prog-txt{font-size:9px;color:rgba(255,255,255,.3);text-align:right;margin-top:2px;}
+#tab-list{
+  display:flex;gap:0;overflow-x:auto;padding:6px 14px 0;
+  scrollbar-width:none;-ms-overflow-style:none;
 }
-#sidebar nav a:hover{background:rgba(255,255,255,.06);color:#fff;}
-#sidebar nav a.active{background:rgba(0,148,212,.2);color:var(--gold2);border-left-color:var(--gold);font-weight:700;}
-#sidebar nav a .n{
-  width:21px;height:21px;border-radius:50%;background:rgba(255,255,255,.1);
-  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;
+#tab-list::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex-shrink:0;display:flex;align-items:center;gap:6px;
+  padding:8px 14px;font-size:12px;color:rgba(255,255,255,.55);
+  background:transparent;border:none;cursor:pointer;white-space:nowrap;
+  border-bottom:2.5px solid transparent;transition:.15s;font-family:inherit;
 }
-#sidebar nav a.active .n{background:var(--gold);color:var(--deep);}
-#sidebar .prog-wrap{padding:14px 18px 22px;}
-#sidebar .prog-lbl{font-size:10.5px;color:rgba(255,255,255,.35);margin-bottom:7px;}
-#sidebar .prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;}
-#sidebar .prog-fill{height:100%;background:var(--gold);border-radius:4px;transition:.4s;width:0;}
+.tab-btn:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.04);}
+.tab-btn.on{color:var(--gold2);border-bottom-color:var(--gold);font-weight:700;}
+.tab-btn .tn{
+  width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;color:rgba(255,255,255,.6);
+}
+.tab-btn.on .tn{background:var(--gold);color:var(--deep);}
+.tab-btn.done .tn{background:rgba(82,214,138,.25);color:#52D68A;}
 
 /* ── Main */
-#main{margin-left:230px;flex:1;}
-.section{min-height:100vh;padding:56px 52px;display:flex;gap:56px;align-items:center;}
+#main{flex:1;}
+.section{display:none;padding:44px 52px;gap:56px;align-items:center;min-height:calc(100vh - 90px);}
+.section.active{display:flex;}
 .section:nth-child(odd){background:var(--brighter);}
 .section:nth-child(even){background:var(--brightest);}
+
+/* ── Tab nav buttons (prev/next) */
+.tab-nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);width:100%;}
+.tab-nav-btn{
+  display:flex;align-items:center;gap:6px;padding:10px 20px;
+  border-radius:10px;border:1.5px solid var(--line);background:var(--card);
+  font-size:13px;font-weight:600;color:var(--sea);cursor:pointer;transition:.15s;font-family:inherit;
+}
+.tab-nav-btn:hover{background:var(--sea);color:#fff;border-color:var(--sea);}
+.tab-nav-btn.primary{background:var(--sea);color:#fff;border-color:var(--sea);}
+.tab-nav-btn.primary:hover{background:var(--deep);}
+.tab-nav-btn:disabled{opacity:.3;pointer-events:none;}
 .sec-text{flex:1;max-width:560px;}
 .sec-diagram{flex-shrink:0;display:flex;justify-content:center;align-items:center;}
 
@@ -56,7 +76,7 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 #s1{
   background:linear-gradient(140deg,var(--deep) 0%,#014070 55%,#015A88 100%);
   flex-direction:column;align-items:flex-start;justify-content:center;
-  position:relative;overflow:hidden;gap:0;
+  position:relative;overflow:hidden;gap:0;min-height:80vh;
 }
 #s1::before{content:"⚓";position:absolute;right:-80px;bottom:-100px;font-size:360px;opacity:.04;pointer-events:none;}
 #s1 .sec-diagram{position:absolute;right:48px;top:50%;transform:translateY(-50%);}
@@ -185,19 +205,19 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 .hl{background:rgba(200,162,74,.14);padding:1px 7px;border-radius:4px;font-weight:700;color:var(--warn);}
 
 /* Mobile */
-#sidebar-toggle{display:none;}
-@media(max-width:960px){
-  #sidebar{transform:translateX(-100%);z-index:200;}
-  #sidebar.open{transform:translateX(0);}
-  #sidebar-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:300;width:38px;height:38px;background:var(--deep);border-radius:9px;align-items:center;justify-content:center;border:none;color:var(--gold2);font-size:17px;cursor:pointer;}
-  #main{margin-left:0;}
-  .section{flex-direction:column;padding:44px 22px;gap:32px;}
+@media(max-width:768px){
+  .tab-header{padding:8px 12px 0;}
+  .tab-title{font-size:13px;}
+  .tab-sub{display:none;}
+  .tab-btn{padding:7px 10px;font-size:11px;}
+  .section{flex-direction:column;padding:28px 16px;gap:24px;}
   .sec-diagram{width:100%;}
   #s1 .sec-diagram{position:relative;right:auto;top:auto;transform:none;display:flex;}
+  .tab-nav-btn{padding:8px 14px;font-size:12px;}
 }
 
 /* ── Language toggle ── */
-#lang-toggle{position:fixed;top:14px;right:16px;z-index:400;display:flex;gap:0;
+#lang-toggle{display:flex;gap:0;flex-shrink:0;
   background:rgba(1,43,74,.9);border:1px solid rgba(255,255,255,.18);
   border-radius:999px;padding:3px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   box-shadow:0 4px 14px rgba(0,30,60,.25);}
@@ -256,40 +276,37 @@ body{font-family:'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif;
 </head>
 <body>
 
-<button id="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-
-<div id="lang-toggle">
-  <button id="lang-ko" class="on" onclick="setLang('ko')">한국어</button>
-  <button id="lang-en" onclick="setLang('en')">EN</button>
+<div id="tab-bar">
+  <div class="tab-header">
+    <div class="tab-title">⚓ OCEAN STORY</div>
+    <div class="tab-sub" data-ko="해양 저자 플랫폼 · 임직원 온보딩" data-en="Maritime Author Platform · Employee Onboarding">해양 저자 플랫폼 · 임직원 온보딩</div>
+    <div class="tab-prog">
+      <div class="tab-prog-bar"><div class="tab-prog-fill" id="prog-fill"></div></div>
+      <div class="tab-prog-txt" id="prog-txt">1 / 10</div>
+    </div>
+    <div id="lang-toggle">
+      <button id="lang-ko" class="on" onclick="setLang('ko')">한국어</button>
+      <button id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <div id="tab-list">
+    <button class="tab-btn on" onclick="goTab(0)"><span class="tn">1</span><span data-ko="소개" data-en="Intro">소개</span></button>
+    <button class="tab-btn" onclick="goTab(1)"><span class="tn">2</span><span data-ko="개념" data-en="Concepts">개념</span></button>
+    <button class="tab-btn" onclick="goTab(2)"><span class="tn">3</span><span data-ko="역할" data-en="Roles">역할</span></button>
+    <button class="tab-btn" onclick="goTab(3)"><span class="tn">4</span><span data-ko="도서등급" data-en="Tiers">도서등급</span></button>
+    <button class="tab-btn" onclick="goTab(4)"><span class="tn">5</span><span data-ko="포인트" data-en="Points">포인트</span></button>
+    <button class="tab-btn" onclick="goTab(5)"><span class="tn">6</span><span data-ko="크루등급" data-en="Crew">크루등급</span></button>
+    <button class="tab-btn" onclick="goTab(6)"><span class="tn">7</span><span data-ko="출간마법사" data-en="Publish">출간마법사</span></button>
+    <button class="tab-btn" onclick="goTab(7)"><span class="tn">8</span><span data-ko="아키텍처" data-en="Tech">아키텍처</span></button>
+    <button class="tab-btn" onclick="goTab(8)"><span class="tn">9</span><span data-ko="이해도점검" data-en="Quiz">이해도점검</span></button>
+    <button class="tab-btn" onclick="goTab(9)"><span class="tn">✓</span><span data-ko="완료" data-en="Done">완료</span></button>
+  </div>
 </div>
-
-<aside id="sidebar">
-  <div class="logo">
-    <div class="title">⚓ OCEAN STORY</div>
-    <div class="sub" data-ko="해양 저자 플랫폼 · 임직원 온보딩" data-en="Maritime Author Platform · Employee Onboarding">해양 저자 플랫폼 · 임직원 온보딩</div>
-  </div>
-  <nav id="nav-list">
-    <a href="#s1" class="active"><span class="n">1</span><span data-ko="소개" data-en="Introduction">소개</span></a>
-    <a href="#s2"><span class="n">2</span><span data-ko="플랫폼 개념" data-en="Platform Concepts">플랫폼 개념</span></a>
-    <a href="#s3"><span class="n">3</span><span data-ko="사용자 역할" data-en="User Roles">사용자 역할</span></a>
-    <a href="#s4"><span class="n">4</span><span data-ko="도서 등급 체계" data-en="Book Tier System">도서 등급 체계</span></a>
-    <a href="#s5"><span class="n">5</span><span data-ko="포인트 시스템" data-en="Points System">포인트 시스템</span></a>
-    <a href="#s6"><span class="n">6</span><span data-ko="크루 등급 체계" data-en="Crew Rank System">크루 등급 체계</span></a>
-    <a href="#s7"><span class="n">7</span><span data-ko="출간 신청 마법사" data-en="Publication Wizard">출간 신청 마법사</span></a>
-    <a href="#s8"><span class="n">8</span><span data-ko="기술 아키텍처" data-en="Technical Architecture">기술 아키텍처</span></a>
-    <a href="#s9"><span class="n">9</span><span data-ko="이해도 점검" data-en="Knowledge Check">이해도 점검</span></a>
-    <a href="#s10"><span class="n">✓</span><span data-ko="완료" data-en="Complete">완료</span></a>
-  </nav>
-  <div class="prog-wrap">
-    <div class="prog-lbl" data-ko="학습 진행률" data-en="Learning Progress">학습 진행률</div>
-    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
-  </div>
-</aside>
 
 <main id="main">
 
 <!-- ══ S1 INTRODUCTION ══ -->
-<section class="section" id="s1">
+<section class="section active" id="s1">
   <div class="sec-text">
     <div class="hero-tag" data-ko="📚 에이콘출판사 | 플랫폼 개요" data-en="📚 Acorn Publishing | Platform Overview">📚 에이콘출판사 | 플랫폼 개요</div>
     <div class="hero-title">OCEAN STORY<br>오션스토리</div>
@@ -1174,29 +1191,53 @@ function showScore(){
   document.getElementById('quiz-submit-btn').style.display='none';
 }
 
-// Progress & active nav
+// Tab navigation
 var sections=document.querySelectorAll('.section');
-var navLinks=document.querySelectorAll('#nav-list a');
-function onScroll(){
-  var sy=window.scrollY+window.innerHeight*.35;
-  var cur=0;
-  sections.forEach(function(s,i){if(sy>=s.offsetTop)cur=i;});
-  navLinks.forEach(function(a){a.classList.remove('active');});
-  if(navLinks[cur])navLinks[cur].classList.add('active');
-  document.getElementById('prog-fill').style.width=Math.round((cur+1)/sections.length*100)+'%';
-}
-window.addEventListener('scroll',onScroll,{passive:true});
-onScroll();
+var tabBtns=document.querySelectorAll('.tab-btn');
+var curTab=0;
+var visited={};
 
-// Smooth scroll
-document.querySelectorAll('#nav-list a').forEach(function(a){
-  a.addEventListener('click',function(e){
-    e.preventDefault();
-    var el=document.getElementById(a.getAttribute('href').replace('#',''));
-    if(el)el.scrollIntoView({behavior:'smooth'});
-    document.getElementById('sidebar').classList.remove('open');
+function goTab(idx){
+  if(idx<0||idx>=sections.length)return;
+  visited[curTab]=true;
+  curTab=idx;
+  sections.forEach(function(sec,i){sec.classList.toggle('active',i===idx);});
+  tabBtns.forEach(function(b,i){
+    b.classList.toggle('on',i===idx);
+    if(visited[i])b.classList.add('done');
   });
-});
+  document.getElementById('prog-fill').style.width=Math.round((idx+1)/sections.length*100)+'%';
+  var ptxt=document.getElementById('prog-txt');
+  if(ptxt)ptxt.textContent=(idx+1)+' / '+sections.length;
+  // scroll tab into view
+  var activeBtn=tabBtns[idx];
+  if(activeBtn)activeBtn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  // scroll main to top
+  window.scrollTo(0,0);
+  // inject prev/next nav if not already present
+  injectTabNav(idx);
+}
+
+function injectTabNav(idx){
+  var sec=sections[idx];
+  if(sec.querySelector('.tab-nav-row'))return;
+  var row=document.createElement('div');
+  row.className='tab-nav-row';
+  var prevLabel=LANG==='ko'?'\u2190 \uc774\uc804':'\u2190 Prev';
+  var nextLabel=LANG==='ko'?'\ub2e4\uc74c \u2192':'Next \u2192';
+  var prevBtn='<button class="tab-nav-btn" '+(idx===0?'disabled':'')+' onclick="goTab('+(idx-1)+')">'+prevLabel+'</button>';
+  var nextBtn='';
+  if(idx<sections.length-1){
+    nextBtn='<button class="tab-nav-btn primary" onclick="goTab('+(idx+1)+')">'+nextLabel+'</button>';
+  }
+  row.innerHTML=prevBtn+nextBtn;
+  // find the right container
+  var target=sec.querySelector('.sec-text')||sec;
+  target.appendChild(row);
+}
+
+// Initialize: show first section
+goTab(0);
 
 
 /* ══ POINT SIMULATION ══ */
