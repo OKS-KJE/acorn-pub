@@ -2142,6 +2142,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <button class="tab-btn" onclick="tab('s4','t2',this)">👔 <span data-i18n="tab_r2">경력 직원</span></button>
       <button class="tab-btn" onclick="tab('s4','t3',this)">🗺️ <span data-i18n="tab_r3">수습 로드맵</span></button>
       <button class="tab-btn" onclick="tab('s4','t4',this)">✅ <span data-i18n="tab_r4">체크리스트</span></button>
+      <button class="tab-btn" onclick="tab('s4','t5',this);wjInit()">📔 <span data-i18n="tab_r5">업무일지</span></button>
     </div>
 
     <div id="s4-t0" class="tab-panel" data-ko-id="s4-t0" active"><div class="rules-grid">
@@ -2422,6 +2423,89 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <strong>수습 기간의 핵심:</strong> 훌륭한 전문가들에게 에이콘이 다리가 됩니다. 잘 부탁드립니다.
       </div>
     </div>
+
+<style>
+/* ── 신규사원 업무일지 (S4-t5) ───────────────────────────── */
+.wj-topbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.wj-topbar-left{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.wj-lbl{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;}
+.wj-input{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);}
+.wj-input:focus{outline:none;border-color:var(--blue);}
+.wj-ta{resize:vertical;line-height:1.6;min-height:44px;}
+.wj-btn{padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.wj-btn-gold{background:var(--gold2);color:#fff;}
+.wj-btn-blue{background:var(--blue);color:#fff;}
+.wj-btn-ghost{background:var(--s3);color:var(--text2);border:1px solid var(--border);}
+.wj-btn:hover{filter:brightness(1.06);}
+.wj-badge{font-size:11px;padding:4px 11px;border-radius:100px;background:rgba(184,114,10,.14);color:var(--gold2);border:1px solid rgba(184,114,10,.3);white-space:nowrap;}
+.wj-badge-on{background:rgba(80,200,120,.15);color:#189a5b;border-color:rgba(80,200,120,.35);}
+.wj-empty{text-align:center;padding:34px 16px;background:var(--s2);border:1.5px dashed var(--border);border-radius:12px;color:var(--text2);font-size:14px;font-weight:600;line-height:1.9;}
+.wj-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px;}
+.wj-card-hdr{padding:11px 16px;background:var(--blue);color:#fff;font-size:13px;font-weight:800;}
+.wj-card-body{padding:16px;}
+.wj-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.wj-hint{font-size:11px;color:var(--text3);font-weight:600;}
+/* 요약 */
+.wj-summary{background:linear-gradient(135deg,var(--s2),var(--s3));border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow);}
+.wj-sum-name{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.wj-avatar{width:42px;height:42px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;}
+.wj-x{margin-left:auto;background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:13px;color:var(--text3);}
+.wj-x:hover{border-color:var(--rose);color:var(--rose);}
+.wj-sum-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px;}
+.wj-stat{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 6px;text-align:center;}
+.wj-stat-k{font-size:10px;color:var(--text3);margin-bottom:3px;}
+.wj-stat-v{font-size:13px;font-weight:800;color:var(--text);}
+.wj-bar-wrap{height:9px;background:var(--surface);border:1px solid var(--border);border-radius:100px;overflow:hidden;}
+.wj-bar{height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold3));border-radius:100px;transition:width .4s;}
+/* 목록 */
+.wj-list{display:flex;flex-direction:column;gap:10px;}
+.wj-entry{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow);}
+.wj-entry-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:7px;border-bottom:1px dashed var(--border);}
+.wj-entry-date{font-size:13px;font-weight:800;color:var(--blue);}
+.wj-dow{font-size:11px;color:var(--text3);font-weight:600;}
+.wj-entry-act{display:flex;gap:6px;}
+.wj-mini{background:var(--s3);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;font-family:inherit;}
+.wj-mini:hover{border-color:var(--blue);color:var(--blue);}
+.wj-mini-del:hover{border-color:var(--rose);color:var(--rose);}
+.wj-row{display:flex;gap:8px;font-size:12px;line-height:1.6;padding:2px 0;}
+.wj-row-k{flex-shrink:0;min-width:80px;font-weight:700;color:var(--rose);}
+.wj-row-v{color:var(--text2);}
+.wj-row-c .wj-row-k{color:var(--teal);}
+/* 토스트 */
+.wj-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--nav-bg);color:#fff;padding:11px 22px;border-radius:100px;font-size:13px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:all .3s;z-index:3000;}
+.wj-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+@media(max-width:760px){.wj-grid2{grid-template-columns:1fr;}.wj-sum-stats{grid-template-columns:repeat(3,1fr);}}
+/* 파일형 목록 */
+.wj-filelist{display:flex;flex-direction:column;gap:7px;}
+.wj-file{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;transition:border-color .15s,transform .12s,box-shadow .15s;box-shadow:var(--shadow);}
+.wj-file:hover{border-color:var(--blue);transform:translateY(-1px);box-shadow:0 4px 16px rgba(7,33,62,.12);}
+.wj-file-icon{font-size:20px;flex-shrink:0;}
+.wj-file-main{flex:1;min-width:0;}
+.wj-file-date{font-size:13px;font-weight:800;color:var(--blue);}
+.wj-file-date .wj-dow{font-size:11px;color:var(--text3);font-weight:600;margin-left:4px;}
+.wj-file-prev{font-size:12px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wj-file-arrow{font-size:22px;color:var(--border2);font-weight:400;flex-shrink:0;}
+.wj-file:hover .wj-file-arrow{color:var(--blue);}
+/* 모달(팝업) */
+.wj-modal-overlay{display:none;position:fixed;inset:0;background:rgba(7,33,62,.5);z-index:2500;align-items:center;justify-content:center;padding:20px;}
+.wj-modal-box{background:var(--surface);border-radius:16px;width:100%;max-width:600px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.35);animation:fadeIn .2s ease;}
+.wj-modal-hdr{padding:15px 20px;background:var(--blue);color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.wj-modal-hdr>span{flex:1;}
+.wj-modal-x{background:none;border:none;color:rgba(255,255,255,.85);font-size:18px;cursor:pointer;padding:2px 6px;line-height:1;}
+.wj-modal-x:hover{color:#fff;}
+.wj-modal-body{flex:1;overflow-y:auto;padding:18px 20px;}
+.wj-modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--s2);}
+</style>
+
+    <div id="s4-t5" class="tab-panel">
+      <div class="sec-h">신규사원 업무일지</div>
+      <p class="sec-sub">신규사원을 등록하고, 수습 3개월 동안 매일 업무일지를 직접 작성합니다. 작성 내용은 이 브라우저에 자동 저장되며, Supabase 연결 시 클라우드에도 백업됩니다.</p>
+      <div id="wj-root"></div>
+      <div class="info-box teal" style="margin-top:16px">
+        <strong>작성 안내:</strong> 매 근무일 퇴근 전 <b>오늘 한 업무 · 느낀 점 · 내일 할 일</b>을 기록하세요. 수습 3개월 후 경영진 1:1 평가 면담의 근거 자료가 됩니다. 상단 [📄 일지 인쇄·PDF]로 전체 일지를 출력·저장할 수 있습니다.
+      </div>
+    </div>
+
 
   </div>
 </div>
@@ -4163,7 +4247,7 @@ const WEEKS = [
         {t:"전 직원 1:1 인사 — 이름·팀·담당 업무 메모", tag:"관계", tc:"#4A1A7C"},
         {t:"경영진과 첫 미팅 — 수습 기간 목표·기대치·평가 기준 확인", tag:"핵심", tc:"#B87030"},
         {t:"업무 PC·이메일·사내 메신저 계정 설정 및 이메일 서명 설정", tag:"시스템", tc:"#0A3E84"},
-        {t:"업무일지 첫 페이지 작성 — 오늘 배운 것·느낀 것·내일 물어볼 것", tag:"성장", tc:"#0A5A2A"},
+        {t:"업무일지 첫 페이지 작성 — 오늘 한 업무·느낀 점·내일 할 일", tag:"성장", tc:"#0A5A2A"},
       ]},
       { title:"Day 2~5 — 현황 파악", items:[
         {t:"온보딩 가이드 전체 정독 — 이해 안 되는 항목 목록 작성", tag:"핵심", tc:"#B87030"},
@@ -4333,11 +4417,8 @@ function tab(section, tabId, btn) {
 // ── NAVIGATION ───────────────────────────────────────────────
 const SECTIONS = ['s1','s3','s4','s8'];
 function nav(id, subTabId) {
-  // hide all sections
-  ['s1','s3','s4','s8','s9','s10','s11','s15'].forEach(s => {
-    const el = document.getElementById(s);
-    if(el) { el.classList.remove('active'); }
-  });
+  // hide all sections (모든 .section 을 전부 숨김 — 신규 섹션 자동 대응)
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
   // show target
   const target = document.getElementById(id);
   if(target) target.classList.add('active');
@@ -4407,6 +4488,7 @@ const T = {
     tab_p3:'저자 발굴', tab_p4:'저자 설득 가이드', tab_p7:'2026 목표', tab_p5:'플랫폼 비즈니스', tab_p6:'원가 분석',
     tab_r0:'공통 규정', tab_r1:'수습 직원', tab_r2:'경력 직원',
     tab_r3:'수습 로드맵', tab_r4:'체크리스트',
+    tab_r5:'업무일지',
     ph_t1:'에이콘출판사 소개', ph_t2:'업무 소개', ph_t3:'복무 규정', ph_t4:'팀별·업무별 KPI',
     ph_s1:'미션·비전·전략과 조직 구조를 확인합니다.',
     ph_s2:'출판 프로세스·원가분석·플랫폼 비즈니스·KDP·저자 발굴·저자 설득 가이드를 이해합니다.',
@@ -4420,6 +4502,7 @@ const T = {
     tab_p3:'Author Discovery', tab_p4:'Persuasion Guide', tab_p7:'2026 Targets', tab_p5:'Platform Business', tab_p6:'Cost Analysis',
     tab_r0:'General Rules', tab_r1:'Probationary', tab_r2:'Experienced',
     tab_r3:'Roadmap', tab_r4:'Checklist',
+    tab_r5:'Work Journal',
     ph_t1:'About Acorn Publishing', ph_t2:'Work Guide', ph_t3:'Regulations', ph_t4:'Team KPI',
     ph_s1:'Explore mission, vision, strategy, and organizational structure.',
     ph_s2:'Understand publishing process, cost analysis, platform business, KDP, and author strategies.',
@@ -7199,6 +7282,447 @@ function copyEmailText(){
   }).catch(function(){
     var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
   });
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// 신규사원 업무일지 (Work Journal) — 신규사원 등록 + 3개월 일지
+//   localStorage 우선 · Supabase(acorn_worklog) 백그라운드 백업
+//   일지 작성/수정 = 모달(팝업) · 목록 = 파일형 · 항목 선택 시 모달
+// ══════════════════════════════════════════════════════════════
+var WJ_EMP_KEY = 'acorn_wj_emps';       // [{id,name,startDate,team,mentor,note,createdAt,updatedAt}]
+var WJ_ENT_KEY = 'acorn_wj_entries';    // { empId: [ {id,date,work,felt,tomorrow,comment,updatedAt} ] }
+var WJ_CUR_KEY = 'acorn_wj_current';    // 현재 선택된 사원 id
+var WJ_SB_TABLE = 'acorn_worklog';      // Supabase 테이블명
+
+var WJ_EMPS = [];
+var WJ_ENTRIES = {};
+var WJ_CUR = '';
+var WJ_INITED = false;
+var WJ_MODAL_EID = '';   // 모달에서 편집 중인 일지 id (신규는 '')
+
+// ── 저장/로드 ──────────────────────────────────────────────
+function wjLoad() {
+  try { WJ_EMPS = JSON.parse(localStorage.getItem(WJ_EMP_KEY) || '[]'); } catch (e) { WJ_EMPS = []; }
+  try { WJ_ENTRIES = JSON.parse(localStorage.getItem(WJ_ENT_KEY) || '{}'); } catch (e) { WJ_ENTRIES = {}; }
+  WJ_CUR = localStorage.getItem(WJ_CUR_KEY) || '';
+  if (!Array.isArray(WJ_EMPS)) WJ_EMPS = [];
+  if (!WJ_ENTRIES || typeof WJ_ENTRIES !== 'object') WJ_ENTRIES = {};
+}
+function wjSaveEmps() { try { localStorage.setItem(WJ_EMP_KEY, JSON.stringify(WJ_EMPS)); } catch (e) {} }
+function wjSaveEntries() { try { localStorage.setItem(WJ_ENT_KEY, JSON.stringify(WJ_ENTRIES)); } catch (e) {} }
+function wjSaveCur() { try { localStorage.setItem(WJ_CUR_KEY, WJ_CUR || ''); } catch (e) {} }
+
+// ── 유틸 ───────────────────────────────────────────────────
+function wjUid(p) { return (p || 'w') + '_' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3); }
+function wjToday() { var d = new Date(); return wjFmt(d); }
+function wjFmt(d) {
+  var y = d.getFullYear(), m = ('0' + (d.getMonth() + 1)).slice(-2), day = ('0' + d.getDate()).slice(-2);
+  return y + '-' + m + '-' + day;
+}
+function wjParse(s) { var p = String(s || '').split('-'); return new Date(+p[0], (+p[1] || 1) - 1, +p[2] || 1); }
+function wjAddMonths(d, n) { var x = new Date(d.getTime()); x.setMonth(x.getMonth() + n); return x; }
+function wjWeekday(s) { return ['일','월','화','수','목','금','토'][wjParse(s).getDay()]; }
+function wjBizDays(a, b) {
+  if (b < a) return 0;
+  var n = 0, cur = new Date(a.getFullYear(), a.getMonth(), a.getDate());
+  var end = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+  while (cur <= end) { var w = cur.getDay(); if (w !== 0 && w !== 6) n++; cur.setDate(cur.getDate() + 1); }
+  return n;
+}
+function wjCurEmp() { for (var i = 0; i < WJ_EMPS.length; i++) if (WJ_EMPS[i].id === WJ_CUR) return WJ_EMPS[i]; return null; }
+function wjSet(id, v) { var el = document.getElementById(id); if (el) el.value = v || ''; }
+function wjGet(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function wjTrunc(s, n) { s = String(s || '').replace(/\n/g, ' '); return s.length > n ? s.slice(0, n) + '…' : s; }
+
+// ── 초기화 (탭 진입 시) ────────────────────────────────────
+function wjInit() {
+  wjLoad();
+  if (WJ_CUR && !wjCurEmp()) WJ_CUR = '';
+  if (!WJ_CUR && WJ_EMPS.length) WJ_CUR = WJ_EMPS[0].id;
+  wjEnsureModal();
+  wjRender();
+  if (!WJ_INITED) { WJ_INITED = true; wjSbPull(); wjDbBadge(); }
+}
+
+// ── 렌더 (요약 + 작성 버튼 + 파일형 목록) ─────────────────
+function wjRender() {
+  var root = document.getElementById('wj-root');
+  if (!root) return;
+  var emp = wjCurEmp();
+  var opts = '';
+  for (var i = 0; i < WJ_EMPS.length; i++) {
+    var e = WJ_EMPS[i];
+    opts += '<option value="' + escH(e.id) + '"' + (e.id === WJ_CUR ? ' selected' : '') + '>' +
+            escH(e.name) + (e.startDate ? ' (' + escH(e.startDate) + ' 입사)' : '') + '</option>';
+  }
+  var h = '';
+  h += '<div class="wj-topbar"><div class="wj-topbar-left">';
+  if (WJ_EMPS.length) {
+    h += '<label class="wj-lbl" style="margin:0 4px 0 0">사원</label>';
+    h += '<select id="wj-emp-select" class="wj-input" style="width:auto;min-width:220px" onchange="wjSelectEmp(this.value)">' + opts + '</select>';
+  }
+  h += '<button class="wj-btn wj-btn-gold" onclick="wjOpenRegister()">➕ 신규사원 등록</button>';
+  if (emp) h += '<button class="wj-btn wj-btn-ghost" onclick="wjPrint()">📄 일지 인쇄·PDF</button>';
+  h += '</div><span id="wj-db-badge" class="wj-badge">🟡 localStorage</span></div>';
+
+  h += wjRegisterFormHTML();
+
+  if (!emp) {
+    h += '<div class="wj-empty">👤 등록된 신규사원이 없습니다.<br>' +
+         '<span style="font-size:12px;color:var(--text3)">[➕ 신규사원 등록] 버튼을 눌러 사원을 추가한 뒤 수습 3개월 업무일지를 작성하세요.</span></div>';
+    root.innerHTML = h;
+    return;
+  }
+
+  h += wjSummaryHTML(emp);
+  // 작성 버튼
+  h += '<div style="display:flex;justify-content:space-between;align-items:center;margin:4px 0 12px">' +
+       '<div class="sec-h" style="margin:0;flex:1">작성한 업무일지 <span style="font-size:12px;color:var(--text3);font-weight:400">(' +
+       (WJ_ENTRIES[emp.id] || []).length + '개)</span></div>' +
+       '<button class="wj-btn wj-btn-blue" onclick="wjNewEntry()" style="margin-left:12px">✍️ 오늘 일지 작성</button></div>';
+  h += wjListHTML(emp);
+
+  root.innerHTML = h;
+}
+
+function wjRegisterFormHTML() {
+  var h = '<div id="wj-register" class="wj-card" style="display:none;border-color:var(--gold2)">';
+  h += '<div class="wj-card-hdr" style="background:var(--gold2)">➕ 신규사원 등록</div>';
+  h += '<div class="wj-card-body">';
+  h += '<div class="wj-grid2">';
+  h += '<div><label class="wj-lbl">이름 <span style="color:var(--rose)">*</span></label>' +
+       '<input id="wj-r-name" class="wj-input" placeholder="예) 박채운"></div>';
+  h += '<div><label class="wj-lbl">입사일 <span style="color:var(--rose)">*</span></label>' +
+       '<input id="wj-r-date" type="date" class="wj-input" value="' + wjToday() + '"></div>';
+  h += '<div><label class="wj-lbl">소속·희망팀 (선택)</label>' +
+       '<input id="wj-r-team" class="wj-input" placeholder="수습 (보직 미정) / 기획편집팀 등"></div>';
+  h += '<div><label class="wj-lbl">멘토·담당 경영진 (선택)</label>' +
+       '<input id="wj-r-mentor" class="wj-input" placeholder="예) 강승훈 과장"></div>';
+  h += '</div>';
+  h += '<label class="wj-lbl" style="margin-top:10px">메모 (선택)</label>' +
+       '<input id="wj-r-note" class="wj-input" placeholder="비고">';
+  h += '<div style="display:flex;gap:8px;margin-top:14px">' +
+       '<button class="wj-btn wj-btn-gold" onclick="wjSubmitRegister()">💾 등록</button>' +
+       '<button class="wj-btn wj-btn-ghost" onclick="wjCancelRegister()">취소</button></div>';
+  h += '</div></div>';
+  return h;
+}
+
+function wjSummaryHTML(emp) {
+  var start = wjParse(emp.startDate || wjToday());
+  var end = wjAddMonths(start, 3);
+  var todayD = new Date();
+  var elapsedEnd = todayD < end ? todayD : end;
+  var elapsedBiz = wjBizDays(start, elapsedEnd);
+  var totalBiz = wjBizDays(start, end);
+  var written = (WJ_ENTRIES[emp.id] || []).length;
+  var rate = elapsedBiz > 0 ? Math.min(100, Math.round(written / elapsedBiz * 100)) : 0;
+  var daysLeft = wjBizDays(todayD < end ? new Date(todayD.getTime() + 86400000) : end, end);
+  var probEnded = todayD > end;
+
+  var h = '<div class="wj-summary">';
+  h += '<div class="wj-sum-name"><span class="wj-avatar">' + escH((emp.name || '?').slice(0, 1)) + '</span>' +
+       '<div><div style="font-size:16px;font-weight:800;color:var(--text)">' + escH(emp.name) + '</div>' +
+       '<div style="font-size:11px;color:var(--text3)">' + escH(emp.team || '수습 (보직 미정)') +
+       (emp.mentor ? ' · 멘토 ' + escH(emp.mentor) : '') + '</div></div>' +
+       '<button class="wj-x" title="사원 삭제" onclick="wjDeleteEmp()">🗑</button></div>';
+  h += '<div class="wj-sum-stats">';
+  h += wjStat('입사일', escH(emp.startDate || '-'));
+  h += wjStat('수습 종료(예정)', wjFmt(end));
+  h += wjStat('작성한 일지', written + '개');
+  h += wjStat('경과 영업일', elapsedBiz + ' / ' + totalBiz + '일');
+  h += wjStat('작성률', rate + '%');
+  h += wjStat(probEnded ? '수습 상태' : '남은 영업일', probEnded ? '종료' : daysLeft + '일');
+  h += '</div>';
+  h += '<div class="wj-bar-wrap"><div class="wj-bar" style="width:' + rate + '%"></div></div>';
+  h += '</div>';
+  return h;
+}
+function wjStat(k, v) {
+  return '<div class="wj-stat"><div class="wj-stat-k">' + k + '</div><div class="wj-stat-v">' + v + '</div></div>';
+}
+
+// ── 파일형 목록 ────────────────────────────────────────────
+function wjListHTML(emp) {
+  var list = (WJ_ENTRIES[emp.id] || []).slice();
+  list.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+  if (!list.length) { return '<div class="wj-empty" style="padding:26px">아직 작성한 일지가 없습니다.<br><span style="font-size:12px;color:var(--text3)">[✍️ 오늘 일지 작성] 버튼으로 첫 일지를 작성해 보세요.</span></div>'; }
+  var h = '<div class="wj-filelist">';
+  for (var i = 0; i < list.length; i++) {
+    var e = list[i];
+    var prev = wjTrunc(e.work || e.felt || e.tomorrow || e.comment || '', 46);
+    h += '<div class="wj-file" onclick="wjOpenEntry(\'' + e.id + '\')">' +
+         '<div class="wj-file-icon">📄</div>' +
+         '<div class="wj-file-main">' +
+         '<div class="wj-file-date">' + escH(e.date) + ' <span class="wj-dow">(' + wjWeekday(e.date) + ')</span></div>' +
+         '<div class="wj-file-prev">' + escH(prev) + '</div></div>' +
+         '<div class="wj-file-arrow">›</div></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+// ── 모달(팝업) ─────────────────────────────────────────────
+function wjEnsureModal() {
+  if (document.getElementById('wj-modal')) return;
+  var m = document.createElement('div');
+  m.id = 'wj-modal';
+  m.className = 'wj-modal-overlay';
+  m.style.display = 'none';
+  m.innerHTML =
+    '<div class="wj-modal-box">' +
+      '<div class="wj-modal-hdr">' +
+        '<span id="wj-modal-title">✍️ 업무일지 작성</span>' +
+        '<button class="wj-modal-x" onclick="wjCloseModal()">✕</button>' +
+      '</div>' +
+      '<div class="wj-modal-body">' +
+        '<label class="wj-lbl">날짜 <span style="color:var(--rose)">*</span></label>' +
+        '<input id="wjm-date" type="date" class="wj-input">' +
+        '<label class="wj-lbl" style="margin-top:12px">📌 오늘 한 업무</label>' +
+        '<textarea id="wjm-work" class="wj-input wj-ta" rows="3" placeholder="오늘 관찰·지원·수행한 업무를 구체적으로 기록"></textarea>' +
+        '<label class="wj-lbl" style="margin-top:12px">🌱 느낀 점</label>' +
+        '<textarea id="wjm-felt" class="wj-input wj-ta" rows="2" placeholder="잘한 점·아쉬운 점·개선하고 싶은 점"></textarea>' +
+        '<label class="wj-lbl" style="margin-top:12px">📋 내일 할 일</label>' +
+        '<textarea id="wjm-tomorrow" class="wj-input wj-ta" rows="2" placeholder="내일 처리할 일 목록"></textarea>' +
+        '<label class="wj-lbl" style="margin-top:12px">🗒 멘토·경영진 코멘트 (선택)</label>' +
+        '<textarea id="wjm-comment" class="wj-input wj-ta" rows="2" placeholder="멘토/경영진 피드백란"></textarea>' +
+      '</div>' +
+      '<div class="wj-modal-foot">' +
+        '<button id="wj-modal-del" class="wj-btn wj-btn-ghost" style="display:none;color:var(--rose)" onclick="wjModalDelete()">🗑 삭제</button>' +
+        '<div style="flex:1"></div>' +
+        '<button class="wj-btn wj-btn-ghost" onclick="wjCloseModal()">취소</button>' +
+        '<button class="wj-btn wj-btn-blue" onclick="wjModalSave()">💾 저장</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(m);
+  m.addEventListener('click', function (ev) { if (ev.target === m) wjCloseModal(); });
+}
+function wjShowModal(entry, defaultDate) {
+  wjEnsureModal();
+  var date = entry ? entry.date : (defaultDate || wjToday());
+  WJ_MODAL_EID = entry ? entry.id : '';
+  wjSet('wjm-date', date);
+  wjSet('wjm-work', entry ? entry.work : '');
+  wjSet('wjm-felt', entry ? entry.felt : '');
+  wjSet('wjm-tomorrow', entry ? entry.tomorrow : '');
+  wjSet('wjm-comment', entry ? entry.comment : '');
+  var title = document.getElementById('wj-modal-title');
+  var del = document.getElementById('wj-modal-del');
+  if (title) title.textContent = entry ? ('✏️ 업무일지 수정 · ' + date) : '✍️ 업무일지 작성';
+  if (del) del.style.display = entry ? 'inline-block' : 'none';
+  var m = document.getElementById('wj-modal');
+  if (m) m.style.display = 'flex';
+}
+function wjCloseModal() { var m = document.getElementById('wj-modal'); if (m) m.style.display = 'none'; WJ_MODAL_EID = ''; }
+
+function wjNewEntry() {
+  var emp = wjCurEmp(); if (!emp) { alert('먼저 사원을 등록·선택하세요.'); return; }
+  // 오늘 날짜에 이미 작성된 일지가 있으면 수정 모드로 연다
+  var today = wjToday();
+  var list = WJ_ENTRIES[emp.id] || [];
+  for (var i = 0; i < list.length; i++) if (list[i].date === today) { wjShowModal(list[i]); return; }
+  wjShowModal(null, today);
+}
+function wjOpenEntry(id) {
+  var emp = wjCurEmp(); if (!emp) return;
+  var list = WJ_ENTRIES[emp.id] || [];
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) { wjShowModal(list[i]); return; }
+}
+function wjModalSave() {
+  var emp = wjCurEmp(); if (!emp) return;
+  var date = wjGet('wjm-date');
+  if (!date) { alert('날짜를 선택하세요.'); return; }
+  var work = wjGet('wjm-work'), felt = wjGet('wjm-felt'),
+      tomorrow = wjGet('wjm-tomorrow'), comment = wjGet('wjm-comment');
+  if (!work && !felt && !tomorrow && !comment) { alert('내용을 한 항목 이상 작성하세요.'); return; }
+  if (!WJ_ENTRIES[emp.id]) WJ_ENTRIES[emp.id] = [];
+  var list = WJ_ENTRIES[emp.id];
+
+  // 편집 중이던 항목의 원래 날짜 (날짜 변경 시 이전 행 정리)
+  var oldDate = '';
+  if (WJ_MODAL_EID) { for (var i = 0; i < list.length; i++) if (list[i].id === WJ_MODAL_EID) { oldDate = list[i].date; break; } }
+  if (oldDate && oldDate !== date) {
+    list = list.filter(function (x) { return x.id !== WJ_MODAL_EID; });
+    WJ_ENTRIES[emp.id] = list;
+    wjSbDelete('entry:' + emp.id + ':' + oldDate);
+  }
+
+  // 대상 날짜 항목 upsert (하루 1건)
+  var found = null;
+  for (var j = 0; j < list.length; j++) if (list[j].date === date) { found = list[j]; break; }
+  if (found) {
+    found.work = work; found.felt = felt; found.tomorrow = tomorrow; found.comment = comment; found.updatedAt = new Date().toISOString();
+  } else {
+    found = { id: (WJ_MODAL_EID && oldDate === date) ? WJ_MODAL_EID : wjUid('ent'), date: date, work: work, felt: felt, tomorrow: tomorrow, comment: comment, updatedAt: new Date().toISOString() };
+    list.push(found);
+  }
+  wjSaveEntries();
+  wjSbUpsert('entry:' + emp.id + ':' + date, 'entry', { empId: emp.id, date: date, work: work, felt: felt, tomorrow: tomorrow, comment: comment, updatedAt: found.updatedAt });
+  wjCloseModal();
+  wjRender();
+  wjToast('저장되었습니다 · ' + date);
+}
+function wjModalDelete() {
+  var emp = wjCurEmp(); if (!emp || !WJ_MODAL_EID) return;
+  var list = WJ_ENTRIES[emp.id] || [];
+  var target = null;
+  for (var i = 0; i < list.length; i++) if (list[i].id === WJ_MODAL_EID) { target = list[i]; break; }
+  if (!target) { wjCloseModal(); return; }
+  if (!confirm(target.date + ' 일지를 삭제할까요?')) return;
+  WJ_ENTRIES[emp.id] = list.filter(function (x) { return x.id !== WJ_MODAL_EID; });
+  wjSaveEntries();
+  wjSbDelete('entry:' + emp.id + ':' + target.date);
+  wjCloseModal();
+  wjRender();
+  wjToast('삭제되었습니다 · ' + target.date);
+}
+
+// ── 사원 등록 ──────────────────────────────────────────────
+function wjOpenRegister() {
+  var el = document.getElementById('wj-register'); if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
+function wjCancelRegister() { var el = document.getElementById('wj-register'); if (el) el.style.display = 'none'; }
+function wjSubmitRegister() {
+  var name = wjGet('wj-r-name');
+  var date = wjGet('wj-r-date');
+  if (!name) { alert('이름을 입력하세요.'); return; }
+  if (!date) { alert('입사일을 입력하세요.'); return; }
+  var emp = {
+    id: wjUid('emp'), name: name, startDate: date,
+    team: wjGet('wj-r-team'), mentor: wjGet('wj-r-mentor'), note: wjGet('wj-r-note'),
+    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+  };
+  WJ_EMPS.push(emp); wjSaveEmps();
+  WJ_CUR = emp.id; wjSaveCur();
+  wjSbUpsert('emp:' + emp.id, 'emp', emp);
+  wjRender();
+}
+function wjSelectEmp(id) { WJ_CUR = id; wjSaveCur(); wjRender(); }
+function wjDeleteEmp() {
+  var emp = wjCurEmp(); if (!emp) return;
+  var cnt = (WJ_ENTRIES[emp.id] || []).length;
+  if (!confirm('사원 [' + emp.name + ']와(과) 작성된 일지 ' + cnt + '개를 모두 삭제할까요?\n(되돌릴 수 없습니다)')) return;
+  (WJ_ENTRIES[emp.id] || []).forEach(function (e) { wjSbDelete('entry:' + emp.id + ':' + e.date); });
+  wjSbDelete('emp:' + emp.id);
+  delete WJ_ENTRIES[emp.id]; wjSaveEntries();
+  WJ_EMPS = WJ_EMPS.filter(function (x) { return x.id !== emp.id; }); wjSaveEmps();
+  WJ_CUR = WJ_EMPS.length ? WJ_EMPS[0].id : ''; wjSaveCur();
+  wjRender();
+}
+
+// ── 토스트 ─────────────────────────────────────────────────
+function wjToast(msg) {
+  var t = document.getElementById('wj-toast');
+  if (!t) { t = document.createElement('div'); t.id = 'wj-toast'; t.className = 'wj-toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._wjToastT);
+  window._wjToastT = setTimeout(function () { t.classList.remove('show'); }, 1800);
+}
+
+// ── 인쇄 / PDF 내보내기 ────────────────────────────────────
+function wjPrint() {
+  var emp = wjCurEmp(); if (!emp) return;
+  var list = (WJ_ENTRIES[emp.id] || []).slice();
+  list.sort(function (a, b) { return (a.date || '').localeCompare(b.date || ''); });
+  var start = wjParse(emp.startDate || wjToday());
+  var end = wjAddMonths(start, 3);
+  var rows = '';
+  for (var i = 0; i < list.length; i++) {
+    var e = list[i];
+    rows += '<div class="p-entry"><div class="p-date">' + escH(e.date) + ' (' + wjWeekday(e.date) + ')</div>' +
+      pRow('오늘 한 업무', e.work) +
+      pRow('느낀 점', e.felt) + pRow('내일 할 일', e.tomorrow) +
+      (e.comment ? pRow('멘토·경영진 코멘트', e.comment) : '') + '</div>';
+  }
+  if (!list.length) rows = '<p style="color:#888">작성된 일지가 없습니다.</p>';
+  var html = '<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>업무일지 - ' + escH(emp.name) + '</title>' +
+    '<style>body{font-family:"Malgun Gothic","Noto Sans KR",sans-serif;color:#1a1a1a;max-width:760px;margin:0 auto;padding:32px;}' +
+    'h1{font-size:20px;border-bottom:3px solid #D8920A;padding-bottom:10px;}' +
+    '.meta{font-size:12px;color:#555;margin:8px 0 20px;line-height:1.7}' +
+    '.meta b{color:#222}' +
+    '.p-entry{border:1px solid #ddd;border-radius:8px;padding:12px 16px;margin-bottom:12px;page-break-inside:avoid}' +
+    '.p-date{font-weight:800;color:#0A3E84;font-size:13px;margin-bottom:8px;border-bottom:1px dashed #ccc;padding-bottom:5px}' +
+    '.p-row{font-size:12px;margin:5px 0;line-height:1.6}' +
+    '.p-row b{display:inline-block;min-width:110px;color:#8C1A2E;vertical-align:top}' +
+    '.foot{margin-top:24px;font-size:11px;color:#999;text-align:center;border-top:1px solid #eee;padding-top:12px}' +
+    '@media print{body{padding:0}}</style></head><body>' +
+    '<h1>에이콘출판사 · 신규사원 업무일지</h1>' +
+    '<div class="meta"><b>성명</b> ' + escH(emp.name) + ' &nbsp;|&nbsp; <b>소속</b> ' + escH(emp.team || '수습 (보직 미정)') +
+    (emp.mentor ? ' &nbsp;|&nbsp; <b>멘토</b> ' + escH(emp.mentor) : '') + '<br>' +
+    '<b>입사일</b> ' + escH(emp.startDate || '-') + ' &nbsp;|&nbsp; <b>수습 종료(예정)</b> ' + wjFmt(end) +
+    ' &nbsp;|&nbsp; <b>작성 일지</b> ' + list.length + '개</div>' +
+    rows +
+    '<div class="foot">에이콘출판사 편집부 · 출력일 ' + wjToday() + '</div>' +
+    '<script>window.onload=function(){window.print();}<\/script></body></html>';
+  var w = window.open('', '_blank');
+  if (!w) { alert('팝업이 차단되었습니다. 팝업을 허용해 주세요.'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+}
+function pRow(k, v) { if (!v) return ''; return '<div class="p-row"><b>' + k + '</b>' + escH(v).replace(/\n/g, '<br>') + '</div>'; }
+
+// ── Supabase 백업 (acorn_worklog) ─────────────────────────
+function wjSbUpsert(rowKey, kind, payload) {
+  if (typeof sbOn !== 'function' || !sbOn()) return;
+  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + WJ_SB_TABLE, {
+    method: 'POST',
+    headers: sbHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body: JSON.stringify({ row_key: rowKey, kind: kind, payload: payload, updated_at: new Date().toISOString() })
+  }).then(function (r) { if (!r.ok) r.text().then(function (t) { console.warn('[WJ SB] upsert', r.status, t); }); })
+    .catch(function (e) { console.warn('[WJ SB] upsert err', e.message); });
+}
+function wjSbDelete(rowKey) {
+  if (typeof sbOn !== 'function' || !sbOn()) return;
+  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + WJ_SB_TABLE + '?row_key=eq.' + encodeURIComponent(rowKey),
+    { method: 'DELETE', headers: sbHeaders() })
+    .catch(function (e) { console.warn('[WJ SB] delete err', e.message); });
+}
+function wjSbPull() {
+  if (typeof sbOn !== 'function' || !sbOn()) return;
+  var ctrl = new AbortController();
+  var to = setTimeout(function () { ctrl.abort(); }, 3000);
+  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + WJ_SB_TABLE + '?select=row_key,kind,payload,updated_at',
+    { headers: sbHeaders({ 'Cache-Control': 'no-cache' }), cache: 'no-store', signal: ctrl.signal })
+    .then(function (res) { clearTimeout(to); if (res.status === 404 || !res.ok) return null; return res.json(); })
+    .then(function (rows) {
+      if (!rows || !rows.length) return;
+      var changed = false;
+      rows.forEach(function (r) {
+        var p = r.payload || {};
+        if (r.kind === 'emp') {
+          var ex = null; for (var i = 0; i < WJ_EMPS.length; i++) if (WJ_EMPS[i].id === p.id) { ex = WJ_EMPS[i]; break; }
+          if (!ex && p.id) { WJ_EMPS.push(p); changed = true; }
+        } else if (r.kind === 'entry' && p.empId && p.date) {
+          if (!WJ_ENTRIES[p.empId]) WJ_ENTRIES[p.empId] = [];
+          var found = null, arr = WJ_ENTRIES[p.empId];
+          for (var j = 0; j < arr.length; j++) if (arr[j].date === p.date) { found = arr[j]; break; }
+          if (!found) { arr.push({ id: wjUid('ent'), date: p.date, work: p.work, felt: p.felt, tomorrow: p.tomorrow, comment: p.comment, updatedAt: p.updatedAt }); changed = true; }
+          else if (p.updatedAt && found.updatedAt && p.updatedAt > found.updatedAt) {
+            found.work = p.work; found.felt = p.felt; found.tomorrow = p.tomorrow; found.comment = p.comment; found.updatedAt = p.updatedAt; changed = true;
+          }
+        }
+      });
+      if (changed) {
+        wjSaveEmps(); wjSaveEntries();
+        if (WJ_CUR && !wjCurEmp()) WJ_CUR = WJ_EMPS.length ? WJ_EMPS[0].id : '';
+        if (!WJ_CUR && WJ_EMPS.length) WJ_CUR = WJ_EMPS[0].id;
+        wjRender();
+      }
+    })
+    .catch(function () { clearTimeout(to); });
+}
+function wjDbBadge() {
+  var el = document.getElementById('wj-db-badge'); if (!el) return;
+  if (typeof sbOn !== 'function' || !sbOn()) { el.textContent = '🟡 localStorage'; el.className = 'wj-badge'; return; }
+  el.textContent = '⋯ 확인 중';
+  fetch(SUPABASE_CONFIG.url + '/rest/v1/' + WJ_SB_TABLE + '?select=row_key&limit=1',
+    { headers: sbHeaders({ 'Cache-Control': 'no-cache' }), cache: 'no-store' })
+    .then(function (res) {
+      if (res.ok) { el.textContent = '🟢 Supabase 백업'; el.className = 'wj-badge wj-badge-on'; }
+      else if (res.status === 404) { el.textContent = '🟡 localStorage (테이블 없음)'; el.className = 'wj-badge'; }
+      else { el.textContent = '🟡 localStorage'; el.className = 'wj-badge'; }
+    })
+    .catch(function () { el.textContent = '🟡 localStorage'; el.className = 'wj-badge'; });
 }
 
 </script>
