@@ -483,6 +483,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="nav-item" onclick="nav('s15')">
       <span class="nav-icon">🌍</span>Amazon KDP
     </div>
+    <div class="nav-item" onclick="nav('s16')" style="color:#E8814E;border-left:2px solid rgba(232,129,78,.45);">
+      <span class="nav-icon">🏛️</span>출판사 모델
+    </div>
     <div class="nav-item" onclick="nav('s9')">
       <span class="nav-icon">🧪</span>Pilot Test
     </div>
@@ -4233,6 +4236,21 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div>
   </div>
 </div>
+<!-- ══ S16: 출판사 모델 (AcornOn) ══ -->
+<div id="s16" class="section">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 20px;background:linear-gradient(135deg,#1A1000 0%,#8A2F08 55%,#B8430F 100%);color:#fff;">
+    <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+      <span style="font-size:18px;flex-shrink:0;">🏛️</span>
+      <div style="min-width:0;">
+        <div style="font-size:14px;font-weight:800;white-space:nowrap;">출판사 모델 · 에이콘온</div>
+        <div style="font-size:11px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">중소 출판사를 위한 클라우드 출판 플랫폼</div>
+      </div>
+    </div>
+    <a href="AcornOn_Beta.html" target="_blank" rel="noopener" style="flex-shrink:0;text-decoration:none;color:#fff;font-size:12px;font-weight:700;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:7px;padding:6px 12px;">↗ 새 창에서 열기</a>
+  </div>
+  <iframe id="acornon-frame" data-src="AcornOn_Beta.html" title="에이콘온 출판사 모델"
+    style="width:100%;height:calc(100vh - 54px);border:0;display:block;background:#f4ede1;"></iframe>
+</div>
 
 </div><!-- .main -->
 
@@ -4422,6 +4440,8 @@ function nav(id, subTabId) {
   // show target
   const target = document.getElementById(id);
   if(target) target.classList.add('active');
+  // 출판사 모델(AcornOn) iframe 지연 로딩 — 처음 열 때만 로드
+  if(id === 's16'){ var _af = document.getElementById('acornon-frame'); if(_af && !_af.src){ _af.src = _af.getAttribute('data-src'); } }
   // update nav highlight
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const clicked = document.querySelector(`.nav-item[onclick*="'${id}'"]`);
