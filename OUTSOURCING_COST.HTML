@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이콘출판사 · OUTSOURCING COST</title>
+<style>
+  :root{
+    --navy:#012B4A; --sea:#006FA8; --ice1:#C8EDFF; --ice2:#E4F6FF; --ice3:#F0FAFF;
+    --gold:#C8A24A; --ink:#0e2233; --line:#d6e4ee; --ok:#1f8a53; --warn:#c0392b; --paper:#fff;
+    --t-hardcopy:#012B4A; --t-ebook:#006FA8; --t-epub:#2a8f8f; --t-kdp:#C8A24A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Malgun Gothic","맑은 고딕",-apple-system,"Segoe UI",sans-serif;
+    background:var(--ice3);color:var(--ink);font-size:14px;line-height:1.5;}
+  header.top{background:linear-gradient(135deg,var(--navy),var(--sea));color:#fff;
+    padding:20px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  header.top h1{margin:0;font-size:20px;letter-spacing:-.3px;}
+  header.top h1 span{color:var(--gold);}
+  header.top .sub{font-size:12px;opacity:.85;margin-top:3px;}
+  .wrap{max-width:1200px;margin:0 auto;padding:22px 20px 70px;}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;}
+  button{font-family:inherit;font-size:13px;cursor:pointer;border-radius:7px;padding:9px 14px;
+    background:#fff;color:var(--navy);border:1px solid var(--line);transition:.12s;}
+  button:hover{border-color:var(--sea);}
+  button.primary{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700;}
+  button.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);}
+  button.ghost:hover{background:rgba(255,255,255,.12);}
+  button.mini{padding:4px 9px;font-size:12px;border-radius:6px;}
+  button.danger{color:var(--warn);}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:18px;overflow:hidden;}
+  .card > .head{background:var(--navy);color:#fff;padding:11px 16px;display:flex;align-items:center;gap:10px;}
+  .card > .head .idx{background:var(--gold);color:var(--navy);font-weight:800;width:24px;height:24px;
+    border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .card > .head h2{margin:0;font-size:15px;}
+  .card > .head .best{margin-left:auto;font-size:12px;background:rgba(255,255,255,.14);padding:3px 10px;border-radius:20px;}
+  .card .body{padding:14px 16px;}
+
+  /* type filter chips */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .chip{padding:6px 13px;border-radius:20px;border:1px solid var(--line);background:#fff;
+    cursor:pointer;font-size:12px;font-weight:700;color:var(--navy);}
+  .chip.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{background:var(--ice2);color:var(--navy);font-weight:700;padding:8px;text-align:left;
+    border-bottom:2px solid var(--line);font-size:12px;white-space:nowrap;}
+  tbody td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  tbody tr.sel{background:var(--ice3);}
+  tbody tr.min td.amt{color:var(--ok);font-weight:700;}
+  tbody tr.activeBook{outline:2px solid var(--gold);outline-offset:-2px;}
+  td input,td select{width:100%;padding:6px 7px;border:1px solid var(--line);border-radius:6px;
+    font-family:inherit;font-size:13px;background:#fff;}
+  td.num input{text-align:right;}
+  td.amt{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;}
+  td.pick{text-align:center;}
+  .tag-min{display:inline-block;background:var(--ok);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:5px;}
+  .row-add{margin-top:8px;}
+
+  .badge{display:inline-block;color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;}
+  .badge.kdp{color:var(--navy);}
+
+  /* book basic info */
+  .spec-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr .8fr 1fr;gap:12px;}
+  .field label{display:block;font-size:12px;color:var(--sea);font-weight:700;margin-bottom:4px;}
+  .field input,.field select{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:7px;
+    font-family:inherit;font-size:13px;background:#fff;}
+  .field input:focus,.field select:focus{outline:2px solid var(--ice1);border-color:var(--sea);}
+
+  /* KPIs */
+  .summary-top{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px;margin-bottom:16px;}
+  .kpi{border-radius:12px;padding:16px 18px;color:#fff;}
+  .kpi.big{background:linear-gradient(135deg,var(--navy),var(--sea));}
+  .kpi.gold{background:linear-gradient(135deg,#b6902f,var(--gold));color:var(--navy);}
+  .kpi.plain{background:#fff;color:var(--ink);border:1px solid var(--line);}
+  .kpi .lbl{font-size:12px;opacity:.9;font-weight:700;}
+  .kpi .val{font-size:25px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.5px;}
+  .kpi .note{font-size:11px;opacity:.85;margin-top:3px;}
+
+  .sum-table tfoot td{font-weight:800;background:var(--ice2);border-top:2px solid var(--navy);}
+  .bar-wrap{background:var(--ice2);border-radius:20px;height:14px;overflow:hidden;min-width:110px;}
+  .bar{height:100%;background:var(--sea);border-radius:20px;}
+  .missing{color:var(--warn);font-style:italic;}
+  .hint{font-size:12px;color:#5a7488;margin:2px 0 12px;}
+  .empty{padding:40px;text-align:center;color:#5a7488;}
+
+  .agg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .agg-cell{border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .agg-cell .t{font-size:12px;font-weight:700;}
+  .agg-cell .n{font-size:12px;color:#5a7488;margin-top:2px;}
+  .agg-cell .m{font-size:19px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums;}
+
+  .savebar{position:sticky;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);
+    padding:10px 20px;display:flex;gap:8px;justify-content:flex-end;backdrop-filter:blur(4px);z-index:5;}
+  .status{font-size:12px;color:var(--sea);align-self:center;margin-right:auto;}
+
+  @media (max-width:860px){
+    .spec-grid{grid-template-columns:repeat(2,1fr);}
+    .summary-top{grid-template-columns:1fr;}
+    .agg-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media print{header.top,.toolbar,.savebar,.row-add,.chips,button{display:none!important;}
+    body{background:#fff;} .card{break-inside:avoid;}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>에이콘출판사 <span>OUTSOURCING COST</span></h1>
+    <div class="sub">도서별 외주비 관리 · 하드카피 / 전자책 / ePub / KDP 형태 구분 · 단일 파일 / 로컬 저장</div>
+  </div>
+  <div class="toolbar">
+    <button class="ghost" onclick="exportCSV()">CSV 내보내기</button>
+    <button class="ghost" onclick="window.print()">인쇄 / PDF</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 도서 목록 -->
+  <div class="card">
+    <div class="head"><span class="idx">≣</span><h2>도서 목록</h2>
+      <button class="mini primary" style="margin-left:auto" onclick="addBook()">+ 도서 추가</button>
+    </div>
+    <div class="body">
+      <div class="chips" id="typeFilter"></div>
+      <table>
+        <thead>
+          <tr><th style="width:28%">도서명</th><th>출판 형태</th><th>판형</th>
+            <th style="text-align:right">부수</th><th style="text-align:right">총 외주비</th>
+            <th style="text-align:right">권당 원가</th><th style="width:110px"></th></tr>
+        </thead>
+        <tbody id="bookList"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 전체 요약 -->
+  <div class="card">
+    <div class="head"><span class="idx">Σ</span><h2>전체 도서 외주비 요약 (고정비 관점)</h2></div>
+    <div class="body">
+      <div class="agg-grid" id="aggGrid"></div>
+    </div>
+  </div>
+
+  <!-- 선택 도서 상세 -->
+  <div class="card">
+    <div class="head"><span class="idx">✎</span><h2 id="editorTitle">선택 도서</h2>
+      <span class="best" id="editorBadge"></span></div>
+    <div class="body">
+      <div id="editorEmpty" class="empty">도서를 추가하거나 목록에서 선택하세요.</div>
+      <div id="editorMain" style="display:none">
+        <div class="spec-grid">
+          <div class="field"><label>도서명</label>
+            <input id="bTitle" type="text" placeholder="도서명" oninput="onEditor()"></div>
+          <div class="field"><label>출판 형태</label>
+            <select id="bType" onchange="onType()"></select></div>
+          <div class="field"><label>판형</label>
+            <select id="bFormat" onchange="onEditor()">
+              <option>신국판(152×225)</option><option>46판(127×188)</option>
+              <option>크라운판(176×248)</option><option>국배판(210×297)</option>
+              <option>4x6배판(188×257)</option><option>전자책(가변)</option><option>기타</option>
+            </select></div>
+          <div class="field"><label>페이지수</label>
+            <input id="bPages" type="number" min="0" value="320" oninput="onEditor()"></div>
+          <div class="field"><label id="runLabel">초판 부수 (부)</label>
+            <input id="bRun" type="number" min="0" value="1000" oninput="onEditor()"></div>
+        </div>
+        <div class="hint" id="typeHint"></div>
+
+        <div id="catCards"></div>
+
+        <!-- 도서 종합 요약 -->
+        <div style="border-top:2px solid var(--line);margin-top:6px;padding-top:16px">
+          <div class="summary-top">
+            <div class="kpi big"><div class="lbl">권당 원가 (선택 조합)</div>
+              <div class="val" id="kpiUnit">–</div><div class="note" id="kpiUnitNote"></div></div>
+            <div class="kpi gold"><div class="lbl">총 외주 제작비</div>
+              <div class="val" id="kpiTotal">–</div><div class="note">선택된 업체 합계</div></div>
+            <div class="kpi plain"><div class="lbl">최저가 조합 대비</div>
+              <div class="val" id="kpiSave">–</div><div class="note" id="kpiSaveNote"></div></div>
+          </div>
+          <table class="sum-table">
+            <thead><tr><th>공정</th><th>선택 업체</th><th style="text-align:right">단가 / 기준</th>
+              <th style="text-align:right">금액</th><th>비중</th></tr></thead>
+            <tbody id="sumBody"></tbody>
+            <tfoot><tr><td colspan="3">합계</td><td class="amt" id="sumTotal">0</td><td></td></tr></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="savebar">
+  <span class="status" id="status">자동 저장 대기 중…</span>
+  <button onclick="addDemo()">샘플 도서 3권 생성</button>
+  <button class="danger" onclick="resetAll()">전체 초기화</button>
+  <button class="primary" onclick="saveNow()">저장</button>
+</div>
+
+<script>
+var NEW_KEY = "acorn_outsourcing_cost_v2";
+var OLD_KEY = "acorn_outsourcing_compare_v1";
+
+var TYPES = [
+  {key:"hardcopy", name:"하드카피(종이책)", short:"종이책", runLabel:"초판 부수 (부)", color:"var(--t-hardcopy)"},
+  {key:"ebook",    name:"전자책(PDF·고정형)", short:"전자책", runLabel:"예상 판매부수 (부)", color:"var(--t-ebook)"},
+  {key:"epub",     name:"ePub(리플로우)", short:"ePub", runLabel:"예상 판매부수 (부)", color:"var(--t-epub)"},
+  {key:"kdp",      name:"KDP(아마존)", short:"KDP", runLabel:"예상 제작·판매 부수 (부)", color:"var(--t-kdp)"}
+];
+
+// applies: 이 공정이 나타나는 출판 형태
+var CATEGORIES = [
+  {key:"translation", name:"번역", applies:["hardcopy","ebook","epub","kdp"],
+    units:["200자 원고매","영어 단어(1,000단어)","면(페이지)","권(도서 단위)"], defUnit:"200자 원고매", qtySource:"manual"},
+  {key:"editing", name:"편집", applies:["hardcopy","ebook","epub","kdp"],
+    units:["면(페이지)","매(원고지)","권(도서 단위)"], defUnit:"면(페이지)", qtySource:"pages"},
+  {key:"interior", name:"내지 디자인", applies:["hardcopy","ebook","kdp"],
+    units:["권(도서 단위)","면(페이지)"], defUnit:"권(도서 단위)", qtySource:"one"},
+  {key:"typesetting", name:"조판", applies:["hardcopy","kdp"],
+    units:["면(페이지)","권(도서 단위)"], defUnit:"면(페이지)", qtySource:"pages"},
+  {key:"cover", name:"표지 디자인", applies:["hardcopy","ebook","epub","kdp"],
+    units:["건(프로젝트)"], defUnit:"건(프로젝트)", qtySource:"one"},
+  {key:"printing", name:"인쇄 및 제본(오프셋)", applies:["hardcopy"],
+    units:["부(권수)","대(帖)","건(일괄)"], defUnit:"부(권수)", qtySource:"run"},
+  {key:"ebookConv", name:"전자책 제작·변환(PDF/고정형)", applies:["ebook"],
+    units:["건(프로젝트)","면(페이지)"], defUnit:"건(프로젝트)", qtySource:"one"},
+  {key:"epubConv", name:"ePub 제작·변환(리플로우)", applies:["epub"],
+    units:["건(프로젝트)","면(페이지)"], defUnit:"건(프로젝트)", qtySource:"one"},
+  {key:"kdpPrint", name:"KDP POD 인쇄(부당)", applies:["kdp"],
+    units:["부(권수)"], defUnit:"부(권수)", qtySource:"run"},
+  {key:"kdpEbook", name:"KDP 전자책(Kindle) 변환", applies:["kdp"],
+    units:["건(프로젝트)"], defUnit:"건(프로젝트)", qtySource:"one"}
+];
+
+var state = {books:[], activeId:null, filter:"all"};
+
+/* ---------- 유틸 ---------- */
+function uid(){ return "id" + Math.random().toString(36).slice(2,8); }
+function num(v){ var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+function won(n){ return Math.round(n).toLocaleString("ko-KR") + "원"; }
+function esc(s){ if(s==null) return ""; return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function typeByKey(k){ for(var i=0;i<TYPES.length;i++){ if(TYPES[i].key===k) return TYPES[i]; } return TYPES[0]; }
+function catByKey(k){ for(var i=0;i<CATEGORIES.length;i++){ if(CATEGORIES[i].key===k) return CATEGORIES[i]; } return null; }
+function catsFor(typeKey){ var out=[]; for(var i=0;i<CATEGORIES.length;i++){ if(CATEGORIES[i].applies.indexOf(typeKey)>=0) out.push(CATEGORIES[i]); } return out; }
+function getActive(){ for(var i=0;i<state.books.length;i++){ if(state.books[i].id===state.activeId) return state.books[i]; } return null; }
+
+function defaultQty(cat, book){
+  if(cat.qtySource==="pages") return num(book.pages);
+  if(cat.qtySource==="run") return num(book.runSize);
+  if(cat.qtySource==="one") return 1;
+  return 0;
+}
+function newRow(cat, book){
+  return {id:uid(), vendor:"", unit:cat.defUnit, price:0,
+          qty:defaultQty(cat,book), quality:"중", lead:"", notes:"", selected:false};
+}
+function newBook(type){
+  return {id:uid(), title:"", type:type||"hardcopy", format:"신국판(152×225)",
+          pages:320, runSize:1000, cats:{}};
+}
+
+/* ---------- 저장/불러오기 ---------- */
+function saveNow(){
+  try{ localStorage.setItem(NEW_KEY, JSON.stringify(state));
+       setStatus("저장됨 · " + new Date().toLocaleTimeString("ko-KR")); }
+  catch(e){ setStatus("저장 실패: " + e.message); }
+}
+function autoSave(){ saveNow(); }
+function setStatus(t){ document.getElementById("status").textContent = t; }
+function load(){
+  try{ var raw = localStorage.getItem(NEW_KEY); if(raw){ state = JSON.parse(raw); return "loaded"; } }catch(e){}
+  var m = migrate(); if(m){ state = m; return "migrated"; }
+  return "new";
+}
+function migrate(){
+  try{
+    var old = localStorage.getItem(OLD_KEY); if(!old) return null;
+    var o = JSON.parse(old);
+    var b = newBook("hardcopy");
+    b.title = (o.book && o.book.title) ? o.book.title : "이전 도서(하드카피)";
+    if(o.book){ b.format=o.book.format||b.format; b.pages=num(o.book.pages)||320; b.runSize=num(o.book.runSize)||1000; }
+    b.cats = o.cats || {};
+    return {books:[b], activeId:b.id, filter:"all"};
+  }catch(e){ return null; }
+}
+
+/* ---------- 도서 목록 ---------- */
+function computeBook(book){
+  var total=0, minTotal=0;
+  var cats = catsFor(book.type);
+  for(var i=0;i<cats.length;i++){
+    var arr = (book.cats[cats[i].key]||[]);
+    var sel=null, mn=null;
+    for(var r=0;r<arr.length;r++){
+      var a = num(arr[r].price)*num(arr[r].qty);
+      if(arr[r].selected) sel = a;
+      if(a>0 && (mn===null || a<mn)) mn = a;
+    }
+    total += (sel||0);
+    minTotal += (mn||0);
+  }
+  var run = num(book.runSize);
+  return {total:total, minTotal:minTotal, unit: run>0? total/run : 0};
+}
+
+function renderFilter(){
+  var host = document.getElementById("typeFilter");
+  var chips = [{key:"all",name:"전체"}];
+  for(var i=0;i<TYPES.length;i++) chips.push({key:TYPES[i].key,name:TYPES[i].short});
+  var html="";
+  for(var c=0;c<chips.length;c++){
+    var act = state.filter===chips[c].key ? " active" : "";
+    html += '<div class="chip'+act+'" onclick="setFilter(\''+chips[c].key+'\')">'+chips[c].name+'</div>';
+  }
+  host.innerHTML = html;
+}
+function setFilter(k){ state.filter=k; renderBookList(); }
+
+function renderBookList(){
+  renderFilter();
+  var tb = document.getElementById("bookList");
+  tb.innerHTML = "";
+  var shown=0;
+  for(var i=0;i<state.books.length;i++){
+    var b = state.books[i];
+    if(state.filter!=="all" && b.type!==state.filter) continue;
+    shown++;
+    var t = typeByKey(b.type);
+    var c = computeBook(b);
+    var badgeCls = "badge" + (b.type==="kdp"?" kdp":"");
+    var active = (b.id===state.activeId) ? " activeBook" : "";
+    tb.innerHTML += '<tr class="'+active+'">'
+      + '<td><strong>'+ (esc(b.title)||'<span class="missing">(제목 없음)</span>') +'</strong></td>'
+      + '<td><span class="'+badgeCls+'" style="background:'+t.color+'">'+t.short+'</span></td>'
+      + '<td>'+esc(b.format)+'</td>'
+      + '<td class="amt">'+num(b.runSize).toLocaleString("ko-KR")+'</td>'
+      + '<td class="amt">'+won(c.total)+'</td>'
+      + '<td class="amt">'+(num(b.runSize)>0?won(c.unit):'–')+'</td>'
+      + '<td style="text-align:right"><button class="mini" onclick="selectBook(\''+b.id+'\')">편집</button> '
+      + '<button class="mini danger" onclick="delBook(\''+b.id+'\')">삭제</button></td>'
+      + '</tr>';
+  }
+  if(shown===0) tb.innerHTML = '<tr><td colspan="7" class="empty">해당 형태의 도서가 없습니다. "+ 도서 추가"로 등록하세요.</td></tr>';
+}
+
+function addBook(){
+  var b = newBook("hardcopy");
+  state.books.push(b); state.activeId = b.id;
+  renderAll(); autoSave();
+}
+function selectBook(id){ state.activeId = id; renderAll(); }
+function delBook(id){
+  if(!confirm("이 도서를 삭제할까요?")) return;
+  for(var i=0;i<state.books.length;i++){ if(state.books[i].id===id){ state.books.splice(i,1); break; } }
+  if(state.activeId===id) state.activeId = state.books.length? state.books[0].id : null;
+  renderAll(); autoSave();
+}
+
+/* ---------- 전체 요약 ---------- */
+function renderAggregate(){
+  var host = document.getElementById("aggGrid");
+  var byType = {}; for(var i=0;i<TYPES.length;i++) byType[TYPES[i].key]={count:0,total:0};
+  for(var b=0;b<state.books.length;b++){
+    var bk = state.books[b]; var c = computeBook(bk);
+    byType[bk.type].count++; byType[bk.type].total += c.total;
+  }
+  var html="";
+  for(var t=0;t<TYPES.length;t++){
+    var ty = TYPES[t]; var d = byType[ty.key];
+    html += '<div class="agg-cell" style="border-top:3px solid '+ty.color+'">'
+      + '<div class="t" style="color:'+ty.color+'">'+ty.short+'</div>'
+      + '<div class="n">도서 '+d.count+'권</div>'
+      + '<div class="m">'+won(d.total)+'</div></div>';
+  }
+  host.innerHTML = html;
+}
+
+/* ---------- 편집 영역 ---------- */
+function onType(){
+  var b = getActive(); if(!b) return;
+  b.type = document.getElementById("bType").value;
+  // 새 형태에 필요한 공정 초기화 및 부수 기준 수량 재설정
+  renderAll(); autoSave();
+}
+function onEditor(){
+  var b = getActive(); if(!b) return;
+  b.title = document.getElementById("bTitle").value;
+  b.format = document.getElementById("bFormat").value;
+  b.pages = num(document.getElementById("bPages").value);
+  b.runSize = num(document.getElementById("bRun").value);
+  renderBookList(); renderAggregate(); renderBookSummary(); autoSave();
+}
+
+function renderEditor(){
+  var b = getActive();
+  var empty = document.getElementById("editorEmpty");
+  var main = document.getElementById("editorMain");
+  if(!b){ empty.style.display="block"; main.style.display="none";
+    document.getElementById("editorTitle").textContent="선택 도서";
+    document.getElementById("editorBadge").textContent=""; return; }
+  empty.style.display="none"; main.style.display="block";
+
+  // type select 옵션
+  var ts = document.getElementById("bType"); ts.innerHTML="";
+  for(var i=0;i<TYPES.length;i++){
+    var o = document.createElement("option"); o.value=TYPES[i].key; o.text=TYPES[i].name;
+    if(TYPES[i].key===b.type) o.selected=true; ts.appendChild(o);
+  }
+  document.getElementById("bTitle").value = b.title||"";
+  document.getElementById("bFormat").value = b.format||"신국판(152×225)";
+  document.getElementById("bPages").value = b.pages;
+  document.getElementById("bRun").value = b.runSize;
+
+  var t = typeByKey(b.type);
+  document.getElementById("runLabel").textContent = t.runLabel;
+  document.getElementById("editorTitle").textContent = b.title || "(제목 없음)";
+  document.getElementById("editorBadge").textContent = t.name;
+  document.getElementById("typeHint").innerHTML = typeHint(b.type);
+
+  renderCatCards(b);
+  renderBookSummary();
+}
+
+function typeHint(k){
+  if(k==="hardcopy") return "종이책 공정: 번역·편집·내지·조판·표지·오프셋 인쇄. 권당 원가에 인쇄비가 포함됩니다.";
+  if(k==="ebook")   return "전자책(PDF·고정형): 물리 인쇄 없이 변환 제작비 중심. 권당 원가는 예상 판매부수로 나눈 손익 기준입니다.";
+  if(k==="epub")    return "ePub(리플로우): 편집·변환 중심의 고정 제작비. 인쇄·조판 공정이 없습니다.";
+  if(k==="kdp")     return "KDP(아마존): POD 인쇄가 부당 단가로 발생하며 Kindle 전자책 변환이 별도입니다.";
+  return "";
+}
+
+function renderCatCards(book){
+  var host = document.getElementById("catCards");
+  host.innerHTML = "";
+  var cats = catsFor(book.type);
+  for(var i=0;i<cats.length;i++){
+    if(!book.cats[cats[i].key]) book.cats[cats[i].key]=[];
+    host.appendChild(renderCard(cats[i], book, i+1));
+  }
+}
+
+function minAmount(rows){
+  var m=null;
+  for(var i=0;i<rows.length;i++){ var a=num(rows[i].price)*num(rows[i].qty); if(a>0 && (m===null||a<m)) m=a; }
+  return m===null?0:m;
+}
+
+function renderCard(cat, book, idx){
+  var rows = book.cats[cat.key];
+  var card = document.createElement("div");
+  card.className="card";
+  var mn = minAmount(rows);
+  var bestTxt = rows.length ? ("최저가 " + won(mn)) : "업체 미등록";
+  var head = '<div class="head"><span class="idx">'+idx+'</span><h2>'+cat.name+'</h2>'
+    + '<span class="best">'+bestTxt+'</span></div>';
+
+  var thead = '<thead><tr>'
+    +'<th style="width:20%">업체명</th><th style="width:16%">단가 기준</th>'
+    +'<th style="width:12%;text-align:right">단가</th><th style="width:9%;text-align:right">수량</th>'
+    +'<th style="width:13%;text-align:right">금액</th><th style="width:7%">품질</th>'
+    +'<th style="width:8%">납기(일)</th><th>비고</th>'
+    +'<th style="width:6%;text-align:center">채택</th><th style="width:4%"></th></tr></thead>';
+
+  var body="";
+  for(var r=0;r<rows.length;r++) body += rowHtml(cat, rows[r], mn, rows.length>=2);
+
+  card.innerHTML = head + '<div class="body"><table>'+thead+'<tbody>'+body+'</tbody></table>'
+    + '<div class="row-add"><button class="mini" onclick="addRow(\''+cat.key+'\')">+ 업체 추가</button></div></div>';
+  return card;
+}
+
+function rowHtml(cat, row, mn, many){
+  var amt = num(row.price)*num(row.qty);
+  var isMin = (many && amt>0 && amt===mn);
+  var trClass = (row.selected?"sel ":"") + (isMin?"min":"");
+  var uOpts="";
+  for(var u=0;u<cat.units.length;u++){ uOpts += '<option'+(cat.units[u]===row.unit?' selected':'')+'>'+cat.units[u]+'</option>'; }
+  var qOpts=""; var qs=["상","중","하"];
+  for(var q=0;q<qs.length;q++){ qOpts += '<option'+(qs[q]===row.quality?' selected':'')+'>'+qs[q]+'</option>'; }
+  var minTag = isMin ? '<span class="tag-min">최저</span>' : '';
+  var k=cat.key, id=row.id;
+  return '<tr class="'+trClass+'" data-row-id="'+id+'">'
+    +'<td><input type="text" value="'+esc(row.vendor)+'" placeholder="업체/작업자" oninput="upd(\''+k+'\',\''+id+'\',\'vendor\',this.value)"></td>'
+    +'<td><select onchange="upd(\''+k+'\',\''+id+'\',\'unit\',this.value)">'+uOpts+'</select></td>'
+    +'<td class="num"><input type="number" min="0" value="'+row.price+'" oninput="upd(\''+k+'\',\''+id+'\',\'price\',this.value)"></td>'
+    +'<td class="num"><input type="number" min="0" value="'+row.qty+'" oninput="upd(\''+k+'\',\''+id+'\',\'qty\',this.value)"></td>'
+    +'<td class="amt">'+won(amt)+minTag+'</td>'
+    +'<td><select onchange="upd(\''+k+'\',\''+id+'\',\'quality\',this.value)">'+qOpts+'</select></td>'
+    +'<td class="num"><input type="number" min="0" value="'+esc(String(row.lead))+'" oninput="upd(\''+k+'\',\''+id+'\',\'lead\',this.value)"></td>'
+    +'<td><input type="text" value="'+esc(row.notes)+'" placeholder="조건·리드타임 등" oninput="upd(\''+k+'\',\''+id+'\',\'notes\',this.value)"></td>'
+    +'<td class="pick"><input type="radio" name="pick_'+k+'" '+(row.selected?'checked':'')+' onclick="pick(\''+k+'\',\''+id+'\')"></td>'
+    +'<td><button class="mini danger" onclick="delRow(\''+k+'\',\''+id+'\')">×</button></td>'
+    +'</tr>';
+}
+
+/* ---------- 행 조작 (활성 도서) ---------- */
+function addRow(key){
+  var b=getActive(); if(!b) return; var cat=catByKey(key);
+  if(!b.cats[key]) b.cats[key]=[];
+  var row = newRow(cat,b);
+  b.cats[key].push(row);
+  // renderEditor() 대신 해당 카드만 재렌더 — 다른 카테고리 입력 상태 보존
+  refreshCard(key);
+  renderBookList(); renderAggregate(); renderBookSummary(); autoSave();
+  // 새로 추가된 행의 업체명 input에 포커스
+  setTimeout(function(){
+    var host = document.getElementById("catCards");
+    if(!host) return;
+    // 마지막으로 추가된 행(방금 push한 것)의 첫 input(업체명)에 포커스
+    var inputs = host.querySelectorAll('input[type="text"]');
+    // 마지막 input이 방금 추가된 행의 업체명 필드
+    // 더 안전한 방법: 데이터 속성으로 찾기 (아래 rowHtml에서 data-row-id 추가)
+    var target = host.querySelector('tr[data-row-id="'+row.id+'"] input[type="text"]');
+    if(target){ target.focus(); target.select && target.select(); }
+  }, 0);
+}
+function delRow(key,id){
+  var b=getActive(); if(!b) return; var arr=b.cats[key]||[];
+  for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ arr.splice(i,1); break; } }
+  // 삭제는 카드 전체 재렌더 필요 (MIN 재계산·행 제거)
+  refreshCard(key);
+  renderBookList(); renderAggregate(); renderBookSummary(); autoSave();
+}
+function upd(key,id,field,val){
+  var b=getActive(); if(!b) return; var arr=b.cats[key]||[];
+  var row=null;
+  for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ row=arr[i]; break; } }
+  if(!row) return;
+  // 값 저장
+  if(field==="price"||field==="qty"||field==="lead") row[field]=num(val);
+  else row[field]=val;
+
+  // 입력 필드를 파괴하지 않기 위해 renderEditor() 호출 금지.
+  // 필드 종류에 따라 최소 범위만 DOM 갱신:
+  if(field==="price" || field==="qty" || field==="selected"){
+    // 금액·MIN 배지 재계산 → 해당 카드만 미세 갱신 (input의 focus는 유지)
+    refreshCardAmounts(key);
+  }
+  // vendor/notes/unit/quality/lead 는 DOM 갱신 없이 값만 저장
+  // (입력창의 값은 이미 브라우저 기본 동작으로 반영되어 있음)
+
+  // 도서 목록의 총액과 종합 요약은 갱신 필요 (에디터 input 영역 밖이라 안전)
+  renderBookList(); renderAggregate(); renderBookSummary(); autoSave();
+}
+function pick(key,id){
+  var b=getActive(); if(!b) return; var arr=b.cats[key]||[];
+  for(var i=0;i<arr.length;i++) arr[i].selected=(arr[i].id===id);
+  // 라디오 버튼의 checked 상태는 브라우저가 이미 처리했으므로
+  // 카드 내 .sel 클래스만 재적용
+  refreshCardSelection(key);
+  renderBookList(); renderAggregate(); renderBookSummary(); autoSave();
+}
+
+/* ---------- 카드 부분 갱신 (input 파괴 없이) ---------- */
+// 카드 전체 재렌더 (행 추가/삭제, 도서 유형 변경 등에서 사용)
+function refreshCard(key){
+  var b=getActive(); if(!b) return;
+  var host = document.getElementById("catCards");
+  if(!host) return;
+  var cats = catsFor(b.type);
+  var idx = -1, cat = null;
+  for(var i=0;i<cats.length;i++){ if(cats[i].key===key){ idx=i; cat=cats[i]; break; } }
+  if(!cat) return;
+  var oldCard = host.children[idx];
+  if(!oldCard) return;
+  var newCard = renderCard(cat, b, idx+1);
+  host.replaceChild(newCard, oldCard);
+}
+
+// 금액 셀·MIN 배지·"최저가 XXX" 헤더만 갱신 (input DOM 유지)
+function refreshCardAmounts(key){
+  var b=getActive(); if(!b) return;
+  var host = document.getElementById("catCards");
+  if(!host) return;
+  var rows = b.cats[key]||[];
+  var mn = minAmount(rows);
+  var many = rows.length >= 2;
+  // 카드 찾기: cat.key로 매칭
+  var cats = catsFor(b.type);
+  var idx = -1;
+  for(var i=0;i<cats.length;i++){ if(cats[i].key===key){ idx=i; break; } }
+  if(idx < 0) return;
+  var card = host.children[idx];
+  if(!card) return;
+
+  // 헤더의 "최저가 XXX원" 텍스트 갱신
+  var bestEl = card.querySelector('.head .best');
+  if(bestEl) bestEl.textContent = rows.length ? ("최저가 " + won(mn)) : "업체 미등록";
+
+  // 각 행의 금액 셀·MIN 배지·row 클래스 갱신
+  var tbody = card.querySelector('tbody');
+  if(!tbody) return;
+  var trs = tbody.querySelectorAll('tr');
+  for(var r=0;r<rows.length && r<trs.length;r++){
+    var row = rows[r];
+    var amt = num(row.price)*num(row.qty);
+    var isMin = (many && amt>0 && amt===mn);
+    var amtTd = trs[r].querySelector('td.amt');
+    if(amtTd){
+      amtTd.innerHTML = won(amt) + (isMin ? '<span class="tag-min">최저</span>' : '');
+    }
+    // tr class 갱신 (sel/min)
+    var cls = (row.selected?"sel ":"") + (isMin?"min":"");
+    trs[r].className = cls;
+  }
+}
+
+// 라디오 선택 상태 변경 시 .sel 클래스만 갱신 (input DOM 유지)
+function refreshCardSelection(key){
+  var b=getActive(); if(!b) return;
+  var host = document.getElementById("catCards");
+  if(!host) return;
+  var rows = b.cats[key]||[];
+  var cats = catsFor(b.type);
+  var idx = -1;
+  for(var i=0;i<cats.length;i++){ if(cats[i].key===key){ idx=i; break; } }
+  if(idx < 0) return;
+  var card = host.children[idx];
+  if(!card) return;
+  var tbody = card.querySelector('tbody');
+  if(!tbody) return;
+  var trs = tbody.querySelectorAll('tr');
+  // MIN 상태도 함께 재계산 (일관성)
+  var mn = minAmount(rows);
+  var many = rows.length >= 2;
+  for(var r=0;r<rows.length && r<trs.length;r++){
+    var row = rows[r];
+    var amt = num(row.price)*num(row.qty);
+    var isMin = (many && amt>0 && amt===mn);
+    var cls = (row.selected?"sel ":"") + (isMin?"min":"");
+    trs[r].className = cls;
+  }
+}
+
+/* ---------- 도서 종합 요약 ---------- */
+function renderBookSummary(){
+  var b=getActive(); if(!b) return;
+  var tbody=document.getElementById("sumBody"); tbody.innerHTML="";
+  var cats=catsFor(b.type); var total=0, minTotal=0; var data=[];
+  for(var i=0;i<cats.length;i++){
+    var arr=b.cats[cats[i].key]||[]; var sel=null;
+    for(var r=0;r<arr.length;r++){ if(arr[r].selected){ sel=arr[r]; break; } }
+    var amt = sel? num(sel.price)*num(sel.qty):0;
+    total+=amt; minTotal+=minAmount(arr);
+    data.push({cat:cats[i], sel:sel, amt:amt});
+  }
+  for(var j=0;j<data.length;j++){
+    var d=data[j]; var pct= total>0? Math.round(d.amt/total*100):0;
+    var vend, uni, am;
+    if(d.sel){ vend=esc(d.sel.vendor||"(이름 없음)");
+      uni=won(num(d.sel.price))+" / "+esc(d.sel.unit)+" × "+num(d.sel.qty); am=won(d.amt); }
+    else { vend='<span class="missing">미선택</span>'; uni='<span class="missing">—</span>'; am='<span class="missing">0</span>'; }
+    tbody.innerHTML += '<tr><td><strong>'+d.cat.name+'</strong></td><td>'+vend+'</td>'
+      +'<td class="amt">'+uni+'</td><td class="amt">'+am+'</td>'
+      +'<td><div class="bar-wrap"><div class="bar" style="width:'+pct+'%"></div></div>'
+      +'<span style="font-size:11px;color:#5a7488">'+pct+'%</span></td></tr>';
+  }
+  document.getElementById("sumTotal").textContent=won(total);
+  document.getElementById("kpiTotal").textContent=won(total);
+
+  var run=num(b.runSize); var unit= run>0? total/run:0;
+  document.getElementById("kpiUnit").textContent = run>0? won(unit):"부수 입력 필요";
+  var t=typeByKey(b.type);
+  var noteBase = run>0 ? ("총 "+won(total)+" ÷ "+run.toLocaleString("ko-KR")+"부") : "부수를 입력하세요";
+  if(b.type==="ebook"||b.type==="epub") noteBase += " (고정 제작비 / 예상 판매부수)";
+  if(b.type==="kdp") noteBase += " (POD 부당 인쇄 포함)";
+  document.getElementById("kpiUnitNote").textContent = noteBase;
+
+  var saving=total-minTotal;
+  document.getElementById("kpiSave").textContent = saving>0? ("-"+won(saving)):won(0);
+  document.getElementById("kpiSaveNote").textContent = saving>0
+    ? ("모든 공정 최저가 선택 시 "+won(minTotal)+"까지")
+    : "이미 최저가이거나 미선택 상태";
+}
+
+/* ---------- CSV (전체 도서) ---------- */
+function exportCSV(){
+  var lines=[];
+  lines.push(["도서명","출판형태","공정","업체명","단가기준","단가","수량","금액","품질","납기(일)","채택","비고"].join(","));
+  for(var b=0;b<state.books.length;b++){
+    var bk=state.books[b]; var t=typeByKey(bk.type); var cats=catsFor(bk.type);
+    for(var i=0;i<cats.length;i++){
+      var arr=bk.cats[cats[i].key]||[];
+      for(var r=0;r<arr.length;r++){
+        var row=arr[r]; var amt=num(row.price)*num(row.qty);
+        lines.push([csv(bk.title),t.short,cats[i].name,csv(row.vendor),csv(row.unit),
+          num(row.price),num(row.qty),Math.round(amt),row.quality,csv(String(row.lead)),
+          row.selected?"O":"",csv(row.notes)].join(","));
+      }
+    }
+  }
+  var blob=new Blob(["\uFEFF"+lines.join("\n")],{type:"text/csv;charset=utf-8;"});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="OUTSOURCING_COST_전체.csv"; a.click();
+}
+function csv(s){ if(s==null) return ""; s=String(s); if(s.indexOf(",")>=0||s.indexOf('"')>=0){ return '"'+s.replace(/"/g,'""')+'"'; } return s; }
+
+/* ---------- 초기화 / 샘플 ---------- */
+function resetAll(){
+  if(!confirm("모든 도서 데이터를 초기화합니다. 계속할까요?")) return;
+  localStorage.removeItem(NEW_KEY);
+  state={books:[],activeId:null,filter:"all"};
+  renderAll(); setStatus("초기화됨");
+}
+function addDemo(){
+  var demos=[
+    {type:"hardcopy", title:"실무 가이드 (종이책)",
+      v:{translation:[["A 번역",13000,"상"],["B 프리랜서",11000,"중"]],
+         editing:[["외주 편집 C",6000,"중"]],
+         interior:[["스튜디오 D",1200000,"상"]],
+         typesetting:[["조판 F",2500,"중"],["조판 G",2000,"하"]],
+         cover:[["표지 H",600000,"상"]],
+         printing:[["인쇄소 J",1800,"중"],["인쇄소 K",1650,"중"]]}},
+    {type:"ebook", title:"입문서 (전자책)",
+      v:{translation:[["A 번역",12000,"상"]],
+         editing:[["편집 C",5500,"중"]],
+         interior:[["스튜디오 D",700000,"중"]],
+         cover:[["표지 I",400000,"중"]],
+         ebookConv:[["전자책제작 L",300000,"중"],["전자책제작 M",250000,"중"]]}},
+    {type:"kdp", title:"영문판 (KDP)",
+      v:{translation:[["번역 B",14000,"상"]],
+         editing:[["편집 C",6000,"상"]],
+         typesetting:[["조판 G",2200,"중"]],
+         cover:[["표지 H",500000,"상"]],
+         kdpPrint:[["KDP POD",2100,"중"]],
+         kdpEbook:[["Kindle 변환 N",200000,"중"]]}}
+  ];
+  for(var d=0;d<demos.length;d++){
+    var dm=demos[d]; var b=newBook(dm.type); b.title=dm.title;
+    var cats=catsFor(dm.type);
+    for(var i=0;i<cats.length;i++){
+      var arr=[]; var src=dm.v[cats[i].key]||[];
+      for(var r=0;r<src.length;r++){
+        var row=newRow(cats[i],b);
+        row.vendor=src[r][0]; row.price=src[r][1]; row.quality=src[r][2];
+        if(r===0) row.selected=true; arr.push(row);
+      }
+      b.cats[cats[i].key]=arr;
+    }
+    state.books.push(b);
+  }
+  state.activeId = state.books[state.books.length-1].id;
+  renderAll(); autoSave();
+}
+
+/* ---------- 렌더 총괄 ---------- */
+function renderAll(){ renderBookList(); renderAggregate(); renderEditor(); }
+
+(function start(){
+  var r = load();
+  if(!state.activeId && state.books.length) state.activeId = state.books[0].id;
+  renderAll();
+  setStatus(r==="loaded"?"이전 저장본 불러옴": r==="migrated"?"v1 데이터를 하드카피 도서로 이전함":"새로 시작 · 자동 저장 활성");
+})();
+</script>
+</body>
+</html>
