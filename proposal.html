@@ -312,6 +312,48 @@ body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);
 .mkt-act-card p{font-size:11px;color:var(--text2);margin:0;line-height:1.6;}
 .ch-goal-row{display:grid;grid-template-columns:160px 1fr 1fr 1fr;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;}
 .ch-goal-row:last-child{border-bottom:none;}
+
+/* ── 외주 단가 참고 패널 (견적서 에디터 내부) ── */
+.oc-empty{padding:24px 12px;text-align:center;color:var(--text3);font-size:12px;line-height:1.7;}
+.oc-empty a{color:var(--blue);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--blue);}
+.oc-empty a:hover{border-bottom-style:solid;}
+.oc-hint{font-size:11px;color:var(--text3);padding:8px 10px;background:var(--s2);border-radius:6px;margin-bottom:10px;line-height:1.6;}
+.oc-hint strong{color:var(--blue2);}
+.oc-book-select{width:100%;margin-bottom:10px;padding:7px 9px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:'Pretendard',sans-serif;background:#fff;}
+.oc-cat-group{margin-bottom:10px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;}
+.oc-cat-head{background:var(--s2);padding:7px 10px;font-size:12px;font-weight:700;color:var(--nav2);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.oc-cat-head .oc-cat-count{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);font-weight:600;margin-left:auto;}
+.oc-row{display:grid;grid-template-columns:1.2fr 90px 100px 40px;gap:6px;align-items:center;padding:7px 10px;font-size:11px;border-top:1px solid var(--border);transition:background .12s;}
+.oc-row:first-child{border-top:none;}
+.oc-row:hover{background:var(--s3);}
+.oc-row.min-price{background:#F0FDF4;}
+.oc-row.min-price:hover{background:#DCFCE7;}
+.oc-vendor{font-weight:700;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.oc-vendor .oc-qual{display:inline-block;background:var(--border);color:var(--text3);font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:4px;vertical-align:1px;}
+.oc-vendor .oc-qual.high{background:#DBEAFE;color:#1E40AF;}
+.oc-vendor .oc-qual.low{background:#FEE2E2;color:#991B1B;}
+.oc-vendor .oc-min-tag{display:inline-block;background:var(--ok);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;margin-left:4px;vertical-align:1px;}
+.oc-unit-cell{font-family:'JetBrains Mono',monospace;font-size:11px;text-align:right;color:var(--text2);}
+.oc-total-cell{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-align:right;color:var(--nav);}
+.oc-add-btn{border:none;background:var(--gold);color:var(--nav);border-radius:5px;padding:5px 6px;font-size:10px;font-weight:800;cursor:pointer;transition:.12s;line-height:1;}
+.oc-add-btn:hover{background:var(--gold2);transform:scale(1.06);}
+.oc-add-btn:disabled{background:var(--border);color:var(--text3);cursor:not-allowed;transform:none;}
+.oc-refresh{border:none;background:transparent;color:var(--blue);font-size:11px;cursor:pointer;padding:2px 6px;font-family:'Pretendard',sans-serif;}
+.oc-refresh:hover{text-decoration:underline;}
+.oc-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--nav);color:#fff;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:600;box-shadow:0 4px 16px rgba(7,33,62,.3);z-index:10000;opacity:0;transition:opacity .25s;pointer-events:none;}
+.oc-toast.show{opacity:1;}
+
+/* 도서 동기화 상태 배너 */
+.oc-sync-box{padding:10px 12px;border-radius:7px;margin-bottom:10px;font-size:11.5px;line-height:1.6;}
+.oc-sync-box.oc-sync-linked{background:linear-gradient(135deg,#E6F7EF,#F0FDF4);border:1px solid #86EFAC;color:var(--ok);}
+.oc-sync-box.oc-sync-linked strong{color:var(--nav);}
+.oc-sync-box.oc-sync-none{background:linear-gradient(135deg,#FFF8E1,#FFFBEB);border:1px solid #FCD34D;color:var(--tri);}
+.oc-sync-box.oc-sync-none strong{color:var(--nav);}
+.oc-add-book-btn{margin-top:8px;width:100%;border:none;background:var(--gold);color:var(--nav);border-radius:6px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;transition:.15s;font-family:'Pretendard',sans-serif;}
+.oc-add-book-btn:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 3px 8px rgba(212,148,58,.35);}
+.oc-add-book-btn:active{transform:translateY(0);}
+.oc-add-book-btn.small{font-size:11px;padding:6px 10px;width:auto;}
+.oc-linked-badge{display:inline-block;background:var(--ok);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:1px;letter-spacing:.5px;}
 </style>
 </head>
 <body>
@@ -3109,6 +3151,450 @@ function qaMiniHTML(t){
     +'<div style="font-size:11.5px;font-weight:700;color:var(--nav);margin:12px 0 8px;padding-top:10px;border-top:1px dashed var(--border)">💬 공통 Q&A</div>'
     +blk(GUIDE_COMMON.qa);
 }
+
+// ══════════════════════════════════════════════════════════════════
+// 외주 단가 참고 모듈 — OUTSOURCING_COST.HTML과 localStorage 공유
+//  · 저장 키: acorn_outsourcing_cost_v2
+//  · 구조: {books:[{id,title,type,pages,runSize,cats:{catKey:[{vendor,unit,price,qty,quality,selected,...}]}}], activeId, filter}
+//  · 견적 유형(자비/반기획/대행/아마존) → 외주 도서 유형 매핑
+//  · 견적서 도서명·페이지·부수는 연결된 외주 도서와 자동 동기화
+// ══════════════════════════════════════════════════════════════════
+var OC_STORAGE_KEY = 'acorn_outsourcing_cost_v2';
+var OC_OLD_KEY = 'acorn_outsourcing_compare_v1';
+
+// 견적 type(qtype)을 외주 도서 type으로 매핑
+// self/agency/semi → 한국어 도서(하드카피·전자책)이므로 hardcopy를 기본, 도서 없으면 ebook/epub 폴백
+// amazon → kdp
+var OC_QTYPE_TO_BOOKTYPE = {
+  self:   ['hardcopy','ebook','epub'],
+  agency: ['hardcopy','ebook','epub'],
+  semi:   ['hardcopy','ebook','epub'],
+  amazon: ['kdp']
+};
+
+// 외주 카테고리 라벨 (OUTSOURCING_COST.HTML의 CATEGORIES 정의와 동일)
+var OC_CAT_LABELS = {
+  translation:'번역',
+  editing:'편집',
+  interior:'내지 디자인',
+  typesetting:'조판',
+  cover:'표지 디자인',
+  printing:'인쇄 및 제본(오프셋)',
+  ebookConv:'전자책 제작·변환(PDF/고정형)',
+  epubConv:'ePub 제작·변환(리플로우)',
+  kdpPrint:'KDP POD 인쇄(부당)',
+  kdpEbook:'KDP 전자책(Kindle) 변환'
+};
+
+// 도서 type별 short 라벨
+var OC_TYPE_SHORT = {hardcopy:'종이책', ebook:'전자책', epub:'ePub', kdp:'KDP'};
+
+// 외주 데이터 로드
+function ocLoadState(){
+  try{
+    var raw = localStorage.getItem(OC_STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  try{
+    var old = localStorage.getItem(OC_OLD_KEY);
+    if(old){
+      var o = JSON.parse(old);
+      if(o && o.cats){
+        return {books:[{id:'legacy',title:'이전 데이터',type:'hardcopy',pages:o.book&&o.book.pages||320,runSize:o.book&&o.book.runSize||1000,cats:o.cats}], activeId:'legacy', filter:'all'};
+      }
+    }
+  }catch(e){}
+  return null;
+}
+
+// 외주 데이터 저장
+function ocSaveState(state){
+  try{ localStorage.setItem(OC_STORAGE_KEY, JSON.stringify(state)); return true; }
+  catch(e){ return false; }
+}
+
+// 견적 유형과 매칭되는 도서 목록
+function ocBooksForQuoteType(qtype){
+  var state = ocLoadState();
+  if(!state || !state.books || !state.books.length) return [];
+  var wantedTypes = OC_QTYPE_TO_BOOKTYPE[qtype] || OC_QTYPE_TO_BOOKTYPE.self;
+  var matched = [];
+  for(var i=0;i<wantedTypes.length;i++){
+    for(var b=0;b<state.books.length;b++){
+      if(state.books[b].type === wantedTypes[i]) matched.push(state.books[b]);
+    }
+  }
+  return matched;
+}
+
+// 견적서와 연결된 외주 도서 찾기 (우선순위: 명시적 링크 → 도서명 매칭)
+function ocFindLinkedBook(q){
+  if(!q) return null;
+  var state = ocLoadState();
+  if(!state || !state.books) return null;
+
+  // 1) 명시적 링크 ID
+  if(q.outsourceBookId){
+    var byId = state.books.find(function(b){return b.id===q.outsourceBookId;});
+    if(byId) return byId;
+  }
+
+  // 2) 도서명으로 매칭 (호환되는 도서 유형 내에서, 대소문자 무시, 앞뒤 공백 제거)
+  var wantedTypes = OC_QTYPE_TO_BOOKTYPE[q.type] || OC_QTYPE_TO_BOOKTYPE.self;
+  var t = (q.title||'').trim().toLowerCase();
+  if(!t) return null;
+  for(var i=0;i<wantedTypes.length;i++){
+    for(var j=0;j<state.books.length;j++){
+      var b = state.books[j];
+      if(b.type===wantedTypes[i] && (b.title||'').trim().toLowerCase()===t) return b;
+    }
+  }
+  return null;
+}
+
+// 견적서로부터 신규 외주 도서 생성 및 저장
+function ocCreateBookFromQuote(q){
+  if(!q) return null;
+  var state = ocLoadState() || {books:[], activeId:null, filter:'all'};
+  if(!state.books) state.books = [];
+  var wantedTypes = OC_QTYPE_TO_BOOKTYPE[q.type] || OC_QTYPE_TO_BOOKTYPE.self;
+  var bookType = wantedTypes[0]; // 주 매핑 (self/agency/semi → hardcopy, amazon → kdp)
+  var newBook = {
+    id: 'oc' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    title: (q.title||'').trim() || '(제목 미정)',
+    type: bookType,
+    format: '신국판(152×225)',
+    pages: (+q.pages > 0 ? +q.pages : 300),
+    runSize: (+q.runCount > 0 ? +q.runCount : 1000),
+    cats: {}
+  };
+  state.books.push(newBook);
+  if(!state.activeId) state.activeId = newBook.id;
+  ocSaveState(state);
+  return newBook;
+}
+
+// 견적서 필드 → 연결된 외주 도서로 조용히 동기화 (도서명·페이지·부수)
+function ocSyncFromQuote(q){
+  if(!q || !q.outsourceBookId) return false;
+  var state = ocLoadState();
+  if(!state || !state.books) return false;
+  var book = state.books.find(function(b){return b.id===q.outsourceBookId;});
+  if(!book) return false;
+  var changed = false;
+  var newTitle = (q.title||'').trim();
+  if(newTitle && newTitle !== (book.title||'').trim()){ book.title = newTitle; changed = true; }
+  if(+q.pages > 0 && +q.pages !== book.pages){ book.pages = +q.pages; changed = true; }
+  if(+q.runCount > 0 && +q.runCount !== book.runSize){ book.runSize = +q.runCount; changed = true; }
+  if(changed) ocSaveState(state);
+  return changed;
+}
+
+// 이 견적서를 외주 단가에 도서로 추가/연결
+function ocAddCurrentQuoteAsBook(){
+  if(!currentQuote){ ocToast('견적서를 먼저 열어주세요.'); return; }
+  var title = (currentQuote.title||'').trim();
+  if(!title){ ocToast('먼저 도서명을 입력해주세요.'); return; }
+
+  // 이미 같은 도서명·유형의 외주 도서가 있으면 신규 생성 대신 연결만
+  var state = ocLoadState();
+  if(state && state.books){
+    var wantedTypes = OC_QTYPE_TO_BOOKTYPE[currentQuote.type] || OC_QTYPE_TO_BOOKTYPE.self;
+    var t = title.toLowerCase();
+    for(var i=0;i<wantedTypes.length;i++){
+      for(var j=0;j<state.books.length;j++){
+        var b = state.books[j];
+        if(b.type===wantedTypes[i] && (b.title||'').trim().toLowerCase()===t){
+          currentQuote.outsourceBookId = b.id;
+          window._ocSelectedBookId = b.id;
+          // 페이지·부수 동기화
+          ocSyncFromQuote(currentQuote);
+          ocRenderPanel();
+          ocToast('기존 외주 도서와 연결되었습니다: '+b.title);
+          return;
+        }
+      }
+    }
+  }
+
+  // 신규 도서 생성
+  var book = ocCreateBookFromQuote(currentQuote);
+  if(!book){ ocToast('외주 단가에 추가하지 못했습니다.'); return; }
+  currentQuote.outsourceBookId = book.id;
+  window._ocSelectedBookId = book.id;
+  ocRenderPanel();
+  ocToast('외주 단가에 "'+book.title+'" 도서가 추가되었습니다');
+}
+
+// 견적서 필드 변경 시 링크·동기화 실행
+function ocMaybeSync(){
+  if(!currentQuote) return;
+
+  // 링크가 이미 있으면 → 유효성 확인 + 필드 동기화
+  if(currentQuote.outsourceBookId){
+    var state = ocLoadState();
+    var linked = state && state.books ? state.books.find(function(b){return b.id===currentQuote.outsourceBookId;}) : null;
+    if(linked){
+      // 링크된 외주 도서의 유형이 현재 견적 유형과 호환되는지 확인
+      var wantedTypes = OC_QTYPE_TO_BOOKTYPE[currentQuote.type] || OC_QTYPE_TO_BOOKTYPE.self;
+      if(wantedTypes.indexOf(linked.type) < 0){
+        // 유형 변경으로 링크 해제
+        currentQuote.outsourceBookId = null;
+        window._ocSelectedBookId = null;
+      } else {
+        ocSyncFromQuote(currentQuote);
+        window._ocSelectedBookId = linked.id;
+      }
+    } else {
+      // 링크된 도서가 삭제됨
+      currentQuote.outsourceBookId = null;
+      window._ocSelectedBookId = null;
+    }
+  }
+
+  // 링크가 없으면 → 도서명으로 자동 매칭 시도
+  if(!currentQuote.outsourceBookId){
+    var found = ocFindLinkedBook(currentQuote);
+    if(found){
+      currentQuote.outsourceBookId = found.id;
+      window._ocSelectedBookId = found.id;
+    }
+  }
+
+  ocRenderPanel();
+}
+
+// 디바운스 (연속 입력 시 200ms 지연)
+var _ocSyncTimer = null;
+function ocMaybeSyncDebounced(){
+  clearTimeout(_ocSyncTimer);
+  _ocSyncTimer = setTimeout(ocMaybeSync, 200);
+}
+
+// 견적서 에디터 내 외주 참고 패널 HTML
+function outsourcingMiniHTML(qtype){
+  var esc = function(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+  var q = currentQuote;
+  var quoteTitle = ((q&&q.title)||'').trim();
+  var books = ocBooksForQuoteType(qtype);
+  var linkedBook = ocFindLinkedBook(q);
+  var isLinked = !!linkedBook;
+
+  // 헤더 (항상 표시)
+  var header = '<div style="font-size:11.5px;font-weight:700;color:var(--nav);margin-bottom:8px;display:flex;align-items:center;gap:6px">'
+    + '💰 외주 단가 참고'
+    + (isLinked ? '<span class="oc-linked-badge">🔗 동기화</span>' : '')
+    + '<button class="oc-refresh" onclick="ocRenderPanel()" style="margin-left:auto">🔄 새로고침</button>'
+    + '<a href="OUTSOURCING_COST.HTML" target="_blank" rel="noopener" style="font-size:10px;color:var(--blue);text-decoration:none;padding:2px 6px;border:1px solid var(--border);border-radius:5px">↗ 관리</a>'
+    + '</div>';
+
+  // === 케이스 A: 외주 데이터가 하나도 없음 ===
+  if(!books.length){
+    var html = header;
+    if(quoteTitle){
+      // 견적서 도서명으로 시작할 수 있는 CTA
+      html += '<div class="oc-sync-box oc-sync-none">'
+        + '📚 견적서의 도서 <strong>'+esc(quoteTitle)+'</strong>로 외주 단가 관리를 시작할 수 있습니다.'
+        + '<button class="oc-add-book-btn" onclick="ocAddCurrentQuoteAsBook()">📥 이 도서를 외주 단가에 추가하기</button>'
+        + '</div>';
+    }
+    html += '<div class="oc-empty">'
+      + '<div style="font-size:24px;margin-bottom:8px;opacity:.5">💰</div>'
+      + '<div style="font-weight:700;color:var(--text2);margin-bottom:6px">저장된 외주 단가가 없습니다</div>'
+      + '<div style="margin-bottom:12px">외주 단가 관리 페이지에서 도서·업체별 단가를 등록하거나,<br>위 버튼으로 이 견적서의 도서를 바로 추가하세요.</div>'
+      + '<a href="OUTSOURCING_COST.HTML" target="_blank" rel="noopener">↗ 외주 단가 관리 열기</a>'
+      + '</div>';
+    return html;
+  }
+
+  // === 동기화 상태 배너 ===
+  var syncBanner = '';
+  if(isLinked){
+    var linkedType = OC_TYPE_SHORT[linkedBook.type] || linkedBook.type;
+    syncBanner = '<div class="oc-sync-box oc-sync-linked">'
+      + '🔗 <strong>동기화됨</strong>: '+esc(linkedBook.title||'(제목 없음)')+' <span style="opacity:.7;font-weight:400;font-size:10px">('+esc(linkedType)+' · '+linkedBook.pages+'p · '+linkedBook.runSize+'부)</span>'
+      + '<div style="font-size:10px;color:var(--text3);margin-top:3px;font-weight:400">견적서의 도서명·페이지·부수가 자동으로 외주 도서에 반영됩니다.</div>'
+      + '</div>';
+  } else if(quoteTitle){
+    syncBanner = '<div class="oc-sync-box oc-sync-none">'
+      + '⚠ 견적서의 도서 <strong>'+esc(quoteTitle)+'</strong>는 외주 단가에 등록되지 않았습니다.'
+      + '<button class="oc-add-book-btn" onclick="ocAddCurrentQuoteAsBook()">📥 이 도서를 외주 단가에 추가하기</button>'
+      + '</div>';
+  } else {
+    syncBanner = '<div class="oc-hint">먼저 견적서에 <strong>도서명</strong>을 입력하면 외주 단가와 자동 동기화됩니다. 아래는 참고용으로 등록된 다른 도서들입니다.</div>';
+  }
+
+  // === 도서 선택 드롭다운 ===
+  var currentBookId;
+  if(isLinked){
+    currentBookId = linkedBook.id;
+    window._ocSelectedBookId = currentBookId;
+  } else {
+    if(!window._ocSelectedBookId || !books.find(function(b){return b.id===window._ocSelectedBookId;})){
+      window._ocSelectedBookId = books[0].id;
+    }
+    currentBookId = window._ocSelectedBookId;
+  }
+  var book = books.find(function(b){return b.id===currentBookId;}) || books[0];
+
+  var bookOpts = books.map(function(b){
+    var sel = b.id===currentBookId ? ' selected' : '';
+    var t = OC_TYPE_SHORT[b.type] || b.type;
+    var title = b.title || '(제목 없음)';
+    var linkMark = (b.id===currentBookId && isLinked) ? '🔗 ' : '';
+    return '<option value="'+esc(b.id)+'"'+sel+'>'+linkMark+t+' · '+esc(title)+' ('+b.pages+'p / '+b.runSize+'부)</option>';
+  }).join('');
+
+  var html = header + syncBanner
+    + '<select class="oc-book-select" onchange="ocSelectBook(this.value)">'+bookOpts+'</select>';
+
+  // === 카테고리별 그룹 ===
+  var cats = book.cats || {};
+  var catKeys = Object.keys(cats);
+  if(!catKeys.length){
+    html += '<div class="oc-empty" style="padding:12px">선택한 도서에 등록된 외주 단가가 없습니다.<br><a href="OUTSOURCING_COST.HTML" target="_blank" rel="noopener">↗ 도서에 업체 추가하기</a></div>';
+    return html;
+  }
+
+  catKeys.forEach(function(catKey){
+    var rows = cats[catKey] || [];
+    if(!rows.length) return;
+    var catName = OC_CAT_LABELS[catKey] || catKey;
+    var minIdx = ocMinPriceRowIdx(rows);
+
+    html += '<div class="oc-cat-group">'
+      + '<div class="oc-cat-head">'+catName
+      + '<span class="oc-cat-count">'+rows.length+'개 업체</span>'
+      + '</div>';
+
+    rows.forEach(function(r, i){
+      var unit = (+r.price||0);
+      var qty = (+r.qty||0);
+      var total = unit * qty;
+      var isMin = (i === minIdx);
+      var vendorName = r.vendor || '(업체명 미입력)';
+      var qual = r.quality || '중';
+      var qualCls = qual==='상'?'high':(qual==='하'?'low':'');
+      var minTag = isMin ? '<span class="oc-min-tag">MIN</span>' : '';
+      var unitLabel = r.unit || '';
+      var itemName = catName + ' · ' + vendorName;
+      var payload = encodeURIComponent(JSON.stringify({name:itemName, qty:qty, unit:unit, unitLabel:unitLabel}));
+
+      html += '<div class="oc-row'+(isMin?' min-price':'')+'">'
+        + '<div class="oc-vendor" title="'+esc(vendorName)+' · '+esc(qual)+' 등급'+(unitLabel?' · '+esc(unitLabel):'')+'">'
+          + esc(vendorName)
+          + '<span class="oc-qual '+qualCls+'">'+esc(qual)+'</span>'
+          + minTag
+        + '</div>'
+        + '<div class="oc-unit-cell" title="단가">'+won(unit)+'</div>'
+        + '<div class="oc-total-cell" title="총액 = 수량 × 단가">'+won(total)+'</div>'
+        + '<button class="oc-add-btn" onclick="ocAddToQuote(\''+payload+'\')" title="견적 항목으로 추가">＋</button>'
+        + '</div>';
+    });
+
+    html += '</div>';
+  });
+
+  return html;
+}
+
+// 특정 도서·카테고리의 최저가 행 인덱스
+function ocMinPriceRowIdx(rows){
+  var min = Infinity, idx = -1;
+  for(var i=0;i<rows.length;i++){
+    var amt = (+rows[i].price||0) * (+rows[i].qty||0);
+    if(amt > 0 && amt < min){ min = amt; idx = i; }
+  }
+  return idx;
+}
+
+// 사용자가 드롭다운으로 도서를 직접 선택 → 견적서에 명시적 링크 저장
+function ocSelectBook(bookId){
+  window._ocSelectedBookId = bookId;
+  if(currentQuote){
+    currentQuote.outsourceBookId = bookId;
+    // 선택한 도서에 견적서 필드를 동기화 (도서명 포함 — 사용자가 명시적으로 이 도서를 골랐으므로)
+    ocSyncFromQuote(currentQuote);
+  }
+  ocRenderPanel();
+}
+
+// 외주 참고 패널 다시 렌더 (에디터가 열려 있는 상태에서만)
+function ocRenderPanel(){
+  if(!currentQuote) return;
+  var panel = document.getElementById('oc-ref-panel');
+  if(!panel) return;
+  panel.innerHTML = outsourcingMiniHTML(currentQuote.type);
+}
+
+// 외주 단가 행 → 견적 항목으로 추가
+function ocAddToQuote(payloadEncoded){
+  if(!currentQuote){ ocToast('견적서를 먼저 열어주세요.'); return; }
+  var data;
+  try{ data = JSON.parse(decodeURIComponent(payloadEncoded)); }catch(e){ return; }
+
+  var items = currentQuote.items = currentQuote.items || [];
+  var slot = -1;
+  for(var i=0;i<items.length;i++){
+    var it = items[i];
+    if(!it.name && !+it.qty && !+it.unit){ slot = i; break; }
+  }
+  var newItem = { name: data.name, qty: (+data.qty||1), unit: (+data.unit||0) };
+  if(slot >= 0){
+    items[slot] = newItem;
+  } else {
+    items.push(newItem);
+  }
+  renderQuoteItems();
+  refreshQuoteTotals();
+  ocToast('견적 항목에 추가되었습니다: '+data.name);
+}
+
+// 간단 토스트
+function ocToast(msg){
+  var t = document.getElementById('oc-toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'oc-toast';
+    t.className = 'oc-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._ocToastTimer);
+  window._ocToastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+// qf 함수를 감싸서 도서명·페이지·부수·유형 변경 시 자동 동기화
+(function(){
+  if(typeof qf === 'function'){
+    var _origQf = qf;
+    qf = function(field, val){
+      _origQf(field, val);
+      if(field === 'type'){
+        // 유형 변경 시 링크 리셋 (다른 도서 유형이 필요할 수 있음)
+        if(currentQuote){ currentQuote.outsourceBookId = null; }
+        window._ocSelectedBookId = null;
+        ocMaybeSync();
+      } else if(field === 'title' || field === 'pages' || field === 'runCount'){
+        ocMaybeSyncDebounced();
+      }
+    };
+  }
+})();
+
+// onQuoteTypeChange도 감싸서 링크 리셋 (qf 경로 외에도 호출될 수 있음)
+(function(){
+  if(typeof onQuoteTypeChange === 'function'){
+    var _orig = onQuoteTypeChange;
+    onQuoteTypeChange = function(){
+      window._ocSelectedBookId = null;
+      if(currentQuote){ currentQuote.outsourceBookId = null; }
+      return _orig.apply(this, arguments);
+    };
+  }
+})();
+
 // 오른쪽 탭(안내/가이드/Q&A) 전환
 function crefTab(btn,name){
   const root=btn.closest('.detail-section'); if(!root) return;
@@ -5191,9 +5677,11 @@ function renderQuoteEditor(){
     <div style="display:flex;border-bottom:1px solid var(--border)">
       <button type="button" class="cref-tab" onclick="crefTab(this,'guide')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--blue);color:var(--blue);font-family:'Pretendard',sans-serif">📝 원고 가이드</button>
       <button type="button" class="cref-tab" onclick="crefTab(this,'qa')" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);font-family:'Pretendard',sans-serif">💬 Q&A</button>
+      <button type="button" class="cref-tab" onclick="crefTab(this,'outsource');ocRenderPanel()" style="flex:1;border:none;background:transparent;padding:10px 6px;font-size:11px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);font-family:'Pretendard',sans-serif">💰 외주 단가</button>
     </div>
     <div class="cref-panel" data-cref="guide" style="padding:12px;max-height:300px;overflow:auto">${guideMiniHTML(q.type)}</div>
     <div class="cref-panel" data-cref="qa" style="display:none;padding:12px;max-height:300px;overflow:auto">${qaMiniHTML(q.type)}</div>
+    <div class="cref-panel" data-cref="outsource" style="display:none;padding:12px;max-height:340px;overflow:auto" id="oc-ref-panel">${outsourcingMiniHTML(q.type)}</div>
   </div>`;
   renderQuoteItems();
   refreshQuoteTotals();
