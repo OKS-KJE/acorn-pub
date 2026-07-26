@@ -3725,9 +3725,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div style="display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:0;">
       <button id="kdptab-btn-0" onclick="kdpTab(0)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:700;color:var(--blue);border-bottom:2.5px solid var(--blue);margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🗺 지원 프로세스</button>
       <button id="kdptab-btn-1" onclick="kdpTab(1)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📋 파이프라인 관리</button>
-      <button id="kdptab-btn-2" onclick="kdpTab(2)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📖 KDP 제작 가이드</button>
-      <button id="kdptab-btn-3" onclick="kdpTab(3)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">✅ 출간 체크리스트</button>
-      <button id="kdptab-btn-4" onclick="kdpTab(4)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🔗 저자 링크 생성</button>
+      <button id="kdptab-btn-2" onclick="kdpTab(2)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🖥 KDP Studio</button>
+      <button id="kdptab-btn-3" onclick="kdpTab(3)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📖 KDP 제작 가이드</button>
+      <button id="kdptab-btn-4" onclick="kdpTab(4)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">✅ 출간 체크리스트</button>
+      <button id="kdptab-btn-5" onclick="kdpTab(5)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🔗 저자 링크 생성</button>
     </div>
 
     <!-- TAB 0: 지원 프로세스 -->
@@ -3819,9 +3820,76 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div id="kp-table" style="min-height:80px;"></div>
     </div><!-- /kdptab-1 -->
 
-    <!-- TAB 2: KDP 제작 가이드 -->
-    <!-- TAB 2: KDP 제작 가이드 -->
+    <!-- TAB 2: KDP Studio -->
     <div id="kdptab-2" style="display:none;">
+
+      <!-- 헤더 -->
+      <div style="background:linear-gradient(135deg,rgba(21,96,184,.08),rgba(13,148,136,.05));border:1.5px solid rgba(21,96,184,.2);border-radius:var(--rL);padding:20px 24px;margin-bottom:24px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">INTERNAL TOOL</div>
+        <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;">🖥 KDP Studio — Word 원고 → KDP 업로드 파일 자동 제작</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7;">저자의 Word(.docx) 원고 1개를 업로드하면 Amazon KDP 업로드에 필요한 전자책·종이책 파일을 자동으로 만들어 주는 사내 변환 도구입니다.</div>
+      </div>
+
+      <div class="info-box teal" style="margin-bottom:22px;">
+        <strong>📌 현재 상태</strong> — 사내 내부 도구로 로컬/서버 환경에서 구동되며, <strong>아직 공개 배포 URL은 없습니다.</strong> 실제 KDP 사이트 업로드·출간 신청은 자동화되어 있지 않으며, 담당자가 산출물을 내려받아 <strong>직접 KDP 대시보드에 업로드</strong>합니다. 이용을 원하는 팀은 기획편집팀에 문의해 주세요.
+      </div>
+
+      <div class="sec-h">산출물 — 파일 5종</div>
+      <table class="data-table" style="margin-bottom:22px">
+        <thead><tr><th>산출물</th><th>파일</th><th>KDP 업로드 위치</th></tr></thead>
+        <tbody>
+          <tr><td>전자책 원고</td><td><code>book.epub</code> (EPUB 3)</td><td>Kindle eBook → Manuscript</td></tr>
+          <tr><td>전자책 표지</td><td><code>ebook-cover.jpg</code> (1600×2560px)</td><td>Kindle eBook → Book Cover</td></tr>
+          <tr><td>인쇄용 내지</td><td><code>interior.pdf</code></td><td>Paperback → Interior</td></tr>
+          <tr><td>종이책 전체 표지</td><td><code>cover.pdf</code> (뒤표지+책등+앞표지, 블리드 포함)</td><td>Paperback → Cover</td></tr>
+          <tr><td>입력 항목 시트</td><td><code>kdp-metadata.xlsx</code> (5개 시트)</td><td>대시보드 입력 참고용</td></tr>
+        </tbody>
+      </table>
+
+      <div class="sec-h">화면 흐름 — 4단계</div>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px;">
+        <div style="display:flex;gap:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">1</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--blue),rgba(21,96,184,.15));margin:4px 0;min-height:20px;"></div></div>
+          <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+            <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">원고 업로드</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">.docx 파일을 드래그앤드롭 (최대 60MB). 장·절 구분은 Word의 <strong>제목 1/2/3 스타일</strong>을 기준으로 자동 인식됩니다.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">2</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--teal),rgba(13,148,136,.15));margin:4px 0;min-height:20px;"></div></div>
+          <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+            <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">서지 정보 · 판형 설정</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">제목·저자·ISBN·설명·키워드와 트림 사이즈, 용지, 조판 프리셋, 표지 테마를 입력합니다.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">3</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--purple),rgba(74,26,124,.15));margin:4px 0;min-height:20px;"></div></div>
+          <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+            <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">자동 변환</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">거터(안쪽 여백)·페이지 수·책등 두께를 KDP 규격에 맞춰 자동 계산하며, 페이지 수 변화에 따라 2-pass로 재조판·수렴시킵니다. 진행 상황과 로그가 실시간으로 표시됩니다.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:#10B981;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">4</div></div>
+          <div style="flex:1;background:var(--surface);border:1.5px solid rgba(16,185,129,.3);border-left:4px solid #10B981;border-radius:var(--rL);padding:14px 18px;">
+            <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">산출물 확인 및 다운로드</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">미리보기 후 개별 파일 또는 <code>kdp-package.zip</code> 일괄 다운로드. 이후 담당자가 KDP 대시보드에 직접 업로드합니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-card" style="margin-bottom:14px;">
+        <div class="rule-card-title" style="color:var(--blue)">🔗 KDP 제작 가이드 탭과의 연결</div>
+        <ul class="rule-list">
+          <li><span class="rule-bullet">▸</span>이 도구가 자동으로 지키는 표지·거터·책등·들여쓰기 규격은 옆의 <strong>📖 KDP 제작 가이드</strong> 탭에 정리된 실무 기준과 동일합니다.</li>
+          <li><span class="rule-bullet">▸</span>한글·한문 텍스트 처리, 각주→미주 전환처럼 <strong>사람의 판단이 필요한 항목</strong>은 자동화 대상이 아니므로, 변환 전 가이드 탭 기준으로 원고를 먼저 검토해 주세요.</li>
+        </ul>
+      </div>
+
+    </div><!-- /kdptab-2 -->
+
+    <!-- TAB 3: KDP 제작 가이드 -->
+    <div id="kdptab-3" style="display:none;">
 
       <!-- 헤더 -->
       <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
@@ -4017,10 +4085,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <a href="https://kdp.amazon.com/help/topic/G201953020" target="_blank" style="color:var(--blue);text-decoration:none;">↗ 종이책 내지</a>
         <a href="https://kdp.amazon.com/cover-calculator" target="_blank" style="color:var(--blue);text-decoration:none;">↗ Cover Calculator</a>
       </div>
-    </div><!-- /kdptab-2 -->
+    </div><!-- /kdptab-3 -->
 
-    <!-- TAB 3: 출간 체크리스트 -->
-    <div id="kdptab-3" style="display:none;">
+    <!-- TAB 4: 출간 체크리스트 -->
+    <div id="kdptab-4" style="display:none;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
         <div>
           <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;">PUBLISHING CHECKLIST</div>
@@ -4030,11 +4098,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <button onclick="kdpResetChecklist()" style="padding:7px 14px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 초기화</button>
       </div>
       <div id="kdp-checklist-body" style="display:flex;flex-direction:column;gap:14px;"></div>
-    </div><!-- /kdptab-3 -->
+    </div><!-- /kdptab-4 -->
 
 
-    <!-- TAB 4: 저자 링크 생성 -->
-    <div id="kdptab-4" style="display:none;">
+    <!-- TAB 5: 저자 링크 생성 -->
+    <div id="kdptab-5" style="display:none;">
       <div style="background:linear-gradient(135deg,rgba(21,96,184,.07),rgba(13,148,136,.05));border:1.5px solid rgba(21,96,184,.18);border-radius:var(--rL);padding:22px 26px;margin-bottom:22px;">
         <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--blue);text-transform:uppercase;margin-bottom:8px;">AUTHOR LINK GENERATOR</div>
         <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;">저자 맞춤 제안서 링크 생성</div>
@@ -4080,7 +4148,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <button onclick="copyEmailText()" style="margin-top:8px;padding:6px 13px;background:none;border:1.5px solid rgba(13,148,136,.3);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:var(--teal);">📋 이메일 문구 복사</button>
         </div>
       </div>
-    </div><!-- /kdptab-4 -->
+    </div><!-- /kdptab-5 -->
 
     <!-- 제안서 상세 모달 -->
     <div id="kp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
@@ -7172,7 +7240,7 @@ function pplSave(){
 
 // ── KDP 탭 전환 ───────────────────────────────────────
 function kdpTab(n){
-  [0,1,2,3,4].forEach(function(i){
+  [0,1,2,3,4,5].forEach(function(i){
     var btn = document.getElementById('kdptab-btn-'+i);
     var panel = document.getElementById('kdptab-'+i);
     var active = i===n;
@@ -7184,7 +7252,7 @@ function kdpTab(n){
     if(panel) panel.style.display = active?'block':'none';
   });
   if(n===1) kpLoad();
-  if(n===3) kdpBuildChecklist();
+  if(n===4) kdpBuildChecklist();
 }
 
 // ── 가이드 서브탭 ─────────────────────────────────────────
