@@ -368,6 +368,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .tab-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;animation:fadeIn .3s ease;}
+.kdp-sub-panel{display:none;}
+.kdp-sub-panel.active{display:block;animation:fadeIn .3s ease;}
 /* compact card grid */
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:18px;}
 /* compact rules */
@@ -675,7 +677,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">기획편집팀</span></td>
           <td>일반서 기획·편집<br>일정·품질 관리</td><td>일반서 국내외 저자 발굴 및 기획 상담<br>플랫폼 업무 개발 보조</td><td><span class="location-badge">부산</span></td>
         </tr>
-        
+        <tr>
+          <td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">박</div>박주란 차장</div></td>
+          <td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">기획편집팀</span></td>
+          <td>디자인 담당<br>표지·내지 디자인 관리</td><td>전자책·종이책 표지 디자인 · 내지 레이아웃 디자인 및 품질 검수</td><td>서울</td>
+        </tr>
+
         <tr class="org-group-hdr"><td colspan="5">📢 마케팅팀</td></tr>
         <tr>
           <td><div class="emp-name"><div class="emp-avatar" style="background:#7A0A1A">김</div>김희지 사원</div></td>
@@ -1664,7 +1671,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div class="info-box teal">
         <strong>플랫폼 3개 공통 원칙:</strong> ① 모든 데이터 입력 후 저장 여부 확인 ② 저자·독자 개인정보(계약조건·인세율·결제정보)는 플랫폼 외부 공유 금지 ③ 오류·이상 발견 시 사업팀 소장 24시간 내 보고 ④ Admin 계정 로그아웃 후 자리 이석
       </div></div>
-    <div id="s3-t3" class="tab-panel" data-ko-id="s3-t3"><div class="sec-h">Amazon KDP 대행 서비스 — 에이콘 원스톱 패키지</div>
+    <div id="s3-t3" class="tab-panel" data-ko-id="s3-t3">
+      <div class="pill-tabs" id="kdp-sub-tabs" style="margin-bottom:18px">
+        <button class="pill-tab active" onclick="kdpSub(0,this)">🤝 대행 서비스</button>
+        <button class="pill-tab" onclick="kdpSub(1,this)">📐 제작 가이드</button>
+      </div>
+      <div id="s3-t3-biz" class="kdp-sub-panel active"><div class="sec-h">Amazon KDP 대행 서비스 — 에이콘 원스톱 패키지</div>
       <div class="sec-sub">한국을 넘어, 전 세계 190개국 독자에게. KDP 계정 설정·메타데이터 최적화·영어/일어 번역 연계·AMS 광고까지 에이콘이 원스톱으로 대행합니다. 저자님은 원고만 준비하시면 됩니다.</div>
 
       <!-- 패키지 + 운영 흐름 -->
@@ -1749,6 +1761,172 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <tr><td>가격 설정</td><td>$2.99~$9.99 = 인세 70% / 그 외 = 인세 35%. 경쟁도서 가격대 참조.</td><td>⭐⭐⭐</td></tr>
         </tbody>
       </table></div>
+      <div id="s3-t3-guide" class="kdp-sub-panel">
+        <div class="sec-h">Amazon KDP 제작 가이드 — 표지·내지 통합 실무 기준</div>
+        <div class="sec-sub">전자책(eBook)·종이책(Paperback) 표지와 내지 제작 시 편집 담당자가 반드시 확인해야 할 기술 규격입니다. 에이콘출판사 기획편집부 작성 (2026) · Amazon 공식 가이드 기준.</div>
+
+        <!-- ══ PART 1. 전자책 표지 ══ -->
+        <div class="sec-h" style="margin-top:0">PART 1 · 전자책 표지 (eBook Cover)</div>
+        <table class="data-table">
+          <thead><tr><th style="width:130px">항목</th><th>규격·기준</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>파일 크기</td><td>1,600 × 2,560 px</td><td>비율 1:1.6 유지</td></tr>
+            <tr><td>최소 해상도</td><td>300 DPI / PPI</td><td>72 DPI → 업로드 거절</td></tr>
+            <tr><td>파일 형식</td><td>JPEG 권장</td><td>PNG 가능, TIFF 불가</td></tr>
+            <tr><td>파일 크기 제한</td><td>5 MB 이하</td><td>초과 시 업로드 오류</td></tr>
+            <tr><td>색상 모드</td><td>RGB 필수</td><td>CMYK → 업로드 즉시 거절</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-card" style="margin-bottom:22px">
+          <div class="rule-card-title" style="color:var(--rose)">⚠ 필수 확인 사항</div>
+          <ul class="rule-list">
+            <li><span class="rule-bullet" style="color:var(--rose)">✖</span>책등·뒷표지·바코드 요소 포함 금지 — 앞표지 1면만 제출</li>
+            <li><span class="rule-bullet" style="color:var(--rose)">✖</span>흰색 배경 시 3~4px 회색 테두리 권장 (아마존 배경과 구분)</li>
+            <li><span class="rule-bullet">💡</span>썸네일(85px) 크기에서 제목·저자명이 판독 가능한지 반드시 확인</li>
+          </ul>
+        </div>
+
+        <!-- ══ PART 2. POD 종이책 표지 ══ -->
+        <div class="sec-h">PART 2 · POD 종이책 표지 — 전자책과의 핵심 차이</div>
+        <div class="info-box rose">⚠ 독자 환경에 따라 레이아웃이 유동적인 전자책과 달리, 종이책은 인쇄 화질과 여백 규격이 고정되어야 하므로 일정상 리스크가 더 큰 점에 유의하세요.</div>
+        <table class="data-table">
+          <thead><tr><th style="width:130px">항목</th><th>전자책 표지</th><th>종이책 표지</th></tr></thead>
+          <tbody>
+            <tr><td>구성</td><td>앞표지 1장 단독</td><td>앞+책등+뒤 통합 3면</td></tr>
+            <tr><td>색상</td><td>RGB 필수</td><td>CMYK 인쇄용 PDF</td></tr>
+            <tr><td>해상도</td><td>300 DPI / JPEG</td><td>최소 300 DPI / PDF 권장</td></tr>
+            <tr><td>Bleed</td><td>해당 없음</td><td>사방 0.125인치 (3.2mm)</td></tr>
+            <tr><td>안전 여백</td><td>해당 없음</td><td>0.25인치 (6.4mm) 안쪽</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-card-title" style="font-size:12px;color:var(--text3);margin:-8px 0 8px">▶ 책등 계수 · 판형</div>
+        <table class="data-table">
+          <thead><tr><th>종이 종류</th><th>계수 (페이지당)</th><th>100p 예시</th></tr></thead>
+          <tbody>
+            <tr><td>흑백 백색지</td><td>× 0.002252인치</td><td>약 5.7mm</td></tr>
+            <tr><td>흑백 크림지</td><td>× 0.0025인치</td><td>약 6.4mm</td></tr>
+            <tr><td>컬러지</td><td>× 0.002347인치</td><td>약 5.9mm</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box" style="margin-bottom:22px">💡 에이콘 권장 판형: <strong>148×210mm (5.83"×8.27")</strong> 또는 <strong>152.4×228.6mm (6"×9")</strong></div>
+
+        <!-- ══ PART 3. 전자책 내지 ══ -->
+        <div class="sec-h">PART 3 · 전자책 내지 — 편집 담당자 기술 검토</div>
+        <div class="info-box blue">💡 전자책은 화면 크기·글자 크기에 따라 텍스트가 자동 재흐름(Reflow)됩니다. 고정 레이아웃이 아닌 스타일 중심 편집이 필수입니다.</div>
+
+        <div class="rule-card" style="margin-bottom:14px">
+          <div class="rule-card-title" style="color:var(--blue)">① 한글·한문 텍스트 처리</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px">문제: 킨들 기기 및 해외 인쇄 장비에서 한글/한문 폰트가 깨지거나 네모(□)로 출력될 수 있습니다.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">[조치 제안]</div>
+          <ul class="rule-list">
+            <li><span class="rule-bullet">▸</span>원칙적으로 한글/한문 삭제 또는 영문 음차 표기로 전환 (예: 부산 → Busan)</li>
+            <li><span class="rule-bullet">▸</span>유지 필요한 도표·상징물은 저자 측에서 고화질 이미지(300 DPI) 파일로 추출 제공 요청</li>
+          </ul>
+        </div>
+
+        <div class="rule-card" style="margin-bottom:14px">
+          <div class="rule-card-title" style="color:var(--teal)">② 각주 처리</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px">현황: 양방향 하이퍼링크 각주 연결 정상. 아마존 공식 가이드는 미주(Endnote) 방식을 권장합니다.</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;font-weight:700">
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">앞부속 (표지·발간사·목차)</span>
+            <span style="color:var(--gold2)">→</span>
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">본문 (Chapter 1~N)</span>
+            <span style="color:var(--gold2)">→</span>
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">Notes (하이퍼링크 미주)</span>
+            <span style="color:var(--gold2)">→</span>
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">References (참고문헌·출처)</span>
+          </div>
+        </div>
+
+        <div class="rule-card" style="margin-bottom:14px">
+          <div class="rule-card-title" style="color:var(--purple)">③ 문단 정렬 및 들여쓰기 최적화</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px">문제: 현재 원고에 탭(Tab)과 들여쓰기/내어쓰기 과도 적용 → 레이아웃 작업 시간 소요</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">[조치 제안]</div>
+          <ul class="rule-list" style="margin-bottom:10px">
+            <li><span class="rule-bullet">▸</span>아마존 표준: 첫줄 들여쓰기 약 0.5인치(1.27cm) 재정렬</li>
+          </ul>
+          <table class="data-table" style="margin-bottom:0">
+            <thead><tr><th>구분</th><th>옵션 A — 미주 전환 없이 진행</th><th>옵션 B — 미주 전환 진행</th></tr></thead>
+            <tbody>
+              <tr><td>비용</td><td>추가 비용 없음</td><td>에이콘 대행 시: 추가 작업 비용 발생 / 저자 직접 수정 시: 비용 없음</td></tr>
+              <tr><td>일정</td><td>단축 가능</td><td>전환 작업 기간 추가 소요</td></tr>
+            </tbody>
+          </table>
+          <div class="info-box rose" style="margin-bottom:0">⚠ 일정 단축 옵션 — 현재 원고 그대로 또는 저자가 원하는 형태로 진행할 경우 저자 컨펌(서면) 필요</div>
+        </div>
+
+        <div class="rule-card-title" style="font-size:12px;color:var(--text3);margin:8px 0">④ 표지 제작 사양 비교</div>
+        <table class="data-table">
+          <thead><tr><th style="width:110px">항목</th><th>전자책 표지 규격</th><th>종이책 표지 규격</th></tr></thead>
+          <tbody>
+            <tr><td>색상 모드</td><td>RGB</td><td>CMYK (인쇄용)</td></tr>
+            <tr><td>파일 형식</td><td>JPEG (1600×2560px)</td><td>PDF (앞+책등+뒤 통합)</td></tr>
+            <tr><td>해상도</td><td>300 DPI 이상</td><td>300~600 DPI</td></tr>
+            <tr><td>비고</td><td>앞표지 1면만 제출</td><td>Bleed·안전여백 포함</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ══ PART 4. 종이책 내지 ══ -->
+        <div class="sec-h">PART 4 · 종이책 내지 (Paperback Interior)</div>
+        <div class="info-box rose">⚠ 종이책은 전자책과 편집 기준이 다릅니다. 인쇄 후 수정이 불가하므로 사전 검수를 철저히 해야 합니다.</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+          <div class="rule-card">
+            <div class="rule-card-title" style="color:var(--blue)">▶ 파일 형식·폰트</div>
+            <ul class="rule-list">
+              <li><span class="rule-bullet">▸</span>bleed 없음: PDF · DOCX · RTF · HTML · TXT</li>
+              <li><span class="rule-bullet">▸</span>bleed 있음: PDF 필수</li>
+              <li><span class="rule-bullet" style="color:var(--teal)">☑</span>모든 폰트·이미지 임베드(Embed) 필수</li>
+              <li><span class="rule-bullet" style="color:var(--teal)">☑</span>단면(Single Page) PDF 제출 — 펼침면(Spread) 금지</li>
+              <li><span class="rule-bullet" style="color:var(--rose)">✖</span>파일명에 이모지·특수문자 금지</li>
+            </ul>
+          </div>
+          <div class="rule-card">
+            <div class="rule-card-title" style="color:var(--teal)">▶ 이미지·그래픽</div>
+            <ul class="rule-list">
+              <li><span class="rule-bullet">▸</span>이미지: 최소 300 DPI, 권장 최대 600 DPI</li>
+              <li><span class="rule-bullet">▸</span>선 두께: 최소 0.75pt (0.3mm) — 이하 시 인쇄 후 소실</li>
+              <li><span class="rule-bullet">▸</span>흑백 인쇄 회색 배경: 최소 10% Grayscale Fill</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="rule-card-title" style="font-size:12px;color:var(--text3);margin-bottom:8px">▶ 안쪽 여백(Gutter) 기준</div>
+        <table class="data-table">
+          <thead><tr><th>페이지 수 범위</th><th>gutter</th><th>바깥(no-bleed)</th><th>바깥(bleed)</th></tr></thead>
+          <tbody>
+            <tr><td>24~150p</td><td>0.375인치 (9.5mm)</td><td>0.25인치 (6.4mm)</td><td>0.375인치 (9.5mm)</td></tr>
+            <tr><td>151~300p</td><td>0.5인치 (12.7mm)</td><td>0.25인치 (6.4mm)</td><td>0.375인치 (9.5mm)</td></tr>
+            <tr><td>301~500p</td><td>0.625인치 (15.9mm)</td><td>0.25인치 (6.4mm)</td><td>0.375인치 (9.5mm)</td></tr>
+            <tr><td>501p 이상</td><td>0.75인치 (19.1mm)</td><td>0.25인치 (6.4mm)</td><td>0.375인치 (9.5mm)</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ══ PART 5. 통합 제작 워크플로우 ══ -->
+        <div class="sec-h">PART 5 · 통합 제작 워크플로우</div>
+        <ol class="step-list">
+          <li class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">출간 형태·판형 확정</div><div class="step-desc">전자책/종이책/동시 출간, trim size 결정</div></div></li>
+          <li class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">원고(내지) 제작</div><div class="step-desc">전자책: 스타일 기반 DOCX / 종이책: 판형 맞춤 PDF</div></div></li>
+          <li class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">한글·한문·각주·들여쓰기 검토</div><div class="step-desc">담당자 기술 검토 ① ② ③ 처리 결정</div></div></li>
+          <li class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">표지 마스터 디자인</div><div class="step-desc">레이어 유지본(PSD/AI) 제작 — 전자책 RGB / 종이책 CMYK 분리</div></div></li>
+          <li class="step-item"><div class="step-num">5</div><div class="step-body"><div class="step-title">전자책 표지 추출</div><div class="step-desc">앞표지 1면 → RGB JPEG, 1600×2560px</div></div></li>
+          <li class="step-item"><div class="step-num">6</div><div class="step-body"><div class="step-title">종이책 표지 제작</div><div class="step-desc">Cover Calculator 템플릿 → CMYK PDF</div></div></li>
+          <li class="step-item"><div class="step-num">7</div><div class="step-body"><div class="step-title">Previewer 검수</div><div class="step-desc">Kindle Previewer(전자책) / Print Previewer(종이책)</div></div></li>
+          <li class="step-item"><div class="step-num">8</div><div class="step-body"><div class="step-title">KDP 업로드 및 출간</div><div class="step-desc">메타데이터 → 파일 업로드 → Publish</div></div></li>
+        </ol>
+
+        <!-- ══ PART 6. 참고 링크 ══ -->
+        <div class="sec-h">PART 6 · 참고 링크</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+          <a class="ref-link" href="https://kdp.amazon.com/en_US/help/topic/G6GTK3T3NUHKLEFX" target="_blank" rel="noopener">🖼 전자책 표지 가이드 ↗</a>
+          <a class="ref-link" href="https://kdp.amazon.com/en_US/help/topic/G201857950" target="_blank" rel="noopener">📕 종이책 표지 가이드 ↗</a>
+          <a class="ref-link" href="https://kdp.amazon.com/help/topic/G201605700" target="_blank" rel="noopener">📄 전자책 내지 가이드 ↗</a>
+          <a class="ref-link" href="https://kdp.amazon.com/help/topic/G201953020" target="_blank" rel="noopener">📘 종이책 내지 가이드 ↗</a>
+        </div>
+        <div class="info-box teal" style="margin-bottom:0">💡 Cover Calculator — kdp.amazon.com 내 "Cover Calculator" 검색 후 trim size·페이지 수 입력 시 표지 치수 자동 산출</div>
+
+      </div>
+    </div>
     <div id="s3-t4" class="tab-panel" data-ko-id="s3-t4"><div class="sec-h">저자 발굴 — 해외 파견 전문인력 & 국내 고학력·전문직</div>
       <div class="sec-sub">에이콘이 주목하는 저자는 '글 쓸 기회가 없었던 전문가'입니다.</div>
       <div class="author-grid">
@@ -4432,6 +4610,15 @@ function tab(section, tabId, btn) {
   btn.classList.add('active');
 }
 
+// ── KDP TAB: 대행 서비스 / 제작 가이드 서브 토글 ──────────────
+function kdpSub(idx, btn) {
+  const bar = btn.closest('.pill-tabs');
+  if(bar) bar.querySelectorAll('.pill-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('s3-t3-biz')?.classList.toggle('active', idx===0);
+  document.getElementById('s3-t3-guide')?.classList.toggle('active', idx===1);
+}
+
 // ── NAVIGATION ───────────────────────────────────────────────
 const SECTIONS = ['s1','s3','s4','s8'];
 function nav(id, subTabId) {
@@ -4581,7 +4768,7 @@ const EN_PAGES = {
   <tr><td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">임</div>Im Ji-won, Associate</div></td><td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">Editorial</span></td><td>Tech book editing · Overseas rights</td><td>Tech book editing · International copyright administration</td><td>Seoul</td></tr>
   <tr><td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">임</div>Im Seung-kyung, Associate</div></td><td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">Editorial</span></td><td>General book editing</td><td>Schedule coordination &amp; editorial quality</td><td>Seoul</td></tr>
   <tr><td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">김</div>Kim Gwang-u, Associate</div></td><td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">Editorial</span></td><td>General book planning &amp; editing</td><td>Author discovery · Planning consulting · Platform support</td><td><span class="location-badge">Busan</span></td></tr>
-  <tr><td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">윤</div>Yoon Seo-bin, Associate</div></td><td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">Editorial</span></td><td>Design (cover · interior · promo)</td><td>Marketing visuals · Book design</td><td>Seoul</td></tr>
+  <tr><td><div class="emp-name"><div class="emp-avatar" style="background:#1560B8">박</div>Park Ju-ran, Sr. Manager</div></td><td><span class="dept-chip" style="background:#EBF3FD;color:#1560B8">Editorial</span></td><td>Design lead<br>Cover &amp; interior design</td><td>eBook &amp; paperback cover design · Interior layout design &amp; QC</td><td>Seoul</td></tr>
   <tr class="org-group-hdr"><td colspan="5">📢 Marketing Team</td></tr>
   <tr><td><div class="emp-name"><div class="emp-avatar" style="background:#7A0A1A">김</div>Kim Hee-ji, Staff</div></td><td><span class="dept-chip" style="background:#FDE8EA;color:#7A0A1A">Marketing</span></td><td>KDP support · Marketing ops</td><td>KDP-related SNS content &amp; marketing execution</td><td>Seoul</td></tr>
   <tr class="org-group-hdr"><td colspan="5">📁 Administration Team</td></tr>
@@ -4656,7 +4843,56 @@ const EN_PAGES = {
   </tbody>
 </table>
 `,
-  's3t1': `
+  's3t2': `
+      <div style="background:var(--nav-bg);border-radius:var(--rL);padding:20px 24px;margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold3);letter-spacing:1.5px;margin-bottom:8px">PLATFORM BUSINESS MODEL</div>
+        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Acorn-On 3-Platform Business Models</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:14px">Beyond traditional publishing, Acorn-On connects <strong style="color:var(--gold3)">Publishers (Publisher-On) · Authors (Author-On) · Readers (Reader-On)</strong> in a single ecosystem. Each platform has an independent revenue model, and together they complete the <strong style="color:var(--gold3)">ONE CONTENT · MULTI REVENUES</strong> strategy.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div style="background:rgba(255,255,255,.07);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:20px;margin-bottom:6px">📋</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">Publisher-On</div><div style="font-size:11px;color:rgba(255,255,255,.65)">Publishing operations<br>SaaS platform (B2B)</div></div>
+          <div style="background:rgba(255,255,255,.07);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:20px;margin-bottom:6px">✍️</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">Author-On</div><div style="font-size:11px;color:rgba(255,255,255,.65)">Publishing service<br>marketplace for authors (B2C)</div></div>
+          <div style="background:rgba(255,255,255,.07);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:20px;margin-bottom:6px">📖</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">Reader-On</div><div style="font-size:11px;color:rgba(255,255,255,.65)">Knowledge content<br>distribution hub (B2C)</div></div>
+        </div>
+      </div>
+      <div style="border:2px solid var(--steel);border-radius:var(--rL);overflow:hidden;margin-bottom:18px;">
+        <div style="background:var(--steel);padding:16px 20px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📋</div><div><div style="font-size:16px;font-weight:700;color:#fff">Publisher-On — Publisher Platform</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">B2B SaaS that digitizes the entire publishing operation · For publishing companies</div></div><div style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:var(--r);padding:8px 14px;text-align:center"><div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px">Primary Customer</div><div style="font-size:12px;font-weight:700;color:#fff">Publishers (B2B)</div></div></div>
+        <div style="background:var(--surface);padding:18px 20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--steel);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💡 VALUE PROPOSITION</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Value for Publishers</div><ul style="list-style:none;padding:0"><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Single system from planning → editing → printing → distribution → settlement</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Real-time P&amp;L (BEP) tracking per title</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Automated release schedule and bottleneck alerts</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Digital management of author contracts, advances, and royalties</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Data-driven publishing decision support</li></ul></div>
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--gold2);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💰 REVENUE MODEL</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Revenue Streams</div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">① SaaS Subscription Fees</div><div style="font-size:11px;color:var(--text2)">Monthly subscription for external publishers (future B2B expansion)</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">② Internal Efficiency Gains</div><div style="font-size:11px;color:var(--text2)">Reduced Acorn operating costs + faster decision-making</div></div><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">③ Data Monetization (long-term)</div><div style="font-size:11px;color:var(--text2)">Publishing market data analytics as a service</div></div></div>
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--teal);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">⚙️ KEY FEATURES</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Core Features</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📊 P&amp;L Dashboard</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📅 Schedule Mgmt</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📝 Contract Mgmt</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">💳 Settlement</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📦 Inventory</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📈 Sales Analytics</div></div></div>
+          </div>
+          <div style="background:var(--s3);border-radius:var(--r);padding:12px 16px;"><div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🔄 Business Flow</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Publisher Signup<br><span style="font-size:10px;color:var(--text3)">incl. Acorn</span></div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Register &amp; manage<br>book projects</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Track editing<br>&amp; production</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Release &amp;<br>distribution sync</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Auto P&amp;L<br>&amp; settlement</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--steel);border-radius:6px;padding:7px 12px;font-size:11px;color:#fff;text-align:center;font-weight:700">Monthly<br>subscription</div></div></div>
+        </div>
+      </div>
+      <div style="border:2px solid var(--purple);border-radius:var(--rL);overflow:hidden;margin-bottom:18px;">
+        <div style="background:var(--purple);padding:16px 20px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">✍️</div><div><div style="font-size:16px;font-weight:700;color:#fff">Author-On — Author Platform</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Publishing service marketplace that turns manuscripts into IP · For authors</div></div><div style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:var(--r);padding:8px 14px;text-align:center"><div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px">Primary Customer</div><div style="font-size:12px;font-weight:700;color:#fff">Authors (B2C)</div></div></div>
+        <div style="background:var(--surface);padding:18px 20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--purple);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💡 VALUE PROPOSITION</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Value for Authors</div><ul style="list-style:none;padding:0"><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Manuscript-ready publishing: one-stop editing, design, production</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Clear path: self-pub → semi-planned → planned → KDP global</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>100% copyright retained by author</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Access to Acorn's distribution channels</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Amazon KDP 190+ countries simultaneous publishing</li></ul></div>
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--gold2);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💰 REVENUE MODEL</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Revenue Streams</div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">① Self-Publishing Service Fees</div><div style="font-size:11px;color:var(--text2)">Editing, design, printing package (author bears full cost)</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">② KDP Agency Commission</div><div style="font-size:11px;color:var(--text2)">Basic package KRW 1,350,000 + optional (translation/ads)</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">③ Semi-Planned Investment</div><div style="font-size:11px;color:var(--text2)">Author shares printing cost + revenue split post-publication</div></div><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">④ Platform Subscription (long-term)</div><div style="font-size:11px;color:var(--text2)">Author management, analytics, and channel tools subscription</div></div></div>
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--teal);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">👤 CUSTOMER SEGMENTS</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Author Customer Types</div><div style="margin-bottom:7px"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px">🎓 Domestic Experts &amp; Professionals</div><div style="font-size:11px;color:var(--text2)">Professors, PhDs, doctors, lawyers with high KDP interest</div></div><div style="margin-bottom:7px"><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px">✈ Overseas Dispatch Professionals</div><div style="font-size:11px;color:var(--text2)">Seafarers, polar researchers, government dispatch officials</div></div><div><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px">💼 Corporate &amp; Institutional Experts</div><div style="font-size:11px;color:var(--text2)">Corporate executives, research cluster professionals</div></div></div>
+          </div>
+          <div style="background:var(--s3);border-radius:var(--r);padding:12px 16px;"><div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🔄 Author Journey</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Author<br>Discovery</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Contract &amp;<br>Account Setup</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Manuscript<br>Editing/Design</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Domestic Release<br>+ KDP Listing</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Sales &amp;<br>Monitoring</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--purple);border-radius:6px;padding:7px 12px;font-size:11px;color:#fff;text-align:center;font-weight:700">Service Fee<br>+ Revenue Split</div></div></div>
+        </div>
+      </div>
+      <div style="border:2px solid var(--ops);border-radius:var(--rL);overflow:hidden;margin-bottom:18px;">
+        <div style="background:var(--ops);padding:16px 20px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📖</div><div><div style="font-size:16px;font-weight:700;color:#fff">Reader-On — Reader Platform</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Integrated distribution hub for print, e-book, and audiobook · For readers</div></div><div style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:var(--r);padding:8px 14px;text-align:center"><div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px">Primary Customer</div><div style="font-size:12px;font-weight:700;color:#fff">Readers (B2C) + Channels (B2B)</div></div></div>
+        <div style="background:var(--surface);padding:18px 20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--ops);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💡 VALUE PROPOSITION</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Value for Readers</div><ul style="list-style:none;padding:0"><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Single platform access for print, e-book, and audiobook</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Expert curation in IT/tech + humanities genres</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Community for direct author-reader interaction</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Personalized recommendations based on reading history</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Connected newsletters, lectures, and educational content</li></ul></div>
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--gold2);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💰 REVENUE MODEL</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Revenue Streams</div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">① Book Sales Revenue</div><div style="font-size:11px;color:var(--text2)">Direct sales of print books, e-books, and audiobooks</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">② Distributor Settlement</div><div style="font-size:11px;color:var(--text2)">Revenue from Kyobo, Yes24, Aladin, Ridibooks channels</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">③ Subscription Service (long-term)</div><div style="font-size:11px;color:var(--text2)">Premium reader membership + unlimited e-book subscription</div></div><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">④ Ad &amp; Commerce (long-term)</div><div style="font-size:11px;color:var(--text2)">Targeted advertising based on reader data + related commerce</div></div></div>
+            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--teal);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">📊 KEY METRICS</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">Key Performance Indicators</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Channel Coverage</div><div style="font-size:14px;font-weight:700;color:var(--ops)">4</div><div style="font-size:10px;color:var(--text3)">major bookstores</div></div><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Rating Alert</div><div style="font-size:14px;font-weight:700;color:var(--rose)">3.0↓</div><div style="font-size:10px;color:var(--text3)">5+ cases → alert</div></div><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Data Collection</div><div style="font-size:14px;font-weight:700;color:var(--ops)">Monthly</div><div style="font-size:10px;color:var(--text3)">reader response</div></div><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Formats</div><div style="font-size:14px;font-weight:700;color:var(--ops)">3</div><div style="font-size:10px;color:var(--text3)">print/e-book/audio</div></div></div></div>
+          </div>
+          <div style="background:var(--s3);border-radius:var(--r);padding:12px 16px;"><div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🔄 Reader Journey</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Book Search<br><span style="font-size:10px;color:var(--text3)">bookstore/platform</span></div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Choose Format<br>print/e-book/audio</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Purchase &amp;<br>Download</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Review &amp;<br>Community</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Lectures &amp;<br>Newsletters</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--ops);border-radius:6px;padding:7px 12px;font-size:11px;color:#fff;text-align:center;font-weight:700">Repeat Purchase<br>+ Subscription</div></div></div>
+        </div>
+      </div>
+      <div style="background:var(--nav-bg);border-radius:var(--rL);padding:20px 24px;">
+        <div style="font-size:11px;font-weight:700;color:var(--gold3);letter-spacing:1.5px;margin-bottom:10px">INTEGRATED ECOSYSTEM</div>
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:14px">3-Platform Integrated Ecosystem — ONE CONTENT · MULTI REVENUES</div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin-bottom:16px;"><div style="background:rgba(42,64,96,.5);border:1px solid var(--steel);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:16px;margin-bottom:4px">📋</div><div style="font-size:12px;font-weight:700;color:#fff">Publisher-On</div><div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:3px">Optimize publishing operations → improve profitability</div></div><div style="text-align:center;padding:0 4px"><div style="font-size:18px;color:var(--gold3)">⇄</div><div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:2px">book &amp; contract<br>data sync</div></div><div style="background:rgba(74,26,124,.4);border:1px solid var(--purple);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:16px;margin-bottom:4px">✍️</div><div style="font-size:12px;font-weight:700;color:#fff">Author-On</div><div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:3px">Manuscript → IP → multi-channel publishing</div></div><div style="text-align:center;padding:0 4px"><div style="font-size:18px;color:var(--gold3)">⇄</div><div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:2px">book &amp; reader<br>data sync</div></div><div style="background:rgba(10,90,42,.4);border:1px solid var(--ops);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:16px;margin-bottom:4px">📖</div><div style="font-size:12px;font-weight:700;color:#fff">Reader-On</div><div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:3px">Reader distribution &amp; subscription → recurring revenue</div></div></div>
+        <table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="border-bottom:1px solid rgba(255,255,255,.15)"><th style="padding:8px 10px;color:var(--gold3);text-align:left;font-weight:700">One Manuscript</th><th style="padding:8px 10px;color:rgba(255,255,255,.7);text-align:center">→</th><th style="padding:8px 10px;color:var(--gold3);text-align:left;font-weight:700">6-Channel Expansion</th><th style="padding:8px 10px;color:var(--gold3);text-align:right;font-weight:700">Multi-Layer Revenue</th></tr></thead><tbody><tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:7px 10px;color:rgba(255,255,255,.8)">Print manuscript</td><td style="text-align:center;color:var(--gold3)">→</td><td style="padding:7px 10px;color:rgba(255,255,255,.8)">📚 Print (domestic) + ✍️ E-book (Ridi/Kyobo) + 🌐 KDP (global) + 🎧 Audiobook + 🎓 Lectures + 📧 Newsletter</td><td style="text-align:right;padding:7px 10px;color:var(--gold3);font-weight:700">Recurring + Multi-layer</td></tr></tbody></table>
+      </div>
 <div class="sec-h">Platform Management — Publisher-On · Author-On · Reader-On</div>
 <div class="sec-sub">The Business Team operates as Admin for all three platforms.</div>
 <div class="platform-grid">
@@ -4692,7 +4928,12 @@ const EN_PAGES = {
 </div>
 <div class="info-box teal"><strong>3-Platform Common Principles:</strong> ① Verify save after every data entry ② No author/reader personal info (contract terms, royalty rates, payment details) outside platform ③ Report any error to Business Team Director within 24 hrs ④ Log out of Admin account when leaving your desk</div>
 `,
-  's3t2': `
+  's3t3': `
+      <div class="pill-tabs" id="kdp-sub-tabs" style="margin-bottom:18px">
+        <button class="pill-tab active" onclick="kdpSub(0,this)">🤝 Agency Service</button>
+        <button class="pill-tab" onclick="kdpSub(1,this)">📐 Production Guide</button>
+      </div>
+      <div id="s3-t3-biz" class="kdp-sub-panel active">
 <div class="sec-h">Amazon KDP Agency Service — Acorn One-Stop Package</div>
 <div class="sec-sub">Beyond Korea — reach readers in 190+ countries worldwide. Acorn handles everything from KDP account setup, metadata optimization, translation coordination, to AMS advertising. Authors only need to prepare the manuscript.</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px">
@@ -4756,8 +4997,174 @@ const EN_PAGES = {
     <tr><td>Pricing</td><td>$2.99–$9.99 = 70% royalty / Outside this range = 35% royalty. Reference competing titles.</td><td>⭐⭐⭐</td></tr>
   </tbody>
 </table>
+</div>
+      <div id="s3-t3-guide" class="kdp-sub-panel">
+        <div class="sec-h">Amazon KDP Production Guide — Cover &amp; Interior Technical Standards</div>
+        <div class="sec-sub">Technical specifications the editorial team must confirm when producing eBook and paperback covers and interiors. Written by Acorn Publishing's Editorial Division (2026) · based on Amazon's official guidelines.</div>
+
+        <!-- ══ PART 1. eBook Cover ══ -->
+        <div class="sec-h" style="margin-top:0">PART 1 · eBook Cover</div>
+        <table class="data-table">
+          <thead><tr><th style="width:130px">Item</th><th>Specification</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>File size</td><td>1,600 × 2,560 px</td><td>Maintain 1:1.6 ratio</td></tr>
+            <tr><td>Min. resolution</td><td>300 DPI / PPI</td><td>72 DPI → upload rejected</td></tr>
+            <tr><td>File format</td><td>JPEG recommended</td><td>PNG accepted, TIFF not accepted</td></tr>
+            <tr><td>File size limit</td><td>Under 5 MB</td><td>Upload error if exceeded</td></tr>
+            <tr><td>Color mode</td><td>RGB required</td><td>CMYK → upload rejected immediately</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-card" style="margin-bottom:22px">
+          <div class="rule-card-title" style="color:var(--rose)">⚠ Must-check items</div>
+          <ul class="rule-list">
+            <li><span class="rule-bullet" style="color:var(--rose)">✖</span>No spine, back cover, or barcode elements — submit the front cover face only</li>
+            <li><span class="rule-bullet" style="color:var(--rose)">✖</span>On a white background, a 3–4px gray border is recommended (to distinguish from Amazon's own background)</li>
+            <li><span class="rule-bullet">💡</span>Always confirm the title and author name stay legible at 85px thumbnail size</li>
+          </ul>
+        </div>
+
+        <!-- ══ PART 2. POD Paperback Cover ══ -->
+        <div class="sec-h">PART 2 · POD Paperback Cover — Key Differences from eBook</div>
+        <div class="info-box rose">⚠ Unlike eBooks, where layout is flexible across reader devices, paperback print quality and margins are fixed and cannot be corrected after printing — schedule risk is higher.</div>
+        <table class="data-table">
+          <thead><tr><th style="width:130px">Item</th><th>eBook Cover</th><th>Paperback Cover</th></tr></thead>
+          <tbody>
+            <tr><td>Composition</td><td>Front cover only</td><td>Front + spine + back combined, 3 faces</td></tr>
+            <tr><td>Color</td><td>RGB required</td><td>CMYK print-ready PDF</td></tr>
+            <tr><td>Resolution</td><td>300 DPI / JPEG</td><td>300 DPI min. / PDF recommended</td></tr>
+            <tr><td>Bleed</td><td>N/A</td><td>0.125 in (3.2mm) on all sides</td></tr>
+            <tr><td>Safety margin</td><td>N/A</td><td>0.25 in (6.4mm) inward</td></tr>
+          </tbody>
+        </table>
+        <div class="rule-card-title" style="font-size:12px;color:var(--text3);margin:-8px 0 8px">▶ Spine thickness coefficient · trim size</div>
+        <table class="data-table">
+          <thead><tr><th>Paper stock</th><th>Coefficient (per page)</th><th>100p example</th></tr></thead>
+          <tbody>
+            <tr><td>B&amp;W, white</td><td>× 0.002252 in</td><td>≈ 5.7mm</td></tr>
+            <tr><td>B&amp;W, cream</td><td>× 0.0025 in</td><td>≈ 6.4mm</td></tr>
+            <tr><td>Color</td><td>× 0.002347 in</td><td>≈ 5.9mm</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box" style="margin-bottom:22px">💡 Acorn-recommended trim size: <strong>148×210mm (5.83"×8.27")</strong> or <strong>152.4×228.6mm (6"×9")</strong></div>
+
+        <!-- ══ PART 3. eBook Interior ══ -->
+        <div class="sec-h">PART 3 · eBook Interior — Editorial Technical Review</div>
+        <div class="info-box blue">💡 eBook text reflows automatically depending on screen size and font size. Style-based editing is required rather than fixed layout.</div>
+
+        <div class="rule-card" style="margin-bottom:14px">
+          <div class="rule-card-title" style="color:var(--blue)">① Korean / Hanja text handling</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px">Problem: Korean/Hanja fonts may break or render as tofu boxes (□) on Kindle devices and overseas print equipment.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">[Proposed action]</div>
+          <ul class="rule-list">
+            <li><span class="rule-bullet">▸</span>In principle, remove Korean/Hanja text or transliterate into English (e.g., 부산 → Busan)</li>
+            <li><span class="rule-bullet">▸</span>Where a diagram or symbol must be kept, request a high-resolution image (300 DPI) extract from the author</li>
+          </ul>
+        </div>
+
+        <div class="rule-card" style="margin-bottom:14px">
+          <div class="rule-card-title" style="color:var(--teal)">② Footnote handling</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px">Current state: bidirectional hyperlinked footnotes work correctly. Amazon's official guide recommends the endnote format instead.</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:11px;font-weight:700">
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">Front matter (cover · preface · TOC)</span>
+            <span style="color:var(--gold2)">→</span>
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">Body (Chapter 1–N)</span>
+            <span style="color:var(--gold2)">→</span>
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">Notes (hyperlinked endnotes)</span>
+            <span style="color:var(--gold2)">→</span>
+            <span style="padding:6px 11px;background:var(--s2);border-radius:100px;color:var(--text2)">References (bibliography · sources)</span>
+          </div>
+        </div>
+
+        <div class="rule-card" style="margin-bottom:14px">
+          <div class="rule-card-title" style="color:var(--purple)">③ Paragraph alignment &amp; indentation</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px">Problem: current manuscripts over-apply tabs and indent/outdent formatting → adds layout work time.</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px">[Proposed action]</div>
+          <ul class="rule-list" style="margin-bottom:10px">
+            <li><span class="rule-bullet">▸</span>Amazon standard: re-align to a first-line indent of about 0.5 in (1.27cm)</li>
+          </ul>
+          <table class="data-table" style="margin-bottom:0">
+            <thead><tr><th>Category</th><th>Option A — proceed without endnote conversion</th><th>Option B — proceed with endnote conversion</th></tr></thead>
+            <tbody>
+              <tr><td>Cost</td><td>No additional cost</td><td>If Acorn handles it: extra work cost applies / if the author edits directly: no cost</td></tr>
+              <tr><td>Schedule</td><td>Can be shortened</td><td>Additional time needed for conversion work</td></tr>
+            </tbody>
+          </table>
+          <div class="info-box rose" style="margin-bottom:0">⚠ Schedule-shortening option — proceeding as-is or in the author's preferred format requires the author's written confirmation</div>
+        </div>
+
+        <div class="rule-card-title" style="font-size:12px;color:var(--text3);margin:8px 0">④ Cover production spec comparison</div>
+        <table class="data-table">
+          <thead><tr><th style="width:110px">Item</th><th>eBook cover spec</th><th>Paperback cover spec</th></tr></thead>
+          <tbody>
+            <tr><td>Color mode</td><td>RGB</td><td>CMYK (print-ready)</td></tr>
+            <tr><td>File format</td><td>JPEG (1600×2560px)</td><td>PDF (front+spine+back combined)</td></tr>
+            <tr><td>Resolution</td><td>300 DPI or higher</td><td>300–600 DPI</td></tr>
+            <tr><td>Notes</td><td>Front cover face only</td><td>Includes bleed &amp; safety margin</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ══ PART 4. Paperback Interior ══ -->
+        <div class="sec-h">PART 4 · Paperback Interior</div>
+        <div class="info-box rose">⚠ Paperback editorial standards differ from eBook. Corrections are not possible after printing, so pre-print review must be thorough.</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+          <div class="rule-card">
+            <div class="rule-card-title" style="color:var(--blue)">▶ File format · fonts</div>
+            <ul class="rule-list">
+              <li><span class="rule-bullet">▸</span>No bleed: PDF · DOCX · RTF · HTML · TXT</li>
+              <li><span class="rule-bullet">▸</span>With bleed: PDF required</li>
+              <li><span class="rule-bullet" style="color:var(--teal)">☑</span>All fonts and images must be embedded</li>
+              <li><span class="rule-bullet" style="color:var(--teal)">☑</span>Submit single-page PDF — no spreads</li>
+              <li><span class="rule-bullet" style="color:var(--rose)">✖</span>No emoji or special characters in file names</li>
+            </ul>
+          </div>
+          <div class="rule-card">
+            <div class="rule-card-title" style="color:var(--teal)">▶ Images · graphics</div>
+            <ul class="rule-list">
+              <li><span class="rule-bullet">▸</span>Images: 300 DPI minimum, 600 DPI recommended maximum</li>
+              <li><span class="rule-bullet">▸</span>Line weight: 0.75pt (0.3mm) minimum — thinner lines may disappear after printing</li>
+              <li><span class="rule-bullet">▸</span>Grayscale background fills: 10% minimum for B&amp;W printing</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="rule-card-title" style="font-size:12px;color:var(--text3);margin-bottom:8px">▶ Inside margin (gutter) standards</div>
+        <table class="data-table">
+          <thead><tr><th>Page range</th><th>Gutter</th><th>Outer (no-bleed)</th><th>Outer (bleed)</th></tr></thead>
+          <tbody>
+            <tr><td>24–150p</td><td>0.375 in (9.5mm)</td><td>0.25 in (6.4mm)</td><td>0.375 in (9.5mm)</td></tr>
+            <tr><td>151–300p</td><td>0.5 in (12.7mm)</td><td>0.25 in (6.4mm)</td><td>0.375 in (9.5mm)</td></tr>
+            <tr><td>301–500p</td><td>0.625 in (15.9mm)</td><td>0.25 in (6.4mm)</td><td>0.375 in (9.5mm)</td></tr>
+            <tr><td>501p+</td><td>0.75 in (19.1mm)</td><td>0.25 in (6.4mm)</td><td>0.375 in (9.5mm)</td></tr>
+          </tbody>
+        </table>
+
+        <!-- ══ PART 5. Integrated Production Workflow ══ -->
+        <div class="sec-h">PART 5 · Integrated Production Workflow</div>
+        <ol class="step-list">
+          <li class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Confirm format &amp; trim size</div><div class="step-desc">Decide eBook / paperback / simultaneous release and trim size</div></div></li>
+          <li class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Produce the manuscript (interior)</div><div class="step-desc">eBook: style-based DOCX / Paperback: trim-fitted PDF</div></div></li>
+          <li class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Review Korean/Hanja, footnotes, indentation</div><div class="step-desc">Editor decides handling per items ① ② ③ above</div></div></li>
+          <li class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Cover master design</div><div class="step-desc">Produce a layered master file (PSD/AI) — RGB for eBook, CMYK for paperback</div></div></li>
+          <li class="step-item"><div class="step-num">5</div><div class="step-body"><div class="step-title">Extract eBook cover</div><div class="step-desc">Front cover face → RGB JPEG, 1600×2560px</div></div></li>
+          <li class="step-item"><div class="step-num">6</div><div class="step-body"><div class="step-title">Produce paperback cover</div><div class="step-desc">Cover Calculator template → CMYK PDF</div></div></li>
+          <li class="step-item"><div class="step-num">7</div><div class="step-body"><div class="step-title">Previewer check</div><div class="step-desc">Kindle Previewer (eBook) / Print Previewer (paperback)</div></div></li>
+          <li class="step-item"><div class="step-num">8</div><div class="step-body"><div class="step-title">Upload to KDP &amp; publish</div><div class="step-desc">Metadata → file upload → Publish</div></div></li>
+        </ol>
+
+        <!-- ══ PART 6. Reference Links ══ -->
+        <div class="sec-h">PART 6 · Reference Links</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+          <a class="ref-link" href="https://kdp.amazon.com/en_US/help/topic/G6GTK3T3NUHKLEFX" target="_blank" rel="noopener">🖼 eBook Cover Guide ↗</a>
+          <a class="ref-link" href="https://kdp.amazon.com/en_US/help/topic/G201857950" target="_blank" rel="noopener">📕 Paperback Cover Guide ↗</a>
+          <a class="ref-link" href="https://kdp.amazon.com/help/topic/G201605700" target="_blank" rel="noopener">📄 eBook Interior Guide ↗</a>
+          <a class="ref-link" href="https://kdp.amazon.com/help/topic/G201953020" target="_blank" rel="noopener">📘 Paperback Interior Guide ↗</a>
+        </div>
+        <div class="info-box teal" style="margin-bottom:0">💡 Cover Calculator — search "Cover Calculator" on kdp.amazon.com; enter trim size and page count to auto-calculate cover dimensions</div>
+
+      </div>
 `,
-  's3t3': `
+  's3t4': `
 <div class="sec-h">Author Discovery — Overseas Dispatch Professionals &amp; Domestic Experts</div>
 <div class="sec-sub">Acorn targets authors who have never had a chance to publish. We systematically discover both groups and connect them all the way to publication.</div>
 <div class="author-grid">
@@ -4795,7 +5202,7 @@ const EN_PAGES = {
 </ol>
 <div class="info-box"><strong>Approach Methods:</strong> Author recruitment notices via newsletter &amp; website · SNS community channels · Academic association newsletters &amp; journals · Relevant magazine advertising · Publishing information sessions</div>
 `,
-  's3t4': `
+  's3t5': `
 <div style="background:var(--nav-bg);border-radius:var(--rL);padding:18px 22px;margin-bottom:18px;color:#fff;">
   <div style="font-size:11px;font-weight:700;color:var(--gold3);letter-spacing:1.5px;margin-bottom:7px">MARKET CONTEXT — Staff Must Read</div>
   <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:10px">Current Single-Title Book Market — What to Remember When Receiving a Proposal</div>
@@ -4843,57 +5250,6 @@ const EN_PAGES = {
   's4t2': `<div class="sec-h">Experienced Staff Roles &amp; Expected Standards</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;"><div class="rule-card" style="border-top:3px solid var(--blue)"><div class="rule-card-title" style="color:var(--blue)">📌 Independent Work Standards</div><ul class="rule-list"><li><span class="rule-bullet" style="color:var(--blue)">▸</span>Independent judgment and execution within assigned scope (no prior reporting needed)</li><li><span class="rule-bullet" style="color:var(--blue)">▸</span>May propose initial contract terms (final terms must be confirmed by management)</li><li><span class="rule-bullet" style="color:var(--blue)">▸</span>Autonomous management of editing, production, and scheduling</li><li><span class="rule-bullet" style="color:var(--blue)">▸</span>Independent platform data entry and updates</li><li><span class="rule-bullet" style="color:var(--blue)">▸</span>Under ₩200,000: execute and report to management by next business day</li></ul></div><div class="rule-card" style="border-top:3px solid var(--teal)"><div class="rule-card-title" style="color:var(--teal)">🌱 Junior Development &amp; Knowledge Sharing</div><ul class="rule-list"><li><span class="rule-bullet" style="color:var(--teal)">▸</span>Coach probationary staff and provide practical feedback</li><li><span class="rule-bullet" style="color:var(--teal)">▸</span>Keep work manuals and checklists current; share on Notion</li><li><span class="rule-bullet" style="color:var(--teal)">▸</span>Share expertise and lessons learned within the team</li><li><span class="rule-bullet" style="color:var(--teal)">▸</span>Participate in onboarding checklist review and 1:1 mentoring</li><li><span class="rule-bullet" style="color:var(--teal)">▸</span>Offer constructive input on task assignment coordination</li></ul></div><div class="rule-card" style="border-top:3px solid var(--gold2)"><div class="rule-card-title" style="color:var(--gold2)">🎯 Performance &amp; Self-Development</div><ul class="rule-list"><li><span class="rule-bullet" style="color:var(--gold2)">▸</span>Quarterly KPI self-assessment and management reporting</li><li><span class="rule-bullet" style="color:var(--gold2)">▸</span>Semi-annual self-evaluation (goal achievement, gaps, improvement plan)</li><li><span class="rule-bullet" style="color:var(--gold2)">▸</span>Attend at least 1 external seminar/training per year</li><li><span class="rule-bullet" style="color:var(--gold2)">▸</span>Study and apply AI tools in practice (AX strategy)</li><li><span class="rule-bullet" style="color:var(--gold2)">▸</span>Propose at least 1 operational improvement idea per half year</li></ul></div><div class="rule-card" style="border-top:3px solid var(--rose)"><div class="rule-card-title" style="color:var(--rose)">🚨 Mandatory Compliance</div><ul class="rule-list"><li><span class="rule-bullet" style="color:var(--rose)">▸</span>Final contract terms require management approval</li><li><span class="rule-bullet" style="color:var(--rose)">▸</span>₩200,000+ expenses require management pre-approval</li><li><span class="rule-bullet" style="color:var(--rose)">▸</span>Issues or disputes: report to management immediately (don't resolve alone)</li><li><span class="rule-bullet" style="color:var(--rose)">▸</span>No sharing of author/reader personal info externally</li><li><span class="rule-bullet" style="color:var(--rose)">▸</span>Upon resignation: mandatory written handover documentation</li></ul></div></div><div class="sec-h">Role &amp; Authority by Level</div><table class="data-table"><thead><tr><th>Category</th><th>Probationary (3 months)</th><th>Staff (Junior/Associate)</th><th>Senior (Deputy Mgr+)</th></tr></thead><tbody><tr><td>Independent Work</td><td>Support only; senior confirmation required</td><td>Independent within assigned scope</td><td>Judges and coordinates team direction</td></tr><tr><td>Author Consultation</td><td>Attend and take notes only</td><td>May conduct initial consultation</td><td>May propose terms (management confirms)</td></tr><tr><td>Expense Execution</td><td>Cannot execute independently</td><td>Under ₩200,000 after management approval</td><td>Under ₩200,000: execute then report next day</td></tr><tr><td>Platform Authority</td><td>Observation and support only</td><td>Full independent Admin access</td><td>Full Admin + approves junior access</td></tr><tr><td>Junior Development</td><td>N/A</td><td>Participate in probationary support</td><td>Lead coaching and evaluation; update manuals</td></tr><tr><td>KPI Reporting</td><td>Replaced by probationary evaluation</td><td>Quarterly self-assessment + management report</td><td>Lead team KPI consolidation and reporting</td></tr></tbody></table><div class="info-box blue"><strong>Core Value:</strong> Autonomy and Responsibility. Make independent judgments and own the results. Share knowledge with junior colleagues and be a driving force in the organization's growth.</div>`,
   's4t3': `<div class="sec-h">3-Month Probationary Roadmap</div><div class="roadmap-block"><div class="roadmap-row"><div class="roadmap-period" style="background:linear-gradient(180deg,#B87030,#8A5020)">Wk 1–4<span>Observe</span></div><div class="roadmap-content"><div class="roadmap-content-title">Observe · Understand · Record</div><ul class="tl-list"><li>Complete 1:1 greetings with all staff; document each person's role (within first 2 weeks)</li><li>Observe KDP operations, account, and dashboard with Business Team Manager</li><li>Explore all features of Publisher-On, Author-On, and Reader-On; take notes</li><li>Review full published title list and KDP registration status</li><li>Research author discovery channels (Maritime Officers' Assoc., KOPRI, universities)</li><li>Read the entire onboarding guide; list unclear items to ask about</li><li>Write daily work log</li><li>End of Week 4: 1st mid-check meeting with management</li></ul></div></div><div class="roadmap-row"><div class="roadmap-period" style="background:linear-gradient(180deg,#1560B8,#0A3E84)">Wk 5–8<span>Support</span></div><div class="roadmap-content"><div class="roadmap-content-title">Support Execution — Accurately Carry Out Assigned Tasks</div><ul class="tl-list"><li>Write KDP metadata improvement list for existing titles → management review</li><li>Assist with weekly KDP monitoring (rankings, reviews, ratings) data collection</li><li>Assist with Publisher-On project status data entry</li><li>Assist with Author-On author account creation and onboarding guide delivery</li><li>Assist with Reader-On new title information registration</li><li>Assist in drafting KDP/platform seminar planning materials</li><li>End of Week 8: 2nd mid-check meeting with management</li></ul></div></div><div class="roadmap-row"><div class="roadmap-period" style="background:linear-gradient(180deg,#0A5A4A,#0A3A30)">Wk 9–12<span>Deepen</span></div><div class="roadmap-content"><div class="roadmap-content-title">Deepen Support — Verify Capabilities &amp; Prepare for Position Assignment</div><ul class="tl-list"><li>Draft KDP metadata for a new title independently → reviewed by management and Business Manager</li><li>Compile and submit full author discovery candidate list report to management</li><li>Write 3-month retrospective (strengths, areas for growth, improvement plan)</li><li>Submit 1-page report on preferred team placement and reasons to management</li><li>End of Week 12: Final evaluation meeting with management → Position confirmed</li></ul></div></div><div class="roadmap-row"><div class="roadmap-period" style="background:linear-gradient(180deg,#B87030,#8A5020)">After 3 mo.<span>Position set</span></div><div class="roadmap-content"><div class="roadmap-content-title" style="color:var(--gold2)">Management Final Evaluation → Position Confirmed</div><div class="bojeok-grid" style="margin-top:10px"><div class="bojeok-card" style="background:linear-gradient(135deg,#0A2E7A,#1560B8)">📝<br><span style="font-size:11px">Editorial Team</span></div><div class="bojeok-card" style="background:linear-gradient(135deg,#7A0A1A,#B02030)">📢<br><span style="font-size:11px">Marketing Team</span></div><div class="bojeok-card" style="background:linear-gradient(135deg,#0A5A4A,#0E9A78)">🚀<br><span style="font-size:11px">Business Team</span></div></div></div></div></div><div class="info-box"><strong>Probationary Goal:</strong> Not to "perform well" but to "learn precisely." Ask when uncertain, report mistakes immediately, and write a daily work log. After 3 months, your final position is determined through a 1:1 evaluation meeting with management.</div>`,
   's8main': `<div class="sec-h">2026 Annual Goals</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px"><div style="background:var(--nav-bg);border-radius:var(--r);padding:16px;text-align:center;color:#fff"><div style="font-size:10px;color:var(--gold3);font-weight:700;margin-bottom:6px">Annual Revenue</div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold3)">&#8361;2.0B</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center"><div style="font-size:10px;color:var(--blue);font-weight:700;margin-bottom:6px">Planned Publishing</div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--blue)">12/yr</div><div style="font-size:10px;color:var(--text3)">(1/month)</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center"><div style="font-size:10px;color:var(--purple);font-weight:700;margin-bottom:6px">Semi-Planned</div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--purple)">12/yr</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center"><div style="font-size:10px;color:var(--teal);font-weight:700;margin-bottom:6px">Self-Published</div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--teal)">24/yr</div></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center"><div style="font-size:10px;color:var(--gold2);font-weight:700;margin-bottom:6px">KDP Agency</div><div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold2)">12/yr</div></div></div><div class="sec-h">Team KPI — Company Growth</div><table class="data-table" style="margin-bottom:20px"><thead><tr><th style="width:100px">Team</th><th>KPI Item</th><th style="width:120px">Target</th><th style="width:90px">Cycle</th></tr></thead><tbody><tr><td rowspan="5" style="background:var(--s2);vertical-align:middle;text-align:center;font-weight:700;color:var(--blue)">Editorial</td><td>Planned titles released</td><td>1+/month</td><td>Monthly</td></tr><tr><td>Semi-planned titles released</td><td>1+/month</td><td>Monthly</td></tr><tr><td>Self-published titles released</td><td>2+/month</td><td>Monthly</td></tr><tr><td>Author planning consultations</td><td>5+/month</td><td>Monthly</td></tr><tr><td>1st editorial comment deadline</td><td>100% within 3 days</td><td>Per project</td></tr><tr><td rowspan="3" style="background:var(--s2);vertical-align:middle;text-align:center;font-weight:700;color:var(--rose)">Marketing</td><td>SNS posts per new title</td><td>3+/title</td><td>Per release</td></tr><tr><td>KDP-related SNS content</td><td>2+/month</td><td>Monthly</td></tr><tr><td>Distributor book info accuracy</td><td>0 missing (4 channels)</td><td>Monthly</td></tr><tr><td rowspan="4" style="background:var(--s2);vertical-align:middle;text-align:center;font-weight:700;color:var(--teal)">Business</td><td>KDP agency registrations</td><td>1+/month</td><td>Monthly</td></tr><tr><td>Weekly KDP monitoring</td><td>100% weekly</td><td>Weekly</td></tr><tr><td>Platform data update timeliness</td><td>100% within 3 days</td><td>Per item</td></tr><tr><td>Author candidates registered</td><td>2+/month</td><td>Monthly</td></tr><tr><td rowspan="2" style="background:var(--s2);vertical-align:middle;text-align:center;font-weight:700;color:var(--gold2)">Admin</td><td>Contract registration deadline</td><td>100% within 3 days</td><td>Per item</td></tr><tr><td>Settlement deadline</td><td>100% by 5th of month</td><td>Monthly</td></tr></tbody></table><div class="sec-h">Common KPI — Self-Development &amp; Compliance</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px"><div class="rule-card" style="border-top:3px solid var(--blue)"><div class="rule-card-title" style="color:var(--blue)">📈 Company Growth</div><ul class="rule-list"><li><span class="rule-bullet">▸</span>Monthly target achievement rate ≥ 90%</li><li><span class="rule-bullet">▸</span>Author response deadline compliance ≥ 95%</li><li><span class="rule-bullet">▸</span>Cross-team response 100% within 48 hrs</li><li><span class="rule-bullet">▸</span>Platform data errors ≤ 3/month</li></ul></div><div class="rule-card" style="border-top:3px solid var(--teal)"><div class="rule-card-title" style="color:var(--teal)">🌱 Self-Development</div><ul class="rule-list"><li><span class="rule-bullet">▸</span>Complete relevant study (quarterly review)</li><li><span class="rule-bullet">▸</span>Work log: 100% during probation / weekly after</li><li><span class="rule-bullet">▸</span>Incorporate feedback and improve</li><li><span class="rule-bullet">▸</span>1+ external seminar/year</li></ul></div><div class="rule-card" style="border-top:3px solid var(--gold2)"><div class="rule-card-title" style="color:var(--gold2)">📋 Compliance</div><ul class="rule-list"><li><span class="rule-bullet">▸</span>Expense approval violations: 0/month</li><li><span class="rule-bullet">▸</span>Privacy/contract leaks: 0 incidents</li><li><span class="rule-bullet">▸</span>24-hr issue reporting rate: 100%</li><li><span class="rule-bullet">▸</span>Weekly log submission ≥ 90%</li></ul></div></div><div class="info-box blue"><strong>KPI Operations:</strong> Team KPIs are reported to management quarterly. Probationary staff are evaluated separately on learning completion, deadline compliance, and daily log. Team KPIs apply after position is confirmed.</div>`
-,
-  's3t5': `
-      <div style="background:var(--nav-bg);border-radius:var(--rL);padding:20px 24px;margin-bottom:20px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gold3);letter-spacing:1.5px;margin-bottom:8px">PLATFORM BUSINESS MODEL</div>
-        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Acorn-On 3-Platform Business Models</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:14px">Beyond traditional publishing, Acorn-On connects <strong style="color:var(--gold3)">Publishers (Publisher-On) · Authors (Author-On) · Readers (Reader-On)</strong> in a single ecosystem. Each platform has an independent revenue model, and together they complete the <strong style="color:var(--gold3)">ONE CONTENT · MULTI REVENUES</strong> strategy.</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-          <div style="background:rgba(255,255,255,.07);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:20px;margin-bottom:6px">📋</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">Publisher-On</div><div style="font-size:11px;color:rgba(255,255,255,.65)">Publishing operations<br>SaaS platform (B2B)</div></div>
-          <div style="background:rgba(255,255,255,.07);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:20px;margin-bottom:6px">✍️</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">Author-On</div><div style="font-size:11px;color:rgba(255,255,255,.65)">Publishing service<br>marketplace for authors (B2C)</div></div>
-          <div style="background:rgba(255,255,255,.07);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:20px;margin-bottom:6px">📖</div><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">Reader-On</div><div style="font-size:11px;color:rgba(255,255,255,.65)">Knowledge content<br>distribution hub (B2C)</div></div>
-        </div>
-      </div>
-      <div style="border:2px solid var(--steel);border-radius:var(--rL);overflow:hidden;margin-bottom:18px;">
-        <div style="background:var(--steel);padding:16px 20px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📋</div><div><div style="font-size:16px;font-weight:700;color:#fff">Publisher-On — Publisher Platform</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">B2B SaaS that digitizes the entire publishing operation · For publishing companies</div></div><div style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:var(--r);padding:8px 14px;text-align:center"><div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px">Primary Customer</div><div style="font-size:12px;font-weight:700;color:#fff">Publishers (B2B)</div></div></div>
-        <div style="background:var(--surface);padding:18px 20px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--steel);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💡 VALUE PROPOSITION</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Value for Publishers</div><ul style="list-style:none;padding:0"><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Single system from planning → editing → printing → distribution → settlement</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Real-time P&amp;L (BEP) tracking per title</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Automated release schedule and bottleneck alerts</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Digital management of author contracts, advances, and royalties</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--steel);font-weight:700">▸</span>Data-driven publishing decision support</li></ul></div>
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--gold2);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💰 REVENUE MODEL</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Revenue Streams</div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">① SaaS Subscription Fees</div><div style="font-size:11px;color:var(--text2)">Monthly subscription for external publishers (future B2B expansion)</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">② Internal Efficiency Gains</div><div style="font-size:11px;color:var(--text2)">Reduced Acorn operating costs + faster decision-making</div></div><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">③ Data Monetization (long-term)</div><div style="font-size:11px;color:var(--text2)">Publishing market data analytics as a service</div></div></div>
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--teal);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">⚙️ KEY FEATURES</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Core Features</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📊 P&amp;L Dashboard</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📅 Schedule Mgmt</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📝 Contract Mgmt</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">💳 Settlement</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📦 Inventory</div><div style="background:var(--surface);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--text2);text-align:center">📈 Sales Analytics</div></div></div>
-          </div>
-          <div style="background:var(--s3);border-radius:var(--r);padding:12px 16px;"><div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🔄 Business Flow</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Publisher Signup<br><span style="font-size:10px;color:var(--text3)">incl. Acorn</span></div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Register &amp; manage<br>book projects</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Track editing<br>&amp; production</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Release &amp;<br>distribution sync</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Auto P&amp;L<br>&amp; settlement</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--steel);border-radius:6px;padding:7px 12px;font-size:11px;color:#fff;text-align:center;font-weight:700">Monthly<br>subscription</div></div></div>
-        </div>
-      </div>
-      <div style="border:2px solid var(--purple);border-radius:var(--rL);overflow:hidden;margin-bottom:18px;">
-        <div style="background:var(--purple);padding:16px 20px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">✍️</div><div><div style="font-size:16px;font-weight:700;color:#fff">Author-On — Author Platform</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Publishing service marketplace that turns manuscripts into IP · For authors</div></div><div style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:var(--r);padding:8px 14px;text-align:center"><div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px">Primary Customer</div><div style="font-size:12px;font-weight:700;color:#fff">Authors (B2C)</div></div></div>
-        <div style="background:var(--surface);padding:18px 20px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--purple);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💡 VALUE PROPOSITION</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Value for Authors</div><ul style="list-style:none;padding:0"><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Manuscript-ready publishing: one-stop editing, design, production</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Clear path: self-pub → semi-planned → planned → KDP global</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>100% copyright retained by author</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Access to Acorn's distribution channels</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--purple);font-weight:700">▸</span>Amazon KDP 190+ countries simultaneous publishing</li></ul></div>
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--gold2);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💰 REVENUE MODEL</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Revenue Streams</div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">① Self-Publishing Service Fees</div><div style="font-size:11px;color:var(--text2)">Editing, design, printing package (author bears full cost)</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">② KDP Agency Commission</div><div style="font-size:11px;color:var(--text2)">Basic package KRW 1,350,000 + optional (translation/ads)</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">③ Semi-Planned Investment</div><div style="font-size:11px;color:var(--text2)">Author shares printing cost + revenue split post-publication</div></div><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">④ Platform Subscription (long-term)</div><div style="font-size:11px;color:var(--text2)">Author management, analytics, and channel tools subscription</div></div></div>
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--teal);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">👤 CUSTOMER SEGMENTS</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Author Customer Types</div><div style="margin-bottom:7px"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:3px">🎓 Domestic Experts &amp; Professionals</div><div style="font-size:11px;color:var(--text2)">Professors, PhDs, doctors, lawyers with high KDP interest</div></div><div style="margin-bottom:7px"><div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px">✈ Overseas Dispatch Professionals</div><div style="font-size:11px;color:var(--text2)">Seafarers, polar researchers, government dispatch officials</div></div><div><div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px">💼 Corporate &amp; Institutional Experts</div><div style="font-size:11px;color:var(--text2)">Corporate executives, research cluster professionals</div></div></div>
-          </div>
-          <div style="background:var(--s3);border-radius:var(--r);padding:12px 16px;"><div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🔄 Author Journey</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Author<br>Discovery</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Contract &amp;<br>Account Setup</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Manuscript<br>Editing/Design</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Domestic Release<br>+ KDP Listing</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Sales &amp;<br>Monitoring</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--purple);border-radius:6px;padding:7px 12px;font-size:11px;color:#fff;text-align:center;font-weight:700">Service Fee<br>+ Revenue Split</div></div></div>
-        </div>
-      </div>
-      <div style="border:2px solid var(--ops);border-radius:var(--rL);overflow:hidden;margin-bottom:18px;">
-        <div style="background:var(--ops);padding:16px 20px;display:flex;align-items:center;gap:12px;"><div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📖</div><div><div style="font-size:16px;font-weight:700;color:#fff">Reader-On — Reader Platform</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px">Integrated distribution hub for print, e-book, and audiobook · For readers</div></div><div style="margin-left:auto;background:rgba(255,255,255,.15);border-radius:var(--r);padding:8px 14px;text-align:center"><div style="font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px">Primary Customer</div><div style="font-size:12px;font-weight:700;color:#fff">Readers (B2C) + Channels (B2B)</div></div></div>
-        <div style="background:var(--surface);padding:18px 20px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--ops);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💡 VALUE PROPOSITION</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Value for Readers</div><ul style="list-style:none;padding:0"><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Single platform access for print, e-book, and audiobook</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Expert curation in IT/tech + humanities genres</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Community for direct author-reader interaction</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Personalized recommendations based on reading history</li><li style="font-size:11px;color:var(--text2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--ops);font-weight:700">▸</span>Connected newsletters, lectures, and educational content</li></ul></div>
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--gold2);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">💰 REVENUE MODEL</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">Revenue Streams</div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">① Book Sales Revenue</div><div style="font-size:11px;color:var(--text2)">Direct sales of print books, e-books, and audiobooks</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">② Distributor Settlement</div><div style="font-size:11px;color:var(--text2)">Revenue from Kyobo, Yes24, Aladin, Ridibooks channels</div></div><div style="margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">③ Subscription Service (long-term)</div><div style="font-size:11px;color:var(--text2)">Premium reader membership + unlimited e-book subscription</div></div><div><div style="font-size:11px;font-weight:700;color:var(--gold2);margin-bottom:4px">④ Ad &amp; Commerce (long-term)</div><div style="font-size:11px;color:var(--text2)">Targeted advertising based on reader data + related commerce</div></div></div>
-            <div style="background:var(--s2);border-radius:var(--r);padding:14px;border-left:3px solid var(--teal);"><div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;margin-bottom:8px">📊 KEY METRICS</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">Key Performance Indicators</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Channel Coverage</div><div style="font-size:14px;font-weight:700;color:var(--ops)">4</div><div style="font-size:10px;color:var(--text3)">major bookstores</div></div><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Rating Alert</div><div style="font-size:14px;font-weight:700;color:var(--rose)">3.0↓</div><div style="font-size:10px;color:var(--text3)">5+ cases → alert</div></div><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Data Collection</div><div style="font-size:14px;font-weight:700;color:var(--ops)">Monthly</div><div style="font-size:10px;color:var(--text3)">reader response</div></div><div style="background:var(--surface);border-radius:6px;padding:8px;text-align:center"><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Formats</div><div style="font-size:14px;font-weight:700;color:var(--ops)">3</div><div style="font-size:10px;color:var(--text3)">print/e-book/audio</div></div></div></div>
-          </div>
-          <div style="background:var(--s3);border-radius:var(--r);padding:12px 16px;"><div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:8px">🔄 Reader Journey</div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Book Search<br><span style="font-size:10px;color:var(--text3)">bookstore/platform</span></div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Choose Format<br>print/e-book/audio</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Purchase &amp;<br>Download</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Review &amp;<br>Community</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--text2);text-align:center">Lectures &amp;<br>Newsletters</div><div style="color:var(--gold2);font-size:14px;font-weight:700">→</div><div style="background:var(--ops);border-radius:6px;padding:7px 12px;font-size:11px;color:#fff;text-align:center;font-weight:700">Repeat Purchase<br>+ Subscription</div></div></div>
-        </div>
-      </div>
-      <div style="background:var(--nav-bg);border-radius:var(--rL);padding:20px 24px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gold3);letter-spacing:1.5px;margin-bottom:10px">INTEGRATED ECOSYSTEM</div>
-        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:14px">3-Platform Integrated Ecosystem — ONE CONTENT · MULTI REVENUES</div>
-        <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin-bottom:16px;"><div style="background:rgba(42,64,96,.5);border:1px solid var(--steel);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:16px;margin-bottom:4px">📋</div><div style="font-size:12px;font-weight:700;color:#fff">Publisher-On</div><div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:3px">Optimize publishing operations → improve profitability</div></div><div style="text-align:center;padding:0 4px"><div style="font-size:18px;color:var(--gold3)">⇄</div><div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:2px">book &amp; contract<br>data sync</div></div><div style="background:rgba(74,26,124,.4);border:1px solid var(--purple);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:16px;margin-bottom:4px">✍️</div><div style="font-size:12px;font-weight:700;color:#fff">Author-On</div><div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:3px">Manuscript → IP → multi-channel publishing</div></div><div style="text-align:center;padding:0 4px"><div style="font-size:18px;color:var(--gold3)">⇄</div><div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:2px">book &amp; reader<br>data sync</div></div><div style="background:rgba(10,90,42,.4);border:1px solid var(--ops);border-radius:var(--r);padding:14px;text-align:center"><div style="font-size:16px;margin-bottom:4px">📖</div><div style="font-size:12px;font-weight:700;color:#fff">Reader-On</div><div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:3px">Reader distribution &amp; subscription → recurring revenue</div></div></div>
-        <table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="border-bottom:1px solid rgba(255,255,255,.15)"><th style="padding:8px 10px;color:var(--gold3);text-align:left;font-weight:700">One Manuscript</th><th style="padding:8px 10px;color:rgba(255,255,255,.7);text-align:center">→</th><th style="padding:8px 10px;color:var(--gold3);text-align:left;font-weight:700">6-Channel Expansion</th><th style="padding:8px 10px;color:var(--gold3);text-align:right;font-weight:700">Multi-Layer Revenue</th></tr></thead><tbody><tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:7px 10px;color:rgba(255,255,255,.8)">Print manuscript</td><td style="text-align:center;color:var(--gold3)">→</td><td style="padding:7px 10px;color:rgba(255,255,255,.8)">📚 Print (domestic) + ✍️ E-book (Ridi/Kyobo) + 🌐 KDP (global) + 🎧 Audiobook + 🎓 Lectures + 📧 Newsletter</td><td style="text-align:right;padding:7px 10px;color:var(--gold3);font-weight:700">Recurring + Multi-layer</td></tr></tbody></table>
-      </div>`
 };
 
 function setLang(lang) {
