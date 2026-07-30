@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 기획안 자동 평가 — 에이콘출판사</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script>if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';}</script>
+<style>
+:root{
+  --nav:#07213E;--nav2:#0D3060;--gold:#D4943A;--gold2:#E8B04A;
+  --blue:#1560B8;--blue2:#0A3E84;--teal:#0A7860;--purple:#4A1A7C;
+  --rose:#8A1A2A;
+  --bg:#EAF3FB;--surface:#fff;--border:#D4E4F4;--border2:#B8D0EC;
+  --text:#0A1A2E;--text2:#2A3A4E;--text3:#5A6A7E;
+  --s2:#F0F7FF;--s3:#E3EFF9;--shadow:0 2px 8px rgba(21,96,184,.08);
+  --r:8px;--rL:12px;
+  --ok:#1A7A1A;--ok-bg:#E8F5E8;--tri:#B87030;--tri-bg:#FFF3E0;--ex:#8A1A1A;--ex-bg:#FDE8E8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.topnav{background:var(--nav);height:52px;display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.3);position:sticky;top:0;z-index:100;}
+.topnav-logo{font-size:14px;font-weight:800;color:#fff;}
+.topnav-badge{background:var(--gold);color:var(--nav);font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;}
+.topnav-back{margin-left:auto;font-size:12px;color:rgba(255,255,255,.6);text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,.2);border-radius:6px;transition:.2s;}
+.topnav-back:hover{color:#fff;border-color:rgba(255,255,255,.5);}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
+
+/* ── 업로드 존 ── */
+.upload-zone{background:var(--surface);border:2.5px dashed var(--border2);border-radius:var(--rL);padding:48px 32px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:24px;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue);background:var(--s2);}
+.upload-zone.has-file{border-style:solid;border-color:var(--teal);background:#F0FBF7;}
+.uz-icon{font-size:44px;margin-bottom:14px;}
+.uz-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.uz-sub{font-size:12.5px;color:var(--text3);line-height:1.7;}
+.uz-file{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:8px 16px;background:var(--surface);border:1.5px solid var(--teal);border-radius:8px;font-size:13px;font-weight:600;color:var(--teal);}
+
+/* ── 분석 버튼 ── */
+.analyze-btn{display:block;width:100%;padding:15px;background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border:none;border-radius:var(--rL);font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .15s;box-shadow:0 4px 16px rgba(21,96,184,.25);}
+.analyze-btn:hover{opacity:.88;}
+.analyze-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── 진행 표시 ── */
+.progress-box{display:none;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:24px;margin-top:20px;}
+.progress-box.show{display:block;}
+.prog-step{display:flex;align-items:center;gap:12px;padding:9px 0;font-size:13px;color:var(--text3);}
+.prog-step.active{color:var(--blue);font-weight:700;}
+.prog-step.done{color:var(--teal);}
+.prog-icon{width:24px;height:24px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.prog-step.active .prog-icon{background:var(--blue);color:#fff;animation:pulse 1.2s infinite;}
+.prog-step.done .prog-icon{background:var(--teal);color:#fff;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+/* ── 결과 ── */
+.result{display:none;margin-top:28px;}
+.result.show{display:block;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.res-summary{background:linear-gradient(135deg,var(--nav),var(--nav2));border-radius:var(--rL);padding:26px 28px;color:#fff;margin-bottom:20px;}
+.res-title{font-size:19px;font-weight:800;margin-bottom:4px;}
+.res-meta{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:16px;}
+.res-score-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.res-total{text-align:center;}
+.res-total-num{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;line-height:1;}
+.res-total-label{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;}
+.res-verdict{padding:10px 22px;border-radius:100px;font-size:15px;font-weight:800;}
+.v-approve{background:rgba(26,122,26,.25);color:#7EE787;border:1.5px solid rgba(126,231,135,.4);}
+.v-conditional{background:rgba(184,112,48,.25);color:#FFC078;border:1.5px solid rgba(255,192,120,.4);}
+.v-selfpub{background:rgba(212,148,58,.25);color:#FFD780;border:1.5px solid rgba(255,215,128,.4);}
+.v-reject{background:rgba(138,26,26,.3);color:#FF9090;border:1.5px solid rgba(255,144,144,.4);}
+
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+@media(max-width:800px){.res-grid{grid-template-columns:1fr;}}
+.res-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:20px 22px;}
+.rc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.rc-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;}
+.rc-score{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;}
+.rc-bar{height:7px;background:var(--s3);border-radius:100px;overflow:hidden;margin-bottom:14px;}
+.rc-bar-fill{height:100%;border-radius:100px;transition:width .8s ease;}
+.rc-item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--s3);font-size:12.5px;}
+.rc-item:last-child{border-bottom:none;}
+.rc-mark{font-size:13px;flex-shrink:0;width:20px;text-align:center;font-weight:800;}
+.mark-ok{color:var(--ok);}
+.mark-tri{color:var(--tri);}
+.mark-ex{color:var(--ex);}
+.rc-item-label{font-weight:700;color:var(--text);}
+.rc-item-reason{color:var(--text3);margin-top:2px;line-height:1.6;}
+
+.res-analysis{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:22px 24px;margin-bottom:20px;}
+.ra-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.ra-body{font-size:13.5px;color:var(--text2);line-height:1.9;}
+.ra-body p{margin-bottom:10px;}
+.ra-body strong{color:var(--text);}
+
+.res-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn{padding:11px 22px;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:opacity .15s;}
+.btn:hover{opacity:.85;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-gold{background:var(--gold);color:var(--nav);}
+.btn-ghost{background:none;border:1.5px solid var(--border2);color:var(--text3);}
+
+.err-box{display:none;background:var(--ex-bg);border:1.5px solid #E8B0B0;border-radius:var(--r);padding:14px 18px;font-size:13px;color:var(--ex);margin-top:16px;}
+.err-box.show{display:block;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="topnav-logo">ACORN <span style="color:var(--gold2)">AI</span></span>
+  <span class="topnav-badge">기획안 자동 평가</span>
+  <a href="proposal.html" class="topnav-back">← 기획안 관리로</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- 헤더 -->
+  <div style="margin-bottom:24px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--blue);text-transform:uppercase;margin-bottom:6px;">AI-POWERED PROPOSAL EVALUATION</div>
+    <h1 style="font-size:24px;font-weight:800;margin-bottom:6px;">기획안 원고 자동 평가</h1>
+    <p style="font-size:13.5px;color:var(--text3);line-height:1.7;">기획안 또는 원고 파일(.docx / .pdf)을 업로드하면 AI가 내용을 분석하여<br>에이콘 4대 평가 기준(원고 10% · 저자 50% · 시장 10% · 마케팅 30%)에 따라 자동 평가합니다.</p>
+  </div>
+
+  <!-- 업로드 -->
+  <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+    <div class="uz-icon">📄</div>
+    <div class="uz-title">Word 또는 PDF 파일을 업로드하세요</div>
+    <div class="uz-sub">클릭하거나 파일을 이곳에 드래그하세요<br>.docx / .pdf 형식 · 최대 20MB</div>
+    <div id="uz-file-badge" style="display:none;" class="uz-file"></div>
+  </div>
+  <input type="file" id="file-input" accept=".docx,.pdf" style="display:none;">
+
+  <button class="analyze-btn" id="analyze-btn" onclick="startAnalysis()" disabled>🤖 AI 자동 평가 시작</button>
+
+  <div class="err-box" id="err-box"></div>
+
+  <!-- 진행 -->
+  <div class="progress-box" id="progress-box">
+    <div style="font-size:13px;font-weight:800;margin-bottom:12px;">분석 진행 중…</div>
+    <div class="prog-step" id="ps1"><div class="prog-icon">1</div><span>Word 문서 텍스트 추출</span></div>
+    <div class="prog-step" id="ps2"><div class="prog-icon">2</div><span>원고 구조·분량 분석</span></div>
+    <div class="prog-step" id="ps3"><div class="prog-icon">3</div><span>4대 기준 평가 — AI 또는 키워드 분석 엔진</span></div>
+    <div class="prog-step" id="ps4"><div class="prog-icon">4</div><span>종합 판정 및 리포트 생성</span></div>
+  </div>
+
+  <!-- 결과 -->
+  <div class="result" id="result"></div>
+
+</div>
+<script>
+// ═══════════════════════════════════════════════════════
+// 설정 — proposal.html 과 동일 Supabase
+// ═══════════════════════════════════════════════════════
+const SUPABASE_CONFIG = {
+  enabled: true,
+  url: 'https://edwfljyybrrccbxccvdh.supabase.co',
+  key: 'sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl',
+  table: 'proposals'
+};
+const sbOn = () => SUPABASE_CONFIG.enabled && SUPABASE_CONFIG.url && SUPABASE_CONFIG.key;
+function sbHeaders(extra){
+  return Object.assign({
+    'apikey': SUPABASE_CONFIG.key,
+    'Authorization': 'Bearer ' + SUPABASE_CONFIG.key,
+    'Content-Type': 'application/json'
+  }, extra || {});
+}
+
+// ═══════════════════════════════════════════════════════
+// 평가 기준 (proposal.html CRITERIA 동일)
+// ═══════════════════════════════════════════════════════
+const WEIGHTS = { manuscript:0.10, author:0.50, market:0.10, marketing:0.30 };
+const CRITERIA_META = {
+  manuscript:{ label:'원고 분석',       icon:'📄', color:'#1560B8',
+    items:{ ms1:'완성도·분량', ms2:'차별성·독창성', ms3:'독자 가치·유용성', ms4:'문장·가독성', ms5:'구성·논리성' } },
+  author:{     label:'저자 분석',       icon:'👤', color:'#4A1A7C',
+    items:{ au1:'전문성·현장 경력', au2:'강의·교육 이력', au3:'SNS·온라인 채널', au4:'커뮤니티·네트워크', au5:'협업·소통 가능성' } },
+  market:{     label:'시장 분석',       icon:'📊', color:'#0A7860',
+    items:{ mk1:'경쟁 도서 현황', mk2:'독자 수요·타깃', mk3:'시장 트렌드·시의성', mk4:'KDP 글로벌 가능성' } },
+  marketing:{  label:'마케팅 지원 분석', icon:'📢', color:'#B87030',
+    items:{ ma1:'강의·스터디 연계', ma2:'SNS·유튜브 홍보', ma3:'단체구매·기업 연계', ma4:'마케팅 예산·의지' } },
+};
+const DEC_MAP = {
+  approve:     { label:'기획출판 승인', cls:'v-approve' },
+  conditional: { label:'조건부 승인',   cls:'v-conditional' },
+  selfpub:     { label:'자비출판 유도', cls:'v-selfpub' },
+  reject:      { label:'기각',          cls:'v-reject' },
+};
+
+// ═══════════════════════════════════════════════════════
+// 파일 업로드 처리
+// ═══════════════════════════════════════════════════════
+let UPLOADED_FILE = null;
+let EXTRACTED_TEXT = '';
+
+const zone  = document.getElementById('upload-zone');
+const input = document.getElementById('file-input');
+
+input.addEventListener('change', e => handleFile(e.target.files[0]));
+zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('drag');
+  handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  const fn = file.name.toLowerCase();
+  if (!fn.endsWith('.docx') && !fn.endsWith('.pdf')) {
+    showErr('❌ .docx 또는 .pdf 파일만 업로드할 수 있습니다.');
+    return;
+  }
+  if (file.size > 20 * 1024 * 1024) {
+    showErr('❌ 파일 크기가 20MB를 초과합니다.');
+    return;
+  }
+  UPLOADED_FILE = file;
+  hideErr();
+  zone.classList.add('has-file');
+  const badge = document.getElementById('uz-file-badge');
+  badge.style.display = 'inline-flex';
+  badge.textContent = '📎 ' + file.name + ' (' + (file.size/1024).toFixed(0) + 'KB)';
+  document.getElementById('analyze-btn').disabled = false;
+}
+
+function showErr(msg) {
+  const el = document.getElementById('err-box');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hideErr() { document.getElementById('err-box').classList.remove('show'); }
+
+// ═══════════════════════════════════════════════════════
+// 분석 파이프라인
+// ═══════════════════════════════════════════════════════
+function setStep(n, state) {
+  const el = document.getElementById('ps' + n);
+  if (!el) return;
+  el.classList.remove('active','done');
+  if (state) el.classList.add(state);
+  if (state === 'done') el.querySelector('.prog-icon').textContent = '✓';
+}
+
+async function startAnalysis() {
+  if (!UPLOADED_FILE) return;
+  hideErr();
+  document.getElementById('analyze-btn').disabled = true;
+  document.getElementById('progress-box').classList.add('show');
+  document.getElementById('result').classList.remove('show');
+
+  try {
+    // ── STEP 1: 텍스트 추출 (docx=mammoth / pdf=pdf.js) ──
+    setStep(1,'active');
+    const arrayBuffer = await UPLOADED_FILE.arrayBuffer();
+    const fname = UPLOADED_FILE.name.toLowerCase();
+    if (fname.endsWith('.pdf')) {
+      EXTRACTED_TEXT = await extractPdfText(arrayBuffer);
+    } else {
+      const mm = await mammoth.extractRawText({ arrayBuffer });
+      EXTRACTED_TEXT = (mm.value || '').trim();
+    }
+    if (EXTRACTED_TEXT.length < 200) {
+      throw new Error('추출된 텍스트가 너무 짧습니다 (200자 미만). 스캔 이미지 PDF인 경우 텍스트 추출이 불가합니다.');
+    }
+    setStep(1,'done');
+
+    // ── STEP 2: 구조 분석 (로컬) ──
+    setStep(2,'active');
+    const structure = analyzeStructure(EXTRACTED_TEXT);
+    await sleep(400);
+    setStep(2,'done');
+
+    // ── STEP 3: AI 평가 (실패 시 규칙 기반 로컬 엔진 자동 전환) ──
+    setStep(3,'active');
+    let evaluation;
+    try {
+      evaluation = await evaluateWithAI(EXTRACTED_TEXT, structure);
+      evaluation.engine = 'ai';
+    } catch(apiErr) {
+      console.warn('[AI 평가 불가 — 로컬 엔진 전환]', apiErr.message);
+      evaluation = localEvaluate(EXTRACTED_TEXT, structure);
+    }
+    setStep(3,'done');
+
+    // ── STEP 4: 리포트 렌더 ──
+    setStep(4,'active');
+    renderResult(evaluation, structure);
+    await sleep(300);
+    setStep(4,'done');
+
+    document.getElementById('result').classList.add('show');
+    document.getElementById('result').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  } catch(err) {
+    console.error(err);
+    showErr('❌ 분석 실패: ' + (err.message || err));
+  } finally {
+    document.getElementById('analyze-btn').disabled = false;
+  }
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+// ═══════════════════════════════════════════════════════
+// PDF 텍스트 추출 (pdf.js)
+// ═══════════════════════════════════════════════════════
+async function extractPdfText(arrayBuffer) {
+  if (typeof pdfjsLib === 'undefined') {
+    throw new Error('PDF 라이브러리 로드 실패. 네트워크 연결을 확인해주세요.');
+  }
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const maxPages = Math.min(pdf.numPages, 200); // 최대 200페이지
+  let text = '';
+  for (let i = 1; i <= maxPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items.map(it => it.str).join(' ');
+    text += pageText + '\n\n';
+  }
+  return text.trim();
+}
+
+// ═══════════════════════════════════════════════════════
+// 로컬 구조 분석
+// ═══════════════════════════════════════════════════════
+function analyzeStructure(text) {
+  const chars   = text.length;
+  const words   = text.split(/\s+/).length;
+  // 원고 페이지 추정: 한글 기준 약 700자/페이지
+  const estPages = Math.round(chars / 700);
+  // 목차/챕터 추정
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const chapterPatterns = lines.filter(l =>
+    /^(제?\s?\d+\s?[장부편절]|chapter\s*\d+|CHAPTER\s*\d+|\d+\.\s+\S)/i.test(l) && l.length < 60
+  );
+  return {
+    chars, words, estPages,
+    lineCount: lines.length,
+    chapterCount: chapterPatterns.length,
+    chapters: chapterPatterns.slice(0, 20),
+    preview: text.slice(0, 300),
+  };
+}
+
+
+// ═══════════════════════════════════════════════════════
+// 규칙 기반 로컬 평가 엔진 (AI API 불가 환경 fallback)
+// ═══════════════════════════════════════════════════════
+function localEvaluate(text, structure) {
+  const T = text; // 원본
+  const L = text.toLowerCase();
+
+  // ── 유틸: 키워드 히트 수 ──
+  function hits(keywords) {
+    let n = 0;
+    keywords.forEach(k => {
+      const re = new RegExp(k, 'gi');
+      const m = T.match(re);
+      if (m) n += m.length;
+    });
+    return n;
+  }
+  function has(keywords) { return hits(keywords) > 0; }
+  // 마크 결정: 히트 수 기준
+  function markBy(n, okAt, triAt) { return n >= okAt ? 'ok' : n >= triAt ? 'tri' : 'ex'; }
+
+  // ── 제목/저자 추출 ──
+  let title = '';
+  const bracketMatch = T.match(/『(.+?)』/) || T.match(/《(.+?)》/) || T.match(/<(.{5,50}?)>/);
+  const titleMatch = bracketMatch || T.match(/1안\s*[::]\s*(.+)/) || T.match(/제목\s*[::]?\s*(.+)/) || T.match(/예상 제목[^\n]*[::]?\s*(.+)/);
+  if (titleMatch) title = titleMatch[1].trim().split('\n')[0].slice(0, 60);
+  if (!title) {
+    const firstLines = T.split('\n').map(s=>s.trim()).filter(s=>s.length>5 && s.length<60);
+    title = firstLines[0] || '(제목 미상)';
+  }
+  let author = '미상';
+  const am = T.match(/작성자\s*[::]\s*(\S+)/) || T.match(/저자\s*[::]\s*(\S+)/) || T.match(/성명\s*[::]\s*(\S+)/);
+  if (am) author = am[1].trim();
+
+  // ── 분야 추정 ──
+  const GENRES = [
+    ['AI/ML',      ['AI','머신러닝','딥러닝','LLM','인공지능','GPT']],
+    ['데이터',      ['데이터','CDC','빅데이터','Kafka','스트리밍','ETL','분석','GoldenGate','DB','데이터베이스']],
+    ['백엔드',      ['백엔드','서버','Spring','Node','API','MSA','마이크로서비스']],
+    ['클라우드/인프라',['클라우드','쿠버네티스','도커','AWS','인프라','DevOps']],
+    ['보안',        ['보안','해킹','침투','암호']],
+    ['프론트엔드',   ['프론트','React','Vue','자바스크립트','UI']],
+  ];
+  let genre = 'IT 일반';
+  let best = 0;
+  GENRES.forEach(([g, kws]) => {
+    const n = hits(kws);
+    if (n > best) { best = n; genre = g; }
+  });
+
+  const scores = { manuscript:{}, author:{}, market:{}, marketing:{} };
+  const reasons = {};
+
+  // ═══ 1) 원고 분석 ═══
+  // ms1 완성도·분량
+  const pageMatch = T.match(/(\d{3,4})\s*(페이지|쪽|p\b|P\b)/);
+  const estP = pageMatch ? parseInt(pageMatch[1]) : structure.estPages;
+  if (estP >= 250 && estP <= 600) {
+    scores.manuscript.ms1 = has(['완성','탈고','집필 완료']) ? 'ok' : 'tri';
+    reasons.ms1 = '예상 분량 ' + estP + 'p — 적정 범위(250~600p)' + (scores.manuscript.ms1==='tri' ? ', 집필 계획 단계' : '');
+  } else if (estP > 0) {
+    scores.manuscript.ms1 = 'tri';
+    reasons.ms1 = '예상 분량 ' + estP + 'p — 적정 범위 벗어남, 조정 협의 필요';
+  } else {
+    scores.manuscript.ms1 = 'ex';
+    reasons.ms1 = '분량 정보 없음';
+  }
+  // ms2 차별성
+  const diffN = hits(['차별','유일','국내 최초','기존 도서와','다른 점','없다','전무']);
+  const compSection = has(['경쟁 도서','경쟁도서','유사 도서','유사도서']);
+  scores.manuscript.ms2 = compSection && diffN >= 2 ? 'ok' : (compSection || diffN >= 1) ? 'tri' : 'ex';
+  reasons.ms2 = compSection ? '경쟁 도서 분석 포함, 차별점 언급 ' + diffN + '회' : '경쟁 도서 분석 없음';
+  // ms3 독자 가치
+  const valN = hits(['실습','예제','코드','실무','현장','샘플','스크립트','데모','활용']);
+  scores.manuscript.ms3 = markBy(valN, 8, 3);
+  reasons.ms3 = '실습·예제·실무 관련 언급 ' + valN + '회' + (valN>=8?' — 실용성 높음':valN>=3?' — 보통':' — 부족');
+  // ms4 문장·가독성 (계획서 단계 판단 한계)
+  const sentences = T.split(/[.。!?\n]/).filter(s=>s.trim().length>10);
+  const avgLen = sentences.length ? Math.round(sentences.reduce((a,s)=>a+s.length,0)/sentences.length) : 0;
+  scores.manuscript.ms4 = avgLen > 0 && avgLen < 90 ? 'tri' : 'ex';
+  reasons.ms4 = '평균 문장 길이 ' + avgLen + '자 — 원고 본문 확인 전 잠정 평가';
+  // ms5 구성·논리성
+  const tocN = hits(['목차','챕터','장\\b','부\\b','파트']);
+  scores.manuscript.ms5 = structure.chapterCount >= 8 ? 'ok' : structure.chapterCount >= 3 ? 'tri' : (tocN >= 3 ? 'tri' : 'ex');
+  reasons.ms5 = '챕터 구조 ' + structure.chapterCount + '개 감지' + (structure.chapterCount>=8?' — 체계적':'');
+
+  // ═══ 2) 저자 분석 ═══
+  // au1 전문성
+  const expN = hits(['경력','년차','현직','엔지니어','컨설턴트','수행','프로젝트','근무','재직','전문가','약력']);
+  const yearMatch = T.match(/(\d{1,2})\s*년\s*(차|이상|간|경력)/);
+  scores.author.au1 = (yearMatch && parseInt(yearMatch[1]) >= 5) || expN >= 8 ? 'ok' : expN >= 3 ? 'tri' : 'ex';
+  reasons.au1 = (yearMatch ? yearMatch[0] + ' 언급, ' : '') + '경력 관련 표현 ' + expN + '회';
+  // au2 강의
+  const lecN = hits(['강의','강사','교육','세미나','웨비나','워크숍','특강','수강']);
+  scores.author.au2 = markBy(lecN, 5, 2);
+  reasons.au2 = '강의·교육 관련 언급 ' + lecN + '회' + (lecN>=5?' — 교육 경험 풍부':'');
+  // au3 SNS
+  const snsN = hits(['유튜브','YouTube','블로그','팔로워','구독자','링크드인','LinkedIn','SNS','인스타']);
+  scores.author.au3 = markBy(snsN, 4, 1);
+  reasons.au3 = snsN > 0 ? 'SNS·채널 언급 ' + snsN + '회 — 규모 확인 필요' : '문서에 SNS 채널 정보 없음';
+  // au4 커뮤니티
+  const commN = hits(['커뮤니티','학회','협회','오픈소스','GitHub','깃허브','파트너','고객사','네트워크','사용자 그룹']);
+  scores.author.au4 = markBy(commN, 4, 1);
+  reasons.au4 = commN > 0 ? '커뮤니티·네트워크 언급 ' + commN + '회' : '커뮤니티 연결 정보 없음';
+  // au5 협업 (연락처 기재 여부로 잠정)
+  const contactOk = has(['이메일','@','연락처','전화']);
+  scores.author.au5 = contactOk ? 'tri' : 'ex';
+  reasons.au5 = contactOk ? '연락처 기재됨 — 실제 소통은 미팅으로 확인 필요' : '연락처 정보 없음';
+
+  // ═══ 3) 시장 분석 ═══
+  // mk1 경쟁
+  const fewComp = has(['없다','전무','유일','최초','절판','오래된']);
+  scores.market.mk1 = compSection ? (fewComp ? 'ok' : 'tri') : 'ex';
+  reasons.mk1 = compSection ? '경쟁 도서 분석 있음' + (fewComp?' — 틈새 시장 주장':'') : '경쟁 도서 분석 없음';
+  // mk2 타깃
+  const tgtSection = has(['타깃','타겟','독자층','대상 독자','독자 대상']);
+  const tgtDetail = hits(['입문자','초급','중급','고급','년차','개발자','엔지니어','DBA','관리자','학생','실무자']);
+  scores.market.mk2 = tgtSection && tgtDetail >= 3 ? 'ok' : tgtSection ? 'tri' : 'ex';
+  reasons.mk2 = tgtSection ? '타깃 독자 정의됨, 세부 구분 ' + tgtDetail + '회 언급' : '타깃 독자 정의 없음';
+  // mk3 트렌드
+  const trendN = hits(['AI','LLM','실시간','클라우드','CDC','스트리밍','빅데이터','MSA','자동화','최신','트렌드','동향']);
+  scores.market.mk3 = markBy(trendN, 6, 2);
+  reasons.mk3 = '트렌드 키워드 ' + trendN + '회' + (trendN>=6?' — 시의성 높음':'');
+  // mk4 KDP
+  const glbN = hits(['글로벌','영문','영어','해외','번역','KDP','Amazon','아마존']);
+  scores.market.mk4 = markBy(glbN, 3, 1);
+  reasons.mk4 = glbN > 0 ? '글로벌 관련 언급 ' + glbN + '회' : '글로벌 확장 언급 없음';
+
+  // ═══ 4) 마케팅 분석 ═══
+  const mktSection = has(['마케팅 방안','마케팅 계획','홍보 방안','홍보 계획']);
+  // ma1 강의 연계
+  const ma1N = hits(['강의','워크숍','교재','수강생','교육기관','대학','부트캠프']);
+  scores.marketing.ma1 = mktSection && ma1N >= 4 ? 'ok' : ma1N >= 2 ? 'tri' : 'ex';
+  reasons.ma1 = '강의 연계 관련 ' + ma1N + '회 언급' + (mktSection?' (마케팅 방안 섹션 有)':'');
+  // ma2 SNS 홍보
+  const ma2N = hits(['연재','영상','유튜브','웨비나','데모','시리즈','콘텐츠','공개','블로그']);
+  scores.marketing.ma2 = mktSection && ma2N >= 4 ? 'ok' : ma2N >= 2 ? 'tri' : 'ex';
+  reasons.ma2 = 'SNS·콘텐츠 홍보 관련 ' + ma2N + '회 언급';
+  // ma3 단체구매
+  const ma3N = hits(['고객사','파트너','기업','단체','PoC','기관','온보딩','제안']);
+  scores.marketing.ma3 = markBy(ma3N, 5, 2);
+  reasons.ma3 = '기업·단체 연계 관련 ' + ma3N + '회 언급' + (ma3N>=5?' — B2B 채널 가능성':'');
+  // ma4 예산·의지
+  const ma4N = hits(['비용 분담','마케팅 비용','자비','예산','부담 의향']);
+  scores.marketing.ma4 = ma4N >= 2 ? 'tri' : 'ex';
+  reasons.ma4 = ma4N > 0 ? '비용 관련 언급 있음 — 협의 필요' : '마케팅 예산·분담 언급 없음 (일반적)';
+
+  // ═══ 요약·의견 생성 ═══
+  const total = computeTotal(scores);
+  const conceptMatch = T.match(/핵심 콘셉트[^\n]*\n+([\s\S]{50,300}?)\n\n/);
+  const concept = conceptMatch ? conceptMatch[1].trim().split('\n')[0] : '';
+
+  const catP = {};
+  Object.keys(CRITERIA_META).forEach(c => {
+    catP[c] = catPct(scores[c], Object.keys(CRITERIA_META[c].items).length);
+  });
+
+  const strengths = [];
+  const weaknesses = [];
+  if (catP.manuscript >= 60) strengths.push('원고 기획의 완성도와 구성이 체계적입니다');
+  else weaknesses.push('원고 완성도·구성 보완이 필요합니다');
+  if (catP.author >= 60) strengths.push('저자의 전문성과 채널 기반이 확인됩니다');
+  else if (catP.author >= 35) weaknesses.push('저자 SNS·커뮤니티 채널 규모 확인이 필요합니다');
+  else weaknesses.push('저자 채널 정보가 부족해 초도 판매 동력 검증이 필요합니다');
+  if (catP.market >= 60) strengths.push('시장 타깃과 시의성이 명확합니다');
+  else weaknesses.push('시장·경쟁 분석 구체화가 필요합니다');
+  if (catP.marketing >= 60) strengths.push('저자 주도 마케팅 계획이 구체적입니다');
+  else if (catP.marketing >= 35) weaknesses.push('마케팅 계획의 실행 가능성 검증이 필요합니다');
+  else weaknesses.push('마케팅 계획이 없어 BEP 달성 경로가 불확실합니다');
+
+  const verdict = verdictOf(total);
+  const recMap = {
+    approve: '4개 분석 지표가 고르게 양호하여 기획출판 승인을 권고합니다. 저자 미팅에서 세부 일정과 마케팅 실행안을 확정하세요.',
+    conditional: '핵심 지표는 긍정적이나 일부 확인 사항이 있습니다. 저자 미팅을 통해 채널 규모·마케팅 실행안을 검증한 후 조건부 승인을 권고합니다.',
+    selfpub: '원고 자체의 가치는 있으나 저자 채널·마케팅 기반이 약해 기획출판 리스크가 큽니다. 자비출판 또는 반기획 트랙 협의를 권고합니다.',
+    reject: '현재 상태로는 기획출판 기준에 미달합니다. 저자 채널 구축 후 재제안을 안내하거나 기각을 권고합니다.',
+  };
+
+  return {
+    engine: 'local',
+    title, author, genre,
+    scores, reasons,
+    summary: (concept ? concept + ' ' : '') +
+      '전체 ' + structure.chars.toLocaleString() + '자(' + (pageMatch ? '저자 제시 ' + estP + 'p' : '추정 ' + estP + 'p') + ') 규모의 ' + genre + ' 분야 기획안입니다. ' +
+      '문서 내 키워드 패턴 분석 기준으로 원고 ' + catP.manuscript + '% · 저자 ' + catP.author + '% · 시장 ' + catP.market + '% · 마케팅 ' + catP.marketing + '%로 평가되었습니다.',
+    strengths: strengths.join('. ') + '.',
+    weaknesses: weaknesses.join('. ') + '.',
+    recommendation: recMap[verdict],
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+// Claude API 평가
+// ═══════════════════════════════════════════════════════
+async function evaluateWithAI(text, structure) {
+  // 텍스트가 길면 앞부분 + 중간 + 끝부분 샘플링
+  let sample = text;
+  const MAX = 28000;
+  if (text.length > MAX) {
+    const third = Math.floor(MAX / 3);
+    sample = text.slice(0, third) +
+      '\n\n[... 중략 ...]\n\n' + text.slice(Math.floor(text.length/2) - Math.floor(third/2), Math.floor(text.length/2) + Math.floor(third/2)) +
+      '\n\n[... 중략 ...]\n\n' + text.slice(-third);
+  }
+
+  const prompt = `당신은 한국의 중소 IT 전문 출판사 '에이콘출판사'의 시니어 편집자입니다.
+아래 기획안/원고를 읽고 출판 여부를 평가해주세요.
+
+## 평가 기준 (에이콘 4대 분석 · 가중치)
+1. **원고 분석 (가중치 10%)** — 항목: ms1 완성도·분량(250~600p 적정) / ms2 차별성·독창성 / ms3 독자 가치·유용성 / ms4 문장·가독성 / ms5 구성·논리성
+2. **저자 분석 (가중치 50%)** — 항목: au1 전문성·현장경력 / au2 강의·교육이력 / au3 SNS·온라인채널(팔로워 3천↑ 기준) / au4 커뮤니티·네트워크 / au5 협업·소통 가능성
+3. **시장 분석 (가중치 10%)** — 항목: mk1 경쟁도서 현황 / mk2 독자수요·타깃 명확성 / mk3 트렌드·시의성 / mk4 KDP 글로벌 가능성
+4. **마케팅 지원 분석 (가중치 30%)** — 항목: ma1 강의·스터디 연계 / ma2 SNS·유튜브 홍보 계획 / ma3 단체구매·기업 연계 / ma4 마케팅 예산·의지
+
+## 채점 방식
+- 각 항목: "ok"(충족·2점) / "tri"(부분충족·1점) / "ex"(미흡·0점)
+- 문서에 해당 정보가 없으면 "ex" 처리하고 사유에 "문서에 정보 없음"이라고 명시
+- 저자 정보(경력·SNS·강의)가 문서에 없으면 저자 분석 항목들은 "ex"로 처리
+
+## 문서 구조 정보 (시스템 분석)
+- 전체 분량: ${structure.chars.toLocaleString()}자 (예상 ${structure.estPages}페이지)
+- 감지된 챕터 수: ${structure.chapterCount}개
+
+## 평가 대상 문서
+${sample}
+
+## 출력 형식
+반드시 아래 JSON 형식으로만 응답하세요. 마크다운 백틱 없이 순수 JSON만 출력하세요.
+{
+  "title": "문서에서 추출한 도서 제목 (없으면 내용 기반 추정 제목)",
+  "author": "문서에서 추출한 저자명 (없으면 '미상')",
+  "genre": "추정 분야 (예: AI/ML, 백엔드, 데이터, 보안 등)",
+  "scores": {
+    "manuscript": {"ms1":"ok|tri|ex","ms2":"...","ms3":"...","ms4":"...","ms5":"..."},
+    "author":     {"au1":"...","au2":"...","au3":"...","au4":"...","au5":"..."},
+    "market":     {"mk1":"...","mk2":"...","mk3":"...","mk4":"..."},
+    "marketing":  {"ma1":"...","ma2":"...","ma3":"...","ma4":"..."}
+  },
+  "reasons": {
+    "ms1":"한 줄 평가 사유","ms2":"...","ms3":"...","ms4":"...","ms5":"...",
+    "au1":"...","au2":"...","au3":"...","au4":"...","au5":"...",
+    "mk1":"...","mk2":"...","mk3":"...","mk4":"...",
+    "ma1":"...","ma2":"...","ma3":"...","ma4":"..."
+  },
+  "summary": "기획안 핵심 요약 3~4문장. 무엇을 다루는 책이고 누구를 위한 것인지.",
+  "strengths": "강점 2~3가지 (문장으로)",
+  "weaknesses": "약점·보완 필요사항 2~3가지 (문장으로)",
+  "recommendation": "편집자 관점의 종합 의견 2~3문장. 승인/조건부/자비출판/기각 중 무엇을 왜 권하는지."
+}`;
+
+  const ctrl = new AbortController();
+  setTimeout(() => ctrl.abort(), 12000);
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    }),
+    signal: ctrl.signal
+  });
+
+  if (!response.ok) {
+    throw new Error('AI 평가 요청 실패 (HTTP ' + response.status + ')');
+  }
+  const data = await response.json();
+  const raw = (data.content || []).map(c => c.text || '').join('').trim();
+  const clean = raw.replace(/```json|```/g, '').trim();
+  let parsed;
+  try { parsed = JSON.parse(clean); }
+  catch(e) {
+    // JSON 파싱 실패 시 중괄호 범위 추출 재시도
+    const m = clean.match(/\{[\s\S]*\}/);
+    if (m) parsed = JSON.parse(m[0]);
+    else throw new Error('AI 응답 파싱 실패');
+  }
+  return parsed;
+}
+
+// ═══════════════════════════════════════════════════════
+// 점수 계산 (proposal.html 로직 동일)
+// ═══════════════════════════════════════════════════════
+const MARK_SCORE = { ok:2, tri:1, ex:0 };
+function catPct(scoreObj, itemCount) {
+  if (!scoreObj) return 0;
+  let sum = 0;
+  Object.values(scoreObj).forEach(v => { sum += MARK_SCORE[v] ?? 0; });
+  return Math.round(sum / (itemCount * 2) * 100);
+}
+function computeTotal(scores) {
+  let total = 0;
+  Object.keys(WEIGHTS).forEach(cat => {
+    const items = Object.keys(CRITERIA_META[cat].items).length;
+    const pct = catPct(scores[cat], items);
+    total += pct * WEIGHTS[cat];
+  });
+  return Math.round(total);
+}
+function verdictOf(total) {
+  if (total >= 70) return 'approve';
+  if (total >= 55) return 'conditional';
+  if (total >= 40) return 'selfpub';
+  return 'reject';
+}
+
+// ═══════════════════════════════════════════════════════
+// 결과 렌더링
+// ═══════════════════════════════════════════════════════
+let LAST_EVAL = null;
+
+function renderResult(ev, structure) {
+  LAST_EVAL = ev;
+  const total   = computeTotal(ev.scores);
+  const verdict = verdictOf(total);
+  const dm      = DEC_MAP[verdict];
+  const MARKS   = { ok:'◎', tri:'△', ex:'✕' };
+  const MARK_CLS= { ok:'mark-ok', tri:'mark-tri', ex:'mark-ex' };
+
+  const cards = Object.keys(CRITERIA_META).map(catId => {
+    const meta  = CRITERIA_META[catId];
+    const items = Object.keys(meta.items).length;
+    const pct   = catPct(ev.scores[catId], items);
+    const rows = Object.entries(meta.items).map(([iid, label]) => {
+      const mark = ev.scores[catId]?.[iid] || 'ex';
+      const reason = ev.reasons?.[iid] || '';
+      return '<div class="rc-item">' +
+        '<span class="rc-mark ' + MARK_CLS[mark] + '">' + MARKS[mark] + '</span>' +
+        '<div><div class="rc-item-label">' + label + '</div>' +
+        (reason ? '<div class="rc-item-reason">' + reason + '</div>' : '') +
+        '</div></div>';
+    }).join('');
+    return '<div class="res-card">' +
+      '<div class="rc-head">' +
+        '<div class="rc-title"><span>' + meta.icon + '</span><span>' + meta.label + '</span>' +
+          '<span style="font-size:10px;color:var(--text3);font-weight:600;">가중치 ' + Math.round(WEIGHTS[catId]*100) + '%</span></div>' +
+        '<div class="rc-score" style="color:' + meta.color + '">' + pct + '%</div>' +
+      '</div>' +
+      '<div class="rc-bar"><div class="rc-bar-fill" style="width:' + pct + '%;background:' + meta.color + ';"></div></div>' +
+      rows +
+    '</div>';
+  }).join('');
+
+  document.getElementById('result').innerHTML =
+    '<div class="res-summary">' +
+      '<div class="res-title">📖 ' + (ev.title || '(제목 미상)') + '</div>' +
+      '<div class="res-meta">저자: ' + (ev.author || '미상') + ' · 분야: ' + (ev.genre || '-') +
+        ' · 분량: ' + structure.chars.toLocaleString() + '자 (약 ' + structure.estPages + 'p) · 챕터 ' + structure.chapterCount + '개 감지 · ' +
+        (ev.engine === 'ai' ? '🤖 AI 평가' : '📐 키워드 분석 엔진') + '</div>' +
+      '<div class="res-score-row">' +
+        '<div class="res-total"><div class="res-total-num">' + total + '<span style="font-size:18px;opacity:.6">점</span></div>' +
+          '<div class="res-total-label">가중 종합 점수</div></div>' +
+        '<div class="res-verdict ' + dm.cls + '">' + dm.label + '</div>' +
+        '<div style="font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.7;">70점↑ 승인 · 55~69 조건부<br>40~54 자비출판 유도 · 40 미만 기각</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="res-analysis">' +
+      '<div class="ra-title">📋 기획안 요약</div>' +
+      '<div class="ra-body"><p>' + (ev.summary || '') + '</p></div>' +
+    '</div>' +
+
+    '<div class="res-grid">' + cards + '</div>' +
+
+    '<div class="res-grid">' +
+      '<div class="res-analysis" style="margin:0;">' +
+        '<div class="ra-title" style="color:var(--ok);">💪 강점</div>' +
+        '<div class="ra-body">' + (ev.strengths || '') + '</div>' +
+      '</div>' +
+      '<div class="res-analysis" style="margin:0;">' +
+        '<div class="ra-title" style="color:var(--tri);">⚠️ 보완 필요</div>' +
+        '<div class="ra-body">' + (ev.weaknesses || '') + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="res-analysis" style="border-left:4px solid var(--gold);">' +
+      '<div class="ra-title">🎯 편집자 종합 의견 (AI)</div>' +
+      '<div class="ra-body"><p>' + (ev.recommendation || '') + '</p></div>' +
+      '<div style="margin-top:10px;font-size:11px;color:var(--text3);">※ 본 평가는 1차 자동 평가입니다(AI 연결 불가 시 키워드 패턴 분석으로 자동 전환). 최종 판정은 반드시 편집자 검토를 거쳐 확정하세요. 특히 저자 분석(가중치 50%)은 문서 외 정보 확인이 필요합니다.</div>' +
+    '</div>' +
+
+    '<div class="res-actions">' +
+      '<button class="btn btn-primary" onclick="saveToProposals()">💾 기획안 관리에 저장</button>' +
+      '<button class="btn btn-gold" onclick="downloadReport()">📥 평가 리포트 다운로드</button>' +
+      '<button class="btn btn-ghost" onclick="location.reload()">↺ 새 평가</button>' +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════════════════
+// Supabase 저장 (proposals 테이블 — proposal.html 과 호환)
+// ═══════════════════════════════════════════════════════
+async function saveToProposals() {
+  if (!LAST_EVAL) return;
+  const ev = LAST_EVAL;
+  const total = computeTotal(ev.scores);
+  const p = {
+    id: 'ai_' + Date.now().toString(36),
+    title: ev.title || '(제목 미상)',
+    author: ev.author || '미상',
+    genre: ev.genre || '',
+    scores: ev.scores,
+    decision: verdictOf(total),
+    date: new Date().toISOString().slice(0,10),
+    memo: '[AI 자동 평가] ' + (ev.recommendation || '') +
+      '\n\n■ 요약: ' + (ev.summary||'') +
+      '\n■ 강점: ' + (ev.strengths||'') +
+      '\n■ 보완: ' + (ev.weaknesses||''),
+    created_at: new Date().toISOString(),
+  };
+
+  // localStorage (proposal.html 이 읽는 키와 병합)
+  try {
+    const KEY = 'proposals_v3';
+    const all = JSON.parse(localStorage.getItem(KEY) || '[]');
+    all.unshift(p);
+    localStorage.setItem(KEY, JSON.stringify(all));
+  } catch(e) {}
+
+  // Supabase
+  if (sbOn()) {
+    try {
+      const ctrl = new AbortController();
+      setTimeout(() => ctrl.abort(), 4000);
+      await fetch(SUPABASE_CONFIG.url + '/rest/v1/' + SUPABASE_CONFIG.table, {
+        method: 'POST',
+        headers: sbHeaders({ 'Prefer':'resolution=merge-duplicates,return=minimal' }),
+        body: JSON.stringify(p),
+        signal: ctrl.signal,
+      });
+    } catch(e) { /* localStorage 저장됨 */ }
+  }
+
+  // 알림 큐 (index.html 알림 시스템 연동)
+  try {
+    localStorage.setItem('notif_queue', JSON.stringify({
+      source:'acornon', type:'proposal',
+      title: p.title, actor:'AI 자동 평가', ts: Date.now()
+    }));
+  } catch(e) {}
+
+  alert('✅ 기획안 관리에 저장되었습니다.\n제목: ' + p.title + '\n판정: ' + DEC_MAP[p.decision].label);
+}
+
+// ═══════════════════════════════════════════════════════
+// 리포트 다운로드 (텍스트)
+// ═══════════════════════════════════════════════════════
+function downloadReport() {
+  if (!LAST_EVAL) return;
+  const ev = LAST_EVAL;
+  const total = computeTotal(ev.scores);
+  const dm = DEC_MAP[verdictOf(total)];
+  const MARKS = { ok:'◎ 충족', tri:'△ 부분', ex:'✕ 미흡' };
+
+  let txt = '═══════════════════════════════════════\n';
+  txt += ' 에이콘출판사 AI 기획안 자동 평가 리포트\n';
+  txt += '═══════════════════════════════════════\n\n';
+  txt += '도서 제목: ' + (ev.title||'-') + '\n';
+  txt += '저자: ' + (ev.author||'-') + ' · 분야: ' + (ev.genre||'-') + '\n';
+  txt += '평가일: ' + new Date().toLocaleDateString('ko-KR') + '\n\n';
+  txt += '■ 종합 점수: ' + total + '점 → ' + dm.label + '\n\n';
+  txt += '■ 기획안 요약\n' + (ev.summary||'') + '\n\n';
+
+  Object.keys(CRITERIA_META).forEach(catId => {
+    const meta = CRITERIA_META[catId];
+    const items = Object.keys(meta.items).length;
+    txt += '■ ' + meta.label + ' (' + catPct(ev.scores[catId], items) + '% · 가중치 ' + Math.round(WEIGHTS[catId]*100) + '%)\n';
+    Object.entries(meta.items).forEach(([iid,label]) => {
+      const mark = ev.scores[catId]?.[iid] || 'ex';
+      txt += '  - ' + label + ': ' + MARKS[mark] + ' — ' + (ev.reasons?.[iid]||'') + '\n';
+    });
+    txt += '\n';
+  });
+
+  txt += '■ 강점\n' + (ev.strengths||'') + '\n\n';
+  txt += '■ 보완 필요\n' + (ev.weaknesses||'') + '\n\n';
+  txt += '■ 편집자 종합 의견 (AI)\n' + (ev.recommendation||'') + '\n\n';
+  txt += '※ 본 평가는 AI 1차 자동 평가입니다. 최종 판정은 편집자 검토 후 확정하세요.\n';
+
+  const blob = new Blob([txt], { type:'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'AI평가리포트_' + (ev.title||'기획안').slice(0,20).replace(/[\\/:*?"<>|]/g,'') + '.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>
