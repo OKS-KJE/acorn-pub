@@ -727,7 +727,7 @@ function renderResult(ev, structure) {
 
     '<div class="res-actions">' +
       '<button class="btn btn-primary" onclick="saveToProposals()">💾 기획안 관리에 저장</button>' +
-      '<button class="btn btn-gold" onclick="downloadReport()">📥 평가 리포트 다운로드</button>' +
+      '<button class="btn btn-gold" onclick="downloadReport()">📥 평가 리포트 PDF 출력</button>' +
       '<button class="btn btn-ghost" onclick="location.reload()">↺ 새 평가</button>' +
     '</div>';
 }
@@ -739,52 +739,91 @@ async function saveToProposals() {
   if (!LAST_EVAL) return;
   const ev = LAST_EVAL;
   const total = computeTotal(ev.scores);
-  const p = {
-    id: 'ai_' + Date.now().toString(36),
+  const now = new Date().toISOString();
+  const today = now.slice(0,10);
+
+  // ── scores를 proposal.html 형식으로 변환 ──
+  // auto-eval: {manuscript:{ms1:'ok',...}}  →  proposal: {manuscript:{items:{ms1:{score:'ok',note:'사유'}},note:''}}
+  const convScores = {};
+  Object.keys(CRITERIA_META).forEach(cat => {
+    convScores[cat] = { items:{}, note:'[AI 자동 평가] ' + (ev.engine==='ai'?'Claude AI':'키워드 분석 엔진') };
+    Object.keys(CRITERIA_META[cat].items).forEach(iid => {
+      convScores[cat].items[iid] = {
+        score: ev.scores[cat]?.[iid] || '',
+        note:  ev.reasons?.[iid] || ''
+      };
+    });
+  });
+
+  const verdict = verdictOf(total);
+
+  // ── proposal.html 의 proposal 객체 형식 그대로 구성 ──
+  const proposal = {
+    id: 'ae' + Date.now().toString(),
+    corrPub: 0, corrAuth: 1, corrTurn: 'publisher',
     title: ev.title || '(제목 미상)',
     author: ev.author || '미상',
-    genre: ev.genre || '',
-    scores: ev.scores,
-    decision: verdictOf(total),
-    date: new Date().toISOString().slice(0,10),
-    memo: '[AI 자동 평가] ' + (ev.recommendation || '') +
-      '\n\n■ 요약: ' + (ev.summary||'') +
-      '\n■ 강점: ' + (ev.strengths||'') +
-      '\n■ 보완: ' + (ev.weaknesses||''),
-    created_at: new Date().toISOString(),
+    authorTel: '', authorEmail: '', authorJob: '',
+    channel: '기타', channelOther: 'AI 자동 평가 업로드',
+    genre: ev.genre || '기타', genreOther: '',
+    price: '', msStatus: '', type: '',
+    summary: (ev.summary || '') +
+      '\n\n■ 강점: ' + (ev.strengths || '') +
+      '\n■ 보완: ' + (ev.weaknesses || ''),
+    track: 'core', role: '',
+    engines: { platform:'none', b2b:'none', public:'none' },
+    engNote: '',
+    manuscripts: [{ name: UPLOADED_FILE ? UPLOADED_FILE.name : '업로드 문서', size: UPLOADED_FILE ? UPLOADED_FILE.size : 0, type: UPLOADED_FILE ? UPLOADED_FILE.type : '' }],
+    scores: convScores,
+    scorePct: total,
+    autoDecision: verdict,
+    decision: 'pending',
+    decNote: '[AI 자동 평가 결과] ' + total + '점 → ' + DEC_MAP[verdict].label + ' 권고\n' + (ev.recommendation || ''),
+    rationale: '',
+    reviewer: 'AI 자동 평가',
+    date: today, reply: '', regDate: today,
+    history: [{ at: now, by: 'AI 자동 평가', type:'created', scorePct: total, decision:'pending',
+      changes: ['AI 자동 평가로 등록 (' + (ev.engine==='ai'?'Claude AI':'키워드 엔진') + ' · ' + total + '점 · ' + DEC_MAP[verdict].label + ' 권고)'] }],
+    createdAt: now, updatedAt: now,
   };
 
-  // localStorage (proposal.html 이 읽는 키와 병합)
+  // ── 1) localStorage — proposal.html과 동일 키(acorn_proposals_v2)에 병합 ──
   try {
-    const KEY = 'proposals_v3';
+    const KEY = 'acorn_proposals_v2';
     const all = JSON.parse(localStorage.getItem(KEY) || '[]');
-    all.unshift(p);
+    all.unshift(proposal);
     localStorage.setItem(KEY, JSON.stringify(all));
-  } catch(e) {}
+  } catch(e) { console.warn('localStorage 저장 실패:', e.message); }
 
-  // Supabase
+  // ── 2) Supabase — proposal.html 형식({id, data, updated_at} 래퍼) ──
+  let sbOk = false;
   if (sbOn()) {
     try {
       const ctrl = new AbortController();
-      setTimeout(() => ctrl.abort(), 4000);
-      await fetch(SUPABASE_CONFIG.url + '/rest/v1/' + SUPABASE_CONFIG.table, {
-        method: 'POST',
-        headers: sbHeaders({ 'Prefer':'resolution=merge-duplicates,return=minimal' }),
-        body: JSON.stringify(p),
-        signal: ctrl.signal,
-      });
-    } catch(e) { /* localStorage 저장됨 */ }
+      setTimeout(() => ctrl.abort(), 5000);
+      const res = await fetch(
+        SUPABASE_CONFIG.url + '/rest/v1/' + SUPABASE_CONFIG.table + '?on_conflict=id',
+        { method: 'POST',
+          headers: sbHeaders({ 'Prefer':'resolution=merge-duplicates,return=minimal' }),
+          body: JSON.stringify([{ id: String(proposal.id), data: proposal, updated_at: now }]),
+          signal: ctrl.signal }
+      );
+      sbOk = res.ok;
+    } catch(e) { console.warn('Supabase 저장 실패 — localStorage에는 저장됨'); }
   }
 
-  // 알림 큐 (index.html 알림 시스템 연동)
+  // ── 3) 알림 큐 (index.html 연동) ──
   try {
     localStorage.setItem('notif_queue', JSON.stringify({
       source:'acornon', type:'proposal',
-      title: p.title, actor:'AI 자동 평가', ts: Date.now()
+      title: proposal.title, actor:'AI 자동 평가', ts: Date.now()
     }));
   } catch(e) {}
 
-  alert('✅ 기획안 관리에 저장되었습니다.\n제목: ' + p.title + '\n판정: ' + DEC_MAP[p.decision].label);
+  alert('✅ 기획안 관리에 저장되었습니다.\n\n제목: ' + proposal.title +
+    '\n점수: ' + total + '점 → ' + DEC_MAP[verdict].label + ' (자동 판정)' +
+    '\n저장: localStorage' + (sbOk ? ' + Supabase' : ' (Supabase 대기 — 테이블 연결 시 동기화)') +
+    '\n\nproposal.html 기획안 목록에서 확인하세요. 판정은 "검토 중" 상태로 등록되며 편집자 확정이 필요합니다.');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -794,40 +833,105 @@ function downloadReport() {
   if (!LAST_EVAL) return;
   const ev = LAST_EVAL;
   const total = computeTotal(ev.scores);
-  const dm = DEC_MAP[verdictOf(total)];
-  const MARKS = { ok:'◎ 충족', tri:'△ 부분', ex:'✕ 미흡' };
+  const verdict = verdictOf(total);
+  const dm = DEC_MAP[verdict];
+  const MARKS = { ok:'◎ 충족', tri:'△ 부분충족', ex:'✕ 미흡' };
+  const MARK_COLOR = { ok:'#1A7A1A', tri:'#B87030', ex:'#8A1A1A' };
+  const V_COLOR = { approve:'#1A7A1A', conditional:'#B87030', selfpub:'#8B6300', reject:'#8A1A1A' };
 
-  let txt = '═══════════════════════════════════════\n';
-  txt += ' 에이콘출판사 AI 기획안 자동 평가 리포트\n';
-  txt += '═══════════════════════════════════════\n\n';
-  txt += '도서 제목: ' + (ev.title||'-') + '\n';
-  txt += '저자: ' + (ev.author||'-') + ' · 분야: ' + (ev.genre||'-') + '\n';
-  txt += '평가일: ' + new Date().toLocaleDateString('ko-KR') + '\n\n';
-  txt += '■ 종합 점수: ' + total + '점 → ' + dm.label + '\n\n';
-  txt += '■ 기획안 요약\n' + (ev.summary||'') + '\n\n';
-
-  Object.keys(CRITERIA_META).forEach(catId => {
+  // 카테고리별 섹션 HTML
+  const catSections = Object.keys(CRITERIA_META).map(catId => {
     const meta = CRITERIA_META[catId];
     const items = Object.keys(meta.items).length;
-    txt += '■ ' + meta.label + ' (' + catPct(ev.scores[catId], items) + '% · 가중치 ' + Math.round(WEIGHTS[catId]*100) + '%)\n';
-    Object.entries(meta.items).forEach(([iid,label]) => {
+    const pct = catPct(ev.scores[catId], items);
+    const rows = Object.entries(meta.items).map(([iid, label]) => {
       const mark = ev.scores[catId]?.[iid] || 'ex';
-      txt += '  - ' + label + ': ' + MARKS[mark] + ' — ' + (ev.reasons?.[iid]||'') + '\n';
-    });
-    txt += '\n';
-  });
+      return '<tr>' +
+        '<td style="padding:7px 10px;border:1px solid #D4E4F4;font-weight:600;width:32%;">' + label + '</td>' +
+        '<td style="padding:7px 10px;border:1px solid #D4E4F4;text-align:center;width:15%;color:' + MARK_COLOR[mark] + ';font-weight:700;white-space:nowrap;">' + MARKS[mark] + '</td>' +
+        '<td style="padding:7px 10px;border:1px solid #D4E4F4;color:#5A6A7E;font-size:11px;">' + (ev.reasons?.[iid]||'') + '</td>' +
+      '</tr>';
+    }).join('');
+    return '<div style="margin-bottom:18px;page-break-inside:avoid;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+        '<div style="font-size:14px;font-weight:800;color:' + meta.color + ';">' + meta.icon + ' ' + meta.label +
+          ' <span style="font-size:11px;color:#5A6A7E;font-weight:600;">(가중치 ' + Math.round(WEIGHTS[catId]*100) + '%)</span></div>' +
+        '<div style="font-size:18px;font-weight:800;color:' + meta.color + ';font-family:monospace;">' + pct + '%</div>' +
+      '</div>' +
+      '<table style="width:100%;border-collapse:collapse;font-size:12px;">' + rows + '</table>' +
+    '</div>';
+  }).join('');
 
-  txt += '■ 강점\n' + (ev.strengths||'') + '\n\n';
-  txt += '■ 보완 필요\n' + (ev.weaknesses||'') + '\n\n';
-  txt += '■ 편집자 종합 의견 (AI)\n' + (ev.recommendation||'') + '\n\n';
-  txt += '※ 본 평가는 AI 1차 자동 평가입니다. 최종 판정은 편집자 검토 후 확정하세요.\n';
+  const reportHtml = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">' +
+    '<title>AI 평가 리포트 — ' + (ev.title||'기획안') + '</title>' +
+    '<style>' +
+      '@page{size:A4;margin:18mm 15mm;}' +
+      'body{font-family:"Pretendard","Malgun Gothic",sans-serif;color:#0A1A2E;line-height:1.6;margin:0;padding:24px;max-width:760px;margin:0 auto;}' +
+      '@media print{body{padding:0;} .no-print{display:none;}}' +
+    '</style></head><body>' +
 
-  const blob = new Blob([txt], { type:'text/plain;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'AI평가리포트_' + (ev.title||'기획안').slice(0,20).replace(/[\\/:*?"<>|]/g,'') + '.txt';
-  a.click();
-  URL.revokeObjectURL(a.href);
+    // 헤더
+    '<div style="border-bottom:3px solid #07213E;padding-bottom:14px;margin-bottom:20px;">' +
+      '<div style="font-size:10px;letter-spacing:.2em;color:#1560B8;font-weight:700;margin-bottom:4px;">ACORN PUBLISHING · AI PROPOSAL EVALUATION REPORT</div>' +
+      '<div style="font-size:21px;font-weight:800;">' + (ev.title||'(제목 미상)') + '</div>' +
+      '<div style="font-size:12px;color:#5A6A7E;margin-top:5px;">저자: ' + (ev.author||'미상') + ' · 분야: ' + (ev.genre||'-') +
+        ' · 평가일: ' + new Date().toLocaleDateString('ko-KR') +
+        ' · 평가 엔진: ' + (ev.engine==='ai'?'Claude AI':'키워드 패턴 분석') + '</div>' +
+    '</div>' +
+
+    // 종합 점수
+    '<div style="display:flex;align-items:center;gap:20px;background:#F0F7FF;border:1.5px solid #D4E4F4;border-radius:10px;padding:16px 20px;margin-bottom:20px;page-break-inside:avoid;">' +
+      '<div style="text-align:center;">' +
+        '<div style="font-size:36px;font-weight:800;font-family:monospace;color:#07213E;">' + total + '<span style="font-size:16px;">점</span></div>' +
+        '<div style="font-size:10px;color:#5A6A7E;">가중 종합 점수</div></div>' +
+      '<div style="padding:8px 20px;border-radius:100px;font-size:15px;font-weight:800;color:#fff;background:' + V_COLOR[verdict] + ';">' + dm.label + '</div>' +
+      '<div style="font-size:10.5px;color:#5A6A7E;line-height:1.6;">70점 이상 승인 · 55~69 조건부 승인<br>40~54 자비출판 유도 · 40 미만 기각</div>' +
+    '</div>' +
+
+    // 요약
+    '<div style="margin-bottom:18px;page-break-inside:avoid;">' +
+      '<div style="font-size:13px;font-weight:800;margin-bottom:6px;">📋 기획안 요약</div>' +
+      '<div style="font-size:12.5px;color:#2A3A4E;background:#F8FAFD;border-left:3px solid #1560B8;padding:10px 14px;border-radius:0 6px 6px 0;">' + (ev.summary||'') + '</div>' +
+    '</div>' +
+
+    // 4대 분석
+    catSections +
+
+    // 강점·보완
+    '<div style="display:flex;gap:14px;margin-bottom:18px;page-break-inside:avoid;">' +
+      '<div style="flex:1;background:#F0FBF0;border:1px solid #C0E0C0;border-radius:8px;padding:12px 14px;">' +
+        '<div style="font-size:12px;font-weight:800;color:#1A7A1A;margin-bottom:5px;">💪 강점</div>' +
+        '<div style="font-size:11.5px;color:#2A3A4E;">' + (ev.strengths||'') + '</div></div>' +
+      '<div style="flex:1;background:#FFF8F0;border:1px solid #E8D0B0;border-radius:8px;padding:12px 14px;">' +
+        '<div style="font-size:12px;font-weight:800;color:#B87030;margin-bottom:5px;">⚠️ 보완 필요</div>' +
+        '<div style="font-size:11.5px;color:#2A3A4E;">' + (ev.weaknesses||'') + '</div></div>' +
+    '</div>' +
+
+    // 종합 의견
+    '<div style="background:#FFFBF0;border:1.5px solid #E8B04A;border-radius:8px;padding:14px 16px;margin-bottom:20px;page-break-inside:avoid;">' +
+      '<div style="font-size:13px;font-weight:800;margin-bottom:6px;">🎯 편집자 종합 의견 (자동 생성)</div>' +
+      '<div style="font-size:12.5px;color:#2A3A4E;">' + (ev.recommendation||'') + '</div>' +
+    '</div>' +
+
+    // 푸터
+    '<div style="border-top:1px solid #D4E4F4;padding-top:10px;font-size:10px;color:#8A9AAE;">' +
+      '※ 본 리포트는 1차 자동 평가 결과입니다. 최종 판정은 반드시 편집자 검토를 거쳐 확정하세요. 특히 저자 분석(가중치 50%)은 문서 외 정보 확인이 필요합니다.<br>' +
+      '에이콘출판사 · 기획안 자동 평가 시스템 · ' + new Date().toLocaleString('ko-KR') +
+    '</div>' +
+
+    // 인쇄 버튼 (화면 전용)
+    '<div class="no-print" style="position:fixed;bottom:20px;right:20px;display:flex;gap:8px;">' +
+      '<button onclick="window.print()" style="padding:12px 24px;background:#1560B8;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);font-family:inherit;">🖨 PDF로 저장 / 인쇄</button>' +
+      '<button onclick="window.close()" style="padding:12px 18px;background:#fff;color:#5A6A7E;border:1.5px solid #D4E4F4;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;">닫기</button>' +
+    '</div>' +
+
+    '<script>window.addEventListener("load",function(){setTimeout(function(){window.print();},600);});<\/script>' +
+    '</body></html>';
+
+  const win = window.open('', '_blank');
+  if (!win) { alert('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해주세요.'); return; }
+  win.document.write(reportHtml);
+  win.document.close();
 }
 </script>
 </body>
