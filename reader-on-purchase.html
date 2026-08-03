@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reader·On — 지금 알아두면 좋은 교양 인문학 49가지</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#12161F; --ink-line:#2A3145; --ink-soft:#8C95AB;
+    --paper:#FBFAF6; --paper-line:#E6E1D6; --text:#23272F; --text-soft:#6A6E78;
+    --amber:#D49A3A; --amber-deep:#B57E22; --on:#3FBF8F;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:"Pretendard",system-ui,sans-serif;color:var(--text);background:var(--paper);-webkit-font-smoothing:antialiased;padding-bottom:96px;}
+
+  .topbar{position:sticky;top:0;z-index:40;background:var(--ink);color:#fff;height:54px;display:flex;align-items:center;padding:0 18px;gap:10px;}
+  .topbar .back{background:none;border:none;color:var(--ink-soft);font-size:18px;cursor:pointer;padding:0;}
+  .topbar .word{font-family:"Spectral",serif;font-weight:600;font-size:16px;display:flex;align-items:center;gap:7px;}
+  .topbar .dot{width:7px;height:7px;border-radius:50%;background:var(--on);flex:none;}
+
+  .wrap{max-width:640px;margin:0 auto;padding:26px 18px 0;}
+
+  /* HERO */
+  .hero{display:grid;grid-template-columns:112px 1fr;gap:18px;margin-bottom:22px;}
+  .cover{width:112px;height:158px;border-radius:8px;background:linear-gradient(150deg,#3A4A6B,#1E2536);position:relative;overflow:hidden;box-shadow:0 14px 30px -14px rgba(18,22,31,.5);flex:none;}
+  .cover::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;background:rgba(0,0,0,.22);}
+  .cover .ct{position:absolute;left:18px;right:12px;top:20px;font-family:"Gowun Batang",serif;font-weight:700;font-size:13px;line-height:1.4;color:#F4F5F8;}
+  .cover .ca{position:absolute;left:18px;bottom:14px;font-size:10.5px;color:var(--ink-soft);}
+  .meta-cat{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--amber-deep);text-transform:uppercase;margin:0 0 6px;}
+  .title{font-family:"Gowun Batang",serif;font-size:21px;font-weight:700;line-height:1.35;margin:0 0 5px;}
+  .byline{font-size:13px;color:var(--text-soft);margin:0 0 12px;}
+  .price-row{display:flex;align-items:baseline;gap:8px;}
+  .price{font-family:"Spectral",serif;font-size:24px;font-weight:600;}
+  .price-badge{font-size:10.5px;font-weight:700;color:var(--text-soft);background:#EFEBE1;border-radius:999px;padding:3px 9px;}
+
+  /* SAME PRICE BRIDGE (signature) */
+  .bridge{position:relative;margin:0 0 26px;}
+  .bridge-row{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border:1px solid var(--paper-line);border-radius:14px;overflow:hidden;}
+  .bridge-col{padding:20px 16px 18px;}
+  .bridge-col.left{border-right:1px solid var(--paper-line);}
+  .bridge-label{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-soft);margin:0 0 10px;}
+  .bridge-col.right .bridge-label{color:var(--amber-deep);}
+  .bridge-list{list-style:none;margin:0;padding:0;display:grid;gap:7px;}
+  .bridge-list li{font-size:12.5px;color:var(--text-soft);padding-left:16px;position:relative;line-height:1.4;}
+  .bridge-list li::before{content:"–";position:absolute;left:0;color:var(--ink-soft);}
+  .bridge-col.right .bridge-list li{color:var(--text);font-weight:500;}
+  .bridge-col.right .bridge-list li::before{content:"✓";color:var(--on);font-weight:700;}
+  .bridge-pill{position:absolute;left:50%;top:-1px;transform:translate(-50%,-50%);background:var(--ink);color:#fff;font-family:"Spectral",serif;font-size:11.5px;font-weight:600;padding:7px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 16px -6px rgba(18,22,31,.5);}
+
+  /* FORMAT PICKER */
+  h2.sect{font-size:14px;font-weight:700;margin:0 0 12px;}
+  .formats{display:grid;gap:9px;margin-bottom:22px;}
+  .fmt-card{position:relative;display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--paper-line);border-radius:12px;padding:13px 14px;cursor:pointer;text-align:left;font-family:inherit;width:100%;transition:all .15s;}
+  .fmt-card[aria-pressed="true"]{border-color:var(--amber);background:#FFFDF8;}
+  .fmt-radio{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--paper-line);flex:none;display:flex;align-items:center;justify-content:center;}
+  .fmt-radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--amber);opacity:0;transition:opacity .15s;}
+  .fmt-card[aria-pressed="true"] .fmt-radio::after{opacity:1;}
+  .fmt-main{flex:1;min-width:0;}
+  .fmt-name{font-weight:700;font-size:14px;}
+  .fmt-ribbon{display:inline-block;margin-left:7px;font-size:10px;font-weight:700;color:#fff;background:var(--on);border-radius:999px;padding:2px 8px;vertical-align:middle;}
+  .fmt-desc{font-size:12px;color:var(--text-soft);margin-top:2px;}
+  .fmt-price{font-family:"Spectral",serif;font-size:14px;font-weight:600;flex:none;text-align:right;}
+  .fmt-price s{display:block;font-size:11px;font-weight:500;color:var(--text-soft);}
+
+  /* ADD-ONS */
+  .addon{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:13px 14px;margin-bottom:10px;}
+  .addon input{width:19px;height:19px;flex:none;accent-color:var(--amber);}
+  .addon-main{flex:1;min-width:0;}
+  .addon-name{font-weight:700;font-size:13.5px;}
+  .addon-desc{font-size:11.5px;color:var(--text-soft);margin-top:2px;}
+  .addon-tag{font-size:10.5px;font-weight:700;color:var(--amber-deep);}
+
+  /* SUBSCRIPTION BANNER */
+  .sub-banner{background:linear-gradient(120deg,#1E2536,var(--ink));color:#EAECF2;border-radius:14px;padding:18px;margin:22px 0;position:relative;overflow:hidden;}
+  .sub-banner h3{font-family:"Gowun Batang",serif;font-size:16px;font-weight:700;margin:0 0 6px;}
+  .sub-banner p{font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 0 12px;max-width:34ch;}
+  .sub-banner button{background:var(--amber);color:#231B07;border:none;border-radius:9px;padding:9px 16px;font-family:inherit;font-weight:700;font-size:12.5px;cursor:pointer;}
+
+  /* SUMMARY FOOTER */
+  .summary-bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--paper-line);padding:12px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 -8px 24px -14px rgba(18,22,31,.25);z-index:40;}
+  .summary-total{flex:1;min-width:0;}
+  .summary-total .lbl{font-size:10.5px;color:var(--text-soft);}
+  .summary-total .val{font-family:"Spectral",serif;font-size:19px;font-weight:600;}
+  .buy-btn{background:var(--ink);color:#fff;border:none;border-radius:11px;padding:13px 24px;font-family:inherit;font-weight:700;font-size:14.5px;cursor:pointer;}
+  .buy-btn:hover{background:#0C0F16;}
+
+  /* SUCCESS + QNA */
+  .success{display:none;background:#E5F6EF;border:1px solid #BFE7D5;border-radius:12px;padding:16px;margin:0 0 22px;}
+  .success.show{display:block;}
+  .success h3{margin:0 0 4px;font-size:14.5px;color:#1F7A57;}
+  .success p{margin:0;font-size:12.5px;color:#1F7A57;line-height:1.55;}
+
+  .qna{border-top:1px solid var(--paper-line);margin-top:30px;padding-top:22px;}
+  .qna-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+  .qna-head h2{font-family:"Gowun Batang",serif;font-size:17px;font-weight:700;margin:0;}
+  .qna-count{font-size:11.5px;color:var(--text-soft);}
+  .qna-sub{font-size:12px;color:var(--text-soft);margin:0 0 16px;}
+  .qna-list{display:grid;gap:10px;margin-bottom:16px;}
+  .qna-item{background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:14px;}
+  .qna-q{display:flex;justify-content:space-between;gap:10px;align-items:baseline;}
+  .qna-who{font-size:12px;font-weight:700;color:var(--text-soft);}
+  .qna-time{font-size:10.5px;color:var(--text-soft);}
+  .qna-text{font-size:13.5px;margin:5px 0 0;line-height:1.55;}
+  .qna-status{display:inline-block;margin-top:9px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;}
+  .qna-status.wait{background:#EFEBE1;color:var(--text-soft);}
+  .qna-status.done{background:#E5F6EF;color:#1F7A57;}
+  .qna-answer{margin-top:9px;padding:11px 12px;background:#F8F5EE;border-left:3px solid var(--amber);border-radius:8px;font-size:13px;line-height:1.55;}
+  .qna-answer .qa-tag{display:block;font-size:10.5px;font-weight:700;color:var(--amber-deep);margin-bottom:4px;}
+  .qna-empty{font-size:12.5px;color:var(--text-soft);text-align:center;padding:20px 0;}
+  .qna-form{background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:14px;}
+  .qna-form label{display:block;font-size:11.5px;font-weight:700;margin:0 0 6px;}
+  .qna-form input,.qna-form textarea{width:100%;font-family:inherit;font-size:13.5px;padding:10px 12px;border:1px solid var(--paper-line);border-radius:9px;margin-bottom:10px;}
+  .qna-form textarea{min-height:64px;resize:vertical;}
+  .qna-form button{width:100%;background:var(--amber);color:#231B07;border:none;border-radius:9px;padding:11px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;}
+  .qmsg{font-size:12px;border-radius:8px;padding:8px 10px;margin-bottom:10px;display:none;}
+  .qmsg.show{display:block;background:#E5F6EF;color:#1F7A57;border:1px solid #BFE7D5;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back" aria-label="뒤로">‹</button>
+  <div class="word"><span class="dot"></span>Reader·On</div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="cover">
+      <div class="ct">교양<br>인문학<br>49가지</div>
+      <div class="ca">김레나 지음</div>
+    </div>
+    <div>
+      <p class="meta-cat">인문학·교양</p>
+      <h1 class="title">지금 알아두면 좋은 교양 인문학 49가지</h1>
+      <p class="byline">김레나 지음 · 에이콘출판사 · 2026</p>
+      <div class="price-row">
+        <span class="price" id="listPrice">22,000원</span>
+        <span class="price-badge">전국 동일가</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bridge">
+    <div class="bridge-row">
+      <div class="bridge-col left">
+        <p class="bridge-label">유통사 구매 시</p>
+        <ul class="bridge-list">
+          <li>가격 10% 할인 + 마일리지 5%</li>
+          <li>유통사 포인트로 적립</li>
+          <li>종이책만 구매 가능</li>
+          <li>저자와의 접점 없음</li>
+        </ul>
+      </div>
+      <div class="bridge-col right">
+        <p class="bridge-label">Reader·On 직접구매 시</p>
+        <ul class="bridge-list">
+          <li>종이책 + 전자책 세트 무료 증정</li>
+          <li>저자에게 직접 질문 가능</li>
+          <li>한정 사인본 우선 배정</li>
+          <li>구독 시 신간 얼리액세스</li>
+        </ul>
+      </div>
+    </div>
+    <span class="bridge-pill">정가 동일, 혜택은 다릅니다</span>
+  </div>
+
+  <h2 class="sect">포맷 선택</h2>
+  <div class="formats" id="formats"></div>
+
+  <div class="addon">
+    <input type="checkbox" id="signed" onchange="updateSummary()" />
+    <div class="addon-main">
+      <div class="addon-name">저자 사인본으로 받기 <span class="addon-tag">한정 120부 · 무료</span></div>
+      <div class="addon-desc">저자가 직접 서명한 초판 한정 사인본으로 발송해 드립니다.</div>
+    </div>
+  </div>
+
+  <div class="sub-banner">
+    <h3>Reader·On 구독</h3>
+    <p>월 구독 시 매달 전자책 1권 무료 증정, 신간 정식 출간 전 얼리액세스, 저자 북토크 우선 초대까지.</p>
+    <button type="button" onclick="alert('구독 안내 페이지로 이동합니다. (데모)')">구독 알아보기</button>
+  </div>
+
+  <div class="success" id="success">
+    <h3>구매가 완료되었습니다</h3>
+    <p>선택하신 전자책은 서재에 자동으로 추가되어 바로 읽으실 수 있습니다. 사인본을 선택하셨다면 영업일 기준 3~5일 내 발송됩니다.</p>
+  </div>
+
+  <!-- AUTHOR Q&A -->
+  <div class="qna">
+    <div class="qna-head">
+      <h2>저자에게 질문하기</h2>
+      <span class="qna-count" id="qnaCount"></span>
+    </div>
+    <p class="qna-sub">김레나 작가님께 궁금한 점을 남겨보세요. 직접 답변을 받으실 수 있습니다.</p>
+
+    <div class="qna-list" id="qnaList"></div>
+
+    <div class="qmsg" id="qmsg"></div>
+    <div class="qna-form">
+      <label for="qName">이름 · 닉네임</label>
+      <input type="text" id="qName" placeholder="독자님 성함 또는 닉네임" />
+      <label for="qText">질문</label>
+      <textarea id="qText" placeholder="예) 49가지 주제 중 어떤 기준으로 선정하신 건가요?"></textarea>
+      <button type="button" onclick="submitQuestion()">질문 남기기</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="summary-bar">
+  <div class="summary-total">
+    <div class="lbl">결제 예정 금액</div>
+    <div class="val" id="totalPrice">22,000원</div>
+  </div>
+  <button class="buy-btn" onclick="purchase()">구매하기</button>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   Reader·On — 도서 구매 플로우 (데모)
+   저자 Q&A는 author-studio-qna.html 과 localStorage 키를 공유합니다.
+   같은 브라우저에서 두 파일을 열어보시면 질문↔답변이 서로 연동됩니다.
+----------------------------------------------------------------*/
+var store=(function(){try{var k="__ro_t__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage;}catch(e){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null;},setItem:function(k,v){m[k]=String(v);}};}})();
+var K_QNA="studio_on_qna";
+var BOOK={id:"humanities-49",title:"지금 알아두면 좋은 교양 인문학 49가지",author:"김레나"};
+var BASE_PRICE=22000;
+
+var FORMATS=[
+  {id:"paper",name:"종이책",desc:"무선제본 · 320쪽",price:BASE_PRICE},
+  {id:"bundle",name:"종이책 + 전자책 세트",ribbon:"전자책 무료",desc:"종이책 구매 시 PDF·EPUB을 함께 드립니다.",price:BASE_PRICE,strike:BASE_PRICE+9000},
+  {id:"pdf",name:"전자책 (PDF)",desc:"Reader·On 뷰어에서 바로 읽기",price:15000},
+  {id:"epub",name:"전자책 (EPUB)",desc:"기기 뷰어 · 읽기 앱 호환",price:15000}
+];
+var selectedFmt="bundle";
+
+function fmt(n){return Number(n).toLocaleString("ko-KR")+"원";}
+function $(id){return document.getElementById(id);}
+function read(key,fb){try{var v=store.getItem(key);return v?JSON.parse(v):fb;}catch(e){return fb;}}
+function write(key,val){try{store.setItem(key,JSON.stringify(val));}catch(e){}}
+
+function renderFormats(){
+  $("formats").innerHTML=FORMATS.map(function(f){
+    var on=f.id===selectedFmt;
+    var priceHtml=f.strike?('<s>'+fmt(f.strike)+'</s>'+fmt(f.price)):fmt(f.price);
+    return '<button type="button" class="fmt-card" aria-pressed="'+on+'" onclick="selectFmt(\''+f.id+'\')">'+
+      '<span class="fmt-radio"></span>'+
+      '<span class="fmt-main"><span class="fmt-name">'+f.name+(f.ribbon?'<span class="fmt-ribbon">'+f.ribbon+'</span>':'')+'</span>'+
+      '<span class="fmt-desc">'+f.desc+'</span></span>'+
+      '<span class="fmt-price">'+priceHtml+'</span></button>';
+  }).join("");
+}
+function selectFmt(id){selectedFmt=id;renderFormats();updateSummary();}
+function updateSummary(){
+  var f=FORMATS.filter(function(x){return x.id===selectedFmt;})[0];
+  $("totalPrice").textContent=fmt(f.price);
+}
+function purchase(){
+  $("success").className="success show";
+  $("success").scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+/* ---------- Q&A ---------- */
+function loadQna(){var all=read(K_QNA,[]);return all.filter(function(q){return q.bookId===BOOK.id;}).sort(function(a,b){return b.createdAt-a.createdAt;});}
+function renderQna(){
+  var items=loadQna();
+  $("qnaCount").textContent=items.length+"건의 질문";
+  if(!items.length){$("qnaList").innerHTML='<p class="qna-empty">아직 등록된 질문이 없습니다. 첫 질문을 남겨보세요.</p>';return;}
+  $("qnaList").innerHTML=items.map(function(q){
+    var statusHtml=q.answer?'<span class="qna-status done">답변 완료</span>':'<span class="qna-status wait">답변 대기</span>';
+    var answerHtml=q.answer?('<div class="qna-answer"><span class="qa-tag">'+BOOK.author+' 작가 답변</span>'+esc(q.answer)+'</div>'):'';
+    return '<div class="qna-item"><div class="qna-q"><span class="qna-who">'+esc(q.readerName)+'</span><span class="qna-time">'+timeAgo(q.createdAt)+'</span></div>'+
+      '<p class="qna-text">'+esc(q.question)+'</p>'+statusHtml+answerHtml+'</div>';
+  }).join("");
+}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+function timeAgo(ts){
+  var diff=Math.floor((Date.now()-ts)/1000);
+  if(diff<60)return "방금 전";
+  if(diff<3600)return Math.floor(diff/60)+"분 전";
+  if(diff<86400)return Math.floor(diff/3600)+"시간 전";
+  return Math.floor(diff/86400)+"일 전";
+}
+function submitQuestion(){
+  var name=$("qName").value.trim(), text=$("qText").value.trim();
+  var m=$("qmsg");
+  if(!name){m.textContent="이름 또는 닉네임을 입력해 주세요.";m.className="qmsg show";return;}
+  if(!text){m.textContent="질문 내용을 입력해 주세요.";m.className="qmsg show";return;}
+  var all=read(K_QNA,[]);
+  all.push({id:"q"+Date.now(),bookId:BOOK.id,bookTitle:BOOK.title,readerName:name,question:text,answer:null,createdAt:Date.now(),answeredAt:null});
+  write(K_QNA,all);
+  $("qText").value="";
+  m.textContent="질문이 등록되었습니다. 저자 답변을 기다려 주세요.";m.className="qmsg show";
+  renderQna();
+}
+
+renderFormats();updateSummary();renderQna();
+</script>
+</body>
+</html>
