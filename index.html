@@ -489,22 +489,22 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <span class="nav-icon">🏛️</span>출판사 모델
     </div>
     <div class="nav-section-label" style="padding-top:6px;">핵심 포털</div>
-    <a href="https://publisher.acornpub.kr/login" target="_blank" rel="noopener" style="text-decoration:none;">
+    <a href="https://publisher.acornpub.kr/login" target="_blank" rel="noopener" onclick="return openPortalWindow('https://publisher.acornpub.kr/login')" style="text-decoration:none;">
       <div class="nav-item" style="color:#E8B48E;">
         <span class="nav-icon">🏢</span>출판사 포털
-        <span style="margin-left:auto;opacity:.5;font-size:10px;">↗</span>
+        <span style="margin-left:auto;opacity:.5;font-size:10px;">⧉</span>
       </div>
     </a>
-    <a href="https://author.acornpub.kr/" target="_blank" rel="noopener" style="text-decoration:none;">
+    <a href="https://author.acornpub.kr/" target="_blank" rel="noopener" onclick="return openPortalWindow('https://author.acornpub.kr/')" style="text-decoration:none;">
       <div class="nav-item" style="color:#E8B48E;">
         <span class="nav-icon">✍️</span>저·역자 포털
-        <span style="margin-left:auto;opacity:.5;font-size:10px;">↗</span>
+        <span style="margin-left:auto;opacity:.5;font-size:10px;">⧉</span>
       </div>
     </a>
-    <a href="reader-on-purchase.html" target="_blank" rel="noopener" style="text-decoration:none;">
+    <a href="reader-on-purchase.html" target="_blank" rel="noopener" onclick="return openPortalWindow('reader-on-purchase.html')" style="text-decoration:none;">
       <div class="nav-item" style="color:#E8B48E;">
         <span class="nav-icon">📖</span>독자 포털
-        <span style="margin-left:auto;opacity:.5;font-size:10px;">↗</span>
+        <span style="margin-left:auto;opacity:.5;font-size:10px;">⧉</span>
       </div>
     </a>
     <div class="nav-item" onclick="nav('s9')">
@@ -4520,6 +4520,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 </div><!-- .main -->
 
 <script>
+// ── 포털 새 창 열기 (출판사/저·역자/독자 포털 공용) ─────────────
+var PORTAL_IDS = ['b1_1','b1_2','b1_5'];
+function openPortalWindow(url){
+  var w=Math.min(1280, screen.availWidth-80);
+  var h=Math.min(860, screen.availHeight-80);
+  var left=Math.max(0,(screen.availWidth-w)/2);
+  var top=Math.max(0,(screen.availHeight-h)/2);
+  window.open(url,'_blank','noopener,width='+w+',height='+h+',left='+left+',top='+top+',menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes');
+  return false;
+}
+
 // ── CHECKLIST DATA ────────────────────────────────────────────
 const WEEKS = [
   { label:"1주차", sub:"관찰·파악·인사", color:"#B87030",
@@ -6555,10 +6566,12 @@ function renderLinkCards(items,color){
   return '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;">'
     +items.map(function(l){
       var domain='';try{domain=new URL(l.url).hostname.replace('www.','');}catch(e){}
+      var isPortal=PORTAL_IDS.indexOf(l.id)>-1;
+      var openAttr=isPortal?(' onclick="return openPortalWindow(\''+l.url+'\')"'):'';
       return '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:3px solid '+(color||'var(--blue)')+';border-radius:10px;padding:11px 12px;">'
-        +'<a href="'+l.url+'" target="_blank" rel="noopener" style="text-decoration:none;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:7px;">'
+        +'<a href="'+l.url+'" target="_blank" rel="noopener"'+openAttr+' style="text-decoration:none;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:7px;">'
         +'<span style="font-size:19px;flex-shrink:0;">'+(l.icon||'🔗')+'</span>'
-        +'<div style="min-width:0;"><div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escH(l.name)+'</div>'
+        +'<div style="min-width:0;"><div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escH(l.name)+(isPortal?' <span style="opacity:.5;font-size:10px;">⧉</span>':'')+'</div>'
         +(domain?'<div style="font-size:10px;color:var(--text3);">'+domain+'</div>':'')
         +(l.memo?'<div style="font-size:10px;color:var(--text3);">'+escH(l.memo)+'</div>':'')
         +'</div></a>'
