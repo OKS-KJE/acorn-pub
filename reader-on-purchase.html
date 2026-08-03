@@ -50,6 +50,28 @@
   .bridge-col.right .bridge-list li::before{content:"✓";color:var(--on);font-weight:700;}
   .bridge-pill{position:absolute;left:50%;top:-1px;transform:translate(-50%,-50%);background:var(--ink);color:#fff;font-family:"Spectral",serif;font-size:11.5px;font-weight:600;padding:7px 16px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 16px -6px rgba(18,22,31,.5);}
 
+  /* WHY READER·ON — horizontal top-nav tabs */
+  .why{margin:0 0 26px;}
+  .why-note{font-size:12px;color:var(--text-soft);line-height:1.6;margin:0 0 14px;background:#F3EFE6;border-radius:10px;padding:11px 13px;}
+  .why-note b{color:var(--amber-deep);}
+  .vtabs{background:#fff;border:1px solid var(--paper-line);border-radius:14px;overflow:hidden;}
+  .vtab-list{display:flex;flex-direction:row;overflow-x:auto;background:#FAF7F0;border-bottom:1px solid var(--paper-line);-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .vtab-list::-webkit-scrollbar{display:none;}
+  .vtab-btn{flex:none;display:flex;flex-direction:row;align-items:center;gap:6px;padding:11px 14px;border:none;background:transparent;cursor:pointer;font-family:inherit;white-space:nowrap;font-size:11.5px;color:var(--text-soft);font-weight:600;border-bottom:3px solid transparent;transition:all .15s;}
+  .vtab-btn .vt-icon{font-size:15px;}
+  .vtab-btn[aria-selected="true"]{background:#fff;color:var(--text);border-bottom-color:var(--amber);}
+  .vtab-panel{padding:16px 16px 18px;}
+  .vtab-eyebrow{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--amber-deep);margin:0 0 6px;}
+  .vtab-panel h3{font-family:"Gowun Batang",serif;font-size:15px;font-weight:700;margin:0 0 7px;}
+  .vtab-panel p{font-size:12.5px;color:var(--text-soft);line-height:1.65;margin:0 0 12px;}
+  .vtab-compare{display:grid;gap:6px;}
+  .vtab-compare .crow{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.5;}
+  .vtab-compare .ctag{flex:none;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:1px;white-space:nowrap;}
+  .vtab-compare .crow.dist .ctag{background:#EFEBE1;color:var(--text-soft);}
+  .vtab-compare .crow.dist{color:var(--text-soft);}
+  .vtab-compare .crow.direct .ctag{background:#E5F6EF;color:#1F7A57;}
+  .vtab-compare .crow.direct{color:var(--text);font-weight:500;}
+
   /* FORMAT PICKER */
   h2.sect{font-size:14px;font-weight:700;margin:0 0 12px;}
   .formats{display:grid;gap:9px;margin-bottom:22px;}
@@ -168,6 +190,15 @@
     <span class="bridge-pill">정가 동일, 혜택은 다릅니다</span>
   </div>
 
+  <div class="why">
+    <h2 class="sect">왜 Reader·On에서 사야 할까요?</h2>
+    <p class="why-note">도서정가제상 <b>가격 할인+마일리지는 합쳐 최대 15%</b>로 어디서 사든 비슷합니다. 그래서 Reader·On은 가격이 아니라, 유통사가 줄 수 없는 <b>6가지 경험</b>으로 다르게 답합니다.</p>
+    <div class="vtabs">
+      <div class="vtab-list" id="vtabList" role="tablist" aria-label="Reader·On 차별화 포인트"></div>
+      <div class="vtab-panel" id="vtabPanel"></div>
+    </div>
+  </div>
+
   <h2 class="sect">포맷 선택</h2>
   <div class="formats" id="formats"></div>
 
@@ -239,6 +270,41 @@ var FORMATS=[
 ];
 var selectedFmt="bundle";
 
+var WHY_TABS=[
+  {id:"bundle",icon:"📦",label:"포맷 결합",eyebrow:"01 · 포맷 결합 특전",
+    title:"종이책+전자책, 함께 드립니다",
+    body:"유통사에서는 종이책만 살 수 있지만, Reader·On은 종이책 구매 시 PDF·EPUB 전자책을 함께 드려 결제 즉시 바로 읽으실 수 있습니다.",
+    dist:"종이책만 구매 가능 · 전자책은 별도 결제",
+    direct:"종이책+전자책 세트, 결제 즉시 서재에서 열람"},
+  {id:"author",icon:"💬",label:"저자 연결",eyebrow:"02 · 저자 직접 연결",
+    title:"저자에게 직접 질문하세요",
+    body:"책만 사고 끝나는 게 아니라, 저자와 만날 수 있는 곳입니다. 궁금한 점을 남기면 저자가 이 페이지에서 직접 답변합니다.",
+    dist:"저자와의 접점 없음",
+    direct:"저자 Q&amp;A · 북토크 우선 초대"},
+  {id:"sub",icon:"🔄",label:"구독 혜택",eyebrow:"03 · 구독 락인",
+    title:"매달 신간을 가장 먼저 만나세요",
+    body:"월 구독 시 정식 출간 전 얼리액세스, 매달 전자책 1권 무료 증정 등 구독자만의 반복 혜택을 제공합니다.",
+    dist:"매장·플랫폼 공통 할인만 적용",
+    direct:"구독자 전용 얼리액세스 + 매달 무료 전자책"},
+  {id:"community",icon:"👥",label:"커뮤니티",eyebrow:"04 · 독서 커뮤니티",
+    title:"혼자 읽지 않아도 됩니다",
+    body:"하이라이트와 독후감을 다른 독자, 그리고 저자와 나눌 수 있는 커뮤니티 공간을 제공합니다.",
+    dist:"리뷰·별점만 남기고 끝",
+    direct:"저자가 직접 댓글로 답하는 독서 커뮤니티"},
+  {id:"signed",icon:"✒️",label:"한정 특전",eyebrow:"05 · 실물 한정 특전",
+    title:"한정 사인본을 우선 배정합니다",
+    body:"저자가 직접 서명한 초판 한정 사인본과 손글씨 메시지 카드를 Reader·On 구매자에게 우선 배정합니다.",
+    dist:"사은품은 유통사가 임의로 구성",
+    direct:"저자 사인본·손글씨 카드 등 출판사만의 특전"},
+  {id:"library",icon:"📱",label:"통합 서재",eyebrow:"06 · 기술적 편의성",
+    title:"포맷을 넘나드는 서재",
+    body:"종이책 구매 인증만으로 전자책 뷰어가 자동으로 열립니다. 하나의 서재에서 형태를 넘나들며 읽으세요.",
+    dist:"포맷별로 따로 구매 · 따로 관리",
+    direct:"종이책 구매 인증 시 전자책 자동 열람"}
+];
+var whyActive="bundle";
+
+
 function fmt(n){return Number(n).toLocaleString("ko-KR")+"원";}
 function $(id){return document.getElementById(id);}
 function read(key,fb){try{var v=store.getItem(key);return v?JSON.parse(v):fb;}catch(e){return fb;}}
@@ -256,6 +322,26 @@ function renderFormats(){
   }).join("");
 }
 function selectFmt(id){selectedFmt=id;renderFormats();updateSummary();}
+
+function renderWhyTabs(){
+  $("vtabList").innerHTML=WHY_TABS.map(function(w){
+    return '<button class="vtab-btn" type="button" role="tab" aria-selected="'+(w.id===whyActive)+'" onclick="selectWhyTab(\''+w.id+'\')">'+
+      '<span class="vt-icon">'+w.icon+'</span><span>'+w.label+'</span></button>';
+  }).join("");
+  renderWhyPanel();
+}
+function selectWhyTab(id){whyActive=id;renderWhyTabs();}
+function renderWhyPanel(){
+  var w=WHY_TABS.filter(function(x){return x.id===whyActive;})[0];
+  $("vtabPanel").innerHTML=
+    '<p class="vtab-eyebrow">'+w.eyebrow+'</p>'+
+    '<h3>'+w.title+'</h3>'+
+    '<p>'+w.body+'</p>'+
+    '<div class="vtab-compare">'+
+      '<div class="crow dist"><span class="ctag">유통사</span><span>'+w.dist+'</span></div>'+
+      '<div class="crow direct"><span class="ctag">Reader·On</span><span>'+w.direct+'</span></div>'+
+    '</div>';
+}
 function updateSummary(){
   var f=FORMATS.filter(function(x){return x.id===selectedFmt;})[0];
   $("totalPrice").textContent=fmt(f.price);
@@ -299,7 +385,7 @@ function submitQuestion(){
   renderQna();
 }
 
-renderFormats();updateSummary();renderQna();
+renderFormats();updateSummary();renderQna();renderWhyTabs();
 </script>
 </body>
 </html>
