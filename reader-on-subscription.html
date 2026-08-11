@@ -188,6 +188,7 @@
 
   .hide{display:none !important;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -319,12 +320,19 @@
 /* ---------------------------------------------------------------
    Reader·On — 멤버십 구독 가입 (데모)
    전자책=구독기간 중 열람 서비스, 종이책=정가 그대로 반영되는 방식으로 설계.
+
+   체크리스트 진행상태 · 직원 의견은 Supabase(팀 전체 공유)에 저장됩니다.
+   ⚠️ Publishable(anon) 키만 사용합니다 — Secret key는 절대 클라이언트에 넣지 마세요.
 ----------------------------------------------------------------*/
+var SUPABASE_URL="https://edwfljyybrrccbxccvdh.supabase.co";
+var SUPABASE_ANON_KEY="sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl";
+var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
 var store=(function(){try{var k="__sub_t__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage;}catch(e){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null;},setItem:function(k,v){m[k]=String(v);},removeItem:function(k){delete m[k];}};}})();
 var K_SUB="studio_on_subscription";
-var K_DONE="subscription_launch_done_v2";
 var K_WEEK="subscription_launch_week_v2";
 var K_TEAM="subscription_launch_teamfilter";
+var K_CFILTER="subscription_launch_commentfilter";
 
 var TIERS=[
   {id:"basic",name:"Basic",tag:"Reader Pass",price:9900,
@@ -481,10 +489,18 @@ function renderLegend(){
   }).join("");
 }
 function setTeamFilter(name){teamFilter=name;write(K_TEAM,name);renderLegend();renderWeek();}
+
+/* ---------- 체크리스트 진행상태: Supabase(checklist_progress) 공유 ---------- */
+var doneCache={};
+async function loadDoneCache(){
+  var res=await sb.from("checklist_progress").select("item_id,done");
+  if(res.error){console.error("checklist load error:",res.error);return;}
+  doneCache={};
+  (res.data||[]).forEach(function(r){doneCache[r.item_id]=r.done;});
+}
 function renderTabs(){
-  var done=read(K_DONE,{});
   $("wtabs").innerHTML=WEEKS.map(function(w,i){
-    var total=w.items.length, doneCt=w.items.filter(function(it){return done[it.id];}).length;
+    var total=w.items.length, doneCt=w.items.filter(function(it){return doneCache[it.id];}).length;
     var pct=total?Math.round(doneCt/total*100):0;
     return '<button class="wtab" type="button" aria-selected="'+(i===currentWeek)+'" onclick="setWeek('+i+')">'+
       '<div class="wn">'+w.label+'</div><div class="wd">'+w.date+'</div><div class="ws">'+w.sub+'</div><div class="wp">'+pct+'%</div></button>';
@@ -493,12 +509,11 @@ function renderTabs(){
 function setWeek(i){currentWeek=i;write(K_WEEK,i);renderTabs();renderWeek();}
 function renderWeek(){
   var w=WEEKS[currentWeek];
-  var done=read(K_DONE,{});
   $("weekHead").innerHTML='<h3>'+w.label+' ('+w.date+') · '+w.sub+'</h3><p>이번 주 준비 항목을 팀별로 확인하세요.</p>';
   var items=w.items.filter(function(it){return teamFilter==="전체"||it.team===teamFilter;});
   if(!items.length){$("items").innerHTML='<p style="font-size:12.5px;color:var(--text-soft);text-align:center;padding:24px 0;">해당 팀의 항목이 없습니다.</p>';return;}
   $("items").innerHTML=items.map(function(it){
-    var isDone=!!done[it.id];
+    var isDone=!!doneCache[it.id];
     var color=TEAMS[it.team]?TEAMS[it.team].color:"var(--paper-line)";
     return '<label class="item'+(isDone?' done':'')+(it.sync?' sync-item':'')+'" style="--team-color:'+color+'">'+
       '<input type="checkbox" '+(isDone?'checked':'')+' onchange="toggleDone(\''+it.id+'\')" />'+
@@ -507,16 +522,16 @@ function renderWeek(){
       '</label>';
   }).join("");
 }
-function toggleDone(id){
-  var done=read(K_DONE,{});
-  done[id]=!done[id];
-  write(K_DONE,done);
+async function toggleDone(id){
+  var newVal=!doneCache[id];
+  doneCache[id]=newVal; /* 낙관적 업데이트: 즉시 반영 후 서버에 저장 */
   renderTabs();renderWeek();renderOverall();
+  var res=await sb.from("checklist_progress").upsert({item_id:id,done:newVal,updated_at:new Date().toISOString()});
+  if(res.error){console.error("checklist save error:",res.error);doneCache[id]=!newVal;renderTabs();renderWeek();renderOverall();}
 }
 function renderOverall(){
-  var done=read(K_DONE,{});
   var all=allItems();
-  var doneCt=all.filter(function(it){return done[it.id];}).length;
+  var doneCt=all.filter(function(it){return doneCache[it.id];}).length;
   var pct=all.length?Math.round(doneCt/all.length*100):0;
   $("overallPct").textContent=pct+"%";
   $("overallBar").style.width=pct+"%";
@@ -541,22 +556,19 @@ function showComments(){setView("comments");renderComments();}
 function toggleChecklistView(){setView(currentView()==="admin"?"sub":"admin");}
 function toggleCommentsView(){setView(currentView()==="comments"?"sub":"comments");renderComments();}
 
-/* ---------- 직원 의견 게시판 ---------- */
-var K_COMMENTS="subscription_launch_comments";
+/* ---------- 직원 의견 게시판: Supabase(subscription_comments) 공유 ---------- */
+var commentsCache=[];
 var commentFilter="all";
 var openReplyRowId=null;
 
-function seedCommentsIfEmpty(){
-  var all=read(K_COMMENTS,null);
-  if(all!==null)return;
-  var now=Date.now();
-  write(K_COMMENTS,[
-    {id:"c1",name:"김광우",team:"기획편집팀",text:"Premium 카탈로그 상한 22,000원은 실무서 기준으로는 조금 빠듯해요. 26,000원 정도로 올리고 차액 결제 구간을 줄이는 게 어떨까요?",status:"open",reply:null,createdAt:now-1000*60*60*20,repliedAt:null},
-    {id:"c2",name:"한용호",team:"개발팀",text:"GitHub 저장소 연동은 3주차보다 여유 있게 4주차 초반까지 끌고 가는 게 안전할 것 같습니다. PG 연동이 먼저 안정화돼야 해서요.",status:"closed",reply:"동의합니다. 4주차 초반으로 일정 조정했습니다. 체크리스트에도 반영했어요.",createdAt:now-1000*60*60*30,repliedAt:now-1000*60*60*5}
-  ]);
+async function loadComments(){
+  var res=await sb.from("subscription_comments").select("*").order("created_at",{ascending:false});
+  if(res.error){console.error("comments load error:",res.error);return;}
+  commentsCache=res.data||[];
+  renderComments();
 }
-function timeAgoC(ts){
-  var diff=Math.floor((Date.now()-ts)/1000);
+function timeAgoC(iso){
+  var diff=Math.floor((Date.now()-new Date(iso).getTime())/1000);
   if(diff<60)return "방금 전";
   if(diff<3600)return Math.floor(diff/60)+"분 전";
   if(diff<86400)return Math.floor(diff/3600)+"시간 전";
@@ -564,13 +576,14 @@ function timeAgoC(ts){
 }
 function setCommentFilter(f){
   commentFilter=f;
+  write(K_CFILTER,f);
   $("cfAll").setAttribute("aria-selected",f==="all"?"true":"false");
   $("cfOpen").setAttribute("aria-selected",f==="open"?"true":"false");
   $("cfClosed").setAttribute("aria-selected",f==="closed"?"true":"false");
   renderComments();
 }
 function renderComments(){
-  var all=read(K_COMMENTS,[]).slice().sort(function(a,b){return b.createdAt-a.createdAt;});
+  var all=commentsCache;
   var openCt=all.filter(function(c){return c.status==="open";}).length;
   var closedCt=all.length-openCt;
   $("cstats").innerHTML=
@@ -586,17 +599,17 @@ function renderComments(){
     var color=TEAMS[c.team]?TEAMS[c.team].color:"var(--paper-line)";
     var replyHtml=c.reply?('<div class="reply-preview">↳ 답신: '+esc(c.reply)+'</div>'):'';
     var row='<tr class="'+(c.status==="closed"?"row-closed":"")+'">'+
-      '<td><button class="status-badge '+c.status+'" type="button" onclick="quickToggleStatus(\''+c.id+'\')">'+(c.status==="open"?"열림":"닫힘")+'</button></td>'+
+      '<td><button class="status-badge '+c.status+'" type="button" onclick="quickToggleStatus('+c.id+')">'+(c.status==="open"?"열림":"닫힘")+'</button></td>'+
       '<td class="ctext-cell"><div class="who-cell"><span class="cname">'+esc(c.name)+'</span><span class="cteam" style="background:'+color+'">'+esc(c.team)+'</span></div>'+esc(c.text)+replyHtml+'</td>'+
-      '<td class="date-cell">'+timeAgoC(c.createdAt)+'</td>'+
-      '<td><button class="action-btn" type="button" onclick="toggleReplyRow(\''+c.id+'\')">'+(openReplyRowId===c.id?"닫기":"답신")+'</button></td>'+
+      '<td class="date-cell">'+timeAgoC(c.created_at)+'</td>'+
+      '<td><button class="action-btn" type="button" onclick="toggleReplyRow('+c.id+')">'+(openReplyRowId===c.id?"닫기":"답신")+'</button></td>'+
       '</tr>';
     if(openReplyRowId===c.id){
       row+='<tr class="reply-row"><td colspan="4">'+
         '<textarea id="reply-input-'+c.id+'" placeholder="답신 내용을 입력하세요">'+esc(c.reply||"")+'</textarea>'+
         '<div class="reply-row-actions">'+
         '<select id="status-select-'+c.id+'"><option value="open"'+(c.status==="open"?" selected":"")+'>열림으로 유지</option><option value="closed"'+(c.status==="closed"?" selected":"")+'>닫힘으로 변경</option></select>'+
-        '<button class="action-btn" type="button" onclick="saveReply(\''+c.id+'\')">저장</button>'+
+        '<button class="action-btn" type="button" onclick="saveReply('+c.id+')">저장</button>'+
         '</div></td></tr>';
     }
     return row;
@@ -604,38 +617,33 @@ function renderComments(){
   $("ctable").innerHTML=head+"<tbody>"+body+"</tbody>";
 }
 function toggleReplyRow(id){openReplyRowId=(openReplyRowId===id)?null:id;renderComments();if(openReplyRowId){setTimeout(function(){var t=$("reply-input-"+id);if(t)t.focus();},0);}}
-function saveReply(id){
-  var all=read(K_COMMENTS,[]);
-  var c=all.filter(function(x){return x.id===id;})[0];
-  if(!c)return;
+async function saveReply(id){
   var ta=$("reply-input-"+id), sel=$("status-select-"+id);
   var text=ta?ta.value.trim():"";
-  c.reply=text||null;
-  c.repliedAt=text?Date.now():c.repliedAt;
-  c.status=sel?sel.value:c.status;
-  write(K_COMMENTS,all);
+  var payload={reply:text||null,replied_at:text?new Date().toISOString():null,status:sel?sel.value:undefined};
+  var res=await sb.from("subscription_comments").update(payload).eq("id",id);
   openReplyRowId=null;
-  renderComments();
+  if(res.error){console.error("reply save error:",res.error);}
+  await loadComments();
 }
-function quickToggleStatus(id){
-  var all=read(K_COMMENTS,[]);
-  var c=all.filter(function(x){return x.id===id;})[0];
+async function quickToggleStatus(id){
+  var c=commentsCache.filter(function(x){return x.id===id;})[0];
   if(!c)return;
-  c.status=c.status==="open"?"closed":"open";
-  write(K_COMMENTS,all);
-  renderComments();
+  var newStatus=c.status==="open"?"closed":"open";
+  var res=await sb.from("subscription_comments").update({status:newStatus}).eq("id",id);
+  if(res.error){console.error("status toggle error:",res.error);return;}
+  await loadComments();
 }
-function submitComment(){
+async function submitComment(){
   var name=$("cm-name").value.trim(), team=$("cm-team").value, text=$("cm-text").value.trim();
   var m=$("commentMsg");
   if(!name){m.textContent="이름을 입력해 주세요.";m.className="msg show";return;}
   if(!text){m.textContent="의견 내용을 입력해 주세요.";m.className="msg show";return;}
-  var all=read(K_COMMENTS,[]);
-  all.push({id:"c"+Date.now(),name:name,team:team,text:text,status:"open",reply:null,createdAt:Date.now(),repliedAt:null});
-  write(K_COMMENTS,all);
+  var res=await sb.from("subscription_comments").insert({name:name,team:team,text:text,status:"open"});
+  if(res.error){m.textContent="등록 중 오류가 발생했습니다: "+res.error.message;m.className="msg show";return;}
   $("cm-text").value="";
   m.textContent="의견이 등록되었습니다.";m.className="msg show ok";
-  renderComments();
+  await loadComments();
 }
 
 function startSubscription(){
@@ -672,9 +680,26 @@ function renderState(){
 
 teamFilter=read(K_TEAM,"전체");
 currentWeek=read(K_WEEK,0);
+commentFilter=read(K_CFILTER,"all");
 renderTiers();renderRanks();renderState();
 renderLegend();renderTabs();renderWeek();renderOverall();
-seedCommentsIfEmpty();
+
+(async function initSupabaseData(){
+  await loadDoneCache();
+  renderTabs();renderWeek();renderOverall();
+  await loadComments();
+})();
+
+/* 실시간 동기화: 다른 팀원이 체크리스트를 갱신하거나 의견을 남기면 자동 반영됩니다. */
+sb.channel("checklist_progress_changes")
+  .on("postgres_changes",{event:"*",schema:"public",table:"checklist_progress"},async function(){
+    await loadDoneCache();renderTabs();renderWeek();renderOverall();
+  }).subscribe();
+
+sb.channel("subscription_comments_changes")
+  .on("postgres_changes",{event:"*",schema:"public",table:"subscription_comments"},async function(){
+    await loadComments();
+  }).subscribe();
 </script>
 </body>
 </html>
