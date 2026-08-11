@@ -11,6 +11,7 @@
     --ink:#12161F; --ink-line:#2A3145; --ink-soft:#8C95AB;
     --paper:#FBFAF6; --paper-line:#E6E1D6; --text:#23272F; --text-soft:#6A6E78;
     --amber:#D49A3A; --amber-deep:#B57E22; --on:#3FBF8F;
+    --mgmt:#4A90D9; --edit:#D49A3A; --mkt:#3FBF8F; --dev:#8B6FD9;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -20,6 +21,11 @@
   .topbar .back{background:none;border:none;color:var(--ink-soft);font-size:18px;cursor:pointer;padding:0;}
   .topbar .word{font-family:"Spectral",serif;font-weight:600;font-size:16px;display:flex;align-items:center;gap:7px;}
   .topbar .dot{width:7px;height:7px;border-radius:50%;background:var(--on);flex:none;}
+  .topbar-navs{margin-left:auto;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:60%;}
+  .topbar-navs::-webkit-scrollbar{display:none;}
+  .topbar-nav{background:none;border:1px solid var(--ink-line);color:var(--ink-soft);font-family:inherit;font-size:11px;font-weight:600;padding:6px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:all .15s;flex:none;}
+  .topbar-nav:hover{color:#fff;border-color:var(--amber);}
+  .topbar-nav[aria-selected="true"]{background:var(--amber);color:#231B07;border-color:var(--amber);}
 
   .wrap{max-width:640px;margin:0 auto;padding:26px 18px 0;}
 
@@ -139,16 +145,181 @@
   .qna-form button{width:100%;background:var(--amber);color:#231B07;border:none;border-radius:9px;padding:11px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;}
   .qmsg{font-size:12px;border-radius:8px;padding:8px 10px;margin-bottom:10px;display:none;}
   .qmsg.show{display:block;background:#E5F6EF;color:#1F7A57;border:1px solid #BFE7D5;}
+
+  /* ===== 구독 멤버십 / 관리자 화면 (통합) ===== */
+  .sub-hero{text-align:center;margin:0 0 26px;}
+  .sub-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-deep);margin:0 0 8px;}
+  .sub-hero h1{font-family:"Gowun Batang",serif;font-size:23px;font-weight:700;margin:0 0 8px;line-height:1.35;}
+  .sub-hero p{font-size:13px;color:var(--text-soft);line-height:1.65;max-width:38ch;margin:0 auto;}
+
+  /* TIER CARDS */
+  .tiers{display:grid;gap:12px;}
+  .tier{position:relative;background:#fff;border:1.5px solid var(--paper-line);border-radius:16px;padding:18px;cursor:pointer;transition:all .15s;}
+  .tier[aria-pressed="true"]{border-color:var(--amber);box-shadow:0 10px 28px -18px rgba(212,154,58,.6);}
+  .tier .ribbon{position:absolute;top:-10px;right:16px;background:var(--amber);color:#231B07;font-size:10px;font-weight:700;padding:4px 10px;border-radius:999px;}
+  .tier-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .tier-name{font-family:"Gowun Batang",serif;font-size:17px;font-weight:700;}
+  .tier-tag{display:block;font-size:11px;font-weight:600;color:var(--text-soft);margin-top:2px;}
+  .tier-price{text-align:right;flex:none;}
+  .tier-price .amt{font-family:"Spectral",serif;font-size:20px;font-weight:600;}
+  .tier-price .per{display:block;font-size:10.5px;color:var(--text-soft);}
+  .tier-feats{list-style:none;margin:0;padding:0;display:grid;gap:6px;}
+  .tier-feats li{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;line-height:1.5;color:var(--text);}
+  .tier-feats li::before{content:"✓";color:var(--on);font-weight:700;flex:none;}
+  .tier-feats li.inherit{color:var(--text-soft);}
+  .tier-feats li.inherit::before{content:"＋";color:var(--amber-deep);}
+  .tier-radio{position:absolute;top:16px;left:16px;width:18px;height:18px;border-radius:50%;border:1.5px solid var(--paper-line);}
+  .tier[aria-pressed="true"] .tier-radio{border-color:var(--amber);background:var(--amber);}
+  .tier-body{padding-left:0;}
+
+  /* CATALOG PRICE CAP PREVIEW */
+  .catalog{display:none;margin-top:4px;background:#fff;border:1px solid var(--paper-line);border-radius:12px;padding:13px 14px;}
+  .catalog.show{display:block;}
+  .catalog h4{font-size:12px;font-weight:700;margin:0 0 3px;}
+  .catalog .cap-note{font-size:11px;color:var(--text-soft);margin:0 0 10px;line-height:1.5;}
+  .catalog-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--paper-line);font-size:12.5px;}
+  .catalog-row:first-of-type{border-top:none;padding-top:0;}
+  .catalog-row .ct-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .catalog-row .ct-right{display:flex;align-items:center;gap:8px;flex:none;}
+  .catalog-row .ct-price{font-family:"Spectral",serif;font-weight:600;font-size:12.5px;color:var(--text-soft);}
+  .catalog-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;}
+  .catalog-badge.incl{background:#E5F6EF;color:#1F7A57;}
+  .catalog-badge.diff{background:#FFF4E5;color:var(--amber-deep);}
+
+  /* LOYALTY RANK STRIP */
+  .ranks{display:flex;background:#fff;border:1px solid var(--paper-line);border-radius:14px;overflow:hidden;}
+  .rank{flex:1;padding:14px 10px;text-align:center;border-right:1px solid var(--paper-line);}
+  .rank:last-child{border-right:none;}
+  .rank .ri{font-size:20px;}
+  .rank .rn{font-size:12px;font-weight:700;margin-top:4px;}
+  .rank .rm{font-size:10.5px;color:var(--text-soft);margin-top:2px;}
+  .rank .rp{font-size:10px;color:var(--amber-deep);margin-top:5px;line-height:1.4;}
+
+  /* SUBSCRIBE NOTE */
+  .legal-note{font-size:11.5px;color:var(--text-soft);line-height:1.7;background:#F3EFE6;border-radius:10px;padding:12px 14px;margin-top:22px;}
+  .legal-note b{color:var(--amber-deep);}
+
+  /* SIGNUP FORM */
+  .form-card{background:#fff;border:1px solid var(--paper-line);border-radius:14px;padding:18px;margin-top:12px;}
+  .form-card label{display:block;font-size:12px;font-weight:700;margin:0 0 6px;}
+  .field{margin-bottom:14px;}
+  .field input{width:100%;font-family:inherit;font-size:14px;padding:11px 13px;border:1px solid var(--paper-line);border-radius:9px;}
+  .field input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(212,154,58,.16);}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ship-note{font-size:11.5px;color:var(--amber-deep);background:#FFFDF8;border:1px solid #EFCB9B;border-radius:8px;padding:9px 11px;margin-bottom:12px;}
+  .msg{font-size:12.5px;border-radius:8px;padding:9px 11px;margin-bottom:12px;display:none;}
+  .msg.show{display:block;background:#FBE9E5;color:#9E3A28;border:1px solid #F1C9C0;}
+
+  .cta-btn{background:var(--ink);color:#fff;border:none;border-radius:11px;padding:13px 22px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;}
+  .cta-btn:hover{background:#0C0F16;}
+  .cta-btn.danger{background:#fff;color:#C9543E;border:1.5px solid #F1C9C0;}
+
+  /* SUBSCRIBE SUCCESS (renamed to avoid clash with purchase's .success) */
+  .sub-success{display:none;text-align:center;background:#fff;border:1px solid var(--paper-line);border-radius:16px;padding:30px 20px;margin-top:16px;}
+  .sub-success.show{display:block;}
+  .sub-success .ic{font-size:34px;}
+  .sub-success h3{font-family:"Gowun Batang",serif;font-size:18px;margin:10px 0 6px;}
+  .sub-success p{font-size:12.5px;color:var(--text-soft);line-height:1.6;margin:0 0 4px;}
+  .sub-success .next{font-size:11.5px;color:var(--amber-deep);font-weight:700;margin-top:10px;}
+  .sub-success .actions{display:flex;gap:8px;margin-top:18px;}
+  .sub-success .actions button{flex:1;}
+  .btn-outline{background:#fff;border:1.5px solid var(--paper-line);color:var(--text);border-radius:10px;padding:11px;font-family:inherit;font-weight:700;font-size:12.5px;cursor:pointer;}
+
+  /* TABS (filter tabs — was missing a style definition previously) */
+  .tabs{display:flex;gap:4px;background:#EFEBE1;padding:4px;border-radius:11px;}
+  .tab{flex:1;border:none;background:transparent;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--text-soft);padding:8px 0;border-radius:8px;transition:all .15s;}
+  .tab[aria-selected="true"]{background:#fff;color:var(--text);box-shadow:0 1px 4px rgba(18,22,31,.08);}
+
+  /* ADMIN: LAUNCH CHECKLIST */
+  .admin-back{background:none;border:none;color:var(--text-soft);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:0;margin-bottom:16px;}
+  .admin-back:hover{color:var(--amber-deep);}
+  .admin-title{font-family:"Gowun Batang",serif;font-size:19px;font-weight:700;margin:0 0 4px;}
+  .admin-sub{font-size:12.5px;color:var(--text-soft);margin:0 0 18px;}
+  .overall{background:#fff;border:1px solid var(--paper-line);border-radius:14px;padding:15px 17px;margin-bottom:18px;}
+  .overall-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .overall-row .lbl{font-size:12.5px;font-weight:700;}
+  .overall-row .pct{font-family:"Spectral",serif;font-size:18px;font-weight:600;color:var(--amber-deep);}
+  .bar{height:8px;background:#EFEBE1;border-radius:999px;overflow:hidden;}
+  .bar-fill{height:100%;background:var(--amber);border-radius:999px;transition:width .25s;}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .legend-chip{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-soft);background:#fff;border:1px solid var(--paper-line);border-radius:999px;padding:5px 11px;cursor:pointer;transition:all .15s;}
+  .legend-chip .sw{width:9px;height:9px;border-radius:50%;flex:none;}
+  .legend-chip[aria-pressed="true"]{border-color:var(--text);color:var(--text);background:#F3EFE6;}
+  .wtabs{display:flex;gap:4px;background:#EFEBE1;padding:4px;border-radius:12px;margin-bottom:16px;overflow-x:auto;}
+  .wtab{flex:1;min-width:96px;border:none;background:transparent;cursor:pointer;font-family:inherit;padding:9px 6px;border-radius:9px;text-align:center;transition:all .15s;}
+  .wtab[aria-selected="true"]{background:#fff;box-shadow:0 1px 4px rgba(18,22,31,.08);}
+  .wtab .wn{font-size:12px;font-weight:700;}
+  .wtab .wd{font-size:9px;color:var(--text-soft);}
+  .wtab .ws{font-size:10px;color:var(--text-soft);margin-top:1px;}
+  .wtab .wp{font-size:9.5px;color:var(--amber-deep);font-weight:700;margin-top:2px;}
+  .week-head{margin-bottom:12px;}
+  .week-head h3{font-family:"Gowun Batang",serif;font-size:15px;font-weight:700;margin:0 0 3px;}
+  .week-head p{font-size:12px;color:var(--text-soft);margin:0;}
+  .items{display:grid;gap:8px;margin-bottom:18px;}
+  .item{display:flex;align-items:flex-start;gap:11px;background:#fff;border:1px solid var(--paper-line);border-left:4px solid var(--team-color,var(--paper-line));border-radius:11px;padding:12px 13px;transition:opacity .15s;}
+  .item.done{opacity:.5;}
+  .item input[type=checkbox]{width:19px;height:19px;margin-top:1px;flex:none;accent-color:var(--amber);cursor:pointer;}
+  .item-main{flex:1;min-width:0;}
+  .item-text{font-size:13.5px;line-height:1.5;}
+  .item.done .item-text{text-decoration:line-through;}
+  .item-tag{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff;}
+  .item-priority{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;color:var(--amber-deep);}
+  .sync-item{background:#FFFDF8;border-left-color:var(--amber);}
+  .launch-flag{background:#E5F6EF;border:1px solid #BFE7D5;color:#1F7A57;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:700;margin-bottom:16px;text-align:center;}
+
+  /* ADMIN: EMPLOYEE COMMENTS (table + status management) */
+  .comment-form{background:#fff;border:1px solid var(--paper-line);border-radius:14px;padding:16px;margin-bottom:18px;}
+  .comment-form .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .comment-form label{display:block;font-size:11.5px;font-weight:700;margin:0 0 6px;}
+  .comment-form input,.comment-form select,.comment-form textarea{width:100%;font-family:inherit;font-size:13.5px;padding:10px 12px;border:1px solid var(--paper-line);border-radius:9px;margin-bottom:10px;}
+  .comment-form textarea{min-height:70px;resize:vertical;}
+  .comment-form button{width:100%;background:var(--amber);color:#231B07;border:none;border-radius:9px;padding:11px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;}
+
+  .cstats{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .cstat{background:#fff;border:1px solid var(--paper-line);border-radius:10px;padding:8px 13px;font-size:11.5px;color:var(--text-soft);}
+  .cstat b{font-family:"Spectral",serif;font-size:14px;color:var(--text);margin-right:4px;}
+  .cstat.open b{color:var(--amber-deep);}
+  .cstat.closed b{color:var(--on);}
+
+  .ctable-wrap{overflow-x:auto;background:#fff;border:1px solid var(--paper-line);border-radius:14px;}
+  table.ctable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px;}
+  table.ctable th{text-align:left;padding:10px 12px;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;color:var(--text-soft);font-weight:700;border-bottom:1px solid var(--paper-line);white-space:nowrap;}
+  table.ctable td{padding:11px 12px;border-bottom:1px solid var(--paper-line);vertical-align:top;}
+  table.ctable tr:last-child td{border-bottom:none;}
+  table.ctable tr.row-closed{opacity:.6;}
+  .status-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;border:none;font-family:inherit;}
+  .status-badge.open{background:#FFF4E5;color:var(--amber-deep);}
+  .status-badge.closed{background:#E5F6EF;color:#1F7A57;}
+  .who-cell .cname{font-weight:700;font-size:12.5px;}
+  .who-cell .cteam{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:700;padding:1px 7px;border-radius:999px;color:#fff;}
+  .ctext-cell{max-width:260px;font-size:12.5px;line-height:1.5;white-space:pre-wrap;}
+  .reply-preview{margin-top:6px;font-size:11.5px;color:var(--amber-deep);background:#FFFDF8;border-left:2px solid var(--amber);padding:5px 8px;border-radius:6px;}
+  .date-cell{font-size:10.5px;color:var(--text-soft);white-space:nowrap;}
+  .action-btn{background:none;border:1px solid var(--paper-line);border-radius:7px;padding:6px 10px;font-family:inherit;font-size:11px;font-weight:700;color:var(--text-soft);cursor:pointer;white-space:nowrap;}
+  .action-btn:hover{border-color:var(--amber);color:var(--amber-deep);}
+  .reply-row td{background:#FAF7F0;}
+  .reply-row textarea{width:100%;font-family:inherit;font-size:13px;padding:9px 11px;border:1px solid var(--paper-line);border-radius:8px;min-height:60px;resize:vertical;margin-bottom:8px;}
+  .reply-row-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .reply-row-actions select{font-family:inherit;font-size:11.5px;padding:6px 9px;border:1px solid var(--paper-line);border-radius:7px;}
+  .comment-empty{text-align:center;font-size:12.5px;color:var(--text-soft);padding:24px;}
+
+  .hide{display:none !important;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <div class="topbar">
   <button class="back" aria-label="뒤로">‹</button>
   <div class="word"><span class="dot"></span>Reader·On</div>
+  <div class="topbar-navs">
+    <button class="topbar-nav" id="navSubscribeBtn" type="button" aria-selected="false" onclick="toggleView('subscribe')">💳 구독 멤버십</button>
+    <button class="topbar-nav" id="navChecklistBtn" type="button" aria-selected="false" onclick="toggleView('admin')">📋 런칭 체크리스트</button>
+    <button class="topbar-nav" id="navCommentsBtn" type="button" aria-selected="false" onclick="toggleView('comments')">💬 직원 의견</button>
+  </div>
 </div>
 
-<div class="wrap">
+<div class="wrap" id="purchaseView">
 
   <div class="hero">
     <div class="cover">
@@ -213,7 +384,7 @@
   <div class="sub-banner">
     <h3>Reader·On 구독</h3>
     <p>월 구독 시 매달 전자책 1권 무료 증정, 신간 정식 출간 전 얼리액세스, 저자 북토크 우선 초대까지.</p>
-    <button type="button" onclick="alert('구독 안내 페이지로 이동합니다. (데모)')">구독 알아보기</button>
+    <button type="button" onclick="toggleView('subscribe')">구독 알아보기</button>
   </div>
 
   <div class="success" id="success">
@@ -243,12 +414,128 @@
 
 </div>
 
-<div class="summary-bar">
+<!-- ===== 구독 멤버십 ===== -->
+<div class="wrap hide" id="subscribeView">
+  <button class="admin-back" type="button" onclick="backToPurchase()">← 도서 구매 페이지로 돌아가기</button>
+
+  <div class="sub-hero">
+    <p class="eyebrow">Reader·On Membership</p>
+    <h1>더 가까이, 더 자주<br>읽는 방법</h1>
+    <p>전자책 무제한 열람부터 실습 자료·개정판 업그레이드, 매달 종이책까지 — 필요한 만큼 골라 구독하세요.</p>
+  </div>
+
+  <div class="tiers" id="tiers"></div>
+  <div class="catalog" id="catalogPreview"></div>
+
+  <h2 class="sect">구독 등급 안내</h2>
+  <div class="ranks" id="ranks"></div>
+
+  <p class="legal-note"><b>안내</b> · 전자책은 구독 기간 중 열람 서비스로 제공되며 소장(다운로드)이 아닙니다. 종이책은 정가가 그대로 반영되며 별도의 개별 도서 할인이 아닙니다. Premium 카탈로그는 정가 22,000원 이하로 구성되며, 초과 도서 선택 시 초과분만 정가로 별도 결제됩니다. 언제든 해지 가능하며, 해지 시 해당월 서비스 종료 시점까지 이용하실 수 있습니다.</p>
+
+  <div id="formSection">
+    <h2 class="sect">가입 정보</h2>
+    <div class="form-card">
+      <div class="msg" id="formMsg"></div>
+      <div class="field"><label for="su-name">이름</label><input type="text" id="su-name" placeholder="홍길동" /></div>
+      <div class="field"><label for="su-email">이메일</label><input type="email" id="su-email" placeholder="name@example.com" /></div>
+      <div id="shipFields" class="hide">
+        <p class="ship-note">Premium 등급은 매월 종이책이 배송됩니다. 배송지를 입력해 주세요.</p>
+        <div class="field"><label for="su-addr">배송지 주소</label><input type="text" id="su-addr" placeholder="도로명 주소" /></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label for="su-card">카드 번호</label><input type="text" id="su-card" placeholder="0000-0000-0000-0000" /></div>
+        <div class="field"><label for="su-exp">유효기간</label><input type="text" id="su-exp" placeholder="MM/YY" /></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-success" id="subSuccess">
+    <div class="ic">🎉</div>
+    <h3 id="successTitle"></h3>
+    <p id="successBody"></p>
+    <p class="next" id="successNext"></p>
+    <div class="actions">
+      <button class="btn-outline" type="button" onclick="alert('전자책 서재로 이동합니다. (데모)')">전자책 서재로 이동</button>
+      <button class="btn-outline" type="button" onclick="cancelSubscription()">구독 해지</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN: 구독서비스 런칭 6주 마일스톤 체크리스트 ===== -->
+<div class="wrap hide" id="adminView">
+  <button class="admin-back" type="button" onclick="backToPurchase()">← 도서 구매 페이지로 돌아가기</button>
+  <h2 class="admin-title">Reader·On 구독서비스 런칭 · 6주 마일스톤</h2>
+  <p class="admin-sub">관리팀 · 기획편집팀 · 마케팅 · 개발팀 전체가 참여하는 준비 체크리스트입니다.</p>
+
+  <p class="launch-flag" id="launchFlag"></p>
+
+  <div class="overall">
+    <div class="overall-row"><span class="lbl">전체 진행률</span><span class="pct" id="overallPct">0%</span></div>
+    <div class="bar"><div class="bar-fill" id="overallBar" style="width:0%"></div></div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="wtabs" id="wtabs"></div>
+
+  <div class="week-head" id="weekHead"></div>
+  <div class="items" id="items"></div>
+
+  <p class="legal-note"><b>①②③④</b>는 핵심 준비 항목(전자책 목록 정리 · 출간일정·개정판 계획 · 기술 Q&amp;A 커뮤니티 · 에이콘 세미나·포럼 연계)의 위치를 표시합니다. 매주 "전체" 태그 항목으로 전 팀이 진행 상황을 공유합니다.</p>
+</div>
+
+<!-- ===== ADMIN: 직원 의견 게시판 ===== -->
+<div class="wrap hide" id="commentsView">
+  <button class="admin-back" type="button" onclick="backToPurchase()">← 도서 구매 페이지로 돌아가기</button>
+  <h2 class="admin-title">직원 의견 게시판</h2>
+  <p class="admin-sub">구독서비스 준비·운영과 관련해 어떤 의견이든 편하게 남겨주세요. 전 팀이 함께 볼 수 있습니다.</p>
+
+  <div class="comment-form">
+    <div class="msg" id="commentMsg"></div>
+    <div class="grid-2">
+      <div><label for="cm-name">이름</label><input type="text" id="cm-name" placeholder="홍길동" /></div>
+      <div><label for="cm-team">소속</label>
+        <select id="cm-team">
+          <option value="관리팀">관리팀</option>
+          <option value="기획편집팀">기획편집팀</option>
+          <option value="마케팅">마케팅</option>
+          <option value="개발팀">개발팀</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+    </div>
+    <label for="cm-text">의견</label>
+    <textarea id="cm-text" placeholder="예) Premium 카탈로그 상한이 22,000원이면 실무서 대부분이 초과될 것 같아요. 상한을 조정하면 어떨까요?"></textarea>
+    <button type="button" onclick="submitComment()">의견 등록</button>
+  </div>
+
+  <div class="cstats" id="cstats"></div>
+
+  <div class="tabs" role="tablist" aria-label="상태 필터" style="margin-bottom:14px;">
+    <button class="tab" id="cfAll" role="tab" aria-selected="true" onclick="setCommentFilter('all')">전체</button>
+    <button class="tab" id="cfOpen" role="tab" aria-selected="false" onclick="setCommentFilter('open')">열림</button>
+    <button class="tab" id="cfClosed" role="tab" aria-selected="false" onclick="setCommentFilter('closed')">닫힘</button>
+  </div>
+
+  <div class="ctable-wrap">
+    <table class="ctable" id="ctable"></table>
+  </div>
+</div>
+
+<div class="summary-bar" id="purchaseSummaryBar">
   <div class="summary-total">
     <div class="lbl">결제 예정 금액</div>
     <div class="val" id="totalPrice">22,000원</div>
   </div>
   <button class="buy-btn" onclick="purchase()">구매하기</button>
+</div>
+
+<div class="summary-bar hide" id="subSummaryBar">
+  <div class="summary-total">
+    <div class="lbl" id="summaryLabel">선택한 등급</div>
+    <div class="val" id="summaryVal"></div>
+  </div>
+  <button class="cta-btn" id="ctaBtn" onclick="startSubscription()">구독 시작하기</button>
 </div>
 
 <script>
@@ -257,7 +544,7 @@
    저자 Q&A는 author-studio-qna.html 과 localStorage 키를 공유합니다.
    같은 브라우저에서 두 파일을 열어보시면 질문↔답변이 서로 연동됩니다.
 ----------------------------------------------------------------*/
-var store=(function(){try{var k="__ro_t__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage;}catch(e){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null;},setItem:function(k,v){m[k]=String(v);}};}})();
+var store=(function(){try{var k="__ro_t__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage;}catch(e){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null;},setItem:function(k,v){m[k]=String(v);},removeItem:function(k){delete m[k];}};}})();
 var K_QNA="studio_on_qna";
 var BOOK={id:"humanities-49",title:"지금 알아두면 좋은 교양 인문학 49가지",author:"김레나"};
 var BASE_PRICE=22000;
@@ -385,7 +672,394 @@ function submitQuestion(){
   renderQna();
 }
 
+/* ---------------------------------------------------------------
+   Reader·On — 멤버십 구독 가입 (데모)
+   전자책=구독기간 중 열람 서비스, 종이책=정가 그대로 반영되는 방식으로 설계.
+
+   체크리스트 진행상태 · 직원 의견은 Supabase(팀 전체 공유)에 저장됩니다.
+   ⚠️ Publishable(anon) 키만 사용합니다 — Secret key는 절대 클라이언트에 넣지 마세요.
+----------------------------------------------------------------*/
+var SUPABASE_URL="https://edwfljyybrrccbxccvdh.supabase.co";
+var SUPABASE_ANON_KEY="sb_publishable_gQfy6Sm5rD4F88BwlT-lOg_xWj7KNhl";
+var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+var K_SUB="studio_on_subscription";
+var K_WEEK="subscription_launch_week_v2";
+var K_TEAM="subscription_launch_teamfilter";
+var K_CFILTER="subscription_launch_commentfilter";
+
+var TIERS=[
+  {id:"basic",name:"Basic",tag:"Reader Pass",price:9900,
+    feats:["전자책 카탈로그 무제한 열람(구독 기간 중)","신간 얼리액세스 (출간 D-14 프리뷰)","기술 Q&A 커뮤니티 열람"]},
+  {id:"standard",name:"Standard",tag:"Dev Circle",price:19900,ribbon:"인기",
+    inherit:"Basic 전체 혜택",
+    feats:["실습 소스코드 전체 저장소(GitHub) 접근","개정판 발간 시 전자책 무료 업그레이드","기술 Q&A 48시간 내 저자·에디터 답변"]},
+  {id:"premium",name:"Premium",tag:"Reader + Print",price:32000,ribbon:"추천",
+    inherit:"Standard 전체 혜택",
+    feats:["매월 카탈로그 중 종이책 1권 (정가 22,000원 이하 중 택1)","22,000원 초과 도서는 차액만 별도 결제","무료 배송","에이콘 세미나·포럼 우선 초대"]}
+];
+var selected="standard";
+
+/* Premium 구독료(32,000원)에 반영된 도서 상한가.
+   상한 이하 도서는 추가 결제 없이 포함, 초과 시 차액만 정가 그대로 별도 결제. */
+var PREMIUM_CAP=22000;
+var CATALOG_SAMPLE=[
+  {title:"지금 알아두면 좋은 교양 인문학 49가지",price:22000},
+  {title:"물류의 흐름 실무 가이드",price:26000},
+  {title:"그림으로 보는 세계사",price:31000},
+  {title:"짧은 소설집: 오늘의 위로",price:15000}
+];
+
+
+function renderTiers(){
+  $("tiers").innerHTML=TIERS.map(function(t){
+    var on=t.id===selected;
+    var feats='';
+    if(t.inherit) feats+='<li class="inherit">'+t.inherit+'</li>';
+    feats+=t.feats.map(function(f){return '<li>'+f+'</li>';}).join('');
+    return '<div class="tier" role="button" tabindex="0" aria-pressed="'+on+'" onclick="selectTier(\''+t.id+'\')">'+
+      (t.ribbon?'<span class="ribbon">'+t.ribbon+'</span>':'')+
+      '<span class="tier-radio"></span>'+
+      '<div class="tier-body" style="padding-left:26px;">'+
+      '<div class="tier-head"><div><span class="tier-name">'+t.name+'</span><span class="tier-tag">'+t.tag+'</span></div>'+
+      '<div class="tier-price"><span class="amt">'+fmt(t.price)+'</span><span class="per">/월</span></div></div>'+
+      '<ul class="tier-feats">'+feats+'</ul>'+
+      '</div></div>';
+  }).join("");
+  updateTierSummary();
+}
+function selectTier(id){selected=id;renderTiers();}
+function updateTierSummary(){
+  var t=TIERS.filter(function(x){return x.id===selected;})[0];
+  $("summaryVal").textContent=t.name+" · "+fmt(t.price)+"/월";
+  $("shipFields").className=t.id==="premium"?"":"hide";
+  renderCatalogPreview();
+}
+function renderCatalogPreview(){
+  var el=$("catalogPreview");
+  if(selected!=="premium"){el.className="catalog";return;}
+  var rows=CATALOG_SAMPLE.map(function(b){
+    var diff=Math.max(0,b.price-PREMIUM_CAP);
+    var badge=diff>0
+      ? '<span class="catalog-badge diff">+'+fmt(diff)+' 차액 결제</span>'
+      : '<span class="catalog-badge incl">추가 결제 없음</span>';
+    return '<div class="catalog-row"><span class="ct-title">'+b.title+'</span>'+
+      '<span class="ct-right"><span class="ct-price">'+fmt(b.price)+'</span>'+badge+'</span></div>';
+  }).join("");
+  el.innerHTML='<h4>이번 달 카탈로그 예시</h4>'+
+    '<p class="cap-note">정가 '+fmt(PREMIUM_CAP)+' 이하 도서는 구독료에 포함됩니다. 초과 도서를 선택하면 초과분만 정가 그대로 결제되며, 별도의 할인·마일리지는 적용되지 않습니다.</p>'+
+    rows;
+  el.className="catalog show";
+}
+
+var RANKS=[
+  {icon:"🥈",name:"실버",req:"1개월차~",perk:"기본 등급"},
+  {icon:"🥇",name:"골드",req:"6개월 연속",perk:"세미나 무료 입장권 1매"},
+  {icon:"💎",name:"플래티넘",req:"12개월 연속",perk:"신간 베타리더 우선 참여"}
+];
+function renderRanks(){
+  $("ranks").innerHTML=RANKS.map(function(r){
+    return '<div class="rank"><div class="ri">'+r.icon+'</div><div class="rn">'+r.name+'</div><div class="rm">'+r.req+'</div><div class="rp">'+r.perk+'</div></div>';
+  }).join("");
+}
+
+/* ================= ADMIN: 구독서비스 런칭 6주 마일스톤 (내부 팀 관리용) =================
+   기준일: 2026-08-11(화) · 6주 진행 → 9월 22일(화) 런칭 목표
+   *마케팅 "타겟 독자 설문·인터뷰 계획 수립" 항목은 요청에 따라 제외되었습니다. */
+var TEAMS={
+  "관리팀":{color:"var(--mgmt)"},
+  "기획편집팀":{color:"var(--edit)"},
+  "마케팅":{color:"var(--mkt)"},
+  "개발팀":{color:"var(--dev)"},
+  "전체":{color:"var(--amber)"}
+};
+var LAUNCH_TARGET="2026년 9월 22일(화)";
+var WEEKS=[
+  { label:"1주차", date:"8/11~8/17", sub:"기반 조사·설계", items:[
+    {id:"w1-2",team:"관리팀",t:"구독 서비스 약관·개인정보처리방침 초안 작성 착수"},
+    {id:"w1-3",team:"기획편집팀",t:"보유 전자책 전수 조사(파일 포맷·ISBN·정가) 착수",priority:"①"},
+    {id:"w1-4",team:"마케팅",t:"경쟁 구독 서비스(밀리의서재·리디셀렉트 등) 벤치마킹"},
+    {id:"w1-5",team:"개발팀",t:"PG사 API 문서 검토 및 결제 기술 스택 결정"},
+    {id:"w1-6",team:"개발팀",t:"구독 결제·회원 DB 스키마 설계"},
+    {id:"w1-7",team:"전체",t:"킥오프 미팅 — 전 팀 목표·역할·일정 공유",sync:true}
+  ]},
+  { label:"2주차", date:"8/18~8/24", sub:"계약·목록 정리", items:[
+    {id:"w2-1",team:"관리팀",t:"PG사·배송대행사 계약 체결"},
+    {id:"w2-2",team:"기획편집팀",t:"전자책 목록 정리 완료",priority:"①"},
+    {id:"w2-3",team:"기획편집팀",t:"Premium 카탈로그 후보(정가 22,000원 이하 도서) 리스트업"},
+    {id:"w2-4",team:"마케팅",t:"런칭 캠페인 컨셉 초안 작성"},
+    {id:"w2-5",team:"개발팀",t:"결제(PG) 연동 개발 착수"},
+    {id:"w2-6",team:"전체",t:"주간 싱크업 — 계약·목록 진행 상황 공유",sync:true}
+  ]},
+  { label:"3주차", date:"8/25~8/31", sub:"정책·일정 확정", items:[
+    {id:"w3-1",team:"관리팀",t:"구독 약관 법무 검토 완료"},
+    {id:"w3-2",team:"기획편집팀",t:"도서별 출간 일정 및 개정판 계획 확정",priority:"②"},
+    {id:"w3-3",team:"마케팅",t:"캠페인 카피 확정"},
+    {id:"w3-4",team:"마케팅",t:"에이콘 세미나·포럼 연간 일정과 구독 혜택 연계 방안 수립",priority:"④"},
+    {id:"w3-5",team:"개발팀",t:"전자책 서재·뷰어 기능 개발 착수"},
+    {id:"w3-6",team:"전체",t:"주간 싱크업 — 정책·일정 확정 사항 공유",sync:true}
+  ]},
+  { label:"4주차", date:"9/1~9/7", sub:"구축 착수", items:[
+    {id:"w4-1",team:"관리팀",t:"CS 대응 프로세스·FAQ 정리"},
+    {id:"w4-2",team:"기획편집팀",t:"개정판 담당 편집자 배정 및 일정 공유",priority:"②"},
+    {id:"w4-3",team:"마케팅",t:"홍보 콘텐츠(상세페이지·SNS·이메일) 제작 착수"},
+    {id:"w4-4",team:"개발팀",t:"기술 Q&A 커뮤니티 게시판 구축 착수",priority:"③"},
+    {id:"w4-5",team:"전체",t:"주간 싱크업 — 개발·콘텐츠 제작 진행률 점검",sync:true}
+  ]},
+  { label:"5주차", date:"9/8~9/14", sub:"콘텐츠·연동 마무리", items:[
+    {id:"w5-1",team:"관리팀",t:"정산 프로세스 리허설(장부·환불 시나리오 포함)"},
+    {id:"w5-2",team:"기획편집팀",t:"세미나·포럼 발표자료·초청 도서 목록 검토",priority:"④"},
+    {id:"w5-3",team:"마케팅",t:"얼리버드 프로모션 설계"},
+    {id:"w5-4",team:"마케팅",t:"세미나·포럼 초청자 명단 확정",priority:"④"},
+    {id:"w5-5",team:"개발팀",t:"GitHub 소스코드 저장소 연동 개발"},
+    {id:"w5-6",team:"개발팀",t:"개정판 업그레이드 알림 로직 개발"},
+    {id:"w5-7",team:"전체",t:"주간 싱크업 — 런칭 전 최종 점검 항목 공유",sync:true}
+  ]},
+  { label:"6주차", date:"9/15~9/21", sub:"통합 테스트·런칭", items:[
+    {id:"w6-1",team:"관리팀",t:"결제·배송 실거래 테스트"},
+    {id:"w6-2",team:"관리팀",t:"법무 최종 승인 및 약관 게시"},
+    {id:"w6-3",team:"기획편집팀",t:"최종 카탈로그 검수 및 확정"},
+    {id:"w6-4",team:"기획편집팀",t:"개정판 일정 공지 자료 준비"},
+    {id:"w6-5",team:"마케팅",t:"사전예약 오픈"},
+    {id:"w6-6",team:"개발팀",t:"전체 통합 QA 테스트"},
+    {id:"w6-7",team:"개발팀",t:"버그 픽스 및 정식 배포"},
+    {id:"w6-8",team:"전체",t:"런칭 리뷰 미팅 — 결과 공유 및 개선 과제 정리",sync:true}
+  ]}
+];
+var currentWeek=0, teamFilter="전체";
+
+function allItems(){var all=[];WEEKS.forEach(function(w){w.items.forEach(function(i){all.push(i);});});return all;}
+function renderLegend(){
+  var teams=["전체","관리팀","기획편집팀","마케팅","개발팀"];
+  $("legend").innerHTML=teams.map(function(name){
+    var on=name===teamFilter;
+    return '<button class="legend-chip" type="button" aria-pressed="'+on+'" onclick="setTeamFilter(\''+name+'\')">'+
+      '<span class="sw" style="background:'+TEAMS[name].color+'"></span>'+name+'</button>';
+  }).join("");
+}
+function setTeamFilter(name){teamFilter=name;write(K_TEAM,name);renderLegend();renderWeek();}
+
+/* ---------- 체크리스트 진행상태: Supabase(checklist_progress) 공유 ---------- */
+var doneCache={};
+async function loadDoneCache(){
+  var res=await sb.from("checklist_progress").select("item_id,done");
+  if(res.error){console.error("checklist load error:",res.error);return;}
+  doneCache={};
+  (res.data||[]).forEach(function(r){doneCache[r.item_id]=r.done;});
+}
+function renderTabs(){
+  $("wtabs").innerHTML=WEEKS.map(function(w,i){
+    var total=w.items.length, doneCt=w.items.filter(function(it){return doneCache[it.id];}).length;
+    var pct=total?Math.round(doneCt/total*100):0;
+    return '<button class="wtab" type="button" aria-selected="'+(i===currentWeek)+'" onclick="setWeek('+i+')">'+
+      '<div class="wn">'+w.label+'</div><div class="wd">'+w.date+'</div><div class="ws">'+w.sub+'</div><div class="wp">'+pct+'%</div></button>';
+  }).join("");
+}
+function setWeek(i){currentWeek=i;write(K_WEEK,i);renderTabs();renderWeek();}
+function renderWeek(){
+  var w=WEEKS[currentWeek];
+  $("weekHead").innerHTML='<h3>'+w.label+' ('+w.date+') · '+w.sub+'</h3><p>이번 주 준비 항목을 팀별로 확인하세요.</p>';
+  var items=w.items.filter(function(it){return teamFilter==="전체"||it.team===teamFilter;});
+  if(!items.length){$("items").innerHTML='<p style="font-size:12.5px;color:var(--text-soft);text-align:center;padding:24px 0;">해당 팀의 항목이 없습니다.</p>';return;}
+  $("items").innerHTML=items.map(function(it){
+    var isDone=!!doneCache[it.id];
+    var color=TEAMS[it.team]?TEAMS[it.team].color:"var(--paper-line)";
+    return '<label class="item'+(isDone?' done':'')+(it.sync?' sync-item':'')+'" style="--team-color:'+color+'">'+
+      '<input type="checkbox" '+(isDone?'checked':'')+' onchange="toggleDone(\''+it.id+'\')" />'+
+      '<span class="item-main"><span class="item-text">'+it.t+(it.priority?'<span class="item-priority">'+it.priority+'</span>':'')+'</span>'+
+      '<span class="item-tag" style="background:'+color+'">'+it.team+'</span></span>'+
+      '</label>';
+  }).join("");
+}
+async function toggleDone(id){
+  var newVal=!doneCache[id];
+  doneCache[id]=newVal; /* 낙관적 업데이트: 즉시 반영 후 서버에 저장 */
+  renderTabs();renderWeek();renderOverall();
+  var res=await sb.from("checklist_progress").upsert({item_id:id,done:newVal,updated_at:new Date().toISOString()});
+  if(res.error){console.error("checklist save error:",res.error);doneCache[id]=!newVal;renderTabs();renderWeek();renderOverall();}
+}
+function renderOverall(){
+  var all=allItems();
+  var doneCt=all.filter(function(it){return doneCache[it.id];}).length;
+  var pct=all.length?Math.round(doneCt/all.length*100):0;
+  $("overallPct").textContent=pct+"%";
+  $("overallBar").style.width=pct+"%";
+  $("launchFlag").textContent="🚀 오늘(8/11) 기준 6주 일정 · 런칭 목표: "+LAUNCH_TARGET;
+}
+function setView(v){
+  $("purchaseView").className="wrap"+(v==="purchase"?"":" hide");
+  $("subscribeView").className="wrap"+(v==="subscribe"?"":" hide");
+  $("adminView").className="wrap"+(v==="admin"?"":" hide");
+  $("commentsView").className="wrap"+(v==="comments"?"":" hide");
+  $("purchaseSummaryBar").className="summary-bar"+(v==="purchase"?"":" hide");
+  refreshSubBar();
+  $("navSubscribeBtn").setAttribute("aria-selected",v==="subscribe"?"true":"false");
+  $("navChecklistBtn").setAttribute("aria-selected",v==="admin"?"true":"false");
+  $("navCommentsBtn").setAttribute("aria-selected",v==="comments"?"true":"false");
+}
+/* 구독 요약바는 "subscribe 화면에 있고 + 아직 구독 전"일 때만 보여줍니다.
+   (구독 완료 후에는 CTA가 필요 없고, 다른 화면에서는 애초에 안 보여야 함) */
+function refreshSubBar(){
+  var show=currentView()==="subscribe" && !read(K_SUB,null);
+  $("subSummaryBar").className="summary-bar"+(show?"":" hide");
+}
+function currentView(){
+  if($("subscribeView").className.indexOf("hide")===-1) return "subscribe";
+  if($("adminView").className.indexOf("hide")===-1) return "admin";
+  if($("commentsView").className.indexOf("hide")===-1) return "comments";
+  return "purchase";
+}
+function backToPurchase(){setView("purchase");}
+function toggleView(v){
+  setView(currentView()===v?"purchase":v);
+  if(v==="comments") renderComments();
+}
+
+/* ---------- 직원 의견 게시판: Supabase(subscription_comments) 공유 ---------- */
+var commentsCache=[];
+var commentFilter="all";
+var openReplyRowId=null;
+
+async function loadComments(){
+  var res=await sb.from("subscription_comments").select("*").order("created_at",{ascending:false});
+  if(res.error){console.error("comments load error:",res.error);return;}
+  commentsCache=res.data||[];
+  renderComments();
+}
+function timeAgoC(iso){
+  var diff=Math.floor((Date.now()-new Date(iso).getTime())/1000);
+  if(diff<60)return "방금 전";
+  if(diff<3600)return Math.floor(diff/60)+"분 전";
+  if(diff<86400)return Math.floor(diff/3600)+"시간 전";
+  return Math.floor(diff/86400)+"일 전";
+}
+function setCommentFilter(f){
+  commentFilter=f;
+  write(K_CFILTER,f);
+  $("cfAll").setAttribute("aria-selected",f==="all"?"true":"false");
+  $("cfOpen").setAttribute("aria-selected",f==="open"?"true":"false");
+  $("cfClosed").setAttribute("aria-selected",f==="closed"?"true":"false");
+  renderComments();
+}
+function renderComments(){
+  var all=commentsCache;
+  var openCt=all.filter(function(c){return c.status==="open";}).length;
+  var closedCt=all.length-openCt;
+  $("cstats").innerHTML=
+    '<div class="cstat open"><b>'+openCt+'</b>열림</div>'+
+    '<div class="cstat closed"><b>'+closedCt+'</b>닫힘</div>'+
+    '<div class="cstat"><b>'+all.length+'</b>전체 의견</div>';
+
+  var items=all.filter(function(c){return commentFilter==="all"||c.status===commentFilter;});
+  if(!items.length){$("ctable").innerHTML='<tr><td class="comment-empty">해당하는 의견이 없습니다.</td></tr>';return;}
+
+  var head='<thead><tr><th>상태</th><th>의견</th><th>작성일</th><th></th></tr></thead>';
+  var body=items.map(function(c){
+    var color=TEAMS[c.team]?TEAMS[c.team].color:"var(--paper-line)";
+    var replyHtml=c.reply?('<div class="reply-preview">↳ 답신: '+esc(c.reply)+'</div>'):'';
+    var row='<tr class="'+(c.status==="closed"?"row-closed":"")+'">'+
+      '<td><button class="status-badge '+c.status+'" type="button" onclick="quickToggleStatus('+c.id+')">'+(c.status==="open"?"열림":"닫힘")+'</button></td>'+
+      '<td class="ctext-cell"><div class="who-cell"><span class="cname">'+esc(c.name)+'</span><span class="cteam" style="background:'+color+'">'+esc(c.team)+'</span></div>'+esc(c.text)+replyHtml+'</td>'+
+      '<td class="date-cell">'+timeAgoC(c.created_at)+'</td>'+
+      '<td><button class="action-btn" type="button" onclick="toggleReplyRow('+c.id+')">'+(openReplyRowId===c.id?"닫기":"답신")+'</button></td>'+
+      '</tr>';
+    if(openReplyRowId===c.id){
+      row+='<tr class="reply-row"><td colspan="4">'+
+        '<textarea id="reply-input-'+c.id+'" placeholder="답신 내용을 입력하세요">'+esc(c.reply||"")+'</textarea>'+
+        '<div class="reply-row-actions">'+
+        '<select id="status-select-'+c.id+'"><option value="open"'+(c.status==="open"?" selected":"")+'>열림으로 유지</option><option value="closed"'+(c.status==="closed"?" selected":"")+'>닫힘으로 변경</option></select>'+
+        '<button class="action-btn" type="button" onclick="saveReply('+c.id+')">저장</button>'+
+        '</div></td></tr>';
+    }
+    return row;
+  }).join("");
+  $("ctable").innerHTML=head+"<tbody>"+body+"</tbody>";
+}
+function toggleReplyRow(id){openReplyRowId=(openReplyRowId===id)?null:id;renderComments();if(openReplyRowId){setTimeout(function(){var t=$("reply-input-"+id);if(t)t.focus();},0);}}
+async function saveReply(id){
+  var ta=$("reply-input-"+id), sel=$("status-select-"+id);
+  var text=ta?ta.value.trim():"";
+  var payload={reply:text||null,replied_at:text?new Date().toISOString():null,status:sel?sel.value:undefined};
+  var res=await sb.from("subscription_comments").update(payload).eq("id",id);
+  openReplyRowId=null;
+  if(res.error){console.error("reply save error:",res.error);}
+  await loadComments();
+}
+async function quickToggleStatus(id){
+  var c=commentsCache.filter(function(x){return x.id===id;})[0];
+  if(!c)return;
+  var newStatus=c.status==="open"?"closed":"open";
+  var res=await sb.from("subscription_comments").update({status:newStatus}).eq("id",id);
+  if(res.error){console.error("status toggle error:",res.error);return;}
+  await loadComments();
+}
+async function submitComment(){
+  var name=$("cm-name").value.trim(), team=$("cm-team").value, text=$("cm-text").value.trim();
+  var m=$("commentMsg");
+  if(!name){m.textContent="이름을 입력해 주세요.";m.className="msg show";return;}
+  if(!text){m.textContent="의견 내용을 입력해 주세요.";m.className="msg show";return;}
+  var res=await sb.from("subscription_comments").insert({name:name,team:team,text:text,status:"open"});
+  if(res.error){m.textContent="등록 중 오류가 발생했습니다: "+res.error.message;m.className="msg show";return;}
+  $("cm-text").value="";
+  m.textContent="의견이 등록되었습니다.";m.className="msg show ok";
+  await loadComments();
+}
+
+function startSubscription(){
+  var name=$("su-name").value.trim(), email=$("su-email").value.trim();
+  var m=$("formMsg");
+  if(!name||!email){m.textContent="이름과 이메일을 입력해 주세요.";m.className="msg show";return;}
+  if(selected==="premium"&&!$("su-addr").value.trim()){m.textContent="Premium 등급은 배송지 입력이 필요합니다.";m.className="msg show";return;}
+  var t=TIERS.filter(function(x){return x.id===selected;})[0];
+  var sub={tierId:t.id,tierName:t.name,price:t.price,name:name,email:email,months:1,startedAt:Date.now()};
+  write(K_SUB,sub);
+  renderState();
+}
+function cancelSubscription(){
+  try{store.removeItem(K_SUB);}catch(e){}
+  renderState();
+}
+function renderState(){
+  var sub=read(K_SUB,null);
+  if(sub){
+    $("formSection").className="hide";
+    $("subSuccess").className="sub-success show";
+    $("successTitle").textContent=sub.tierName+" 구독이 시작되었습니다";
+    $("successBody").textContent=sub.name+"님, Reader·On 멤버십에 가입해 주셔서 감사합니다. 전자책 서재가 바로 활성화됩니다.";
+    var d=new Date(sub.startedAt); d.setMonth(d.getMonth()+1);
+    $("successNext").textContent="다음 결제일: "+d.getFullYear()+"."+(d.getMonth()+1)+"."+d.getDate()+" · "+fmt(sub.price);
+  } else {
+    $("formSection").className="";
+    $("subSuccess").className="sub-success";
+    $("formMsg").className="msg";
+  }
+  refreshSubBar();
+}
+
+/* ---------- 통합 초기화 ---------- */
 renderFormats();updateSummary();renderQna();renderWhyTabs();
+teamFilter=read(K_TEAM,"전체");
+currentWeek=read(K_WEEK,0);
+commentFilter=read(K_CFILTER,"all");
+renderTiers();renderRanks();renderState();
+renderLegend();renderTabs();renderWeek();renderOverall();
+
+(async function initSupabaseData(){
+  await loadDoneCache();
+  renderTabs();renderWeek();renderOverall();
+  await loadComments();
+})();
+
+/* 실시간 동기화: 다른 팀원이 체크리스트를 갱신하거나 의견을 남기면 자동 반영됩니다. */
+sb.channel("checklist_progress_changes")
+  .on("postgres_changes",{event:"*",schema:"public",table:"checklist_progress"},async function(){
+    await loadDoneCache();renderTabs();renderWeek();renderOverall();
+  }).subscribe();
+
+sb.channel("subscription_comments_changes")
+  .on("postgres_changes",{event:"*",schema:"public",table:"subscription_comments"},async function(){
+    await loadComments();
+  }).subscribe();
 </script>
 </body>
 </html>
