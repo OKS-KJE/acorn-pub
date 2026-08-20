@@ -764,6 +764,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <div class="content">
     <div class="tab-bar">
       <button class="tab-btn active" onclick="tab('s3','t0',this)">📝 <span data-i18n="tab_p0">출판 프로세스</span></button>
+      <button class="tab-btn" onclick="tab('s3','t7',this)">📮 <span data-i18n="tab_p8">저자 커뮤니케이션</span></button>
       <button class="tab-btn" onclick="tab('s3','t1',this)">📊 <span data-i18n="tab_p6">원가 분석</span></button>
       <button class="tab-btn" onclick="tab('s3','t2',this)">🔷 <span data-i18n="tab_p1">플랫폼 비즈니스</span></button>
       <button class="tab-btn" onclick="tab('s3','t3',this)">🌐 <span data-i18n="tab_p2">KDP</span></button>
@@ -2324,6 +2325,208 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
 
     </div>
+    <div id="s3-t7" class="tab-panel" data-ko-id="s3-t7">
+      <div class="sec-h">저자 커뮤니케이션 &amp; 출간 후속 프로세스</div>
+
+      <div class="info-box" style="border-left:3px solid var(--rose)">
+        <strong>📌 배경</strong> — 2026년 8월, 한 저자로부터 출간 이후 커뮤니케이션·마케팅 공유·저자 구매 안내 등에 대한 피드백을 받아 진행 과정을 점검했습니다. 개별 담당자의 실수가 아니라 <strong>표준 절차 부재·통합 점검 부족·신규 담당자 검토 체계 미비</strong>라는 세 가지 구조적 원인이 확인되어, 재발 방지를 위한 프로세스 개선안과 체크리스트를 마련해 이 탭에서 관리합니다.
+      </div>
+
+      <div class="pill-tabs" id="ac-sub-tabs" style="margin-bottom:18px">
+        <button class="pill-tab active" onclick="acSub(0,this)">📋 배경 및 원칙</button>
+        <button class="pill-tab" onclick="acSub(1,this)">🗺 6단계 프로세스</button>
+        <button class="pill-tab" onclick="acSub(2,this)">✅ 체크리스트</button>
+      </div>
+
+      <!-- ══ 서브패널 0: 배경 및 원칙 ══ -->
+      <div id="s3-t7-bg" class="kdp-sub-panel active">
+
+        <div class="sec-h" style="margin-top:0">저자가 제기한 주요 의견</div>
+        <div class="rule-card" style="margin-bottom:14px">
+          <ul class="rule-list">
+            <li><span class="rule-bullet">▸</span>출간 이후 홍보·마케팅 계획과 실제 진행 내용을 별도로 전달받지 못함</li>
+            <li><span class="rule-bullet">▸</span>초판 인쇄 부수를 안내받지 못함</li>
+            <li><span class="rule-bullet">▸</span>제목·디자인·인터넷서점 책 소개·보도자료 등이 하나의 콘셉트로 충분히 연결되지 않음</li>
+            <li><span class="rule-bullet">▸</span>다른 출판사 도서와 비교했을 때 제목·디자인·책 소개의 전문성·완성도에 아쉬움</li>
+            <li><span class="rule-bullet">▸</span>인터넷서점·온라인에서 책이 어떻게 소개·홍보되는지 공유받지 못함</li>
+            <li><span class="rule-bullet">▸</span>저자 구매 가능 여부·조건·신청 방법 안내가 없어 구매 자체를 포기</li>
+            <li><span class="rule-bullet">▸</span>증정본은 수령했으나 발송 사실·배송 과정에 대한 별도 안내 없음</li>
+            <li><span class="rule-bullet">▸</span>책을 함께 만든 출판사와 출간 이후 자연스럽게 소통하는 과정이 부족</li>
+          </ul>
+        </div>
+        <div class="info-box teal" style="margin-bottom:24px">
+          저자는 단순히 홍보를 더 많이 해달라거나 판매를 확대해달라는 요청이 아니라, <strong>출간 이후 책이 어떤 과정을 거쳐 유통·홍보되고 있는지를 저자와 공유하는 과정 자체</strong>가 부족했다는 점을 주요 문제로 제기했습니다.
+        </div>
+
+        <div class="sec-h">종합 판단 — 3가지 구조적 요인</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:24px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:8px;">① 마감 이후 커뮤니케이션 절차 미비</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">예약판매 여부와 관계없이 모든 도서에 적용해야 할 출간 후 저자 커뮤니케이션 절차가 마련되어 있지 않았음</div>
+          </div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--purple);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--purple);margin-bottom:8px;">② 통합 기획·점검 부족</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">제목·디자인·서점 소개·보도자료·마케팅까지 도서 전체를 하나의 상품으로 보고 점검하는 협업 체계가 부족했음</div>
+          </div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:8px;">③ 신규 담당자·외주자 검토 체계 미비</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;">신규 담당자와 신규 외주자가 함께 진행하는 도서에 별도의 내부 검토·중간 점검 절차가 없었음</div>
+          </div>
+        </div>
+
+        <div class="sec-h">운영 원칙</div>
+        <div class="rule-card">
+          <ul class="rule-list">
+            <li><span class="rule-bullet">▸</span>마감은 인쇄용 파일을 넘기는 것으로 종료되지 않으며, 제작·유통·증정·구매·홍보·마케팅 정보 안내와 출간 이후 커뮤니케이션까지 포함해 관리함</li>
+            <li><span class="rule-bullet">▸</span>예약판매 여부와 관계없이 모든 도서에 동일한 저자 커뮤니케이션 절차를 적용함</li>
+            <li><span class="rule-bullet">▸</span>각 단계별 완료 여부를 관리함 (아래 ✅ 체크리스트 탭 활용)</li>
+            <li><span class="rule-bullet">▸</span>신규 편집자 또는 신규 외주자와 진행하는 도서는 시안 및 마감 단계에서 내부 추가 검토를 적용함</li>
+            <li><span class="rule-bullet">▸</span>제목·디자인·책 소개·보도자료·상세 이미지·마케팅의 방향성이 일관되는지 출간 전 종합 점검함</li>
+            <li><span class="rule-bullet">▸</span>상세 실행 항목은 ✅ 체크리스트 탭에 따라 관리함</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ 서브패널 1: 6단계 프로세스 ══ -->
+      <div id="s3-t7-process" class="kdp-sub-panel">
+
+        <div class="sec-h" style="margin-top:0">저자 커뮤니케이션 6단계</div>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px;">
+          <div style="display:flex;gap:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">1</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--blue),rgba(0,0,0,.08));margin:4px 0;min-height:20px;"></div></div>
+            <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">출간 기획·브랜딩</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;">도서의 핵심 독자, 콘셉트, 제목, 디자인, 책 소개, 마케팅 방향을 출간 초기부터 통합 관리</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">2</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--purple),rgba(0,0,0,.08));margin:4px 0;min-height:20px;"></div></div>
+            <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">마감 전 저자 확인</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;">최종 제목·표지·정가·출간일·인쇄 부수·출간 일정 등 주요 제작 정보를 저자와 최종 확인</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">3</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--gold2),rgba(0,0,0,.08));margin:4px 0;min-height:20px;"></div></div>
+            <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">서점 등록·예약판매</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;">예약판매 여부와 관계없이 서점 등록 완료 시 저자에게 판매 링크와 홍보 관련 정보를 안내</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">4</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,var(--teal),rgba(0,0,0,.08));margin:4px 0;min-height:20px;"></div></div>
+            <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">입고·증정·저자 구매</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;">입고 완료, 증정본 발송, 저자 구매 조건 등을 저자에게 안내</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:#10B981;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">5</div><div style="flex:1;width:2px;background:linear-gradient(to bottom,#10B981,rgba(0,0,0,.08));margin:4px 0;min-height:20px;"></div></div>
+            <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;">
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">출간 후 마케팅 공유</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;">출판사에서 예정하거나 진행 중인 마케팅 활동을 저자에게 공유</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;">
+            <div style="display:flex;flex-direction:column;align-items:center;"><div style="width:34px;height:34px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;">6</div></div>
+            <div style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-left:4px solid #DC2626;border-radius:var(--rL);padding:14px 18px;">
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;">출간 후 정기 커뮤니케이션</div>
+              <div style="font-size:12px;color:var(--text2);line-height:1.7;">출간 이후 일정 시점에 저자에게 마케팅 진행 상황과 추가 협업 가능 사항을 공유</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule-card" style="margin-bottom:20px">
+          <div class="rule-card-title" style="color:var(--gold2)">🆕 신규 담당자·신규 외주자 협업 건 — 내부 추가 검토 4단계</div>
+          <ul class="rule-list">
+            <li><span class="rule-bullet">▸</span>초기 콘셉트 및 디자인 방향 설정 단계</li>
+            <li><span class="rule-bullet">▸</span>1차 표지 시안 단계</li>
+            <li><span class="rule-bullet">▸</span>최종 표지 확정 단계</li>
+            <li><span class="rule-bullet">▸</span>서점 상세페이지 및 홍보 콘텐츠 마감 단계</li>
+          </ul>
+        </div>
+
+        <div class="sec-h">⚡ 출간 전후 필수 확인 10항목 (요약)</div>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>확인 항목</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>제목·부제 최종 확인</td></tr>
+            <tr><td>2</td><td>표지·본문 최종 확인</td></tr>
+            <tr><td>3</td><td>정가·출간일 확인</td></tr>
+            <tr><td>4</td><td>초판 인쇄 부수 저자 공유</td></tr>
+            <tr><td>5</td><td>서점 등록 및 링크 저자 전달</td></tr>
+            <tr><td>6</td><td>저자 증정본 수량·주소 확인</td></tr>
+            <tr><td>7</td><td>저자 구매 조건 안내</td></tr>
+            <tr><td>8</td><td>상세 이미지 또는 카드뉴스 제작 여부 확인</td></tr>
+            <tr><td>9</td><td>출간 후 마케팅 계획 저자 공유</td></tr>
+            <tr><td>10</td><td>출간 후 첫 커뮤니케이션 일정 등록</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ══ 서브패널 2: 체크리스트 ══ -->
+      <div id="s3-t7-checklist" class="kdp-sub-panel">
+        <div style="margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--rose);text-transform:uppercase;margin-bottom:4px;">AUTHOR COMMUNICATION CHECKLIST</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);">저자 커뮤니케이션 &amp; 출간 진행 체크리스트</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px;">도서·담당자·일자별로 구분해 Supabase에 저장·관리합니다. 팀 전체가 같은 진행 상황을 공유해서 볼 수 있습니다.</div>
+        </div>
+
+        <!-- ══ 목록 뷰 ══ -->
+        <div id="ac-list-view">
+
+          <div id="ac-db-badge" style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3);margin-bottom:14px;padding:8px 12px;background:var(--s2);border-radius:8px;"></div>
+
+          <div id="ac-table-missing" style="display:none;margin-bottom:16px;background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 18px;">
+            <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px;"><strong style="color:#DC2626;">⚠ Supabase에 author_comm_checklists 테이블이 아직 없습니다.</strong> 아래 버튼으로 생성 SQL을 복사해 Supabase SQL Editor에 붙여넣고 실행하면, 이후부터 도서별 체크리스트가 팀 전체에 저장·동기화됩니다. 테이블이 없어도 이 브라우저에는 계속 저장됩니다.</div>
+            <button onclick="acCopySQL()" style="padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">📋 테이블 생성 SQL 복사</button>
+            <span id="ac-table-msg" style="margin-left:10px;font-size:11px;"></span>
+          </div>
+
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 18px;margin-bottom:18px;">
+            <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;">+ 새 도서 체크리스트 만들기</div>
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:8px;align-items:end;">
+              <div>
+                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">도서명 *</div>
+                <input id="ac-new-title" type="text" placeholder="도서 제목" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">저자명</div>
+                <input id="ac-new-author" type="text" placeholder="저자명 (선택)" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">담당자 *</div>
+                <input id="ac-new-assignee" type="text" placeholder="담당자명" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">목표일</div>
+                <input id="ac-new-date" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+              </div>
+              <button onclick="acNewChecklist()" style="padding:9px 16px;background:var(--rose);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">+ 생성</button>
+            </div>
+          </div>
+
+          <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;">도서별 진행 현황</div>
+          <div id="ac-list-body" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+
+        <!-- ══ 상세(개별 도서) 뷰 ══ -->
+        <div id="ac-detail-view" style="display:none;">
+          <button onclick="acBackToList()" style="margin-bottom:14px;padding:7px 14px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">← 목록으로</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+            <div>
+              <div id="ac-detail-title" style="font-size:15px;font-weight:800;color:var(--text);"></div>
+              <div id="ac-detail-meta" style="font-size:12px;color:var(--text3);margin-top:4px;"></div>
+            </div>
+            <button onclick="acResetChecklist()" style="padding:7px 14px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 이 도서 체크리스트 초기화</button>
+          </div>
+          <div id="ac-checklist-body" style="display:flex;flex-direction:column;gap:14px;"></div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 </div>
 
@@ -4717,6 +4920,17 @@ function kdpSub(idx, btn) {
   document.getElementById('s3-t3-guide')?.classList.toggle('active', idx===1);
 }
 
+// ── 저자 커뮤니케이션 TAB: 배경/프로세스/체크리스트 서브 토글 ──
+function acSub(idx, btn) {
+  const bar = btn.closest('.pill-tabs');
+  if(bar) bar.querySelectorAll('.pill-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('s3-t7-bg')?.classList.toggle('active', idx===0);
+  document.getElementById('s3-t7-process')?.classList.toggle('active', idx===1);
+  document.getElementById('s3-t7-checklist')?.classList.toggle('active', idx===2);
+  if(idx===2 && !AC_LOADED) acLoad();
+}
+
 // ── NAVIGATION ───────────────────────────────────────────────
 const SECTIONS = ['s1','s3','s4','s8'];
 function nav(id, subTabId) {
@@ -4790,7 +5004,7 @@ const T = {
     nav_co:'회사', nav_wk:'업무', nav_rg:'복무 규정', nav_kp:'KPI',
     tab_co:'회사 소개', tab_og:'조직 구조',
     tab_p0:'출판 프로세스', tab_p1:'플랫폼 비즈니스(placeholder)', tab_p2:'KDP',
-    tab_p3:'저자 발굴', tab_p4:'저자 설득 가이드', tab_p7:'2026 목표', tab_p5:'플랫폼 비즈니스', tab_p6:'원가 분석',
+    tab_p3:'저자 발굴', tab_p4:'저자 설득 가이드', tab_p7:'2026 목표', tab_p5:'플랫폼 비즈니스', tab_p6:'원가 분석', tab_p8:'저자 커뮤니케이션',
     tab_r0:'공통 규정', tab_r1:'수습 직원', tab_r2:'경력 직원',
     tab_r3:'수습 로드맵', tab_r4:'체크리스트',
     tab_r5:'업무일지',
@@ -4804,7 +5018,7 @@ const T = {
     nav_co:'Company', nav_wk:'Work', nav_rg:'Regulations', nav_kp:'KPI',
     tab_co:'Overview', tab_og:'Organization',
     tab_p0:'Publishing Process', tab_p1:'Platform Business', tab_p2:'KDP',
-    tab_p3:'Author Discovery', tab_p4:'Persuasion Guide', tab_p7:'2026 Targets', tab_p5:'Platform Business', tab_p6:'Cost Analysis',
+    tab_p3:'Author Discovery', tab_p4:'Persuasion Guide', tab_p7:'2026 Targets', tab_p5:'Platform Business', tab_p6:'Cost Analysis', tab_p8:'Author Communication',
     tab_r0:'General Rules', tab_r1:'Probationary', tab_r2:'Experienced',
     tab_r3:'Roadmap', tab_r4:'Checklist',
     tab_r5:'Work Journal',
@@ -7402,6 +7616,426 @@ function kdpResetChecklist(){
   localStorage.removeItem(KDP_CL_KEY);
   _clBuilt=false;
   kdpBuildChecklist();
+}
+
+// ── 저자 커뮤니케이션 체크리스트 (도서별 · Supabase 저장) ──────
+// 레코드 = { id, book_title, author_name, assignee, target_date,
+//            status('in_progress'|'done'), progress{ "gi_ii": true }, created_at, updated_at }
+var AC_TABLE = 'author_comm_checklists';
+var AC_CL_GROUPS = [
+  {title:"0. 출간 전후 필수 확인 10항목 (Quick Check)", color:"var(--rose)", items:[
+    "제목·부제 최종 확인",
+    "표지·본문 최종 확인",
+    "정가·출간일 확인",
+    "초판 인쇄 부수 저자 공유",
+    "서점 등록 및 링크 저자 전달",
+    "저자 증정본 수량·주소 확인",
+    "저자 구매 조건 안내",
+    "상세 이미지 또는 카드뉴스 제작 여부 확인",
+    "출간 후 마케팅 계획 저자 공유",
+    "출간 후 첫 커뮤니케이션 일정 등록",
+  ]},
+  {title:"1. 출간 기획·브랜딩", color:"var(--blue)", items:[
+    "[도서 콘셉트] 핵심 독자층 정리",
+    "[도서 콘셉트] 도서의 핵심 강점 정리",
+    "[도서 콘셉트] 책을 한 문장으로 설명할 수 있는 핵심 콘셉트 정리",
+    "[도서 콘셉트] 경쟁·유사 도서의 제목·표지·상세페이지·서점 소개 방식 비교",
+    "[도서 콘셉트] 저자가 생각하는 핵심 메시지와 출판사가 판단한 마케팅 포인트 확인",
+    "[도서 콘셉트] 제목·부제·표지·책 소개·보도자료·마케팅 방향이 하나의 콘셉트로 연결되는지 확인",
+    "[제목·디자인] 제목·부제 후보 저자와 협의",
+    "[제목·디자인] 최종 제목 확정 전 저자 의견 확인",
+    "[제목·디자인] 표지 시안이 책의 콘셉트와 독자층에 적합한지 검토",
+    "[제목·디자인] 표지 시안 및 디자인 방향 저자와 공유",
+    "[제목·디자인] 표지·내지·상세 이미지의 디자인 일관성 확인",
+    "[제목·디자인] 신규 외주 디자이너 진행 시 내부 추가 검토",
+    "[서점·홍보 콘텐츠] 인터넷서점용 책 소개 작성",
+    "[서점·홍보 콘텐츠] 저자·역자 소개 최종 확인",
+    "[서점·홍보 콘텐츠] 주요 판매 포인트 및 핵심 문구 정리",
+    "[서점·홍보 콘텐츠] 보도자료 작성",
+    "[서점·홍보 콘텐츠] 상세 이미지 또는 카드뉴스 제작 여부 확인",
+    "[서점·홍보 콘텐츠] 책 소개·보도자료·상세 이미지의 메시지 일치 여부 확인",
+    "[서점·홍보 콘텐츠] 필요 시 책 소개 및 보도자료 주요 내용 저자와 공유",
+  ]},
+  {title:"2. 마감 전 저자 확인", color:"var(--purple)", items:[
+    "[최종 제작 정보] 최종 제목·부제 확인",
+    "[최종 제작 정보] 최종 표지 확인",
+    "[최종 제작 정보] 최종 본문 및 판권 확인",
+    "[최종 제작 정보] 정가 확인",
+    "[최종 제작 정보] 출간 예정일 확인",
+    "[최종 제작 정보] 최종 제작 사양 확인",
+    "[최종 제작 정보] 초판 인쇄 부수 확정",
+    "[최종 제작 정보] 초판 인쇄 부수 및 필요 시 결정 사유 저자에게 공유",
+    "[출간 일정] 인쇄 예정일 공유",
+    "[출간 일정] 입고 예정일 공유",
+    "[출간 일정] 예약판매 여부 및 시작 예정일 공유",
+    "[출간 일정] 공식 출간일 공유",
+    "[출간 일정] 일정 변경 시 저자에게 변경 내용 안내",
+    "[마감 이후 안내 준비] 저자 증정본 수량 확인",
+    "[마감 이후 안내 준비] 저자 증정본 배송지 확인",
+    "[마감 이후 안내 준비] 저자 추가 구매 가능 여부 확인",
+    "[마감 이후 안내 준비] 저자 구매 할인율 확인",
+    "[마감 이후 안내 준비] 저자 구매 신청 방법 정리",
+    "[마감 이후 안내 준비] 저자 구매 배송 방법 및 배송비 기준 확인",
+    "[마감 이후 안내 준비] 저자가 필요한 홍보용 도서 수량 확인",
+    "[마감 이후 안내 준비] 저자의 SNS·블로그·강의·유튜브 등 홍보 협업 가능 채널 확인",
+  ]},
+  {title:"3. 서점 등록·예약판매", color:"var(--gold2)", items:[
+    "[서점 정보 등록] 주요 인터넷서점 도서 정보 등록 여부 확인",
+    "[서점 정보 등록] 제목·부제·저자명·정가·출간일 등 서지정보 확인",
+    "[서점 정보 등록] 책 소개 확인",
+    "[서점 정보 등록] 목차 확인",
+    "[서점 정보 등록] 저자 소개 확인",
+    "[서점 정보 등록] 출판사 리뷰 확인",
+    "[서점 정보 등록] 표지 이미지 정상 등록 여부 확인",
+    "[서점 정보 등록] 상세 이미지 등록 여부 확인",
+    "[서점 정보 등록] 서점별 오기·누락 여부 확인",
+    "[저자 안내] 주요 인터넷서점 링크 저자에게 전달",
+    "[저자 안내] 예약판매 진행 시 시작일·기간 안내",
+    "[저자 안내] 저자 SNS·블로그 등에 활용할 수 있는 링크 전달",
+    "[저자 안내] 홍보 협조 요청 시 요청 내용 구체적으로 전달",
+    "[저자 안내] 상세 이미지·카드뉴스·홍보 이미지 준비 시 함께 전달",
+    "[예약판매가 없는 도서] 서점 등록 완료 시점을 별도 저자 커뮤니케이션 단계로 관리",
+    "[예약판매가 없는 도서] 예약판매를 진행하지 않아도 저자 연락이 생략되지 않는지 확인",
+  ]},
+  {title:"4. 입고·증정·저자 구매", color:"var(--teal)", items:[
+    "[도서 입고] 출판사 입고 완료 확인",
+    "[도서 입고] 저자에게 입고 사실 안내",
+    "[도서 입고] 실제 서점 판매 시작 여부 확인",
+    "[저자 증정본] 계약상 증정본 수량 확인",
+    "[저자 증정본] 저자 증정본 발송",
+    "[저자 증정본] 발송 사실 저자에게 안내",
+    "[저자 증정본] 택배사 및 운송장번호 전달",
+    "[저자 증정본] 수령 여부 확인",
+    "[저자 추가 구매] 저자 구매 가능 여부 안내",
+    "[저자 추가 구매] 저자 구매 할인 조건 안내",
+    "[저자 추가 구매] 구매 가능한 수량 또는 별도 조건 안내",
+    "[저자 추가 구매] 신청 방법 안내",
+    "[저자 추가 구매] 결제 방법 안내",
+    "[저자 추가 구매] 배송 방법 및 배송비 안내",
+    "[저자 추가 구매] 대량 구매 시 재고 및 일정 확인",
+    "[저자 추가 구매] 홍보·강연·증정용 구매 시 필요한 시점 확인",
+  ]},
+  {title:"5. 출간 후 마케팅 공유", color:"#10B981", items:[
+    "[마케팅 계획] 출간 전후 주요 마케팅 계획 저자에게 공유",
+    "[마케팅 계획] 진행 예정 홍보 채널 안내",
+    "[마케팅 계획] 인터넷서점 프로모션 여부 안내",
+    "[마케팅 계획] 자사 SNS 홍보 계획 안내",
+    "[마케팅 계획] 블로그·웹진·뉴스레터 등 홍보 계획 안내",
+    "[마케팅 계획] 보도자료 배포 여부 및 일정 안내",
+    "[마케팅 계획] 상세 이미지·카드뉴스 제작 및 활용 계획 안내",
+    "[마케팅 계획] 인터뷰·영상·웨비나·강연 등 추가 마케팅 가능성 검토",
+    "[진행 내용 공유] 자사 SNS 게시 링크 저자에게 전달",
+    "[진행 내용 공유] 블로그·웹진 콘텐츠 게시 링크 전달",
+    "[진행 내용 공유] 주요 기사·보도 노출 내용 공유",
+    "[진행 내용 공유] 인터넷서점 기획전·프로모션 진행 시 공유",
+    "[진행 내용 공유] 추가 마케팅 확정 시 일정 및 내용 안내",
+    "[저자 협업] 저자의 공식 SNS·블로그·유튜브 채널 확인",
+    "[저자 협업] 저자가 활용할 수 있는 홍보 이미지 제공",
+    "[저자 협업] 저자가 활용할 수 있는 홍보 문구 제공",
+    "[저자 협업] 주요 서점 링크 제공",
+    "[저자 협업] 저자가 제안하는 홍보 아이디어 확인",
+    "[저자 협업] 출판사와 공동 진행 가능한 마케팅 검토",
+  ]},
+  {title:"6. 출간 후 정기 커뮤니케이션", color:"#DC2626", items:[
+    "[출간 직후] 출간 완료 및 판매 시작 안내",
+    "[출간 직후] 주요 서점 링크 재전달",
+    "[출간 직후] 저자 증정본 수령 여부 확인",
+    "[출간 직후] 저자 추가 구매 필요 여부 확인",
+    "[출간 직후] 초기 마케팅 진행 상황 간략 공유",
+    "[출간 후 2~4주] 저자에게 1차 마케팅 진행 상황 공유",
+    "[출간 후 2~4주] 진행 완료한 마케팅 내용 공유",
+    "[출간 후 2~4주] 진행 예정 마케팅 내용 공유",
+    "[출간 후 2~4주] 추가 홍보 협업 가능 여부 확인",
+    "[출간 후 2~4주] 서점 정보·상세페이지 수정 필요 여부 확인",
+    "[지속 관리] 증쇄 결정 시 저자에게 안내",
+    "[지속 관리] 주요 프로모션 진행 시 안내",
+    "[지속 관리] 행사·강연·인터뷰 기회 발생 시 공유",
+    "[지속 관리] 저자의 강의·행사와 연계 가능한 마케팅 확인",
+    "[지속 관리] 후속 도서·개정판 가능성이 있는 저자와 관계 유지",
+  ]},
+];
+var AC_TOTAL_ITEMS = AC_CL_GROUPS.reduce(function(s,g){return s+g.items.length;}, 0);
+
+var AC_ALL = [];
+var AC_CURRENT_ID = null;
+var AC_LOADED = false;
+
+function acUID(){ return 'ac_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function acLocalAll(){ try{ return JSON.parse(localStorage.getItem('ac_checklists_local')||'[]'); }catch(e){ return []; } }
+function acLocalSave(list){ localStorage.setItem('ac_checklists_local', JSON.stringify(list)); }
+
+function acProgressDone(rec){
+  var p = rec.progress||{};
+  return Object.keys(p).filter(function(k){return p[k];}).length;
+}
+
+// ── 목록 로드: Supabase 우선, 실패 시 localStorage 폴백 ─────────
+function acLoad(){
+  var listEl = document.getElementById('ac-list-body');
+  if(listEl) listEl.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text3);font-size:12px;">불러오는 중…</div>';
+  acCheckDb();
+  if(sbOn()){
+    fetch(SUPABASE_CONFIG.url+'/rest/v1/'+AC_TABLE+'?select=*&order=updated_at.desc',
+      {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+    ).then(function(r){
+      if(r.status===404) return null;
+      return r.ok ? r.json() : null;
+    }).then(function(rows){
+      if(rows && Array.isArray(rows)){
+        AC_ALL = rows.map(acNormalize);
+        acLocalSave(AC_ALL);
+      } else {
+        AC_ALL = acLocalAll().map(acNormalize);
+      }
+      AC_LOADED = true;
+      acRenderList();
+    }).catch(function(){
+      AC_ALL = acLocalAll().map(acNormalize);
+      AC_LOADED = true;
+      acRenderList();
+    });
+  } else {
+    AC_ALL = acLocalAll().map(acNormalize);
+    AC_LOADED = true;
+    acRenderList();
+  }
+}
+function acNormalize(r){
+  if(typeof r.progress==='string'){ try{ r.progress=JSON.parse(r.progress); }catch(e){ r.progress={}; } }
+  if(!r.progress) r.progress={};
+  return r;
+}
+
+// ── Supabase 연결 상태 배지 ───────────────────────────────────
+function acCheckDb(){
+  var el = document.getElementById('ac-db-badge');
+  if(!el) return;
+  if(!sbOn()){
+    el.innerHTML = '<span class="db-dot" style="background:var(--gold2)"></span>localStorage 모드 (Supabase 비활성)';
+    var tb=document.getElementById('ac-table-missing'); if(tb) tb.style.display='none';
+    return;
+  }
+  el.innerHTML = '<span class="db-dot" style="background:#9aa0a6"></span>확인 중…';
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+AC_TABLE+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+  ).then(function(res){
+    var tb=document.getElementById('ac-table-missing');
+    if(res.ok || res.status===406){
+      el.innerHTML = '<span class="db-dot" style="background:#50C878"></span>🟢 Supabase 연결됨 — 도서·담당자·일자별로 팀 전체에 저장됩니다';
+      if(tb) tb.style.display='none';
+    } else if(res.status===404){
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>⚠ author_comm_checklists 테이블 없음 — localStorage로만 저장 중';
+      if(tb) tb.style.display='block';
+    } else {
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 HTTP '+res.status;
+    }
+  }).catch(function(){
+    el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 (네트워크) — localStorage로만 저장 중';
+  });
+}
+
+function acCopySQL(){
+  var sql = "-- 저자 커뮤니케이션 체크리스트 (도서·담당자·일자별 관리)\n"
+    + "CREATE TABLE IF NOT EXISTS author_comm_checklists (\n"
+    + "  id           text PRIMARY KEY,\n"
+    + "  book_title   text NOT NULL,\n"
+    + "  author_name  text,\n"
+    + "  assignee     text,\n"
+    + "  target_date  date,\n"
+    + "  status       text NOT NULL DEFAULT 'in_progress',\n"
+    + "  progress     jsonb NOT NULL DEFAULT '{}'::jsonb,\n"
+    + "  created_at   timestamptz DEFAULT now(),\n"
+    + "  updated_at   timestamptz DEFAULT now()\n"
+    + ");\n"
+    + "ALTER TABLE author_comm_checklists ENABLE ROW LEVEL SECURITY;\n"
+    + "CREATE POLICY \"ac_checklists_all\" ON author_comm_checklists\n"
+    + "  FOR ALL USING (true) WITH CHECK (true);";
+  navigator.clipboard.writeText(sql).then(function(){
+    acSetTableMsg('✅ SQL 복사 완료 — Supabase SQL Editor에 붙여넣기 하세요','#0D9488');
+  }).catch(function(){
+    acSetTableMsg('복사 실패 — 콘솔에서 SQL을 확인하세요','#B45309');
+    console.log(sql);
+  });
+}
+function acSetTableMsg(msg, color){
+  var el = document.getElementById('ac-table-msg');
+  if(el){ el.textContent = msg; el.style.color = color||''; }
+}
+
+// ── Supabase upsert / delete ─────────────────────────────────
+function acUpsertRemote(rec){
+  if(!sbOn()) return;
+  var body = Object.assign({}, rec, {updated_at: new Date().toISOString()});
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+AC_TABLE, {
+    method:'POST',
+    headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body: JSON.stringify(body)
+  }).then(function(r){
+    if(!r.ok) r.text().then(function(t){ console.warn('[ac] upsert FAIL:', r.status, t); });
+  }).catch(function(e){ console.warn('[ac] upsert ERROR:', e.message); });
+}
+function acDeleteRemote(id){
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+AC_TABLE+'?id=eq.'+encodeURIComponent(id),
+    {method:'DELETE', headers:sbHeaders()}
+  ).then(function(r){
+    if(!r.ok) r.text().then(function(t){ console.warn('[ac] delete FAIL:', r.status, t); });
+  }).catch(function(e){ console.warn('[ac] delete ERROR:', e.message); });
+}
+
+// ── 새 도서 체크리스트 생성 ───────────────────────────────────
+function acNewChecklist(){
+  var title = (document.getElementById('ac-new-title')?.value||'').trim();
+  var author = (document.getElementById('ac-new-author')?.value||'').trim();
+  var assignee = (document.getElementById('ac-new-assignee')?.value||'').trim();
+  var date = document.getElementById('ac-new-date')?.value||'';
+  if(!title){ alert('도서명을 입력하세요.'); return; }
+  if(!assignee){ alert('담당자를 입력하세요.'); return; }
+  var now = new Date().toISOString();
+  var rec = {
+    id: acUID(), book_title: title, author_name: author||null, assignee: assignee,
+    target_date: date||null, status: 'in_progress', progress: {},
+    created_at: now, updated_at: now
+  };
+  AC_ALL.unshift(rec);
+  acLocalSave(AC_ALL);
+  acUpsertRemote(rec);
+  ['ac-new-title','ac-new-author','ac-new-assignee','ac-new-date'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  acRenderList();
+  acOpenChecklist(rec.id);
+}
+
+function acDeleteChecklist(id, ev){
+  if(ev) ev.stopPropagation();
+  if(!confirm('이 도서의 체크리스트를 삭제하시겠습니까? (복구 불가)')) return;
+  AC_ALL = AC_ALL.filter(function(r){ return r.id!==id; });
+  acLocalSave(AC_ALL);
+  acDeleteRemote(id);
+  acRenderList();
+}
+
+// ── 목록 렌더 ─────────────────────────────────────────────────
+function acRenderList(){
+  var el = document.getElementById('ac-list-body');
+  if(!el) return;
+  if(!AC_ALL.length){
+    el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text3);font-size:12px;">등록된 도서 체크리스트가 없습니다. 위에서 새로 추가해 보세요.</div>';
+    return;
+  }
+  el.innerHTML = AC_ALL.map(function(r){
+    var done = acProgressDone(r);
+    var pct = Math.round(done/AC_TOTAL_ITEMS*100);
+    var isDone = done>=AC_TOTAL_ITEMS;
+    var badge = isDone
+      ? '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(16,185,129,.12);color:#10B981;">✅ 완료</span>'
+      : '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(21,96,184,.1);color:var(--blue);">🔄 진행중</span>';
+    return '<div onclick="acOpenChecklist(\''+r.id+'\')" style="cursor:pointer;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">'
+      +'<div style="flex:1;min-width:180px;">'
+        +'<div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;">'+acEsc(r.book_title)+'</div>'
+        +'<div style="font-size:11px;color:var(--text3);">'
+          +'👤 '+acEsc(r.assignee||'-')
+          +(r.author_name?' · ✍️ '+acEsc(r.author_name):'')
+          +(r.target_date?' · 📅 '+acEsc(r.target_date):'')
+        +'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px;">'
+        +'<div style="width:120px;">'
+          +'<div style="height:6px;background:var(--s2);border-radius:100px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+(isDone?'#10B981':'var(--blue)')+';"></div></div>'
+          +'<div style="font-size:10px;color:var(--text3);margin-top:3px;text-align:right;">'+done+'/'+AC_TOTAL_ITEMS+' ('+pct+'%)</div>'
+        +'</div>'
+        +badge
+        +'<button onclick="acDeleteChecklist(\''+r.id+'\', event)" style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+function acEsc(s){
+  return (s==null?'':String(s)).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+// ── 상세(개별 도서) 체크리스트 열기/닫기 ─────────────────────
+function acOpenChecklist(id){
+  AC_CURRENT_ID = id;
+  var rec = AC_ALL.find(function(r){ return r.id===id; });
+  if(!rec) return;
+  document.getElementById('ac-list-view').style.display = 'none';
+  document.getElementById('ac-detail-view').style.display = 'block';
+  document.getElementById('ac-detail-title').textContent = rec.book_title;
+  document.getElementById('ac-detail-meta').innerHTML =
+    '👤 담당자: <strong>'+acEsc(rec.assignee||'-')+'</strong>'
+    +(rec.author_name?' &nbsp;·&nbsp; ✍️ 저자: <strong>'+acEsc(rec.author_name)+'</strong>':'')
+    +(rec.target_date?' &nbsp;·&nbsp; 📅 목표일: <strong>'+acEsc(rec.target_date)+'</strong>':'');
+  acRenderChecklistBody(rec);
+}
+function acBackToList(){
+  AC_CURRENT_ID = null;
+  document.getElementById('ac-detail-view').style.display = 'none';
+  document.getElementById('ac-list-view').style.display = 'block';
+  acRenderList();
+}
+
+// ── 개별 도서의 116항목 체크리스트 렌더 ──────────────────────
+function acRenderChecklistBody(rec){
+  var el = document.getElementById('ac-checklist-body');
+  if(!el) return;
+  var saved = rec.progress || {};
+  var html = '';
+  AC_CL_GROUPS.forEach(function(grp, gi){
+    var done = grp.items.filter(function(_,ii){ return saved[gi+'_'+ii]; }).length;
+    html += '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:4px solid '+grp.color+';border-radius:var(--rL);overflow:hidden;">'
+      +'<div style="padding:12px 16px;background:var(--s2);display:flex;align-items:center;justify-content:space-between;">'
+      +'<div style="font-size:13px;font-weight:800;color:var(--text);">'+grp.title+'</div>'
+      +'<span id="ac-prog-'+gi+'" style="font-size:11px;font-weight:700;color:'+grp.color+';">'+done+'/'+grp.items.length+'</span>'
+      +'</div>'
+      +'<div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;">'
+      +grp.items.map(function(item,ii){
+        var key=gi+'_'+ii;
+        var checked = saved[key]?'checked':'';
+        return '<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.6;">'
+          +'<input type="checkbox" id="ac-cl-'+key+'" '+checked+' onchange="acSave('+gi+','+ii+')" '
+          +'style="margin-top:2px;width:15px;height:15px;accent-color:'+grp.color+';flex-shrink:0;cursor:pointer;">'
+          +'<span id="ac-cls-'+key+'" style="'+(checked?'text-decoration:line-through;color:var(--text3);':'')+'">'+item+'</span>'
+          +'</label>';
+      }).join('')
+      +'</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function acSave(gi, ii){
+  var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
+  if(!rec) return;
+  var key=gi+'_'+ii;
+  var cb=document.getElementById('ac-cl-'+key);
+  var sp=document.getElementById('ac-cls-'+key);
+  if(!rec.progress) rec.progress={};
+  if(cb.checked){ rec.progress[key]=true; if(sp){sp.style.textDecoration='line-through';sp.style.color='var(--text3)';} }
+  else{ delete rec.progress[key]; if(sp){sp.style.textDecoration='';sp.style.color='var(--text2)';} }
+  var doneTotal = acProgressDone(rec);
+  rec.status = doneTotal>=AC_TOTAL_ITEMS ? 'done' : 'in_progress';
+  rec.updated_at = new Date().toISOString();
+  acLocalSave(AC_ALL);
+  acUpsertRemote(rec);
+  var grp=AC_CL_GROUPS[gi];
+  var done=grp.items.filter(function(_,i){return rec.progress[gi+'_'+i];}).length;
+  var prog=document.getElementById('ac-prog-'+gi);
+  if(prog) prog.textContent=done+'/'+grp.items.length;
+}
+
+function acResetChecklist(){
+  var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
+  if(!rec) return;
+  if(!confirm('"'+rec.book_title+'" 체크리스트를 초기화하시겠습니까?')) return;
+  rec.progress = {};
+  rec.status = 'in_progress';
+  rec.updated_at = new Date().toISOString();
+  acLocalSave(AC_ALL);
+  acUpsertRemote(rec);
+  acRenderChecklistBody(rec);
 }
 
 // ── 상태 정의 ─────────────────────────────────────────
