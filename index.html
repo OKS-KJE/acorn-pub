@@ -3964,6 +3964,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <button id="kdptab-btn-3" onclick="kdpTab(3)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">📖 KDP 제작 가이드</button>
       <button id="kdptab-btn-4" onclick="kdpTab(4)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">✅ 출간 체크리스트</button>
       <button id="kdptab-btn-5" onclick="kdpTab(5)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🔗 저자 링크 생성</button>
+      <button id="kdptab-btn-6" onclick="kdpTab(6)" style="padding:10px 14px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;">🔍 A10 검색 최적화</button>
     </div>
 
     <!-- TAB 0: 지원 프로세스 -->
@@ -4384,6 +4385,129 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
     </div><!-- /kdptab-5 -->
+
+    <!-- TAB 6: A10 검색 알고리즘 자동화 (신규 제안) -->
+    <div id="kdptab-6" style="display:none;">
+
+      <!-- 헤더 -->
+      <div style="background:linear-gradient(135deg,rgba(91,33,182,.08),rgba(21,96,184,.06));border:1.5px solid rgba(91,33,182,.2);border-radius:var(--rL);padding:20px 24px;margin-bottom:20px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--purple);text-transform:uppercase;margin-bottom:6px;">직원 제안 · NEW</div>
+        <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;">🔍 A10 검색 알고리즘 자동화 — 메타데이터 추출 &amp; 저자 유치 랜딩페이지</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7;">아마존 A10 검색 알고리즘과 AI(Claude/ChatGPT)를 활용해, 유료 외부 툴 없이 자체적으로 메타데이터를 뽑고 예비 저자를 유치하는 자체 웹 시스템 제안입니다.</div>
+      </div>
+
+      <div class="rule-card" style="margin-bottom:20px;">
+        <div class="rule-card-title" style="color:var(--purple)">🎯 요약 및 핵심 목표</div>
+        <ul class="rule-list">
+          <li><span class="rule-bullet">▸</span><strong>목표</strong> — 유료 외부 툴 의존도를 낮추고, 대형 출판사로서의 기술적 신뢰감을 주어 저자를 유치함</li>
+          <li><span class="rule-bullet">▸</span><strong>수단</strong> — 아마존 A10 검색 알고리즘과 AI(Claude/ChatGPT)를 활용한 자체 웹 시스템 개발</li>
+        </ul>
+      </div>
+
+      <!-- 서브탭 -->
+      <div class="pill-tabs" id="a10-sub-tabs" style="margin-bottom:18px">
+        <button class="pill-tab active" onclick="a10Sub(0,this)">📂 A건 · 메타데이터 추출 시스템</button>
+        <button class="pill-tab" onclick="a10Sub(1,this)">📢 B건 · 랜딩페이지 (acornon.kr)</button>
+      </div>
+
+      <!-- ══ A건 ══ -->
+      <div id="a10-panel-a" class="kdp-sub-panel active">
+        <div class="sec-h">A건 · 실무 효율화 — 메타데이터 추출 시스템 구축</div>
+        <p class="sec-sub" style="margin-bottom:16px;">기존에 유료로 쓰던 해외 분석 툴을 대체해, 실무자가 저자의 원고를 넣으면 아마존 맞춤형 메타데이터를 자동으로 뽑아주는 내부 시스템입니다.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;">
+          <div style="background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#DC2626;margin-bottom:8px;">⚠ 기존 방식의 문제</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.8;">Publisher Rocket, AIBookSEO 등 해외 분석 툴이 유료화되어 비용 부담이 계속 증가하고 있습니다.</div>
+          </div>
+          <div style="background:rgba(16,185,129,.05);border:1.5px solid rgba(16,185,129,.2);border-radius:var(--rL);padding:14px 16px;">
+            <div style="font-size:11px;font-weight:800;color:#10B981;margin-bottom:8px;">✅ 새로운 프로세스</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.8;">실무자가 원고를 업로드하면 아마존 데이터와 AI 분석을 거쳐 결과물이 자동 도출되고, 담당자 검증 후 저자에게 전달됩니다.</div>
+          </div>
+        </div>
+
+        <ol class="step-list" style="margin-bottom:18px;">
+          <li class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">원고 업로드</div><div class="step-desc">실무자가 저자 원고(.docx 등)를 시스템에 업로드</div></div></li>
+          <li class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">아마존 데이터 · AI(Claude) 분석</div><div class="step-desc">아마존 검색·카테고리 데이터와 AI 분석을 결합해 처리</div></div></li>
+          <li class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">결과물 도출</div><div class="step-desc">키워드·카테고리·도서 소개 초안을 자동 생성</div></div></li>
+          <li class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">담당자 검증 후 저자 전달</div><div class="step-desc">기획편집 담당자가 결과를 검토·보완한 뒤 저자에게 전달</div></div></li>
+        </ol>
+
+        <div class="sec-h" style="margin-top:0">주요 기능 및 출력 결과</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;">
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--rL);padding:14px 16px;"><div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:8px;">🔑 키워드</div><div style="font-size:12px;color:var(--text2);line-height:1.8;">전자책/종이책용 키워드 <strong>9개</strong> 추출 + 선정 이유 제공</div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--rL);padding:14px 16px;"><div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:8px;">🗂 카테고리</div><div style="font-size:12px;color:var(--text2);line-height:1.8;">추천 카테고리 <strong>5개</strong> + 선정 이유 제공</div></div>
+          <div style="background:var(--surface);border:1.5px solid var(--border);border-top:3px solid var(--gold2);border-radius:var(--rL);padding:14px 16px;"><div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:8px;">📝 도서 소개</div><div style="font-size:12px;color:var(--text2);line-height:1.8;">아마존 가이드라인에 맞춘 <strong>4,000자 이내</strong> 소개글 자동 생성</div></div>
+        </div>
+
+        <!-- 인터랙티브 데모 -->
+        <div style="background:var(--s2);border:1.5px dashed rgba(91,33,182,.35);border-radius:var(--rL);padding:18px 20px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <span style="font-size:10px;font-weight:800;padding:2px 9px;border-radius:100px;background:rgba(91,33,182,.12);color:var(--purple);">🧪 데모 화면</span>
+            <span style="font-size:11px;color:var(--text3);">아래는 실제 AI 분석이 아닌 예시 결과입니다. 실제 서비스는 업로드한 원고와 아마존 실시간 데이터를 기반으로 AI가 분석합니다.</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;">
+            <div id="a10a-drop" style="flex:1;min-width:200px;border:1.5px dashed var(--border2);border-radius:var(--r);padding:16px;text-align:center;font-size:12px;color:var(--text3);background:var(--surface);">📄 원고 파일을 여기로 드래그하거나 클릭하세요 (데모 — 실제 업로드되지 않습니다)</div>
+            <button onclick="a10RunDemoA()" id="a10a-btn" style="padding:0 22px;background:var(--purple);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">🔍 분석 시작</button>
+          </div>
+          <div id="a10a-result" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- ══ B건 ══ -->
+      <div id="a10-panel-b" class="kdp-sub-panel">
+        <div class="sec-h">B건 · 마케팅/저자 유치 — 아마존 랜딩페이지 구축 (acornon.kr)</div>
+        <p class="sec-sub" style="margin-bottom:16px;">잠재 고객(예비 저자)이 본인의 책 정보를 입력하면 아마존에서의 예상 성적을 모의로 분석해 주어, 자연스럽게 'KDP 대행 상담'으로 연결하는 마케팅 툴입니다.</p>
+
+        <table class="data-table" style="margin-bottom:18px">
+          <thead><tr><th>사용자 입력 정보</th><th>필수 여부</th></tr></thead>
+          <tbody>
+            <tr><td>도서명</td><td>필수</td></tr>
+            <tr><td>부제</td><td>선택</td></tr>
+            <tr><td>영문 글자 수</td><td>필수</td></tr>
+          </tbody>
+        </table>
+
+        <ol class="step-list" style="margin-bottom:10px;">
+          <li class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">제목 기반 카테고리 분석</div><div class="step-desc">외부 API(Traject Data 등) 또는 AI API로 제목을 분석해 유력 카테고리 도출</div></div></li>
+          <li class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">유사 베스트셀러 데이터 비교</div><div class="step-desc">같은 카테고리의 유사 베스트셀러 데이터와 비교</div></div></li>
+          <li class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">예상 순위 · 대행료 대략 산출</div><div class="step-desc">예상 순위와 전자책 대행료를 대략적으로 산출해 화면에 제시</div></div></li>
+        </ol>
+
+        <div class="info-box teal" style="margin-bottom:20px;">
+          <strong>🎯 최종 목적 (CTA)</strong> — 분석 결과를 보여준 뒤 '무료 상담 신청' 버튼 클릭을 유도해 예비 저자의 연락처(DB)를 확보합니다. 신청 시 기존 <strong>🔗 저자 링크 생성 → 파이프라인 관리</strong> 탭과 동일한 흐름(<code>kdp-form.html</code> → <code>kdp_proposals</code>)으로 연결되어, 별도 시스템 없이 지금 있는 파이프라인에 그대로 쌓입니다.
+        </div>
+
+        <!-- 인터랙티브 데모 -->
+        <div style="background:var(--s2);border:1.5px dashed rgba(21,96,184,.35);border-radius:var(--rL);padding:18px 20px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+            <span style="font-size:10px;font-weight:800;padding:2px 9px;border-radius:100px;background:rgba(21,96,184,.1);color:var(--blue);">🧪 데모 화면</span>
+            <span style="font-size:11px;color:var(--text3);">아래 예상 순위·대행료는 실제 아마존 데이터가 아닌 예시 로직으로 계산된 데모입니다.</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:4px;">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">도서명 *</div>
+              <input id="a10b-title" type="text" placeholder="예: The Leader's Journey" style="width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">부제 (선택)</div>
+              <input id="a10b-subtitle" type="text" placeholder="예: A Guide to Growth" style="width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">영문 글자 수 *</div>
+              <input id="a10b-chars" type="number" min="1" placeholder="예: 45" style="width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--surface);color:var(--text);outline:none;">
+            </div>
+            <button onclick="a10RunDemoB()" style="padding:9px 18px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">📊 예상 성적 확인</button>
+          </div>
+          <div id="a10b-result" style="display:none;margin-top:14px;"></div>
+        </div>
+
+        <div style="margin-top:14px;padding:10px 14px;background:var(--s2);border-radius:8px;font-size:11px;color:var(--text3);">
+          💡 이 데모와 같은 흐름으로, <code>acornon.kr</code>에 올릴 수 있는 독립 공개 랜딩페이지 초안(<code>acornon-landing.html</code>)도 별도 파일로 함께 제작했습니다.
+        </div>
+      </div>
+
+    </div><!-- /kdptab-6 -->
 
     <!-- 제안서 상세 모달 -->
     <div id="kp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:16px;">
@@ -7500,7 +7624,7 @@ function pplSave(){
 
 // ── KDP 탭 전환 ───────────────────────────────────────
 function kdpTab(n){
-  [0,1,2,3,4,5].forEach(function(i){
+  [0,1,2,3,4,5,6].forEach(function(i){
     var btn = document.getElementById('kdptab-btn-'+i);
     var panel = document.getElementById('kdptab-'+i);
     var active = i===n;
@@ -7513,6 +7637,106 @@ function kdpTab(n){
   });
   if(n===1) kpLoad();
   if(n===4) kdpBuildChecklist();
+}
+
+// ── A10 검색 알고리즘 자동화 (제안) — A건/B건 서브 토글 ──────
+function a10Sub(idx, btn){
+  var bar = btn.closest('.pill-tabs');
+  if(bar) bar.querySelectorAll('.pill-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var pa=document.getElementById('a10-panel-a'), pb=document.getElementById('a10-panel-b');
+  if(pa) pa.classList.toggle('active', idx===0);
+  if(pb) pb.classList.toggle('active', idx===1);
+}
+
+// ── A건 데모: 메타데이터 추출 (예시 데이터, 실제 AI 호출 없음) ──
+var A10_KEYWORDS = [
+  ['data engineering for beginners', '핵심 주제어와 대상 독자(입문자) 검색 의도를 동시에 반영'],
+  ['python data pipeline book', '실무에서 가장 많이 검색되는 기술 스택 조합 키워드'],
+  ['kubernetes practical guide', '실전/practical 계열 키워드는 구매 전환율이 높은 편'],
+  ['cloud architecture for developers', '카테고리 상위 베스트셀러들이 공통으로 사용 중인 키워드'],
+  ['devops handbook 2026', '연도를 포함해 최신성을 강조하는 검색 패턴에 대응'],
+  ['system design interview prep', '취업/커리어 목적 구매자의 검색 의도와 직접 연결'],
+  ['backend development roadmap', '입문~중급 독자가 자주 사용하는 로드맵형 검색어'],
+  ['sql for data analysis', '데이터 직군 전반에서 꾸준히 검색량이 높은 키워드'],
+  ['software engineer career guide', '기술서 구매자의 2차 관심사(커리어)까지 확장 커버'],
+];
+var A10_CATEGORIES = [
+  ['Computers & Technology > Programming > Software Development', '본문 핵심 주제와 가장 직접적으로 일치하는 1순위 카테고리'],
+  ['Computers & Technology > Databases > Data Warehousing', '실습 예제 비중이 높아 세부 카테고리 진입 시 상위 노출 유리'],
+  ['Computers & Technology > Networking & Cloud Computing', '클라우드 관련 챕터 비중을 근거로 추천'],
+  ['Business & Money > Processes & Infrastructure', '실무 프로세스 설명 비중이 높은 도서에 적합한 보조 카테고리'],
+  ['Education & Teaching > Schools & Teaching > Certification', '자격증·역량 강화 목적 독자층 유입을 위한 보조 카테고리'],
+];
+var A10_DESC_SAMPLE = '이 책은 실무에서 바로 활용할 수 있는 데이터 엔지니어링 파이프라인 구축법을 다룹니다. 파이썬 기반 ETL 설계부터 클라우드 배포, 모니터링까지 실제 프로젝트 흐름을 따라가며 배웁니다. 이론보다 실습에 집중해, 현업 개발자와 취업 준비생 모두가 곧바로 적용할 수 있도록 구성했습니다… (예시 — 실제 서비스에서는 최대 4,000자까지 자동 생성됩니다)';
+
+function a10RunDemoA(){
+  var btn = document.getElementById('a10a-btn');
+  var resultEl = document.getElementById('a10a-result');
+  if(!resultEl) return;
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = '<div style="padding:16px;text-align:center;font-size:12px;color:var(--text3);">🔄 분석 중… (데모)</div>';
+  if(btn){ btn.disabled = true; btn.style.opacity = '.6'; btn.style.cursor = 'wait'; }
+  setTimeout(function(){
+    var kwHtml = A10_KEYWORDS.map(function(k,i){
+      return '<div style="padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.6;">'
+        +'<strong style="color:var(--blue);">'+(i+1)+'. '+k[0]+'</strong><br><span style="color:var(--text3);">'+k[1]+'</span></div>';
+    }).join('');
+    var catHtml = A10_CATEGORIES.map(function(c,i){
+      return '<div style="padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.6;">'
+        +'<strong style="color:var(--teal);">'+(i+1)+'. '+c[0]+'</strong><br><span style="color:var(--text3);">'+c[1]+'</span></div>';
+    }).join('');
+    resultEl.innerHTML =
+      '<div style="margin-top:4px;">'
+      +'<div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:8px;">🔑 추천 키워드 9개 (예시)</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:16px;">'+kwHtml+'</div>'
+      +'<div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:8px;">🗂 추천 카테고리 5개 (예시)</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:16px;">'+catHtml+'</div>'
+      +'<div style="font-size:11px;font-weight:800;color:var(--gold2);margin-bottom:8px;">📝 도서 소개 (예시 — 일부 발췌)</div>'
+      +'<div style="padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.8;">'+A10_DESC_SAMPLE+'</div>'
+      +'</div>';
+    if(btn){ btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = 'pointer'; }
+  }, 900);
+}
+
+// ── B건 데모: 랜딩페이지 예상 성적 계산 (예시 로직, 실제 데이터 아님) ──
+function a10SeedFromTitle(title){
+  var h = 0;
+  for(var i=0;i<title.length;i++){ h = (h*31 + title.charCodeAt(i)) % 1000; }
+  return Math.abs(h);
+}
+function a10RunDemoB(){
+  var title = (document.getElementById('a10b-title')?.value||'').trim();
+  var subtitle = (document.getElementById('a10b-subtitle')?.value||'').trim();
+  var chars = parseInt(document.getElementById('a10b-chars')?.value||'', 10);
+  var resultEl = document.getElementById('a10b-result');
+  if(!resultEl) return;
+  if(!title){ alert('도서명을 입력하세요.'); return; }
+  if(!chars || chars<=0){ alert('영문 글자 수를 입력하세요.'); return; }
+  var seed = a10SeedFromTitle(title+subtitle);
+  var cat = A10_CATEGORIES[seed % A10_CATEGORIES.length][0];
+  var rankLow = 3 + (seed % 15);
+  var rankHigh = rankLow + 8 + (seed % 12);
+  var feeLow = 30 + (seed % 6)*5;   // 만원
+  var feeHigh = feeLow + 20 + (seed % 4)*5;
+  resultEl.innerHTML =
+    '<div style="background:var(--surface);border:1.5px solid rgba(21,96,184,.25);border-radius:var(--rL);padding:16px 18px;">'
+    +'<div style="font-size:11px;font-weight:800;color:var(--blue);margin-bottom:10px;">📊 예상 성적 (예시)</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:12px;">'
+      +'<div><div style="font-size:10px;color:var(--text3);margin-bottom:3px;">예상 유력 카테고리</div><div style="font-size:12px;font-weight:700;color:var(--text);">'+cat+'</div></div>'
+      +'<div><div style="font-size:10px;color:var(--text3);margin-bottom:3px;">예상 순위 범위</div><div style="font-size:12px;font-weight:700;color:var(--text);">카테고리 내 '+rankLow+'위 ~ '+rankHigh+'위</div></div>'
+      +'<div><div style="font-size:10px;color:var(--text3);margin-bottom:3px;">예상 전자책 대행료</div><div style="font-size:12px;font-weight:700;color:var(--text);">약 '+feeLow+'만원 ~ '+feeHigh+'만원</div></div>'
+    +'</div>'
+    +'<div style="font-size:10px;color:var(--text3);margin-bottom:14px;">⚠ 실제 결과와 다를 수 있는 예시이며, 정확한 견적은 상담을 통해 안내드립니다.</div>'
+    +'<button id="a10b-cta" style="padding:10px 20px;background:var(--rose);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">🎯 무료 KDP 상담 신청하기</button>'
+    +'</div>';
+  resultEl.style.display = 'block';
+  var ctaBtn = document.getElementById('a10b-cta');
+  if(ctaBtn){
+    ctaBtn.onclick = function(){
+      window.open('kdp-form.html?book='+encodeURIComponent(title), '_blank');
+    };
+  }
 }
 
 // ── 가이드 서브탭 ─────────────────────────────────────────
