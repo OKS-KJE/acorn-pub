@@ -2485,7 +2485,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
           <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 18px;margin-bottom:18px;">
             <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;">+ 새 도서 체크리스트 만들기</div>
-            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:8px;align-items:end;">
+            <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 1fr auto;gap:8px;align-items:end;">
               <div>
                 <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">도서명 *</div>
                 <input id="ac-new-title" type="text" placeholder="도서 제목" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
@@ -2499,6 +2499,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
                 <input id="ac-new-assignee" type="text" placeholder="담당자명" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
               </div>
               <div>
+                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">확인자</div>
+                <input id="ac-new-verifier" type="text" placeholder="확인자명 (선택)" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+              </div>
+              <div>
                 <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">목표일</div>
                 <input id="ac-new-date" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
               </div>
@@ -2506,10 +2510,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             </div>
           </div>
 
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
             <div style="font-size:12px;font-weight:800;color:var(--text);">도서별 진행 현황</div>
             <button onclick="acDownloadListCSV()" style="padding:6px 12px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text2);">⬇ 전체 목록 CSV 다운로드</button>
           </div>
+          <div id="ac-status-tabs" class="pill-tabs" style="margin-bottom:14px;"></div>
           <div id="ac-list-body" style="display:flex;flex-direction:column;gap:10px;"></div>
         </div>
 
@@ -2522,6 +2527,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
               <div id="ac-detail-meta" style="font-size:12px;color:var(--text3);margin-top:4px;"></div>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button onclick="acSetVerifier()" style="padding:7px 14px;background:none;border:1.5px solid rgba(16,185,129,.4);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:#10B981;">🔍 확인자 지정/변경</button>
               <button onclick="acDownloadChecklistCSV()" style="padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">⬇ 이 도서 체크리스트 다운로드</button>
               <button onclick="acResetChecklist()" style="padding:7px 14px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 초기화</button>
             </div>
@@ -7775,6 +7781,15 @@ function acProgressDone(rec){
   var p = rec.progress||{};
   return Object.keys(p).filter(function(k){return p[k];}).length;
 }
+function acVerifiedDone(rec){
+  var v = rec.verified||{};
+  return Object.keys(v).filter(function(k){return v[k];}).length;
+}
+function acComputeStatus(rec){
+  var done = acProgressDone(rec);
+  var verified = acVerifiedDone(rec);
+  return (done>=AC_TOTAL_ITEMS && verified>=AC_TOTAL_ITEMS) ? 'done' : 'in_progress';
+}
 
 // ── 목록 로드: Supabase 우선, 실패 시 localStorage 폴백 ─────────
 function acLoad(){
@@ -7810,6 +7825,8 @@ function acLoad(){
 function acNormalize(r){
   if(typeof r.progress==='string'){ try{ r.progress=JSON.parse(r.progress); }catch(e){ r.progress={}; } }
   if(!r.progress) r.progress={};
+  if(typeof r.verified==='string'){ try{ r.verified=JSON.parse(r.verified); }catch(e){ r.verified={}; } }
+  if(!r.verified) r.verified={};
   return r;
 }
 
@@ -7842,19 +7859,25 @@ function acCheckDb(){
 }
 
 function acCopySQL(){
-  var sql = "-- 저자 커뮤니케이션 체크리스트 (도서·담당자·일자별 관리)\n"
+  var sql = "-- 저자 커뮤니케이션 체크리스트 (도서·담당자·확인자·일자별 관리)\n"
     + "CREATE TABLE IF NOT EXISTS author_comm_checklists (\n"
     + "  id           text PRIMARY KEY,\n"
     + "  book_title   text NOT NULL,\n"
     + "  author_name  text,\n"
     + "  assignee     text,\n"
+    + "  verifier     text,\n"
     + "  target_date  date,\n"
     + "  status       text NOT NULL DEFAULT 'in_progress',\n"
     + "  progress     jsonb NOT NULL DEFAULT '{}'::jsonb,\n"
+    + "  verified     jsonb NOT NULL DEFAULT '{}'::jsonb,\n"
     + "  created_at   timestamptz DEFAULT now(),\n"
     + "  updated_at   timestamptz DEFAULT now()\n"
     + ");\n"
+    + "-- 기존 테이블에 이미 데이터가 있는 경우, 위 CREATE TABLE은 건너뛰고 아래 2줄만 실행해도 됩니다\n"
+    + "ALTER TABLE author_comm_checklists ADD COLUMN IF NOT EXISTS verifier text;\n"
+    + "ALTER TABLE author_comm_checklists ADD COLUMN IF NOT EXISTS verified jsonb NOT NULL DEFAULT '{}'::jsonb;\n"
     + "ALTER TABLE author_comm_checklists ENABLE ROW LEVEL SECURITY;\n"
+    + "DROP POLICY IF EXISTS \"ac_checklists_all\" ON author_comm_checklists;\n"
     + "CREATE POLICY \"ac_checklists_all\" ON author_comm_checklists\n"
     + "  FOR ALL USING (true) WITH CHECK (true);";
   navigator.clipboard.writeText(sql).then(function(){
@@ -7895,19 +7918,21 @@ function acNewChecklist(){
   var title = (document.getElementById('ac-new-title')?.value||'').trim();
   var author = (document.getElementById('ac-new-author')?.value||'').trim();
   var assignee = (document.getElementById('ac-new-assignee')?.value||'').trim();
+  var verifier = (document.getElementById('ac-new-verifier')?.value||'').trim();
   var date = document.getElementById('ac-new-date')?.value||'';
   if(!title){ alert('도서명을 입력하세요.'); return; }
   if(!assignee){ alert('담당자를 입력하세요.'); return; }
   var now = new Date().toISOString();
   var rec = {
     id: acUID(), book_title: title, author_name: author||null, assignee: assignee,
-    target_date: date||null, status: 'in_progress', progress: {},
+    verifier: verifier||null,
+    target_date: date||null, status: 'in_progress', progress: {}, verified: {},
     created_at: now, updated_at: now
   };
   AC_ALL.unshift(rec);
   acLocalSave(AC_ALL);
   acUpsertRemote(rec);
-  ['ac-new-title','ac-new-author','ac-new-assignee','ac-new-date'].forEach(function(id){
+  ['ac-new-title','ac-new-author','ac-new-assignee','ac-new-verifier','ac-new-date'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.value='';
   });
   acRenderList();
@@ -7924,39 +7949,66 @@ function acDeleteChecklist(id, ev){
 }
 
 // ── 목록 렌더 ─────────────────────────────────────────────────
+function acCardHTML(r){
+  var done = acProgressDone(r);
+  var verified = acVerifiedDone(r);
+  var pct = Math.round(done/AC_TOTAL_ITEMS*100);
+  var vpct = Math.round(verified/AC_TOTAL_ITEMS*100);
+  var isDone = done>=AC_TOTAL_ITEMS && verified>=AC_TOTAL_ITEMS;
+  var badge = isDone
+    ? '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(16,185,129,.12);color:#10B981;">✅ 완료</span>'
+    : '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(21,96,184,.1);color:var(--blue);">🔄 진행중</span>';
+  return '<div onclick="acOpenChecklist(\''+r.id+'\')" style="cursor:pointer;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">'
+    +'<div style="flex:1;min-width:180px;">'
+      +'<div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;">'+acEsc(r.book_title)+'</div>'
+      +'<div style="font-size:11px;color:var(--text3);">'
+        +'👤 담당 '+acEsc(r.assignee||'-')
+        +(r.verifier?' · 🔍 확인 '+acEsc(r.verifier):'')
+        +(r.author_name?' · ✍️ '+acEsc(r.author_name):'')
+        +(r.target_date?' · 📅 '+acEsc(r.target_date):'')
+      +'</div>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:10px;">'
+      +'<div style="width:150px;">'
+        +'<div style="height:5px;background:var(--s2);border-radius:100px;overflow:hidden;margin-bottom:3px;"><div style="height:100%;width:'+pct+'%;background:var(--blue);"></div></div>'
+        +'<div style="height:5px;background:var(--s2);border-radius:100px;overflow:hidden;"><div style="height:100%;width:'+vpct+'%;background:#10B981;"></div></div>'
+        +'<div style="font-size:9px;color:var(--text3);margin-top:3px;text-align:right;">담당 '+done+'/'+AC_TOTAL_ITEMS+' · 확인 '+verified+'/'+AC_TOTAL_ITEMS+'</div>'
+      +'</div>'
+      +badge
+      +'<button onclick="acDeleteChecklist(\''+r.id+'\', event)" style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button>'
+    +'</div>'
+  +'</div>';
+}
 function acRenderList(){
+  var tabsEl = document.getElementById('ac-status-tabs');
   var el = document.getElementById('ac-list-body');
   if(!el) return;
   if(!AC_ALL.length){
+    if(tabsEl) tabsEl.innerHTML = '';
     el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text3);font-size:12px;">등록된 도서 체크리스트가 없습니다. 위에서 새로 추가해 보세요.</div>';
     return;
   }
-  el.innerHTML = AC_ALL.map(function(r){
-    var done = acProgressDone(r);
-    var pct = Math.round(done/AC_TOTAL_ITEMS*100);
-    var isDone = done>=AC_TOTAL_ITEMS;
-    var badge = isDone
-      ? '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(16,185,129,.12);color:#10B981;">✅ 완료</span>'
-      : '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(21,96,184,.1);color:var(--blue);">🔄 진행중</span>';
-    return '<div onclick="acOpenChecklist(\''+r.id+'\')" style="cursor:pointer;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">'
-      +'<div style="flex:1;min-width:180px;">'
-        +'<div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;">'+acEsc(r.book_title)+'</div>'
-        +'<div style="font-size:11px;color:var(--text3);">'
-          +'👤 '+acEsc(r.assignee||'-')
-          +(r.author_name?' · ✍️ '+acEsc(r.author_name):'')
-          +(r.target_date?' · 📅 '+acEsc(r.target_date):'')
-        +'</div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px;">'
-        +'<div style="width:120px;">'
-          +'<div style="height:6px;background:var(--s2);border-radius:100px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+(isDone?'#10B981':'var(--blue)')+';"></div></div>'
-          +'<div style="font-size:10px;color:var(--text3);margin-top:3px;text-align:right;">'+done+'/'+AC_TOTAL_ITEMS+' ('+pct+'%)</div>'
-        +'</div>'
-        +badge
-        +'<button onclick="acDeleteChecklist(\''+r.id+'\', event)" style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button>'
-      +'</div>'
-    +'</div>';
-  }).join('');
+  var inProgress = AC_ALL.filter(function(r){ return !(acProgressDone(r)>=AC_TOTAL_ITEMS && acVerifiedDone(r)>=AC_TOTAL_ITEMS); });
+  var doneList   = AC_ALL.filter(function(r){ return  (acProgressDone(r)>=AC_TOTAL_ITEMS && acVerifiedDone(r)>=AC_TOTAL_ITEMS); });
+  if(tabsEl){
+    tabsEl.innerHTML =
+      '<button id="ac-stab-0" onclick="acStatusTab(0)" class="pill-tab'+(AC_STATUS_TAB===0?' active':'')+'">🔄 진행중 <span style="opacity:.75;font-weight:700;">('+inProgress.length+')</span></button>'
+      +'<button id="ac-stab-1" onclick="acStatusTab(1)" class="pill-tab'+(AC_STATUS_TAB===1?' active':'')+'">✅ 완료 <span style="opacity:.75;font-weight:700;">('+doneList.length+')</span></button>';
+  }
+  var list = AC_STATUS_TAB===1 ? doneList : inProgress;
+  if(!list.length){
+    el.innerHTML = '<div style="padding:14px;text-align:center;color:var(--text3);font-size:11px;background:var(--s2);border-radius:var(--r);">'
+      +(AC_STATUS_TAB===1 ? '완료된 도서가 없습니다.' : '진행중인 도서가 없습니다.')+'</div>';
+    return;
+  }
+  var note = AC_STATUS_TAB===1
+    ? '<div style="font-size:10px;color:var(--text3);margin-bottom:10px;">✅ 완료 = 담당자 완료 + 확인자 확인이 모두 끝난 도서</div>'
+    : '';
+  el.innerHTML = note + list.map(acCardHTML).join('');
+}
+function acStatusTab(idx){
+  AC_STATUS_TAB = idx;
+  acRenderList();
 }
 function acEsc(s){
   return (s==null?'':String(s)).replace(/[&<>"']/g, function(c){
@@ -7975,6 +8027,7 @@ function acOpenChecklist(id){
   document.getElementById('ac-detail-title').textContent = rec.book_title;
   document.getElementById('ac-detail-meta').innerHTML =
     '👤 담당자: <strong>'+acEsc(rec.assignee||'-')+'</strong>'
+    +(rec.verifier?' &nbsp;·&nbsp; 🔍 확인자: <strong>'+acEsc(rec.verifier)+'</strong>':' &nbsp;·&nbsp; 🔍 확인자: <span style="color:var(--text3)">미지정</span>')
     +(rec.author_name?' &nbsp;·&nbsp; ✍️ 저자: <strong>'+acEsc(rec.author_name)+'</strong>':'')
     +(rec.target_date?' &nbsp;·&nbsp; 📅 목표일: <strong>'+acEsc(rec.target_date)+'</strong>':'');
   acRenderChecklistBody(rec);
@@ -7985,9 +8038,26 @@ function acBackToList(){
   document.getElementById('ac-list-view').style.display = 'block';
   acRenderList();
 }
+function acSetVerifier(){
+  var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
+  if(!rec) return;
+  var name = prompt('확인자 이름을 입력하세요 (담당자가 완료한 항목을 재확인할 사람)', rec.verifier||'');
+  if(name===null) return;
+  name = name.trim();
+  rec.verifier = name||null;
+  rec.updated_at = new Date().toISOString();
+  acLocalSave(AC_ALL);
+  acUpsertRemote(rec);
+  document.getElementById('ac-detail-meta').innerHTML =
+    '👤 담당자: <strong>'+acEsc(rec.assignee||'-')+'</strong>'
+    +(rec.verifier?' &nbsp;·&nbsp; 🔍 확인자: <strong>'+acEsc(rec.verifier)+'</strong>':' &nbsp;·&nbsp; 🔍 확인자: <span style="color:var(--text3)">미지정</span>')
+    +(rec.author_name?' &nbsp;·&nbsp; ✍️ 저자: <strong>'+acEsc(rec.author_name)+'</strong>':'')
+    +(rec.target_date?' &nbsp;·&nbsp; 📅 목표일: <strong>'+acEsc(rec.target_date)+'</strong>':'');
+}
 
 // ── 개별 도서의 체크리스트 렌더 (그룹별 가로형 탭) ────────────
 var AC_CURRENT_GROUP = 0;
+var AC_STATUS_TAB = 0; // 0 = 진행중, 1 = 완료
 
 function acRenderChecklistBody(rec){
   var tabsEl = document.getElementById('ac-group-tabs');
@@ -8008,25 +8078,38 @@ function acRenderGroupContent(rec){
   var contentEl = document.getElementById('ac-group-content');
   if(!contentEl) return;
   var saved = rec.progress || {};
+  var vsaved = rec.verified || {};
   var gi = AC_CURRENT_GROUP;
   var grp = AC_CL_GROUPS[gi];
   if(!grp) return;
   var done = grp.items.filter(function(_,ii){ return saved[gi+'_'+ii]; }).length;
+  var verifiedDone = grp.items.filter(function(_,ii){ return vsaved[gi+'_'+ii]; }).length;
   contentEl.innerHTML =
     '<div style="background:var(--surface);border:1.5px solid var(--border);border-left:4px solid '+grp.color+';border-radius:var(--rL);overflow:hidden;">'
-    +'<div style="padding:12px 16px;background:var(--s2);display:flex;align-items:center;justify-content:space-between;">'
+    +'<div style="padding:12px 16px;background:var(--s2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">'
     +'<div style="font-size:13px;font-weight:800;color:var(--text);">'+grp.title+'</div>'
-    +'<span style="font-size:11px;font-weight:700;color:'+grp.color+';">'+done+'/'+grp.items.length+'</span>'
+    +'<div style="display:flex;gap:12px;font-size:11px;font-weight:700;">'
+    +'<span id="ac-ghdr-done-'+gi+'" style="color:'+grp.color+';">👤 담당자 완료 '+done+'/'+grp.items.length+'</span>'
+    +'<span id="ac-ghdr-verified-'+gi+'" style="color:#10B981;">🔍 확인자 확인 '+verifiedDone+'/'+grp.items.length+'</span>'
     +'</div>'
-    +'<div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px;">'
+    +'</div>'
+    +'<div style="padding:12px 16px;display:flex;flex-direction:column;gap:6px;">'
     +grp.items.map(function(item,ii){
       var key=gi+'_'+ii;
-      var checked = saved[key]?'checked':'';
-      return '<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.6;">'
-        +'<input type="checkbox" id="ac-cl-'+key+'" '+checked+' onchange="acSave('+gi+','+ii+')" '
-        +'style="margin-top:2px;width:15px;height:15px;accent-color:'+grp.color+';flex-shrink:0;cursor:pointer;">'
-        +'<span id="ac-cls-'+key+'" style="'+(checked?'text-decoration:line-through;color:var(--text3);':'')+'">'+item+'</span>'
-        +'</label>';
+      var checked = !!saved[key];
+      var verified = !!vsaved[key];
+      return '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:3px 6px;border-radius:6px;'+(verified?'background:rgba(16,185,129,.06);':'')+'">'
+        +'<label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.6;flex:1;min-width:0;">'
+          +'<input type="checkbox" id="ac-cl-'+key+'" '+(checked?'checked':'')+' onchange="acSave('+gi+','+ii+')" '
+          +'style="margin-top:2px;width:15px;height:15px;accent-color:'+grp.color+';flex-shrink:0;cursor:pointer;">'
+          +'<span id="ac-cls-'+key+'" style="'+(checked?'text-decoration:line-through;color:var(--text3);':'')+'">'+item+'</span>'
+          +'</label>'
+        +'<label id="ac-vfl-'+key+'" title="담당자가 완료 체크한 항목을 확인자가 재확인" style="display:flex;align-items:center;gap:5px;flex-shrink:0;white-space:nowrap;padding-top:1px;font-size:10px;font-weight:700;cursor:'+(checked?'pointer':'not-allowed')+';color:'+(verified?'#10B981':'var(--text3)')+';">'
+          +'<input type="checkbox" id="ac-vf-'+key+'" '+(verified?'checked':'')+' '+(checked?'':'disabled')+' onchange="acSaveVerify('+gi+','+ii+')" '
+          +'style="width:14px;height:14px;accent-color:#10B981;cursor:'+(checked?'pointer':'not-allowed')+';">'
+          +'확인'
+          +'</label>'
+        +'</div>';
     }).join('')
     +'</div></div>';
 }
@@ -8047,25 +8130,74 @@ function acSave(gi, ii){
   var key=gi+'_'+ii;
   var cb=document.getElementById('ac-cl-'+key);
   var sp=document.getElementById('ac-cls-'+key);
+  var vcb=document.getElementById('ac-vf-'+key);
+  var vlabel=document.getElementById('ac-vfl-'+key);
   if(!rec.progress) rec.progress={};
-  if(cb.checked){ rec.progress[key]=true; if(sp){sp.style.textDecoration='line-through';sp.style.color='var(--text3)';} }
-  else{ delete rec.progress[key]; if(sp){sp.style.textDecoration='';sp.style.color='var(--text2)';} }
-  var doneTotal = acProgressDone(rec);
-  rec.status = doneTotal>=AC_TOTAL_ITEMS ? 'done' : 'in_progress';
+  if(!rec.verified) rec.verified={};
+  if(cb.checked){
+    rec.progress[key]=true;
+    if(sp){sp.style.textDecoration='line-through';sp.style.color='var(--text3)';}
+    if(vcb) vcb.disabled=false;
+    if(vlabel){ vlabel.style.cursor='pointer'; }
+  } else {
+    delete rec.progress[key];
+    var wasVerified = !!rec.verified[key];
+    delete rec.verified[key];
+    if(sp){sp.style.textDecoration='';sp.style.color='var(--text2)';}
+    if(vcb){ vcb.checked=false; vcb.disabled=true; }
+    if(vlabel){ vlabel.style.cursor='not-allowed'; vlabel.style.color='var(--text3)'; vlabel.style.background=''; }
+    if(vlabel && vlabel.parentElement){ vlabel.parentElement.style.background=''; }
+  }
+  rec.status = acComputeStatus(rec);
   rec.updated_at = new Date().toISOString();
   acLocalSave(AC_ALL);
   acUpsertRemote(rec);
   var grp=AC_CL_GROUPS[gi];
   var done=grp.items.filter(function(_,i){return rec.progress[gi+'_'+i];}).length;
+  var verifiedDone=grp.items.filter(function(_,i){return rec.verified[gi+'_'+i];}).length;
   var tabProg=document.getElementById('ac-gtab-prog-'+gi);
   if(tabProg) tabProg.textContent='('+done+'/'+grp.items.length+')';
+  var hdrDone=document.getElementById('ac-ghdr-done-'+gi);
+  var hdrVer=document.getElementById('ac-ghdr-verified-'+gi);
+  if(hdrDone) hdrDone.textContent='👤 담당자 완료 '+done+'/'+grp.items.length;
+  if(hdrVer) hdrVer.textContent='🔍 확인자 확인 '+verifiedDone+'/'+grp.items.length;
+}
+
+function acSaveVerify(gi, ii){
+  var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
+  if(!rec) return;
+  var key=gi+'_'+ii;
+  var cb=document.getElementById('ac-cl-'+key);
+  var vcb=document.getElementById('ac-vf-'+key);
+  if(!cb || !cb.checked || !vcb) return; // 담당자 완료 전에는 확인 불가
+  if(!rec.verified) rec.verified={};
+  var vlabel=document.getElementById('ac-vfl-'+key);
+  var row=vlabel?vlabel.parentElement:null;
+  if(vcb.checked){
+    rec.verified[key]=true;
+    if(vlabel) vlabel.style.color='#10B981';
+    if(row) row.style.background='rgba(16,185,129,.06)';
+  } else {
+    delete rec.verified[key];
+    if(vlabel) vlabel.style.color='var(--text3)';
+    if(row) row.style.background='';
+  }
+  rec.status = acComputeStatus(rec);
+  rec.updated_at = new Date().toISOString();
+  acLocalSave(AC_ALL);
+  acUpsertRemote(rec);
+  var grp=AC_CL_GROUPS[gi];
+  var verifiedDone=grp.items.filter(function(_,i){return rec.verified[gi+'_'+i];}).length;
+  var hdrVer=document.getElementById('ac-ghdr-verified-'+gi);
+  if(hdrVer) hdrVer.textContent='🔍 확인자 확인 '+verifiedDone+'/'+grp.items.length;
 }
 
 function acResetChecklist(){
   var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
   if(!rec) return;
-  if(!confirm('"'+rec.book_title+'" 체크리스트를 초기화하시겠습니까?')) return;
+  if(!confirm('"'+rec.book_title+'" 체크리스트를 초기화하시겠습니까? (담당자 완료·확인자 확인 내역이 모두 지워집니다)')) return;
   rec.progress = {};
+  rec.verified = {};
   rec.status = 'in_progress';
   rec.updated_at = new Date().toISOString();
   acLocalSave(AC_ALL);
@@ -8089,11 +8221,13 @@ function acDownloadBlob(filename, text){
 function acDownloadChecklistCSV(){
   var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
   if(!rec) return;
-  var rows = [['도서명','저자명','담당자','목표일','그룹','항목','완료여부']];
+  var rows = [['도서명','저자명','담당자','확인자','목표일','그룹','항목','담당자 완료여부','확인자 확인여부']];
   AC_CL_GROUPS.forEach(function(grp, gi){
     grp.items.forEach(function(item, ii){
-      var done = rec.progress && rec.progress[gi+'_'+ii] ? '완료' : '미완료';
-      rows.push([rec.book_title, rec.author_name||'', rec.assignee||'', rec.target_date||'', grp.title, item, done]);
+      var key = gi+'_'+ii;
+      var done = rec.progress && rec.progress[key] ? '완료' : '미완료';
+      var verified = rec.verified && rec.verified[key] ? '확인완료' : '미확인';
+      rows.push([rec.book_title, rec.author_name||'', rec.assignee||'', rec.verifier||'', rec.target_date||'', grp.title, item, done, verified]);
     });
   });
   var csv = rows.map(function(r){ return r.map(acCsvCell).join(','); }).join('\r\n');
@@ -8101,11 +8235,14 @@ function acDownloadChecklistCSV(){
   acDownloadBlob('저자커뮤니케이션_체크리스트_'+safeTitle+'.csv', csv);
 }
 function acDownloadListCSV(){
-  var rows = [['도서명','저자명','담당자','목표일','완료항목','전체항목','진행률(%)','상태']];
+  var rows = [['도서명','저자명','담당자','확인자','목표일','담당자 완료','확인자 확인','전체항목','완료율(%)','확인율(%)','상태']];
   AC_ALL.forEach(function(r){
     var done = acProgressDone(r);
+    var verified = acVerifiedDone(r);
     var pct = Math.round(done/AC_TOTAL_ITEMS*100);
-    rows.push([r.book_title, r.author_name||'', r.assignee||'', r.target_date||'', done, AC_TOTAL_ITEMS, pct, done>=AC_TOTAL_ITEMS?'완료':'진행중']);
+    var vpct = Math.round(verified/AC_TOTAL_ITEMS*100);
+    var isDone = done>=AC_TOTAL_ITEMS && verified>=AC_TOTAL_ITEMS;
+    rows.push([r.book_title, r.author_name||'', r.assignee||'', r.verifier||'', r.target_date||'', done, verified, AC_TOTAL_ITEMS, pct, vpct, isDone?'완료':'진행중']);
   });
   var csv = rows.map(function(r){ return r.map(acCsvCell).join(','); }).join('\r\n');
   acDownloadBlob('저자커뮤니케이션_체크리스트_전체목록.csv', csv);
