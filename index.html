@@ -8786,20 +8786,23 @@ function crLoad(){
         CR_ALL = crLocalAll();
       }
       CR_LOADED = true;
-      crRebuildFilters();
-      crFilter();
+      crAfterChange();
     }).catch(function(){
       CR_ALL = crLocalAll();
       CR_LOADED = true;
-      crRebuildFilters();
-      crFilter();
+      crAfterChange();
     });
   } else {
     CR_ALL = crLocalAll();
     CR_LOADED = true;
-    crRebuildFilters();
-    crFilter();
+    crAfterChange();
   }
+}
+// CR_ALL이 바뀔 때마다(로드/등록/수정/삭제) 필터·목록·알림 배지를 함께 갱신
+function crAfterChange(){
+  crRebuildFilters();
+  crFilter();
+  if(typeof notifRefresh==='function') notifRefresh();
 }
 
 // ── Supabase 연결 상태 배지 ───────────────────────────────────
@@ -8908,8 +8911,7 @@ function crCreate(){
   ['cr-new-requester','cr-new-target','cr-new-content','cr-new-date'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.value='';
   });
-  crRebuildFilters();
-  crFilter();
+  crAfterChange();
 }
 
 function crDeleteRow(id){
@@ -8917,8 +8919,7 @@ function crDeleteRow(id){
   CR_ALL = CR_ALL.filter(function(r){ return r.id!==id; });
   crLocalSave(CR_ALL);
   crDeleteRemote(id);
-  crRebuildFilters();
-  crFilter();
+  crAfterChange();
 }
 
 function crSetResult(id){
@@ -8929,6 +8930,7 @@ function crSetResult(id){
   rec.result = v.trim() || null;
   crSaveRec(rec);
   crFilter();
+  if(typeof notifRefresh==='function') notifRefresh();
 }
 function crSetDate(id, field){
   var rec = CR_ALL.find(function(r){ return r.id===id; });
@@ -8941,6 +8943,8 @@ function crSetDate(id, field){
   rec[field] = v || null;
   crSaveRec(rec);
   crFilter();
+  // 확인일(담당자 확인)이 지정되면 이 협조사항은 알림 목록에서 자동으로 사라집니다.
+  if(typeof notifRefresh==='function') notifRefresh();
 }
 function crSetStatus(id, status){
   var rec = CR_ALL.find(function(r){ return r.id===id; });
@@ -9005,7 +9009,7 @@ function crRenderTable(list){
   }
   if(empty) empty.style.display = 'none';
   tbody.innerHTML = list.map(function(r){
-    return '<tr>'
+    return '<tr data-cr-id="'+r.id+'">'
       + '<td>'+acEsc(r.requester)+'</td>'
       + '<td style="max-width:220px;">'+acEsc(r.content)+'</td>'
       + '<td style="max-width:180px;cursor:pointer;color:'+(r.result?'var(--text)':'var(--text3)')+';" onclick="crSetResult(\''+r.id+'\')" title="클릭하여 결과 입력/수정">'+(r.result?acEsc(r.result):'— 입력 —')+'</td>'
@@ -9049,6 +9053,101 @@ function crDownloadCSV(){
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
 }
+
+// ══════════════════════════════════════════════════════════════
+// 알림 (사이드바 🔔) — 담당자 확인 대기중인 협조사항을 자동 표시
+// 협조사항이 등록되면 나타나고, 확인일(담당자 확인)이 지정되면 사라짐
+// ══════════════════════════════════════════════════════════════
+function notifSeenIds(){ try{ return JSON.parse(localStorage.getItem('notif_seen_ids')||'[]'); }catch(e){ return []; } }
+function notifSaveSeen(ids){ localStorage.setItem('notif_seen_ids', JSON.stringify(ids)); }
+
+// 알림 대상: 확인일(담당자 확인)이 아직 지정되지 않은 협조사항
+function notifPendingCR(){
+  return (typeof CR_ALL!=='undefined' ? CR_ALL : []).filter(function(r){ return !r.confirm_date; })
+    .sort(function(a,b){ return (b.created_at||'').localeCompare(a.created_at||''); });
+}
+
+function notifRefresh(){
+  var pending = notifPendingCR();
+  var seen = notifSeenIds();
+  // 이미 삭제된 협조사항의 seen 기록은 계속 쌓이지 않도록 정리
+  var pendingIds = pending.map(function(r){ return r.id; });
+  seen = seen.filter(function(id){ return pendingIds.indexOf(id)!==-1; });
+  notifSaveSeen(seen);
+  var unseenCount = pending.filter(function(r){ return seen.indexOf(r.id)===-1; }).length;
+
+  var badge = document.getElementById('notif-badge');
+  if(badge){
+    if(unseenCount>0){ badge.style.display='flex'; badge.textContent = unseenCount>99?'99+':String(unseenCount); }
+    else{ badge.style.display='none'; badge.textContent='0'; }
+  }
+
+  var list = document.getElementById('notif-list');
+  if(!list) return;
+  if(!pending.length){
+    list.innerHTML = '<div class="notif-empty">📭 담당자 확인 대기중인 협조사항이 없습니다.</div>';
+    return;
+  }
+  list.innerHTML = pending.map(function(r){
+    var isUnseen = seen.indexOf(r.id)===-1;
+    return '<div class="notif-item'+(isUnseen?' unread':'')+'" onclick="notifOpenCR(\''+r.id+'\')">'
+      + '<div class="notif-dot" style="background:'+(isUnseen?'#EF4444':'var(--border)')+';"></div>'
+      + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:12px;font-weight:700;color:var(--text);">🤝 협조사항 요청</div>'
+        + '<div style="font-size:11.5px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+acEsc(r.requester)+' → '+acEsc(r.target)+' · '+acEsc(r.content)+'</div>'
+        + '<div style="font-size:10px;color:var(--text3);margin-top:3px;">'+acEsc(r.request_date||'')+' 요청 · 담당자 확인 대기중</div>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
+function notifToggle(){
+  var panel = document.getElementById('notif-panel');
+  if(!panel) return;
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')) notifRefresh();
+}
+
+function notifMarkAllRead(){
+  notifSaveSeen(notifPendingCR().map(function(r){ return r.id; }));
+  notifRefresh();
+}
+
+// 알림 클릭 → KPI·협조사항 탭으로 이동해 해당 행을 강조
+function notifOpenCR(id){
+  var panel = document.getElementById('notif-panel');
+  if(panel) panel.classList.remove('open');
+  var seen = notifSeenIds();
+  if(seen.indexOf(id)===-1){ seen.push(id); notifSaveSeen(seen); }
+  notifRefresh();
+  nav('s8','t1');
+  setTimeout(function(){
+    if(typeof crResetFilters==='function') crResetFilters();
+    setTimeout(function(){
+      var row = document.querySelector('tr[data-cr-id="'+id+'"]');
+      if(row){
+        row.scrollIntoView({behavior:'smooth', block:'center'});
+        row.style.transition = 'background .3s';
+        row.style.background = 'rgba(184,147,10,.18)';
+        setTimeout(function(){ row.style.background=''; }, 1800);
+      }
+    }, 150);
+  }, 150);
+}
+
+// 알림 패널 바깥을 클릭하면 자동으로 닫힘
+document.addEventListener('click', function(e){
+  var panel = document.getElementById('notif-panel');
+  var btn = document.getElementById('notif-btn');
+  if(!panel || !panel.classList.contains('open')) return;
+  if(panel.contains(e.target) || (btn && btn.contains(e.target))) return;
+  panel.classList.remove('open');
+});
+
+// 페이지 로드 시 협조사항을 미리 불러와 알림 배지를 즉시 표시
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof crLoad==='function') crLoad();
+});
 
 // ── 상태 정의 ─────────────────────────────────────────
 var KP_STATUS = {
