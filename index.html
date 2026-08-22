@@ -479,30 +479,26 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="nav-item" onclick="nav('s12')" style="color:#F59E0B;border-left:2px solid rgba(245,158,11,.4);">
       <span class="nav-icon">👤</span>저·역자 관리
     </div>
-    <div class="nav-item" onclick="nav('s10')" style="color:#A78BFA;border-left:2px solid rgba(167,139,250,.4);">
-      <span class="nav-icon">📝</span>회의록
-    </div>
     <div class="nav-item" onclick="nav('s15')">
       <span class="nav-icon">🌍</span>Amazon KDP
     </div>
     <div class="nav-item" onclick="nav('s16')" style="color:#E8814E;border-left:2px solid rgba(232,129,78,.45);">
       <span class="nav-icon">🏛️</span>출판사 모델
     </div>
-    <div class="nav-section-label" style="padding-top:6px;">핵심 포털</div>
     <a href="https://publisher.acornpub.kr/login" target="_blank" rel="noopener" onclick="return openPortalWindow('https://publisher.acornpub.kr/login')" style="text-decoration:none;">
-      <div class="nav-item" style="color:#E8B48E;">
+      <div class="nav-item" style="color:#E8B48E;padding-left:38px;font-size:11px;border-left:2px solid rgba(232,180,142,.3);">
         <span class="nav-icon">🏢</span>출판사 포털
         <span style="margin-left:auto;opacity:.5;font-size:10px;">⧉</span>
       </div>
     </a>
     <a href="https://author.acornpub.kr/" target="_blank" rel="noopener" onclick="return openPortalWindow('https://author.acornpub.kr/')" style="text-decoration:none;">
-      <div class="nav-item" style="color:#E8B48E;">
+      <div class="nav-item" style="color:#E8B48E;padding-left:38px;font-size:11px;border-left:2px solid rgba(232,180,142,.3);">
         <span class="nav-icon">✍️</span>저·역자 포털
         <span style="margin-left:auto;opacity:.5;font-size:10px;">⧉</span>
       </div>
     </a>
     <a href="reader-on-purchase.html" target="_blank" rel="noopener" onclick="return openPortalWindow('reader-on-purchase.html')" style="text-decoration:none;">
-      <div class="nav-item" style="color:#E8B48E;">
+      <div class="nav-item" style="color:#E8B48E;padding-left:38px;font-size:11px;border-left:2px solid rgba(232,180,142,.3);">
         <span class="nav-icon">📖</span>독자 포털
         <span style="margin-left:auto;opacity:.5;font-size:10px;">⧉</span>
       </div>
@@ -2503,12 +2499,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
                 <input id="ac-new-verifier" type="text" placeholder="확인자명 (선택)" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
               </div>
               <div>
-                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">목표일</div>
+                <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">출간(예정)일</div>
                 <input id="ac-new-date" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
               </div>
               <button onclick="acNewChecklist()" style="padding:9px 16px;background:var(--rose);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">+ 생성</button>
             </div>
           </div>
+
+          <div id="ac-reminder-summary" style="margin-bottom:14px;"></div>
 
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
             <div style="font-size:12px;font-weight:800;color:var(--text);">도서별 진행 현황</div>
@@ -2527,11 +2525,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
               <div id="ac-detail-meta" style="font-size:12px;color:var(--text3);margin-top:4px;"></div>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button onclick="acSetTargetDate()" style="padding:7px 14px;background:none;border:1.5px solid rgba(21,96,184,.4);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--blue);">📅 출간(예정)일 지정/변경</button>
               <button onclick="acSetVerifier()" style="padding:7px 14px;background:none;border:1.5px solid rgba(16,185,129,.4);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:#10B981;">🔍 확인자 지정/변경</button>
               <button onclick="acDownloadChecklistCSV()" style="padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">⬇ 이 도서 체크리스트 다운로드</button>
               <button onclick="acResetChecklist()" style="padding:7px 14px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 초기화</button>
             </div>
           </div>
+          <div id="ac-milestone-alert"></div>
+          <div id="ac-milestone-bar" style="margin-bottom:16px;"></div>
           <div id="ac-group-tabs" class="pill-tabs" style="margin-bottom:16px;overflow-x:auto;flex-wrap:nowrap;"></div>
           <div id="ac-group-content"></div>
         </div>
@@ -2559,6 +2560,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <button class="tab-btn" onclick="tab('s4','t3',this)">🗺️ <span data-i18n="tab_r3">수습 로드맵</span></button>
       <button class="tab-btn" onclick="tab('s4','t4',this)">✅ <span data-i18n="tab_r4">체크리스트</span></button>
       <button class="tab-btn" onclick="tab('s4','t5',this);wjInit()">📔 <span data-i18n="tab_r5">업무일지</span></button>
+      <button class="tab-btn" onclick="tab('s4','t6',this);if(typeof mnLoad==='function')mnLoad();">📝 <span data-i18n="tab_r6">회의록</span></button>
     </div>
 
     <div id="s4-t0" class="tab-panel" data-ko-id="s4-t0" active"><div class="rules-grid">
@@ -2922,6 +2924,201 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
 
+    <div id="s4-t6" class="tab-panel" data-ko-id="s4-t6">
+      <div class="sec-h" style="margin-top:0;">📝 회의록 <span style="font-size:.6em;font-weight:400;color:var(--text3);">Meeting Notes</span></div>
+      <p class="sec-sub">회의를 기록하고, 연속 주제는 스레드로 이어서 관리합니다.</p>
+
+
+    <!-- 상단 액션 바 -->
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
+          style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:200px;"
+          oninput="mnFilter()">
+        <select id="mn-filter-author" onchange="mnFilter()"
+          style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">👤 작성자 전체</option>
+        </select>
+        <select id="mn-filter-tag" onchange="mnFilter()"
+          style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
+          <option value="">🏷 주제 전체</option>
+        </select>
+      </div>
+      <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
+        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">✏️ 새 회의록</button>
+    </div>
+
+    <!-- 진행/완료 탭 -->
+    <div style="display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:18px;">
+      <button id="mn-tab-active" onclick="mnSetTab('active')"
+        style="padding:9px 22px;border:none;background:none;font-size:13px;font-weight:700;color:var(--purple);border-bottom:2.5px solid var(--purple);margin-bottom:-2px;cursor:pointer;">
+        🔵 진행중
+      </button>
+      <button id="mn-tab-done" onclick="mnSetTab('done')"
+        style="padding:9px 22px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">
+        ✅ 완료
+      </button>
+      <span id="mn-tab-count" style="margin-left:auto;align-self:center;font-size:11px;color:var(--text3);padding-right:4px;"></span>
+    </div>
+
+    <!-- 회의록 목록 -->
+    <div id="mn-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <div id="mn-empty" style="display:none;text-align:center;padding:48px 0;color:var(--text3);">
+      <div style="font-size:40px;margin-bottom:12px;">📋</div>
+      <div id="mn-empty-msg" style="font-size:14px;">회의록이 없습니다.</div>
+    </div>
+
+    <!-- ── 작성/편집 모달 ── -->
+    <div id="mn-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface);border-radius:16px;padding:28px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div style="font-size:16px;font-weight:700;color:var(--text);" id="mn-modal-title">📝 새 회의록 작성</div>
+          <button onclick="mnCloseModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">제목 *</div>
+              <input id="mn-f-title" type="text" placeholder="회의 제목"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">날짜 *</div>
+              <input id="mn-f-date" type="date"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">작성자 *</div>
+              <input id="mn-f-author" type="text" placeholder="이름"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">참석자</div>
+              <input id="mn-f-attendees" type="text" placeholder="예: 황영주, 강승훈"
+                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">주제 태그</div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;" id="mn-tag-btns">
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'편집')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">편집</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기획')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기획</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'마케팅')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">마케팅</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'디자인')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">디자인</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'플랫폼')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">플랫폼</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'KPI')"    style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">KPI</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'경영')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">경영</button>
+              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기타')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기타</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">회의 내용 *</div>
+            <textarea id="mn-f-body" rows="8" placeholder="안건 / 논의 내용 / 결정 사항"
+              style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">액션 아이템</div>
+            <textarea id="mn-f-actions" rows="3" placeholder="예: - 홍길동: 기획안 수정 (6/30까지)"
+              style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <div id="mn-save-msg" style="font-size:12px;color:var(--teal);font-family:'JetBrains Mono',monospace;"></div>
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="mnCloseModal()" style="padding:9px 20px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+            <button onclick="mnSave()" id="mn-save-btn" style="padding:9px 24px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 스레드 추가 모달 ── -->
+    <div id="mn-thread-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--surface);border-radius:16px;padding:26px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text);">🔗 연속 스레드 추가</div>
+          <button onclick="mnCloseThread()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
+        </div>
+        <div id="mn-thread-origin" style="padding:10px 14px;background:var(--s2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;margin-bottom:16px;font-size:12px;color:var(--text2);"></div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">날짜 *</div>
+              <input id="mn-th-date" type="date" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">작성자 *</div>
+              <input id="mn-th-author" type="text" placeholder="이름" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">참석자</div>
+            <input id="mn-th-attendees" type="text" placeholder="예: 황영주, 강승훈" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">회의 내용 *</div>
+            <textarea id="mn-th-body" rows="6" placeholder="이번 회의에서 논의·결정된 내용"
+              style="width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">액션 아이템</div>
+            <textarea id="mn-th-actions" rows="2" placeholder="- 담당자: 내용 (기한)"
+              style="width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
+          </div>
+          <input type="hidden" id="mn-th-note-id">
+          <input type="hidden" id="mn-th-thread-id">
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button onclick="mnCloseThread()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+            <button onclick="mnSaveThread()" style="padding:8px 22px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">스레드 저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 보기 모달 (2-패널) ── -->
+    <div id="mn-view-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:16px;">
+      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:960px;height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.35);">
+
+        <!-- 헤더 -->
+        <div style="padding:16px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);margin-bottom:4px;">📝 회의록</div>
+            <div id="mnv-title" style="font-size:17px;font-weight:800;color:var(--text);line-height:1.3;"></div>
+            <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;"></div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+            <span id="mnv-status-badge"></span>
+            <button id="mnv-done-btn" onclick="mnToggleDone(document.getElementById('mnv-edit-btn').dataset.id)"
+              style="padding:5px 12px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.3);border-radius:7px;font-size:11px;font-weight:700;color:var(--teal);cursor:pointer;">✅ 완료</button>
+            <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)"
+              style="padding:5px 12px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">✏️ 수정</button>
+            <button onclick="mnCloseView()" style="background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;padding:2px 4px;line-height:1;">✕</button>
+          </div>
+        </div>
+
+        <!-- 2-패널 바디 -->
+        <div style="flex:1;display:flex;overflow:hidden;">
+
+          <!-- 왼쪽: 스레드 네비게이션 -->
+          <div style="width:220px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg);">
+            <div style="padding:12px 14px 8px;font-size:10px;font-weight:800;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;">스레드</div>
+            <div id="mnv-thread-nav" style="flex:1;overflow-y:auto;padding:0 8px 12px;display:flex;flex-direction:column;gap:4px;"></div>
+            <div style="padding:10px 12px;border-top:1px solid var(--border);">
+              <button onclick="mnOpenThread(document.getElementById('mnv-edit-btn').dataset.id)"
+                style="width:100%;padding:8px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.3);border-radius:8px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;">
+                ＋ 스레드 추가
+              </button>
+            </div>
+          </div>
+
+          <!-- 오른쪽: 선택된 스레드 본문 -->
+          <div style="flex:1;overflow-y:auto;padding:20px 26px;" id="mnv-thread-body"></div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
 
   </div>
 </div>
@@ -2934,6 +3131,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <p class="ph-sub"><span data-i18n="ph_s4">2026년 전 직원이 함께 추구하는 KPI — 회사 성장·자기 발전·규정 준수 3개 축</span></p>
   </div>
   <div class="content" data-ko-id="s8-main">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="tab('s8','t0',this)">📊 KPI 현황</button>
+      <button class="tab-btn" onclick="tab('s8','t1',this)">🤝 협조사항</button>
+    </div>
+    <div id="s8-t0" class="tab-panel active" data-ko-id="s8-t0">
 <!-- 연간 목표 요약 -->
     <div class="sec-h">2026년 연간 목표</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:28px;">
@@ -3022,6 +3224,100 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div>
 
     <div class="info-box blue"><strong>KPI 운영 방식:</strong> 팀별 KPI는 매월 말 경영진에게 현황 보고합니다. 수습 직원은 수습 3개월 KPI(학습 완료율·납기 준수·업무일지 작성률)로 별도 평가하며, 보직 확정 후 팀별 KPI가 적용됩니다.</div>
+    </div>
+
+    <div id="s8-t1" class="tab-panel" data-ko-id="s8-t1">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;">TEAM COOPERATION REQUESTS</div>
+        <div style="font-size:15px;font-weight:800;color:var(--text);">협조사항 관리</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:3px;">팀간 협조 요청을 요청자·대상자·요청일·결과상태 기준으로 등록하고 Supabase에 저장·관리합니다.</div>
+      </div>
+
+      <div id="cr-db-badge" style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3);margin-bottom:14px;padding:8px 12px;background:var(--s2);border-radius:8px;"></div>
+
+      <div id="cr-table-missing" style="display:none;margin-bottom:16px;background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 18px;">
+        <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px;"><strong style="color:#DC2626;">⚠ Supabase에 cooperation_requests 테이블이 아직 없습니다.</strong> 아래 버튼으로 생성 SQL을 복사해 Supabase SQL Editor에 붙여넣고 실행하면, 이후부터 협조사항이 팀 전체에 저장·동기화됩니다. 테이블이 없어도 이 브라우저에는 계속 저장됩니다.</div>
+        <button onclick="crCopySQL()" style="padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">📋 테이블 생성 SQL 복사</button>
+        <span id="cr-table-msg" style="margin-left:10px;font-size:11px;"></span>
+      </div>
+
+      <!-- 새 협조사항 등록 -->
+      <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;">+ 새 협조사항 등록</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1.6fr 1fr auto;gap:8px;align-items:end;">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청자 *</div>
+            <input id="cr-new-requester" type="text" placeholder="요청자명" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">대상자 *</div>
+            <input id="cr-new-target" type="text" placeholder="협조 대상자명" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청내용 *</div>
+            <input id="cr-new-content" type="text" placeholder="협조 요청 내용" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청일</div>
+            <input id="cr-new-date" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
+          </div>
+          <button onclick="crCreate()" style="padding:9px 16px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">+ 등록</button>
+        </div>
+      </div>
+
+      <!-- 필터 -->
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:14px;background:var(--s2);border-radius:var(--rL);padding:12px 14px;">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청자</div>
+          <select id="cr-filter-requester" onchange="crFilter()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);"><option value="">전체</option></select>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">대상자</div>
+          <select id="cr-filter-target" onchange="crFilter()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);"><option value="">전체</option></select>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">결과상태</div>
+          <select id="cr-filter-status" onchange="crFilter()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);">
+            <option value="">전체</option>
+            <option value="pending">대기</option>
+            <option value="progress">진행중</option>
+            <option value="done">완료</option>
+            <option value="hold">보류</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청일 시작</div>
+          <input id="cr-filter-date-from" type="date" onchange="crFilter()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);">
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청일 종료</div>
+          <input id="cr-filter-date-to" type="date" onchange="crFilter()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);">
+        </div>
+        <button onclick="crResetFilters()" style="padding:7px 12px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 필터 초기화</button>
+        <div style="flex:1;"></div>
+        <button onclick="crDownloadCSV()" style="padding:7px 12px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text2);">⬇ CSV 다운로드</button>
+      </div>
+
+      <div id="cr-count" style="font-size:11px;color:var(--text3);margin-bottom:8px;"></div>
+
+      <div style="overflow-x:auto;">
+      <table class="data-table" style="min-width:920px;">
+        <thead><tr>
+          <th style="width:90px;">요청자</th>
+          <th>요청내용</th>
+          <th>결과</th>
+          <th style="width:90px;">대상자</th>
+          <th style="width:96px;">요청일</th>
+          <th style="width:96px;">확인일</th>
+          <th style="width:96px;">종료일</th>
+          <th style="width:100px;">결과상태</th>
+          <th style="width:70px;">관리</th>
+        </tr></thead>
+        <tbody id="cr-tbody"></tbody>
+      </table>
+      </div>
+      <div id="cr-empty" style="display:none;padding:24px;text-align:center;color:var(--text3);font-size:12px;background:var(--s2);border-radius:var(--r);margin-top:8px;">등록된 협조사항이 없습니다.</div>
+    </div>
   </div>
 </div>
 
@@ -4539,207 +4835,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div><!-- /content -->
 </div><!-- /s15 -->
 
-<!-- ══ S10: 회의록 ══ -->
-<div id="s10" class="section">
-  <div class="page-header" style="background:linear-gradient(135deg,#1E1040 0%,#2D1B69 60%,#0F172A 100%);">
-    <div class="ph-eyebrow">MEETING NOTES · 에이콘출판사</div>
-    <h1 class="ph-title">회의록 <span style="font-size:.55em;font-weight:400;opacity:.7">Meeting Notes</span></h1>
-    <p class="ph-sub">회의를 기록하고, 연속 주제는 스레드로 이어서 관리합니다.</p>
-  </div>
-  <div class="content">
-
-    <!-- 상단 액션 바 -->
-    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px;">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <input id="mn-search" type="text" placeholder="🔍 제목·내용·작성자 검색…"
-          style="padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;min-width:200px;"
-          oninput="mnFilter()">
-        <select id="mn-filter-author" onchange="mnFilter()"
-          style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
-          <option value="">👤 작성자 전체</option>
-        </select>
-        <select id="mn-filter-tag" onchange="mnFilter()"
-          style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);color:var(--text);outline:none;">
-          <option value="">🏷 주제 전체</option>
-        </select>
-      </div>
-      <button onclick="mnOpenModal()" style="padding:9px 20px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;"
-        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">✏️ 새 회의록</button>
-    </div>
-
-    <!-- 진행/완료 탭 -->
-    <div style="display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:18px;">
-      <button id="mn-tab-active" onclick="mnSetTab('active')"
-        style="padding:9px 22px;border:none;background:none;font-size:13px;font-weight:700;color:var(--purple);border-bottom:2.5px solid var(--purple);margin-bottom:-2px;cursor:pointer;">
-        🔵 진행중
-      </button>
-      <button id="mn-tab-done" onclick="mnSetTab('done')"
-        style="padding:9px 22px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text3);border-bottom:2.5px solid transparent;margin-bottom:-2px;cursor:pointer;">
-        ✅ 완료
-      </button>
-      <span id="mn-tab-count" style="margin-left:auto;align-self:center;font-size:11px;color:var(--text3);padding-right:4px;"></span>
-    </div>
-
-    <!-- 회의록 목록 -->
-    <div id="mn-list" style="display:flex;flex-direction:column;gap:10px;"></div>
-    <div id="mn-empty" style="display:none;text-align:center;padding:48px 0;color:var(--text3);">
-      <div style="font-size:40px;margin-bottom:12px;">📋</div>
-      <div id="mn-empty-msg" style="font-size:14px;">회의록이 없습니다.</div>
-    </div>
-
-    <!-- ── 작성/편집 모달 ── -->
-    <div id="mn-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
-      <div style="background:var(--surface);border-radius:16px;padding:28px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-          <div style="font-size:16px;font-weight:700;color:var(--text);" id="mn-modal-title">📝 새 회의록 작성</div>
-          <button onclick="mnCloseModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:14px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">제목 *</div>
-              <input id="mn-f-title" type="text" placeholder="회의 제목"
-                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-            </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">날짜 *</div>
-              <input id="mn-f-date" type="date"
-                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">작성자 *</div>
-              <input id="mn-f-author" type="text" placeholder="이름"
-                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-            </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">참석자</div>
-              <input id="mn-f-attendees" type="text" placeholder="예: 황영주, 강승훈"
-                style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-            </div>
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">주제 태그</div>
-            <div style="display:flex;gap:7px;flex-wrap:wrap;" id="mn-tag-btns">
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'편집')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">편집</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기획')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기획</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'마케팅')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">마케팅</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'디자인')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">디자인</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'플랫폼')" style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">플랫폼</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'KPI')"    style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">KPI</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'경영')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">경영</button>
-              <button type="button" class="mn-tag-opt" onclick="mnToggleTag(this,'기타')"   style="padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text3);">기타</button>
-            </div>
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">회의 내용 *</div>
-            <textarea id="mn-f-body" rows="8" placeholder="안건 / 논의 내용 / 결정 사항"
-              style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;">액션 아이템</div>
-            <textarea id="mn-f-actions" rows="3" placeholder="예: - 홍길동: 기획안 수정 (6/30까지)"
-              style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
-          </div>
-          <div id="mn-save-msg" style="font-size:12px;color:var(--teal);font-family:'JetBrains Mono',monospace;"></div>
-          <div style="display:flex;gap:8px;justify-content:flex-end;">
-            <button onclick="mnCloseModal()" style="padding:9px 20px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
-            <button onclick="mnSave()" id="mn-save-btn" style="padding:9px 24px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">저장</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── 스레드 추가 모달 ── -->
-    <div id="mn-thread-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;padding:20px;">
-      <div style="background:var(--surface);border-radius:16px;padding:26px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-          <div style="font-size:15px;font-weight:700;color:var(--text);">🔗 연속 스레드 추가</div>
-          <button onclick="mnCloseThread()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
-        </div>
-        <div id="mn-thread-origin" style="padding:10px 14px;background:var(--s2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;margin-bottom:16px;font-size:12px;color:var(--text2);"></div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">날짜 *</div>
-              <input id="mn-th-date" type="date" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-            </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">작성자 *</div>
-              <input id="mn-th-author" type="text" placeholder="이름" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-            </div>
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">참석자</div>
-            <input id="mn-th-attendees" type="text" placeholder="예: 황영주, 강승훈" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">회의 내용 *</div>
-            <textarea id="mn-th-body" rows="6" placeholder="이번 회의에서 논의·결정된 내용"
-              style="width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
-          </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">액션 아이템</div>
-            <textarea id="mn-th-actions" rows="2" placeholder="- 담당자: 내용 (기한)"
-              style="width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.7;box-sizing:border-box;"></textarea>
-          </div>
-          <input type="hidden" id="mn-th-note-id">
-          <input type="hidden" id="mn-th-thread-id">
-          <div style="display:flex;gap:8px;justify-content:flex-end;">
-            <button onclick="mnCloseThread()" style="padding:8px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
-            <button onclick="mnSaveThread()" style="padding:8px 22px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">스레드 저장</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── 보기 모달 (2-패널) ── -->
-    <div id="mn-view-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:16px;">
-      <div style="background:var(--surface);border-radius:16px;width:100%;max-width:960px;height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.35);">
-
-        <!-- 헤더 -->
-        <div style="padding:16px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;gap:12px;">
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--purple);margin-bottom:4px;">📝 회의록</div>
-            <div id="mnv-title" style="font-size:17px;font-weight:800;color:var(--text);line-height:1.3;"></div>
-            <div id="mnv-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;"></div>
-          </div>
-          <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-            <span id="mnv-status-badge"></span>
-            <button id="mnv-done-btn" onclick="mnToggleDone(document.getElementById('mnv-edit-btn').dataset.id)"
-              style="padding:5px 12px;background:rgba(13,148,136,.1);border:1.5px solid rgba(13,148,136,.3);border-radius:7px;font-size:11px;font-weight:700;color:var(--teal);cursor:pointer;">✅ 완료</button>
-            <button id="mnv-edit-btn" onclick="mnCloseView();mnEdit(this.dataset.id)"
-              style="padding:5px 12px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">✏️ 수정</button>
-            <button onclick="mnCloseView()" style="background:none;border:none;font-size:22px;color:var(--text3);cursor:pointer;padding:2px 4px;line-height:1;">✕</button>
-          </div>
-        </div>
-
-        <!-- 2-패널 바디 -->
-        <div style="flex:1;display:flex;overflow:hidden;">
-
-          <!-- 왼쪽: 스레드 네비게이션 -->
-          <div style="width:220px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg);">
-            <div style="padding:12px 14px 8px;font-size:10px;font-weight:800;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;">스레드</div>
-            <div id="mnv-thread-nav" style="flex:1;overflow-y:auto;padding:0 8px 12px;display:flex;flex-direction:column;gap:4px;"></div>
-            <div style="padding:10px 12px;border-top:1px solid var(--border);">
-              <button onclick="mnOpenThread(document.getElementById('mnv-edit-btn').dataset.id)"
-                style="width:100%;padding:8px;background:rgba(124,58,237,.1);border:1.5px solid rgba(124,58,237,.3);border-radius:8px;font-size:12px;font-weight:700;color:var(--purple);cursor:pointer;">
-                ＋ 스레드 추가
-              </button>
-            </div>
-          </div>
-
-          <!-- 오른쪽: 선택된 스레드 본문 -->
-          <div style="flex:1;overflow-y:auto;padding:20px 26px;" id="mnv-thread-body"></div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-</div>
-
 <!-- ══ S11: 참고 사이트 ══ -->
 <div id="s11" class="section">
   <div class="page-header" style="background:linear-gradient(135deg,#0C1F3A 0%,#0A3E5A 60%,#091A0A 100%);">
@@ -5120,16 +5215,10 @@ function nav(id, subTabId) {
   window.scrollTo(0,0);
   buildChecklist();
   if (id === 's9') { setTimeout(function(){ if(typeof pilotInit==='function') pilotInit(); }, 50); }
-  if (id === 's10') {
-    setTimeout(function(){
-      requestAnimationFrame(function(){
-        if(typeof mnLoad==='function') mnLoad();
-      });
-    }, 120);
-  }
   if (id === 's11') { setTimeout(function(){ if(typeof refInit==='function') refInit(); }, 60); }
   if (id === 's12') { setTimeout(function(){ if(typeof pplInit==='function') pplInit(); }, 80); }
   if (id === 's15') { setTimeout(function(){ if(typeof kdpLoad==='function') kdpLoad(); if(typeof kpLoad==='function') kpLoad(); }, 80); }
+  if (id === 's8') { setTimeout(function(){ if(typeof crLoad==='function') crLoad(); }, 80); }
 }
 
 // ── LANGUAGE SYSTEM ──────────────────────────────────────────
@@ -5144,7 +5233,7 @@ const T = {
     tab_p3:'저자 발굴', tab_p4:'저자 설득 가이드', tab_p7:'2026 목표', tab_p5:'플랫폼 비즈니스', tab_p6:'원가 분석', tab_p8:'저자 커뮤니케이션',
     tab_r0:'공통 규정', tab_r1:'수습 직원', tab_r2:'경력 직원',
     tab_r3:'수습 로드맵', tab_r4:'체크리스트',
-    tab_r5:'업무일지',
+    tab_r5:'업무일지', tab_r6:'회의록',
     ph_t1:'에이콘출판사 소개', ph_t2:'업무 소개', ph_t3:'복무 규정', ph_t4:'팀별·업무별 KPI',
     ph_s1:'미션·비전·전략과 조직 구조를 확인합니다.',
     ph_s2:'출판 프로세스·원가분석·플랫폼 비즈니스·KDP·저자 발굴·저자 설득 가이드를 이해합니다.',
@@ -5158,7 +5247,7 @@ const T = {
     tab_p3:'Author Discovery', tab_p4:'Persuasion Guide', tab_p7:'2026 Targets', tab_p5:'Platform Business', tab_p6:'Cost Analysis', tab_p8:'Author Communication',
     tab_r0:'General Rules', tab_r1:'Probationary', tab_r2:'Experienced',
     tab_r3:'Roadmap', tab_r4:'Checklist',
-    tab_r5:'Work Journal',
+    tab_r5:'Work Journal', tab_r6:'Meeting Notes',
     ph_t1:'About Acorn Publishing', ph_t2:'Work Guide', ph_t3:'Regulations', ph_t4:'Team KPI',
     ph_s1:'Explore mission, vision, strategy, and organizational structure.',
     ph_s2:'Understand publishing process, cost analysis, platform business, KDP, and author strategies.',
@@ -7993,6 +8082,79 @@ var AC_CL_GROUPS = [
 ];
 var AC_TOTAL_ITEMS = AC_CL_GROUPS.reduce(function(s,g){return s+g.items.length;}, 0);
 
+// ── 출간 마일스톤 기준 그룹별 권장 일정 (출간(예정)일 = D-day) ──
+// offset: 출간일 기준 며칠 전/후에 진행해야 하는지 (음수=출간 전, 0=출간 시점, 양수=출간 후)
+var AC_MILESTONES = [
+  {offset:-3,  phase:'출간 전', label:'D-3'},   // 0. Quick Check — 출간 직전 최종 점검
+  {offset:-60, phase:'출간 전', label:'D-60'},  // 1. 출간 기획·브랜딩
+  {offset:-14, phase:'출간 전', label:'D-14'},  // 2. 마감 전 저자 확인
+  {offset:-7,  phase:'출간 전', label:'D-7'},   // 3. 서점 등록·예약판매
+  {offset:0,   phase:'출간 시점', label:'D-day'}, // 4. 입고·증정·저자 구매
+  {offset:14,  phase:'출간 후', label:'D+14'},  // 5. 출간 후 마케팅 공유
+  {offset:30,  phase:'출간 후', label:'D+30'},  // 6. 출간 후 정기 커뮤니케이션
+];
+var AC_ALERT_WINDOW_DAYS = 3; // "3일전 알림" 기준
+
+function acToday(){ var d=new Date(); d.setHours(0,0,0,0); return d; }
+function acParseDate(str){
+  if(!str) return null;
+  var p = String(str).split('-');
+  if(p.length!==3) return null;
+  var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+  return isNaN(d.getTime()) ? null : d;
+}
+function acFmtDate(d){
+  if(!d) return '';
+  var y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+// gi 그룹의 실제 권장 날짜 (출간(예정)일이 없으면 null)
+function acGroupDate(rec, gi){
+  var base = acParseDate(rec.target_date);
+  if(!base) return null;
+  var m = AC_MILESTONES[gi];
+  if(!m) return null;
+  var d = new Date(base.getTime());
+  d.setDate(d.getDate() + m.offset);
+  return d;
+}
+// gi 그룹까지 남은 일수 (음수=이미 지남, null=출간(예정)일 미설정)
+function acGroupDDay(rec, gi){
+  var d = acGroupDate(rec, gi);
+  if(!d) return null;
+  var diffMs = d.getTime() - acToday().getTime();
+  return Math.round(diffMs / 86400000);
+}
+function acGroupFullyDone(rec, gi){
+  var grp = AC_CL_GROUPS[gi];
+  var saved = rec.progress||{};
+  return grp.items.every(function(_,ii){ return !!saved[gi+'_'+ii]; });
+}
+// 3일 이내(D-3~D-day, 포함) 진행해야 하고 아직 끝나지 않은 그룹 목록
+function acUpcomingGroups(rec){
+  var out = [];
+  AC_CL_GROUPS.forEach(function(grp, gi){
+    var dd = acGroupDDay(rec, gi);
+    if(dd===null) return;
+    if(dd>=0 && dd<=AC_ALERT_WINDOW_DAYS && !acGroupFullyDone(rec, gi)){
+      out.push({gi:gi, title:grp.title, dday:dd, date:acGroupDate(rec,gi)});
+    }
+  });
+  return out;
+}
+// 이미 권장 시점이 지났는데 아직 끝나지 않은 그룹 목록
+function acOverdueGroups(rec){
+  var out = [];
+  AC_CL_GROUPS.forEach(function(grp, gi){
+    var dd = acGroupDDay(rec, gi);
+    if(dd===null) return;
+    if(dd<0 && !acGroupFullyDone(rec, gi)){
+      out.push({gi:gi, title:grp.title, dday:dd, date:acGroupDate(rec,gi)});
+    }
+  });
+  return out;
+}
+
 var AC_ALL = [];
 var AC_CURRENT_ID = null;
 var AC_LOADED = false;
@@ -8182,6 +8344,14 @@ function acCardHTML(r){
   var badge = isDone
     ? '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(16,185,129,.12);color:#10B981;">✅ 완료</span>'
     : '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(21,96,184,.1);color:var(--blue);">🔄 진행중</span>';
+  var overdueN = acOverdueGroups(r).length;
+  var upcomingN = acUpcomingGroups(r).length;
+  var alertBadge = '';
+  if(!isDone && overdueN){
+    alertBadge = '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(220,38,38,.12);color:#DC2626;">🔴 기한지남 '+overdueN+'</span>';
+  } else if(!isDone && upcomingN){
+    alertBadge = '<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;background:rgba(184,147,10,.12);color:var(--gold2);">⏰ D-3 임박 '+upcomingN+'</span>';
+  }
   return '<div onclick="acOpenChecklist(\''+r.id+'\')" style="cursor:pointer;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">'
     +'<div style="flex:1;min-width:180px;">'
       +'<div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;">'+acEsc(r.book_title)+'</div>'
@@ -8199,14 +8369,46 @@ function acCardHTML(r){
         +'<div style="font-size:9px;color:var(--text3);margin-top:3px;text-align:right;">담당 '+done+'/'+AC_TOTAL_ITEMS+' · 확인 '+verified+'/'+AC_TOTAL_ITEMS+'</div>'
       +'</div>'
       +badge
+      +alertBadge
       +'<button onclick="acDeleteChecklist(\''+r.id+'\', event)" style="padding:5px 10px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button>'
     +'</div>'
   +'</div>';
+}
+function acRenderReminderSummary(){
+  var el = document.getElementById('ac-reminder-summary');
+  if(!el) return;
+  var overdueBooks = [], upcomingBooks = [];
+  AC_ALL.forEach(function(r){
+    var ov = acOverdueGroups(r);
+    var up = acUpcomingGroups(r);
+    if(ov.length) overdueBooks.push({rec:r, groups:ov});
+    if(up.length) upcomingBooks.push({rec:r, groups:up});
+  });
+  if(!overdueBooks.length && !upcomingBooks.length){ el.innerHTML=''; return; }
+  var html = '';
+  if(overdueBooks.length){
+    html += '<div style="background:rgba(220,38,38,.07);border:1.5px solid rgba(220,38,38,.25);border-radius:var(--rL);padding:12px 16px;margin-bottom:8px;">'
+      +'<div style="font-size:12px;font-weight:800;color:#DC2626;margin-bottom:6px;">🔴 권장 시점이 지난 일정이 있는 도서 '+overdueBooks.length+'권</div>'
+      +overdueBooks.map(function(b){
+        return '<div style="font-size:11px;color:var(--text2);padding:2px 0;cursor:pointer;" onclick="acOpenChecklist(\''+b.rec.id+'\')">· <strong>'+acEsc(b.rec.book_title)+'</strong> — '+b.groups.map(function(g){ return acEsc(g.title); }).join(', ')+'</div>';
+      }).join('')
+      +'</div>';
+  }
+  if(upcomingBooks.length){
+    html += '<div style="background:rgba(184,147,10,.08);border:1.5px solid rgba(184,147,10,.3);border-radius:var(--rL);padding:12px 16px;margin-bottom:8px;">'
+      +'<div style="font-size:12px;font-weight:800;color:var(--gold2);margin-bottom:6px;">⏰ 3일 이내 진행해야 하는 일정이 있는 도서 '+upcomingBooks.length+'권</div>'
+      +upcomingBooks.map(function(b){
+        return '<div style="font-size:11px;color:var(--text2);padding:2px 0;cursor:pointer;" onclick="acOpenChecklist(\''+b.rec.id+'\')">· <strong>'+acEsc(b.rec.book_title)+'</strong> — '+b.groups.map(function(g){ return acEsc(g.title); }).join(', ')+'</div>';
+      }).join('')
+      +'</div>';
+  }
+  el.innerHTML = html;
 }
 function acRenderList(){
   var tabsEl = document.getElementById('ac-status-tabs');
   var el = document.getElementById('ac-list-body');
   if(!el) return;
+  acRenderReminderSummary();
   if(!AC_ALL.length){
     if(tabsEl) tabsEl.innerHTML = '';
     el.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text3);font-size:12px;">등록된 도서 체크리스트가 없습니다. 위에서 새로 추가해 보세요.</div>';
@@ -8241,6 +8443,15 @@ function acEsc(s){
 }
 
 // ── 상세(개별 도서) 체크리스트 열기/닫기 ─────────────────────
+function acRenderDetailMeta(rec){
+  var el = document.getElementById('ac-detail-meta');
+  if(!el) return;
+  el.innerHTML =
+    '👤 담당자: <strong>'+acEsc(rec.assignee||'-')+'</strong>'
+    +(rec.verifier?' &nbsp;·&nbsp; 🔍 확인자: <strong>'+acEsc(rec.verifier)+'</strong>':' &nbsp;·&nbsp; 🔍 확인자: <span style="color:var(--text3)">미지정</span>')
+    +(rec.author_name?' &nbsp;·&nbsp; ✍️ 저자: <strong>'+acEsc(rec.author_name)+'</strong>':'')
+    +(rec.target_date?' &nbsp;·&nbsp; 📅 출간(예정)일: <strong>'+acEsc(rec.target_date)+'</strong>':' &nbsp;·&nbsp; 📅 출간(예정)일: <span style="color:var(--text3)">미지정</span>');
+}
 function acOpenChecklist(id){
   AC_CURRENT_ID = id;
   AC_CURRENT_GROUP = 0;
@@ -8249,11 +8460,8 @@ function acOpenChecklist(id){
   document.getElementById('ac-list-view').style.display = 'none';
   document.getElementById('ac-detail-view').style.display = 'block';
   document.getElementById('ac-detail-title').textContent = rec.book_title;
-  document.getElementById('ac-detail-meta').innerHTML =
-    '👤 담당자: <strong>'+acEsc(rec.assignee||'-')+'</strong>'
-    +(rec.verifier?' &nbsp;·&nbsp; 🔍 확인자: <strong>'+acEsc(rec.verifier)+'</strong>':' &nbsp;·&nbsp; 🔍 확인자: <span style="color:var(--text3)">미지정</span>')
-    +(rec.author_name?' &nbsp;·&nbsp; ✍️ 저자: <strong>'+acEsc(rec.author_name)+'</strong>':'')
-    +(rec.target_date?' &nbsp;·&nbsp; 📅 목표일: <strong>'+acEsc(rec.target_date)+'</strong>':'');
+  acRenderDetailMeta(rec);
+  acRenderMilestoneUI(rec);
   acRenderChecklistBody(rec);
 }
 function acBackToList(){
@@ -8272,17 +8480,81 @@ function acSetVerifier(){
   rec.updated_at = new Date().toISOString();
   acLocalSave(AC_ALL);
   acUpsertRemote(rec);
-  document.getElementById('ac-detail-meta').innerHTML =
-    '👤 담당자: <strong>'+acEsc(rec.assignee||'-')+'</strong>'
-    +(rec.verifier?' &nbsp;·&nbsp; 🔍 확인자: <strong>'+acEsc(rec.verifier)+'</strong>':' &nbsp;·&nbsp; 🔍 확인자: <span style="color:var(--text3)">미지정</span>')
-    +(rec.author_name?' &nbsp;·&nbsp; ✍️ 저자: <strong>'+acEsc(rec.author_name)+'</strong>':'')
-    +(rec.target_date?' &nbsp;·&nbsp; 📅 목표일: <strong>'+acEsc(rec.target_date)+'</strong>':'');
+  acRenderDetailMeta(rec);
+}
+function acSetTargetDate(){
+  var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
+  if(!rec) return;
+  var input = prompt('출간(예정)일을 YYYY-MM-DD 형식으로 입력하세요.\n그룹별 권장 일정과 D-3 알림이 이 날짜를 기준으로 계산됩니다.', rec.target_date||'');
+  if(input===null) return;
+  input = input.trim();
+  if(input && !acParseDate(input)){ alert('날짜 형식이 올바르지 않습니다. 예: 2026-09-01'); return; }
+  rec.target_date = input||null;
+  rec.updated_at = new Date().toISOString();
+  acLocalSave(AC_ALL);
+  acUpsertRemote(rec);
+  acRenderDetailMeta(rec);
+  acRenderMilestoneUI(rec);
+  acRenderChecklistBody(rec);
+}
+// ── 출간 마일스톤 타임라인 + D-3 알림 배너 ──────────────────
+function acRenderMilestoneUI(rec){
+  var alertEl = document.getElementById('ac-milestone-alert');
+  var barEl = document.getElementById('ac-milestone-bar');
+  if(!alertEl || !barEl) return;
+
+  if(!rec.target_date || !acParseDate(rec.target_date)){
+    alertEl.innerHTML = '';
+    barEl.innerHTML = '<div style="font-size:11px;color:var(--text3);padding:10px 14px;background:var(--s2);border-radius:8px;margin-bottom:2px;">📅 출간(예정)일을 지정하면 그룹별 권장 일정과 D-3 알림이 자동으로 표시됩니다.</div>';
+    return;
+  }
+
+  var upcoming = acUpcomingGroups(rec);
+  var overdue = acOverdueGroups(rec);
+  var alertHtml = '';
+  if(overdue.length){
+    alertHtml += '<div style="background:rgba(220,38,38,.07);border:1.5px solid rgba(220,38,38,.25);border-radius:var(--rL);padding:12px 16px;margin-bottom:10px;">'
+      +'<div style="font-size:12px;font-weight:800;color:#DC2626;margin-bottom:6px;">🔴 권장 시점이 지났는데 아직 끝나지 않은 그룹</div>'
+      +overdue.map(function(o){ return '<div style="font-size:11px;color:var(--text2);padding:2px 0;cursor:pointer;" onclick="acGroupTab('+o.gi+')">· '+o.title+' <span style="color:#DC2626;font-weight:700;">(D+'+(-o.dday)+' 지남 · '+acFmtDate(o.date)+')</span></div>'; }).join('')
+      +'</div>';
+  }
+  if(upcoming.length){
+    alertHtml += '<div style="background:rgba(184,147,10,.08);border:1.5px solid rgba(184,147,10,.3);border-radius:var(--rL);padding:12px 16px;margin-bottom:10px;">'
+      +'<div style="font-size:12px;font-weight:800;color:var(--gold2);margin-bottom:6px;">⏰ 3일 이내 진행 예정 — 알림</div>'
+      +upcoming.map(function(o){ return '<div style="font-size:11px;color:var(--text2);padding:2px 0;cursor:pointer;" onclick="acGroupTab('+o.gi+')">· '+o.title+' <span style="color:var(--gold2);font-weight:700;">('+(o.dday===0?'D-day':'D-'+o.dday)+' · '+acFmtDate(o.date)+')</span></div>'; }).join('')
+      +'</div>';
+  }
+  alertEl.innerHTML = alertHtml;
+
+  var markers = AC_MILESTONES.map(function(m, gi){
+    var d = acGroupDate(rec, gi);
+    var dd = acGroupDDay(rec, gi);
+    var done = acGroupFullyDone(rec, gi);
+    var stateColor = done ? '#10B981' : (dd<0 ? '#DC2626' : (dd<=AC_ALERT_WINDOW_DAYS ? 'var(--gold2)' : 'var(--text3)'));
+    return '<div onclick="acGroupTab('+gi+')" style="cursor:pointer;flex:1;min-width:60px;text-align:center;">'
+      +'<div style="width:11px;height:11px;border-radius:50%;background:'+stateColor+';margin:0 auto 4px;'+(gi===AC_CURRENT_GROUP?'box-shadow:0 0 0 3px '+stateColor+'40;':'')+'"></div>'
+      +'<div style="font-size:10px;font-weight:800;color:'+stateColor+';">'+m.label+'</div>'
+      +'<div style="font-size:9px;color:var(--text3);">'+acFmtDate(d)+'</div>'
+      +'</div>';
+  }).join('<div style="flex-shrink:0;width:14px;height:1px;background:var(--border);margin-top:5px;"></div>');
+  barEl.innerHTML =
+    '<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:14px 16px;">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">출간 마일스톤 타임라인 · 출간(예정)일 '+rec.target_date+' 기준</div>'
+    +'<div style="display:flex;align-items:flex-start;overflow-x:auto;padding-bottom:2px;">'+markers+'</div>'
+    +'</div>';
 }
 
 // ── 개별 도서의 체크리스트 렌더 (그룹별 가로형 탭) ────────────
 var AC_CURRENT_GROUP = 0;
 var AC_STATUS_TAB = 0; // 0 = 진행중, 1 = 완료
 
+function acDdayBadge(rec, gi, isFullyDone){
+  var dd = acGroupDDay(rec, gi);
+  if(dd===null) return '';
+  var c = isFullyDone ? '#10B981' : (dd<0 ? '#DC2626' : (dd<=AC_ALERT_WINDOW_DAYS ? 'var(--gold2)' : 'inherit'));
+  var label = dd===0 ? 'D-day' : (dd>0 ? 'D-'+dd : 'D+'+(-dd));
+  return ' <span style="color:'+c+';font-weight:800;">'+label+'</span>';
+}
 function acRenderChecklistBody(rec){
   var tabsEl = document.getElementById('ac-group-tabs');
   var contentEl = document.getElementById('ac-group-content');
@@ -8293,6 +8565,7 @@ function acRenderChecklistBody(rec){
     var active = gi===AC_CURRENT_GROUP;
     return '<button id="ac-gtab-'+gi+'" onclick="acGroupTab('+gi+')" class="pill-tab'+(active?' active':'')+'" style="white-space:nowrap;">'
       +grp.title+' <span id="ac-gtab-prog-'+gi+'" style="opacity:.75;font-weight:700;">('+done+'/'+grp.items.length+')</span>'
+      +'<span id="ac-gtab-dday-'+gi+'">'+acDdayBadge(rec, gi, done>=grp.items.length)+'</span>'
       +'</button>';
   }).join('');
   acRenderGroupContent(rec);
@@ -8381,10 +8654,13 @@ function acSave(gi, ii){
   var verifiedDone=grp.items.filter(function(_,i){return rec.verified[gi+'_'+i];}).length;
   var tabProg=document.getElementById('ac-gtab-prog-'+gi);
   if(tabProg) tabProg.textContent='('+done+'/'+grp.items.length+')';
+  var tabDday=document.getElementById('ac-gtab-dday-'+gi);
+  if(tabDday) tabDday.innerHTML = acDdayBadge(rec, gi, done>=grp.items.length);
   var hdrDone=document.getElementById('ac-ghdr-done-'+gi);
   var hdrVer=document.getElementById('ac-ghdr-verified-'+gi);
   if(hdrDone) hdrDone.textContent='👤 담당자 완료 '+done+'/'+grp.items.length;
   if(hdrVer) hdrVer.textContent='🔍 확인자 확인 '+verifiedDone+'/'+grp.items.length;
+  acRenderMilestoneUI(rec);
 }
 
 function acSaveVerify(gi, ii){
@@ -8414,6 +8690,7 @@ function acSaveVerify(gi, ii){
   var verifiedDone=grp.items.filter(function(_,i){return rec.verified[gi+'_'+i];}).length;
   var hdrVer=document.getElementById('ac-ghdr-verified-'+gi);
   if(hdrVer) hdrVer.textContent='🔍 확인자 확인 '+verifiedDone+'/'+grp.items.length;
+  acRenderMilestoneUI(rec);
 }
 
 function acResetChecklist(){
@@ -8426,6 +8703,7 @@ function acResetChecklist(){
   rec.updated_at = new Date().toISOString();
   acLocalSave(AC_ALL);
   acUpsertRemote(rec);
+  acRenderMilestoneUI(rec);
   acRenderChecklistBody(rec);
 }
 
@@ -8445,7 +8723,7 @@ function acDownloadBlob(filename, text){
 function acDownloadChecklistCSV(){
   var rec = AC_ALL.find(function(r){ return r.id===AC_CURRENT_ID; });
   if(!rec) return;
-  var rows = [['도서명','저자명','담당자','확인자','목표일','그룹','항목','담당자 완료여부','확인자 확인여부']];
+  var rows = [['도서명','저자명','담당자','확인자','출간(예정)일','그룹','항목','담당자 완료여부','확인자 확인여부']];
   AC_CL_GROUPS.forEach(function(grp, gi){
     grp.items.forEach(function(item, ii){
       var key = gi+'_'+ii;
@@ -8459,7 +8737,7 @@ function acDownloadChecklistCSV(){
   acDownloadBlob('저자커뮤니케이션_체크리스트_'+safeTitle+'.csv', csv);
 }
 function acDownloadListCSV(){
-  var rows = [['도서명','저자명','담당자','확인자','목표일','담당자 완료','확인자 확인','전체항목','완료율(%)','확인율(%)','상태']];
+  var rows = [['도서명','저자명','담당자','확인자','출간(예정)일','담당자 완료','확인자 확인','전체항목','완료율(%)','확인율(%)','상태']];
   AC_ALL.forEach(function(r){
     var done = acProgressDone(r);
     var verified = acVerifiedDone(r);
@@ -8470,6 +8748,306 @@ function acDownloadListCSV(){
   });
   var csv = rows.map(function(r){ return r.map(acCsvCell).join(','); }).join('\r\n');
   acDownloadBlob('저자커뮤니케이션_체크리스트_전체목록.csv', csv);
+}
+
+// ══════════════════════════════════════════════════════════════
+// 협조사항 관리 (KPI 메뉴) — Supabase + localStorage
+// rec = { id, requester, target, content, result, request_date,
+//         confirm_date, end_date, status, created_at, updated_at }
+// ══════════════════════════════════════════════════════════════
+var CR_TABLE = 'cooperation_requests';
+var CR_ALL = [];
+var CR_LOADED = false;
+var CR_STATUS = {
+  pending:  {lbl:'⏳ 대기',   clr:'var(--text3)'},
+  progress: {lbl:'🔄 진행중', clr:'var(--blue)'},
+  done:     {lbl:'✅ 완료',   clr:'#10B981'},
+  hold:     {lbl:'⏸ 보류',   clr:'var(--gold2)'}
+};
+
+function crUID(){ return 'cr_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function crLocalAll(){ try{ return JSON.parse(localStorage.getItem('cr_requests')||'[]'); }catch(e){ return []; } }
+function crLocalSave(list){ localStorage.setItem('cr_requests', JSON.stringify(list)); }
+
+// ── 목록 로드: Supabase 우선, 실패 시 localStorage 폴백 ─────────
+function crLoad(){
+  crCheckDb();
+  if(sbOn()){
+    fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE+'?select=*&order=request_date.desc,created_at.desc',
+      {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+    ).then(function(r){
+      if(r.status===404) return null;
+      return r.ok ? r.json() : null;
+    }).then(function(rows){
+      if(rows && Array.isArray(rows)){
+        CR_ALL = rows;
+        crLocalSave(CR_ALL);
+      } else {
+        CR_ALL = crLocalAll();
+      }
+      CR_LOADED = true;
+      crRebuildFilters();
+      crFilter();
+    }).catch(function(){
+      CR_ALL = crLocalAll();
+      CR_LOADED = true;
+      crRebuildFilters();
+      crFilter();
+    });
+  } else {
+    CR_ALL = crLocalAll();
+    CR_LOADED = true;
+    crRebuildFilters();
+    crFilter();
+  }
+}
+
+// ── Supabase 연결 상태 배지 ───────────────────────────────────
+function crCheckDb(){
+  var el = document.getElementById('cr-db-badge');
+  if(!el) return;
+  if(!sbOn()){
+    el.innerHTML = '<span class="db-dot" style="background:var(--gold2)"></span>localStorage 모드 (Supabase 비활성)';
+    var tb=document.getElementById('cr-table-missing'); if(tb) tb.style.display='none';
+    return;
+  }
+  el.innerHTML = '<span class="db-dot" style="background:#9aa0a6"></span>확인 중…';
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+  ).then(function(res){
+    var tb=document.getElementById('cr-table-missing');
+    if(res.ok || res.status===406){
+      el.innerHTML = '<span class="db-dot" style="background:#50C878"></span>🟢 Supabase 연결됨 — 협조사항이 팀 전체에 저장됩니다';
+      if(tb) tb.style.display='none';
+    } else if(res.status===404){
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>⚠ cooperation_requests 테이블 없음 — localStorage로만 저장 중';
+      if(tb) tb.style.display='block';
+    } else {
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 HTTP '+res.status;
+    }
+  }).catch(function(){
+    el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 (네트워크) — localStorage로만 저장 중';
+  });
+}
+
+function crCopySQL(){
+  var sql = "-- 협조사항 관리 (요청자·대상자·요청일·결과상태별 관리)\n"
+    + "CREATE TABLE IF NOT EXISTS cooperation_requests (\n"
+    + "  id            text PRIMARY KEY,\n"
+    + "  requester     text NOT NULL,\n"
+    + "  target        text NOT NULL,\n"
+    + "  content       text NOT NULL,\n"
+    + "  result        text,\n"
+    + "  request_date  date,\n"
+    + "  confirm_date  date,\n"
+    + "  end_date      date,\n"
+    + "  status        text NOT NULL DEFAULT 'pending',\n"
+    + "  created_at    timestamptz DEFAULT now(),\n"
+    + "  updated_at    timestamptz DEFAULT now()\n"
+    + ");\n"
+    + "ALTER TABLE cooperation_requests ENABLE ROW LEVEL SECURITY;\n"
+    + "DROP POLICY IF EXISTS \"cr_requests_all\" ON cooperation_requests;\n"
+    + "CREATE POLICY \"cr_requests_all\" ON cooperation_requests\n"
+    + "  FOR ALL USING (true) WITH CHECK (true);";
+  navigator.clipboard.writeText(sql).then(function(){
+    crSetTableMsg('✅ SQL 복사 완료 — Supabase SQL Editor에 붙여넣기 하세요','#0D9488');
+  }).catch(function(){
+    crSetTableMsg('복사 실패 — 콘솔에서 SQL을 확인하세요','#B45309');
+    console.log(sql);
+  });
+}
+function crSetTableMsg(msg, color){
+  var el = document.getElementById('cr-table-msg');
+  if(el){ el.textContent = msg; el.style.color = color||''; }
+}
+
+// ── Supabase upsert / delete ─────────────────────────────────
+function crUpsertRemote(rec){
+  if(!sbOn()) return;
+  var body = Object.assign({}, rec, {updated_at: new Date().toISOString()});
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE, {
+    method:'POST',
+    headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
+    body: JSON.stringify(body)
+  }).then(function(r){
+    if(!r.ok) r.text().then(function(t){ console.warn('[cr] upsert FAIL:', r.status, t); });
+  }).catch(function(e){ console.warn('[cr] upsert ERROR:', e.message); });
+}
+function crDeleteRemote(id){
+  if(!sbOn()) return;
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE+'?id=eq.'+encodeURIComponent(id),
+    {method:'DELETE', headers:sbHeaders()}
+  ).then(function(r){
+    if(!r.ok) r.text().then(function(t){ console.warn('[cr] delete FAIL:', r.status, t); });
+  }).catch(function(e){ console.warn('[cr] delete ERROR:', e.message); });
+}
+
+function crSaveRec(rec){
+  var idx = CR_ALL.findIndex(function(r){ return r.id===rec.id; });
+  if(idx>=0) CR_ALL[idx]=rec; else CR_ALL.unshift(rec);
+  crLocalSave(CR_ALL);
+  crUpsertRemote(rec);
+}
+
+// ── 새 협조사항 등록 ───────────────────────────────────────────
+function crCreate(){
+  var requester = (document.getElementById('cr-new-requester')?.value||'').trim();
+  var target = (document.getElementById('cr-new-target')?.value||'').trim();
+  var content = (document.getElementById('cr-new-content')?.value||'').trim();
+  var date = document.getElementById('cr-new-date')?.value || new Date().toISOString().slice(0,10);
+  if(!requester){ alert('요청자를 입력하세요.'); return; }
+  if(!target){ alert('대상자를 입력하세요.'); return; }
+  if(!content){ alert('요청내용을 입력하세요.'); return; }
+  var now = new Date().toISOString();
+  var rec = {
+    id: crUID(), requester: requester, target: target, content: content, result: null,
+    request_date: date, confirm_date: null, end_date: null, status: 'pending',
+    created_at: now, updated_at: now
+  };
+  crSaveRec(rec);
+  ['cr-new-requester','cr-new-target','cr-new-content','cr-new-date'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  crRebuildFilters();
+  crFilter();
+}
+
+function crDeleteRow(id){
+  if(!confirm('이 협조사항을 삭제하시겠습니까? (복구 불가)')) return;
+  CR_ALL = CR_ALL.filter(function(r){ return r.id!==id; });
+  crLocalSave(CR_ALL);
+  crDeleteRemote(id);
+  crRebuildFilters();
+  crFilter();
+}
+
+function crSetResult(id){
+  var rec = CR_ALL.find(function(r){ return r.id===id; });
+  if(!rec) return;
+  var v = prompt('결과를 입력하세요.', rec.result||'');
+  if(v===null) return;
+  rec.result = v.trim() || null;
+  crSaveRec(rec);
+  crFilter();
+}
+function crSetDate(id, field){
+  var rec = CR_ALL.find(function(r){ return r.id===id; });
+  if(!rec) return;
+  var label = field==='confirm_date' ? '확인일' : '종료일';
+  var v = prompt(label+'을 YYYY-MM-DD 형식으로 입력하세요. (지우려면 빈칸)', rec[field]||'');
+  if(v===null) return;
+  v = v.trim();
+  if(v && !/^\d{4}-\d{2}-\d{2}$/.test(v)){ alert('날짜 형식이 올바르지 않습니다. 예: 2026-08-22'); return; }
+  rec[field] = v || null;
+  crSaveRec(rec);
+  crFilter();
+}
+function crSetStatus(id, status){
+  var rec = CR_ALL.find(function(r){ return r.id===id; });
+  if(!rec) return;
+  rec.status = status;
+  crSaveRec(rec);
+  crFilter();
+}
+
+// ── 필터 ─────────────────────────────────────────────────────
+function crRebuildFilters(){
+  var requesters=[...new Set(CR_ALL.map(function(r){return r.requester;}).filter(Boolean))].sort();
+  var targets=[...new Set(CR_ALL.map(function(r){return r.target;}).filter(Boolean))].sort();
+  var fr=document.getElementById('cr-filter-requester'), ft=document.getElementById('cr-filter-target');
+  var curR = fr?fr.value:'', curT = ft?ft.value:'';
+  if(fr) fr.innerHTML = '<option value="">전체</option>'+requesters.map(function(r){return '<option'+(r===curR?' selected':'')+'>'+acEsc(r)+'</option>';}).join('');
+  if(ft) ft.innerHTML = '<option value="">전체</option>'+targets.map(function(t){return '<option'+(t===curT?' selected':'')+'>'+acEsc(t)+'</option>';}).join('');
+}
+
+function crResetFilters(){
+  ['cr-filter-requester','cr-filter-target','cr-filter-status','cr-filter-date-from','cr-filter-date-to'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  crFilter();
+}
+
+function crFilter(){
+  var reqEl=document.getElementById('cr-filter-requester'), tgtEl=document.getElementById('cr-filter-target'),
+      stEl=document.getElementById('cr-filter-status'), fromEl=document.getElementById('cr-filter-date-from'), toEl=document.getElementById('cr-filter-date-to');
+  var req = reqEl?reqEl.value:'', tgt = tgtEl?tgtEl.value:'', st = stEl?stEl.value:'', from = fromEl?fromEl.value:'', to = toEl?toEl.value:'';
+  var list = CR_ALL.filter(function(r){
+    if(req && r.requester!==req) return false;
+    if(tgt && r.target!==tgt) return false;
+    if(st && r.status!==st) return false;
+    if(from && (!r.request_date || r.request_date < from)) return false;
+    if(to && (!r.request_date || r.request_date > to)) return false;
+    return true;
+  });
+  list.sort(function(a,b){ return (b.request_date||'').localeCompare(a.request_date||'') || (b.created_at||'').localeCompare(a.created_at||''); });
+  crRenderTable(list);
+}
+
+// ── 렌더 ─────────────────────────────────────────────────────
+function crStatusSelectHTML(id, current){
+  return '<select onchange="crSetStatus(\''+id+'\', this.value)" style="padding:4px 6px;border-radius:6px;border:1.5px solid var(--border);font-size:11px;background:var(--surface);color:var(--text);">'
+    + Object.keys(CR_STATUS).map(function(k){
+        return '<option value="'+k+'"'+(k===current?' selected':'')+'>'+CR_STATUS[k].lbl+'</option>';
+      }).join('')
+    + '</select>';
+}
+
+function crRenderTable(list){
+  var tbody = document.getElementById('cr-tbody');
+  var empty = document.getElementById('cr-empty');
+  var count = document.getElementById('cr-count');
+  if(!tbody) return;
+  if(count) count.textContent = '총 '+list.length+'건';
+  if(!list.length){
+    tbody.innerHTML = '';
+    if(empty) empty.style.display = 'block';
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+  tbody.innerHTML = list.map(function(r){
+    return '<tr>'
+      + '<td>'+acEsc(r.requester)+'</td>'
+      + '<td style="max-width:220px;">'+acEsc(r.content)+'</td>'
+      + '<td style="max-width:180px;cursor:pointer;color:'+(r.result?'var(--text)':'var(--text3)')+';" onclick="crSetResult(\''+r.id+'\')" title="클릭하여 결과 입력/수정">'+(r.result?acEsc(r.result):'— 입력 —')+'</td>'
+      + '<td>'+acEsc(r.target)+'</td>'
+      + '<td>'+acEsc(r.request_date||'-')+'</td>'
+      + '<td style="cursor:pointer;color:'+(r.confirm_date?'var(--text)':'var(--text3)')+';" onclick="crSetDate(\''+r.id+'\',\'confirm_date\')" title="클릭하여 확인일 지정">'+(r.confirm_date||'— 지정 —')+'</td>'
+      + '<td style="cursor:pointer;color:'+(r.end_date?'var(--text)':'var(--text3)')+';" onclick="crSetDate(\''+r.id+'\',\'end_date\')" title="클릭하여 종료일 지정">'+(r.end_date||'— 지정 —')+'</td>'
+      + '<td>'+crStatusSelectHTML(r.id, r.status)+'</td>'
+      + '<td><button onclick="crDeleteRow(\''+r.id+'\')" style="padding:4px 8px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button></td>'
+    + '</tr>';
+  }).join('');
+}
+
+// ── CSV 다운로드 (현재 필터 기준) ────────────────────────────
+function crCsvCell(v){
+  var s = (v==null?'':String(v)).replace(/"/g,'""');
+  return '"'+s+'"';
+}
+function crDownloadCSV(){
+  var reqEl=document.getElementById('cr-filter-requester'), tgtEl=document.getElementById('cr-filter-target'),
+      stEl=document.getElementById('cr-filter-status'), fromEl=document.getElementById('cr-filter-date-from'), toEl=document.getElementById('cr-filter-date-to');
+  var req = reqEl?reqEl.value:'', tgt = tgtEl?tgtEl.value:'', st = stEl?stEl.value:'', from = fromEl?fromEl.value:'', to = toEl?toEl.value:'';
+  var list = CR_ALL.filter(function(r){
+    if(req && r.requester!==req) return false;
+    if(tgt && r.target!==tgt) return false;
+    if(st && r.status!==st) return false;
+    if(from && (!r.request_date || r.request_date < from)) return false;
+    if(to && (!r.request_date || r.request_date > to)) return false;
+    return true;
+  });
+  var rows = [['요청자','요청내용','결과','대상자','요청일','확인일','종료일','결과상태']];
+  list.forEach(function(r){
+    var stLbl = (CR_STATUS[r.status]||CR_STATUS.pending).lbl.replace(/^\S+\s/,'');
+    rows.push([r.requester, r.content, r.result||'', r.target, r.request_date||'', r.confirm_date||'', r.end_date||'', stLbl]);
+  });
+  var csv = rows.map(function(r){ return r.map(crCsvCell).join(','); }).join('\r\n');
+  var blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = '협조사항_목록.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
 }
 
 // ── 상태 정의 ─────────────────────────────────────────
