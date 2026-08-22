@@ -3244,7 +3244,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <!-- 새 협조사항 등록 -->
       <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rL);padding:16px 18px;margin-bottom:18px;">
         <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:10px;">+ 새 협조사항 등록</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1.6fr 1fr auto;gap:8px;align-items:end;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px;">
           <div>
             <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청자 *</div>
             <input id="cr-new-requester" type="text" placeholder="요청자명" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
@@ -3254,14 +3254,20 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <input id="cr-new-target" type="text" placeholder="협조 대상자명" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
           </div>
           <div>
-            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청내용 *</div>
-            <input id="cr-new-content" type="text" placeholder="협조 요청 내용" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
-          </div>
-          <div>
             <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청일</div>
             <input id="cr-new-date" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;">
           </div>
           <button onclick="crCreate()" style="padding:9px 16px;background:var(--teal);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">+ 등록</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:8px;">
+          <div>
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">제목 *</div>
+            <input id="cr-new-title" type="text" placeholder="협조 요청 제목 (한 줄)" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청내용 *</div>
+          <textarea id="cr-new-content" rows="3" placeholder="협조 요청 상세 내용 (여러 줄 입력 가능)" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.6;box-sizing:border-box;"></textarea>
         </div>
       </div>
 
@@ -3301,9 +3307,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div id="cr-count" style="font-size:11px;color:var(--text3);margin-bottom:8px;"></div>
 
       <div style="overflow-x:auto;">
-      <table class="data-table" style="min-width:920px;">
+      <table class="data-table" style="min-width:1060px;">
         <thead><tr>
           <th style="width:90px;">요청자</th>
+          <th style="width:140px;">제목</th>
           <th>요청내용</th>
           <th>결과</th>
           <th style="width:90px;">대상자</th>
@@ -8752,8 +8759,9 @@ function acDownloadListCSV(){
 
 // ══════════════════════════════════════════════════════════════
 // 협조사항 관리 (KPI 메뉴) — Supabase + localStorage
-// rec = { id, requester, target, content, result, request_date,
+// rec = { id, requester, target, title, content, result, request_date,
 //         confirm_date, end_date, status, created_at, updated_at }
+// title = 제목(한 줄), content = 요청내용(여러 줄)
 // ══════════════════════════════════════════════════════════════
 var CR_TABLE = 'cooperation_requests';
 var CR_ALL = [];
@@ -8839,6 +8847,7 @@ function crCopySQL(){
     + "  id            text PRIMARY KEY,\n"
     + "  requester     text NOT NULL,\n"
     + "  target        text NOT NULL,\n"
+    + "  title         text,\n"
     + "  content       text NOT NULL,\n"
     + "  result        text,\n"
     + "  request_date  date,\n"
@@ -8848,6 +8857,8 @@ function crCopySQL(){
     + "  created_at    timestamptz DEFAULT now(),\n"
     + "  updated_at    timestamptz DEFAULT now()\n"
     + ");\n"
+    + "-- 기존 테이블에 이미 데이터가 있는 경우, 위 CREATE TABLE은 건너뛰고 아래 1줄만 실행해도 됩니다\n"
+    + "ALTER TABLE cooperation_requests ADD COLUMN IF NOT EXISTS title text;\n"
     + "ALTER TABLE cooperation_requests ENABLE ROW LEVEL SECURITY;\n"
     + "DROP POLICY IF EXISTS \"cr_requests_all\" ON cooperation_requests;\n"
     + "CREATE POLICY \"cr_requests_all\" ON cooperation_requests\n"
@@ -8896,19 +8907,21 @@ function crSaveRec(rec){
 function crCreate(){
   var requester = (document.getElementById('cr-new-requester')?.value||'').trim();
   var target = (document.getElementById('cr-new-target')?.value||'').trim();
+  var title = (document.getElementById('cr-new-title')?.value||'').trim();
   var content = (document.getElementById('cr-new-content')?.value||'').trim();
   var date = document.getElementById('cr-new-date')?.value || new Date().toISOString().slice(0,10);
   if(!requester){ alert('요청자를 입력하세요.'); return; }
   if(!target){ alert('대상자를 입력하세요.'); return; }
+  if(!title){ alert('제목을 입력하세요.'); return; }
   if(!content){ alert('요청내용을 입력하세요.'); return; }
   var now = new Date().toISOString();
   var rec = {
-    id: crUID(), requester: requester, target: target, content: content, result: null,
+    id: crUID(), requester: requester, target: target, title: title, content: content, result: null,
     request_date: date, confirm_date: null, end_date: null, status: 'pending',
     created_at: now, updated_at: now
   };
   crSaveRec(rec);
-  ['cr-new-requester','cr-new-target','cr-new-content','cr-new-date'].forEach(function(id){
+  ['cr-new-requester','cr-new-target','cr-new-title','cr-new-content','cr-new-date'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.value='';
   });
   crAfterChange();
@@ -9009,9 +9022,12 @@ function crRenderTable(list){
   }
   if(empty) empty.style.display = 'none';
   tbody.innerHTML = list.map(function(r){
+    // 구버전 데이터(제목 필드 도입 전) 호환: 제목이 없으면 요청내용 첫 줄로 대체 표시
+    var title = r.title || (r.content ? r.content.split('\n')[0].slice(0,40) : '-');
     return '<tr data-cr-id="'+r.id+'">'
       + '<td>'+acEsc(r.requester)+'</td>'
-      + '<td style="max-width:220px;">'+acEsc(r.content)+'</td>'
+      + '<td style="max-width:160px;font-weight:700;color:var(--text);">'+acEsc(title)+'</td>'
+      + '<td style="max-width:240px;white-space:pre-wrap;line-height:1.5;">'+acEsc(r.content)+'</td>'
       + '<td style="max-width:180px;cursor:pointer;color:'+(r.result?'var(--text)':'var(--text3)')+';" onclick="crSetResult(\''+r.id+'\')" title="클릭하여 결과 입력/수정">'+(r.result?acEsc(r.result):'— 입력 —')+'</td>'
       + '<td>'+acEsc(r.target)+'</td>'
       + '<td>'+acEsc(r.request_date||'-')+'</td>'
@@ -9040,10 +9056,11 @@ function crDownloadCSV(){
     if(to && (!r.request_date || r.request_date > to)) return false;
     return true;
   });
-  var rows = [['요청자','요청내용','결과','대상자','요청일','확인일','종료일','결과상태']];
+  var rows = [['요청자','제목','요청내용','결과','대상자','요청일','확인일','종료일','결과상태']];
   list.forEach(function(r){
     var stLbl = (CR_STATUS[r.status]||CR_STATUS.pending).lbl.replace(/^\S+\s/,'');
-    rows.push([r.requester, r.content, r.result||'', r.target, r.request_date||'', r.confirm_date||'', r.end_date||'', stLbl]);
+    var title = r.title || (r.content ? r.content.split('\n')[0].slice(0,40) : '');
+    rows.push([r.requester, title, r.content, r.result||'', r.target, r.request_date||'', r.confirm_date||'', r.end_date||'', stLbl]);
   });
   var csv = rows.map(function(r){ return r.map(crCsvCell).join(','); }).join('\r\n');
   var blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
@@ -9090,11 +9107,12 @@ function notifRefresh(){
   }
   list.innerHTML = pending.map(function(r){
     var isUnseen = seen.indexOf(r.id)===-1;
+    var title = r.title || (r.content ? r.content.split('\n')[0].slice(0,40) : '');
     return '<div class="notif-item'+(isUnseen?' unread':'')+'" onclick="notifOpenCR(\''+r.id+'\')">'
       + '<div class="notif-dot" style="background:'+(isUnseen?'#EF4444':'var(--border)')+';"></div>'
       + '<div style="flex:1;min-width:0;">'
-        + '<div style="font-size:12px;font-weight:700;color:var(--text);">🤝 협조사항 요청</div>'
-        + '<div style="font-size:11.5px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+acEsc(r.requester)+' → '+acEsc(r.target)+' · '+acEsc(r.content)+'</div>'
+        + '<div style="font-size:12px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">🤝 '+acEsc(title)+'</div>'
+        + '<div style="font-size:11.5px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+acEsc(r.requester)+' → '+acEsc(r.target)+'</div>'
         + '<div style="font-size:10px;color:var(--text3);margin-top:3px;">'+acEsc(r.request_date||'')+' 요청 · 담당자 확인 대기중</div>'
       + '</div>'
     + '</div>';
