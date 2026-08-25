@@ -2928,6 +2928,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div class="sec-h" style="margin-top:0;">📝 회의록 <span style="font-size:.6em;font-weight:400;color:var(--text3);">Meeting Notes</span></div>
       <p class="sec-sub">회의를 기록하고, 연속 주제는 스레드로 이어서 관리합니다.</p>
 
+      <div id="mn-db-badge" style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3);margin-bottom:14px;padding:8px 12px;background:var(--s2);border-radius:8px;"></div>
+      <div id="mn-table-missing" style="display:none;margin-bottom:16px;background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 18px;">
+        <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px;"><strong style="color:#DC2626;">⚠ Supabase에 meeting_notes 테이블이 아직 없습니다.</strong> 아래 버튼으로 생성 SQL을 복사해 Supabase SQL Editor에 붙여넣고 실행하면, 이후부터 회의록이 팀 전체에 저장·동기화됩니다. 테이블이 없어도 이 브라우저에는 계속 저장됩니다.</div>
+        <button onclick="mnCopySQL()" style="padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">📋 테이블 생성 SQL 복사</button>
+        <span id="mn-table-msg" style="margin-left:10px;font-size:11px;"></span>
+      </div>
 
     <!-- 상단 액션 바 -->
     <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px;">
@@ -3324,6 +3330,79 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </table>
       </div>
       <div id="cr-empty" style="display:none;padding:24px;text-align:center;color:var(--text3);font-size:12px;background:var(--s2);border-radius:var(--r);margin-top:8px;">등록된 협조사항이 없습니다.</div>
+
+      <!-- ── 협조사항 수정 모달 (요청자가 등록 후 내용 수정) ── -->
+      <div id="cr-edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+        <div style="background:var(--surface);border-radius:16px;padding:24px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="font-size:15px;font-weight:800;color:var(--text);">✏️ 협조사항 수정</div>
+            <button onclick="crCloseEditModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
+          </div>
+          <input type="hidden" id="cr-edit-id">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청자 *</div>
+                <input id="cr-edit-requester" type="text" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">대상자 *</div>
+                <input id="cr-edit-target" type="text" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청일</div>
+              <input id="cr-edit-date" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">제목 *</div>
+              <input id="cr-edit-title" type="text" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;box-sizing:border-box;">
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">요청내용 *</div>
+              <textarea id="cr-edit-content" rows="4" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.6;box-sizing:border-box;"></textarea>
+            </div>
+            <div id="cr-edit-msg" style="font-size:12px;color:var(--teal);"></div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+              <button onclick="crCloseEditModal()" style="padding:9px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+              <button onclick="crSaveEdit()" style="padding:9px 22px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 답신 모달 (대상자가 답신 작성 + 파일 첨부) ── -->
+      <div id="cr-reply-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+        <div style="background:var(--surface);border-radius:16px;padding:24px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="font-size:15px;font-weight:800;color:var(--text);">💬 답신 작성</div>
+            <button onclick="crCloseReplyModal()" style="background:none;border:none;font-size:20px;color:var(--text3);cursor:pointer;">✕</button>
+          </div>
+          <input type="hidden" id="cr-reply-id">
+          <div id="cr-reply-context" style="font-size:12px;color:var(--text2);background:var(--s2);border-radius:8px;padding:10px 12px;margin-bottom:14px;line-height:1.6;"></div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">답신 내용</div>
+              <textarea id="cr-reply-text" rows="5" placeholder="처리 결과·답신 내용을 입력하세요" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);outline:none;resize:vertical;line-height:1.6;box-sizing:border-box;"></textarea>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:4px;">파일 첨부</div>
+              <div id="cr-reply-attachment-current" style="font-size:12px;margin-bottom:6px;"></div>
+              <input id="cr-reply-file" type="file" style="width:100%;font-size:12px;color:var(--text2);">
+              <div style="font-size:10px;color:var(--text3);margin-top:4px;">Supabase 연결 시에만 파일 첨부가 가능합니다 (최대 10MB).</div>
+            </div>
+            <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);cursor:pointer;">
+              <input id="cr-reply-confirm" type="checkbox" checked style="width:15px;height:15px;cursor:pointer;">
+              답신 저장과 함께 확인일(담당자 확인)도 오늘 날짜로 지정
+            </label>
+            <div id="cr-reply-msg" style="font-size:12px;color:var(--teal);"></div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+              <button onclick="crCloseReplyModal()" style="padding:9px 18px;background:none;border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text3);">취소</button>
+              <button onclick="crSaveReply()" id="cr-reply-save-btn" style="padding:9px 22px;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -6544,6 +6623,7 @@ function mnNormalize(n){
 // ── 로드: Supabase 우선, 실패 시 localStorage 폴백 ─────────────
 // Supabase = 단일 진실 공급원. 삭제/추가가 모든 브라우저에 즉시 반영됨.
 function mnLoad(){
+  mnCheckDb();
   if(sbOn()){
     // Supabase 연결 가능: Supabase 데이터로 localStorage 완전 교체
     mnFetchAll().then(function(remote){
@@ -6565,6 +6645,65 @@ function mnLoad(){
     MN_ALL = mnLocalAll().map(mnNormalize);
     try{ mnRebuildFilters(); mnFilter(); } catch(e){}
   }
+}
+
+// ── Supabase 연결 상태 배지 ───────────────────────────────────
+function mnCheckDb(){
+  var el = document.getElementById('mn-db-badge');
+  if(!el) return;
+  if(!sbOn()){
+    el.innerHTML = '<span class="db-dot" style="background:var(--gold2)"></span>localStorage 모드 (Supabase 비활성)';
+    var tb=document.getElementById('mn-table-missing'); if(tb) tb.style.display='none';
+    return;
+  }
+  el.innerHTML = '<span class="db-dot" style="background:#9aa0a6"></span>확인 중…';
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+MN_TABLE+'?select=id&limit=1',
+    {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
+  ).then(function(res){
+    var tb=document.getElementById('mn-table-missing');
+    if(res.ok || res.status===406){
+      el.innerHTML = '<span class="db-dot" style="background:#50C878"></span>🟢 Supabase 연결됨 — 회의록이 팀 전체에 저장됩니다';
+      if(tb) tb.style.display='none';
+    } else if(res.status===404){
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>⚠ meeting_notes 테이블 없음 — localStorage로만 저장 중';
+      if(tb) tb.style.display='block';
+    } else {
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 HTTP '+res.status;
+    }
+  }).catch(function(){
+    el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 (네트워크) — localStorage로만 저장 중';
+  });
+}
+function mnCopySQL(){
+  var sql = "-- 회의록 관리 (제목·날짜·작성자·주제 태그·스레드)\n"
+    + "CREATE TABLE IF NOT EXISTS meeting_notes (\n"
+    + "  id           text PRIMARY KEY,\n"
+    + "  title        text NOT NULL,\n"
+    + "  date         date NOT NULL,\n"
+    + "  author       text NOT NULL,\n"
+    + "  attendees    text,\n"
+    + "  tags         jsonb NOT NULL DEFAULT '[]'::jsonb,\n"
+    + "  body         text NOT NULL,\n"
+    + "  actions      text,\n"
+    + "  status       text NOT NULL DEFAULT 'active',\n"
+    + "  threads      jsonb NOT NULL DEFAULT '[]'::jsonb,\n"
+    + "  created_at   timestamptz DEFAULT now(),\n"
+    + "  updated_at   timestamptz DEFAULT now()\n"
+    + ");\n"
+    + "ALTER TABLE meeting_notes ENABLE ROW LEVEL SECURITY;\n"
+    + "DROP POLICY IF EXISTS \"meeting_notes_all\" ON meeting_notes;\n"
+    + "CREATE POLICY \"meeting_notes_all\" ON meeting_notes\n"
+    + "  FOR ALL USING (true) WITH CHECK (true);";
+  navigator.clipboard.writeText(sql).then(function(){
+    mnSetTableMsg('✅ SQL 복사 완료 — Supabase SQL Editor에 붙여넣기 하세요','#0D9488');
+  }).catch(function(){
+    mnSetTableMsg('복사 실패 — 콘솔에서 SQL을 확인하세요','#B45309');
+    console.log(sql);
+  });
+}
+function mnSetTableMsg(msg, color){
+  var el = document.getElementById('mn-table-msg');
+  if(el){ el.textContent = msg; el.style.color = color||''; }
 }
 
 // ── 탭 ───────────────────────────────────────────────────────
@@ -8759,9 +8898,11 @@ function acDownloadListCSV(){
 
 // ══════════════════════════════════════════════════════════════
 // 협조사항 관리 (KPI 메뉴) — Supabase + localStorage
-// rec = { id, requester, target, title, content, result, request_date,
+// rec = { id, requester, target, title, content, result,
+//         attachment_url, attachment_name, request_date,
 //         confirm_date, end_date, status, created_at, updated_at }
 // title = 제목(한 줄), content = 요청내용(여러 줄)
+// result = 대상자의 답신 내용, attachment_url/attachment_name = 답신 첨부파일
 // ══════════════════════════════════════════════════════════════
 var CR_TABLE = 'cooperation_requests';
 var CR_ALL = [];
@@ -8844,25 +8985,37 @@ function crCheckDb(){
 function crCopySQL(){
   var sql = "-- 협조사항 관리 (요청자·대상자·요청일·결과상태별 관리)\n"
     + "CREATE TABLE IF NOT EXISTS cooperation_requests (\n"
-    + "  id            text PRIMARY KEY,\n"
-    + "  requester     text NOT NULL,\n"
-    + "  target        text NOT NULL,\n"
-    + "  title         text,\n"
-    + "  content       text NOT NULL,\n"
-    + "  result        text,\n"
-    + "  request_date  date,\n"
-    + "  confirm_date  date,\n"
-    + "  end_date      date,\n"
-    + "  status        text NOT NULL DEFAULT 'pending',\n"
-    + "  created_at    timestamptz DEFAULT now(),\n"
-    + "  updated_at    timestamptz DEFAULT now()\n"
+    + "  id                text PRIMARY KEY,\n"
+    + "  requester         text NOT NULL,\n"
+    + "  target            text NOT NULL,\n"
+    + "  title             text,\n"
+    + "  content           text NOT NULL,\n"
+    + "  result            text,\n"
+    + "  attachment_url    text,\n"
+    + "  attachment_name   text,\n"
+    + "  request_date      date,\n"
+    + "  confirm_date      date,\n"
+    + "  end_date          date,\n"
+    + "  status            text NOT NULL DEFAULT 'pending',\n"
+    + "  created_at        timestamptz DEFAULT now(),\n"
+    + "  updated_at        timestamptz DEFAULT now()\n"
     + ");\n"
-    + "-- 기존 테이블에 이미 데이터가 있는 경우, 위 CREATE TABLE은 건너뛰고 아래 1줄만 실행해도 됩니다\n"
+    + "-- 기존 테이블에 이미 데이터가 있는 경우, 위 CREATE TABLE은 건너뛰고 아래 3줄만 실행해도 됩니다\n"
     + "ALTER TABLE cooperation_requests ADD COLUMN IF NOT EXISTS title text;\n"
+    + "ALTER TABLE cooperation_requests ADD COLUMN IF NOT EXISTS attachment_url text;\n"
+    + "ALTER TABLE cooperation_requests ADD COLUMN IF NOT EXISTS attachment_name text;\n"
     + "ALTER TABLE cooperation_requests ENABLE ROW LEVEL SECURITY;\n"
     + "DROP POLICY IF EXISTS \"cr_requests_all\" ON cooperation_requests;\n"
     + "CREATE POLICY \"cr_requests_all\" ON cooperation_requests\n"
-    + "  FOR ALL USING (true) WITH CHECK (true);";
+    + "  FOR ALL USING (true) WITH CHECK (true);\n"
+    + "\n"
+    + "-- 답신 첨부파일 저장용 Storage 버킷 (공개 버킷)\n"
+    + "INSERT INTO storage.buckets (id, name, public)\n"
+    + "  VALUES ('cr-attachments', 'cr-attachments', true)\n"
+    + "  ON CONFLICT (id) DO NOTHING;\n"
+    + "DROP POLICY IF EXISTS \"cr_attachments_all\" ON storage.objects;\n"
+    + "CREATE POLICY \"cr_attachments_all\" ON storage.objects\n"
+    + "  FOR ALL USING (bucket_id = 'cr-attachments') WITH CHECK (bucket_id = 'cr-attachments');";
   navigator.clipboard.writeText(sql).then(function(){
     crSetTableMsg('✅ SQL 복사 완료 — Supabase SQL Editor에 붙여넣기 하세요','#0D9488');
   }).catch(function(){
@@ -8935,16 +9088,125 @@ function crDeleteRow(id){
   crAfterChange();
 }
 
-function crSetResult(id){
+// ── 협조사항 수정 (요청자가 등록 후 요청 내용을 수정) ───────────
+function crOpenEditModal(id){
   var rec = CR_ALL.find(function(r){ return r.id===id; });
   if(!rec) return;
-  var v = prompt('결과를 입력하세요.', rec.result||'');
-  if(v===null) return;
-  rec.result = v.trim() || null;
-  crSaveRec(rec);
-  crFilter();
-  if(typeof notifRefresh==='function') notifRefresh();
+  document.getElementById('cr-edit-id').value = id;
+  document.getElementById('cr-edit-requester').value = rec.requester||'';
+  document.getElementById('cr-edit-target').value = rec.target||'';
+  document.getElementById('cr-edit-date').value = rec.request_date||'';
+  document.getElementById('cr-edit-title').value = rec.title||'';
+  document.getElementById('cr-edit-content').value = rec.content||'';
+  var msg = document.getElementById('cr-edit-msg'); if(msg) msg.textContent='';
+  var modal = document.getElementById('cr-edit-modal');
+  if(modal) modal.style.display = 'flex';
 }
+function crCloseEditModal(){
+  var modal = document.getElementById('cr-edit-modal');
+  if(modal) modal.style.display = 'none';
+}
+function crSaveEdit(){
+  var id = document.getElementById('cr-edit-id').value;
+  var rec = CR_ALL.find(function(r){ return r.id===id; });
+  var msg = document.getElementById('cr-edit-msg');
+  if(!rec){ if(msg){msg.textContent='오류: 대상을 찾을 수 없습니다.';msg.style.color='#EF4444';} return; }
+  var requester = (document.getElementById('cr-edit-requester').value||'').trim();
+  var target = (document.getElementById('cr-edit-target').value||'').trim();
+  var date = document.getElementById('cr-edit-date').value||'';
+  var title = (document.getElementById('cr-edit-title').value||'').trim();
+  var content = (document.getElementById('cr-edit-content').value||'').trim();
+  if(!requester||!target||!title||!content){
+    if(msg){msg.textContent='⚠ 요청자·대상자·제목·요청내용은 필수입니다.';msg.style.color='#EF4444';}
+    return;
+  }
+  rec.requester = requester; rec.target = target; rec.request_date = date||null;
+  rec.title = title; rec.content = content;
+  crSaveRec(rec);
+  crCloseEditModal();
+  crAfterChange();
+}
+
+// ── 답신 작성 (대상자가 결과를 답신하고 파일을 첨부) ────────────
+var CR_BUCKET = 'cr-attachments';
+function crOpenReplyModal(id){
+  var rec = CR_ALL.find(function(r){ return r.id===id; });
+  if(!rec) return;
+  document.getElementById('cr-reply-id').value = id;
+  document.getElementById('cr-reply-text').value = rec.result||'';
+  document.getElementById('cr-reply-file').value = '';
+  document.getElementById('cr-reply-confirm').checked = !rec.confirm_date;
+  var title = rec.title || (rec.content ? rec.content.split('\n')[0].slice(0,40) : '');
+  document.getElementById('cr-reply-context').innerHTML =
+    '<strong>'+acEsc(title)+'</strong><br>'+acEsc(rec.requester)+' → '+acEsc(rec.target)+' · '+acEsc(rec.request_date||'');
+  var curEl = document.getElementById('cr-reply-attachment-current');
+  curEl.innerHTML = rec.attachment_url
+    ? '현재 첨부: <a href="'+acEsc(rec.attachment_url)+'" target="_blank" rel="noopener" style="color:var(--blue);">📎 '+acEsc(rec.attachment_name||'첨부파일')+'</a>'
+    : '<span style="color:var(--text3);">첨부된 파일이 없습니다.</span>';
+  var msg = document.getElementById('cr-reply-msg'); if(msg) msg.textContent='';
+  var modal = document.getElementById('cr-reply-modal');
+  if(modal) modal.style.display = 'flex';
+}
+function crCloseReplyModal(){
+  var modal = document.getElementById('cr-reply-modal');
+  if(modal) modal.style.display = 'none';
+}
+// 파일을 Supabase Storage(cr-attachments 버킷)에 업로드하고 공개 URL을 반환
+function crUploadAttachment(id, file){
+  var path = id + '/' + Date.now() + '_' + encodeURIComponent(file.name);
+  return fetch(SUPABASE_CONFIG.url+'/storage/v1/object/'+CR_BUCKET+'/'+path, {
+    method:'POST',
+    headers:{ 'apikey':SUPABASE_CONFIG.key, 'Authorization':'Bearer '+SUPABASE_CONFIG.key, 'Content-Type': file.type||'application/octet-stream' },
+    body: file
+  }).then(function(r){
+    if(!r.ok) return r.text().then(function(t){ throw new Error('HTTP '+r.status+' '+t); });
+    return { url: SUPABASE_CONFIG.url+'/storage/v1/object/public/'+CR_BUCKET+'/'+path, name: file.name };
+  });
+}
+function crSaveReply(){
+  var id = document.getElementById('cr-reply-id').value;
+  var rec = CR_ALL.find(function(r){ return r.id===id; });
+  var msg = document.getElementById('cr-reply-msg');
+  if(!rec){ if(msg){msg.textContent='오류: 대상을 찾을 수 없습니다.';msg.style.color='#EF4444';} return; }
+  var text = (document.getElementById('cr-reply-text').value||'').trim();
+  var fileInput = document.getElementById('cr-reply-file');
+  var file = fileInput && fileInput.files && fileInput.files[0];
+  var wantConfirm = document.getElementById('cr-reply-confirm').checked;
+  var btn = document.getElementById('cr-reply-save-btn');
+
+  if(file && file.size > 10*1024*1024){
+    if(msg){msg.textContent='⚠ 파일 크기는 10MB를 넘을 수 없습니다.';msg.style.color='#EF4444';}
+    return;
+  }
+  if(file && !sbOn()){
+    if(msg){msg.textContent='⚠ 파일 첨부는 Supabase 연결 시에만 가능합니다. 텍스트 답신만 저장하려면 파일을 제거하세요.';msg.style.color='#EF4444';}
+    return;
+  }
+
+  function finishSave(attachment){
+    rec.result = text || null;
+    if(attachment){ rec.attachment_url = attachment.url; rec.attachment_name = attachment.name; }
+    if(wantConfirm && !rec.confirm_date) rec.confirm_date = new Date().toISOString().slice(0,10);
+    crSaveRec(rec);
+    crCloseReplyModal();
+    crAfterChange();
+  }
+
+  if(file){
+    if(btn){ btn.textContent='업로드 중…'; btn.disabled=true; }
+    if(msg){ msg.textContent='파일 업로드 중…'; msg.style.color='var(--text3)'; }
+    crUploadAttachment(id, file).then(function(att){
+      finishSave(att);
+    }).catch(function(e){
+      if(msg){ msg.textContent='❌ 업로드 실패: '+(e.message||e)+' — 텍스트 답신만 먼저 저장하려면 파일을 제거하고 다시 시도하세요.'; msg.style.color='#EF4444'; }
+    }).finally(function(){
+      if(btn){ btn.textContent='저장'; btn.disabled=false; }
+    });
+  } else {
+    finishSave(null);
+  }
+}
+
 function crSetDate(id, field){
   var rec = CR_ALL.find(function(r){ return r.id===id; });
   if(!rec) return;
@@ -9028,13 +9290,19 @@ function crRenderTable(list){
       + '<td>'+acEsc(r.requester)+'</td>'
       + '<td style="max-width:160px;font-weight:700;color:var(--text);">'+acEsc(title)+'</td>'
       + '<td style="max-width:240px;white-space:pre-wrap;line-height:1.5;">'+acEsc(r.content)+'</td>'
-      + '<td style="max-width:180px;cursor:pointer;color:'+(r.result?'var(--text)':'var(--text3)')+';" onclick="crSetResult(\''+r.id+'\')" title="클릭하여 결과 입력/수정">'+(r.result?acEsc(r.result):'— 입력 —')+'</td>'
+      + '<td style="max-width:190px;cursor:pointer;" onclick="crOpenReplyModal(\''+r.id+'\')" title="클릭하여 답신 작성/수정">'
+        + (r.result ? '<div style="white-space:pre-wrap;line-height:1.5;color:var(--text);">'+acEsc(r.result)+'</div>' : '<span style="color:var(--text3);">— 답신 작성 —</span>')
+        + (r.attachment_url ? '<div style="margin-top:4px;"><a href="'+acEsc(r.attachment_url)+'" target="_blank" rel="noopener" onclick="event.stopPropagation();" style="font-size:11px;color:var(--blue);text-decoration:none;">📎 '+acEsc(r.attachment_name||'첨부파일')+'</a></div>' : '')
+      + '</td>'
       + '<td>'+acEsc(r.target)+'</td>'
       + '<td>'+acEsc(r.request_date||'-')+'</td>'
       + '<td style="cursor:pointer;color:'+(r.confirm_date?'var(--text)':'var(--text3)')+';" onclick="crSetDate(\''+r.id+'\',\'confirm_date\')" title="클릭하여 확인일 지정">'+(r.confirm_date||'— 지정 —')+'</td>'
       + '<td style="cursor:pointer;color:'+(r.end_date?'var(--text)':'var(--text3)')+';" onclick="crSetDate(\''+r.id+'\',\'end_date\')" title="클릭하여 종료일 지정">'+(r.end_date||'— 지정 —')+'</td>'
       + '<td>'+crStatusSelectHTML(r.id, r.status)+'</td>'
-      + '<td><button onclick="crDeleteRow(\''+r.id+'\')" style="padding:4px 8px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button></td>'
+      + '<td style="white-space:nowrap;">'
+        + '<button onclick="crOpenEditModal(\''+r.id+'\')" title="협조사항 수정" style="padding:4px 7px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;margin-right:4px;">✏️</button>'
+        + '<button onclick="crDeleteRow(\''+r.id+'\')" title="삭제" style="padding:4px 7px;background:none;border:1.5px solid var(--border);border-radius:6px;font-size:11px;color:var(--text3);cursor:pointer;">🗑</button>'
+      + '</td>'
     + '</tr>';
   }).join('');
 }
@@ -9056,11 +9324,11 @@ function crDownloadCSV(){
     if(to && (!r.request_date || r.request_date > to)) return false;
     return true;
   });
-  var rows = [['요청자','제목','요청내용','결과','대상자','요청일','확인일','종료일','결과상태']];
+  var rows = [['요청자','제목','요청내용','결과','첨부파일','대상자','요청일','확인일','종료일','결과상태']];
   list.forEach(function(r){
     var stLbl = (CR_STATUS[r.status]||CR_STATUS.pending).lbl.replace(/^\S+\s/,'');
     var title = r.title || (r.content ? r.content.split('\n')[0].slice(0,40) : '');
-    rows.push([r.requester, title, r.content, r.result||'', r.target, r.request_date||'', r.confirm_date||'', r.end_date||'', stLbl]);
+    rows.push([r.requester, title, r.content, r.result||'', r.attachment_url||'', r.target, r.request_date||'', r.confirm_date||'', r.end_date||'', stLbl]);
   });
   var csv = rows.map(function(r){ return r.map(crCsvCell).join(','); }).join('\r\n');
   var blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
@@ -9604,7 +9872,9 @@ function wjRender() {
   }
   h += '<button class="wj-btn wj-btn-gold" onclick="wjOpenRegister()">➕ 신규사원 등록</button>';
   if (emp) h += '<button class="wj-btn wj-btn-ghost" onclick="wjPrint()">📄 일지 인쇄·PDF</button>';
-  h += '</div><span id="wj-db-badge" class="wj-badge">🟡 localStorage</span></div>';
+  h += '</div><span style="display:flex;align-items:center;gap:6px;"><span id="wj-db-badge" class="wj-badge">🟡 localStorage</span>'
+    + '<button onclick="wjCopySQL()" title="Supabase 테이블 생성 SQL 복사" style="padding:4px 9px;background:none;border:1px solid var(--border);border-radius:100px;font-size:10px;font-weight:700;cursor:pointer;color:var(--text3);">📋 SQL</button>'
+    + '<span id="wj-table-msg" style="font-size:10px;"></span></span></div>';
 
   h += wjRegisterFormHTML();
 
@@ -9963,6 +10233,26 @@ function wjDbBadge() {
       else { el.textContent = '🟡 localStorage'; el.className = 'wj-badge'; }
     })
     .catch(function () { el.textContent = '🟡 localStorage'; el.className = 'wj-badge'; });
+}
+function wjCopySQL(){
+  var sql = "-- 신규사원 업무일지 백업 (key-value 저장: 사원 정보/일지 항목)\n"
+    + "CREATE TABLE IF NOT EXISTS acorn_worklog (\n"
+    + "  row_key      text PRIMARY KEY,\n"
+    + "  kind         text NOT NULL,\n"
+    + "  payload      jsonb NOT NULL DEFAULT '{}'::jsonb,\n"
+    + "  updated_at   timestamptz DEFAULT now()\n"
+    + ");\n"
+    + "ALTER TABLE acorn_worklog ENABLE ROW LEVEL SECURITY;\n"
+    + "DROP POLICY IF EXISTS \"acorn_worklog_all\" ON acorn_worklog;\n"
+    + "CREATE POLICY \"acorn_worklog_all\" ON acorn_worklog\n"
+    + "  FOR ALL USING (true) WITH CHECK (true);";
+  var msgEl = document.getElementById('wj-table-msg');
+  navigator.clipboard.writeText(sql).then(function(){
+    if(msgEl){ msgEl.textContent='✅ SQL 복사됨'; msgEl.style.color='#0D9488'; }
+  }).catch(function(){
+    if(msgEl){ msgEl.textContent='복사 실패 (콘솔 확인)'; msgEl.style.color='#B45309'; }
+    console.log(sql);
+  });
 }
 
 </script>
