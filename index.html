@@ -9809,6 +9809,11 @@ var WJ_CUR = '';
 var WJ_INITED = false;
 var WJ_MODAL_EID = '';   // 모달에서 편집 중인 일지 id (신규는 '')
 
+// ── 주간일지 필터 상태 (작성자·일자 기준, 전 사원 대상) ────
+var WJ_FLT_AUTHOR = '';  // 사원 id, '' = 전체
+var WJ_FLT_FROM = '';
+var WJ_FLT_TO = '';
+
 // ── 저장/로드 ──────────────────────────────────────────────
 function wjLoad() {
   try { WJ_EMPS = JSON.parse(localStorage.getItem(WJ_EMP_KEY) || '[]'); } catch (e) { WJ_EMPS = []; }
@@ -9887,11 +9892,10 @@ function wjRender() {
 
   h += wjSummaryHTML(emp);
   // 작성 버튼
-  h += '<div style="display:flex;justify-content:space-between;align-items:center;margin:4px 0 12px">' +
-       '<div class="sec-h" style="margin:0;flex:1">작성한 업무일지 <span style="font-size:12px;color:var(--text3);font-weight:400">(' +
-       (WJ_ENTRIES[emp.id] || []).length + '개)</span></div>' +
-       '<button class="wj-btn wj-btn-blue" onclick="wjNewEntry()" style="margin-left:12px">✍️ 오늘 일지 작성</button></div>';
-  h += wjListHTML(emp);
+  h += '<div style="display:flex;justify-content:flex-end;margin:4px 0 14px">' +
+       '<button class="wj-btn wj-btn-blue" onclick="wjNewEntry()">✍️ 오늘 일지 작성 (' + escH(emp.name) + ')</button></div>';
+
+  h += wjWeeklyWrapHTML();
 
   root.innerHTML = h;
 }
@@ -9971,6 +9975,142 @@ function wjListHTML(emp) {
   }
   h += '</div>';
   return h;
+}
+
+// ── 주간일지 (전 사원 대상, 작성자·일자 필터) ────────────────
+function wjAllFlat() {
+  var out = [];
+  for (var i = 0; i < WJ_EMPS.length; i++) {
+    var emp = WJ_EMPS[i];
+    var list = WJ_ENTRIES[emp.id] || [];
+    for (var j = 0; j < list.length; j++) {
+      var e = list[j];
+      out.push({ id: e.id, empId: emp.id, empName: emp.name, date: e.date, work: e.work, felt: e.felt, tomorrow: e.tomorrow, comment: e.comment, updatedAt: e.updatedAt });
+    }
+  }
+  return out;
+}
+function wjWeekStart(dateStr) {
+  var d = wjParse(dateStr);
+  var dow = d.getDay(); // 0=일 .. 6=토
+  var diff = dow === 0 ? -6 : 1 - dow; // 월요일로 이동
+  var mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() + diff);
+  return wjFmt(mon);
+}
+function wjWeekEnd(dateStr) {
+  var mon = wjParse(wjWeekStart(dateStr));
+  var fri = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 4);
+  return wjFmt(fri);
+}
+function wjWeekLabel(dateStr) {
+  var ws = wjWeekStart(dateStr), we = wjWeekEnd(dateStr);
+  var wsD = wjParse(ws);
+  var wom = Math.ceil(wsD.getDate() / 7);
+  return (wsD.getMonth() + 1) + '월 ' + wom + '주차 (' + ws.slice(5).replace('-', '.') + '~' + we.slice(5).replace('-', '.') + ')';
+}
+function wjFilteredFlat() {
+  var all = wjAllFlat();
+  return all.filter(function (e) {
+    if (WJ_FLT_AUTHOR && e.empId !== WJ_FLT_AUTHOR) return false;
+    if (WJ_FLT_FROM && (!e.date || e.date < WJ_FLT_FROM)) return false;
+    if (WJ_FLT_TO && (!e.date || e.date > WJ_FLT_TO)) return false;
+    return true;
+  });
+}
+function wjGroupWeeks(list) {
+  var map = {};
+  list.forEach(function (e) {
+    var ws = wjWeekStart(e.date);
+    if (!map[ws]) map[ws] = [];
+    map[ws].push(e);
+  });
+  var weeks = Object.keys(map).sort().reverse();
+  return weeks.map(function (ws) {
+    var items = map[ws].slice().sort(function (a, b) {
+      return (b.date || '').localeCompare(a.date || '') || (a.empName || '').localeCompare(b.empName || '', 'ko');
+    });
+    return { weekStart: ws, items: items };
+  });
+}
+function wjWeeklyWrapHTML() {
+  var authors = WJ_EMPS.slice().sort(function (a, b) { return (a.name || '').localeCompare(b.name || '', 'ko'); });
+  var h = '<div class="sec-h" style="margin:18px 0 10px">📅 주간일지 <span style="font-size:12px;color:var(--text3);font-weight:400">(작성자·일자 기준 조회)</span></div>';
+  h += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:14px;background:var(--s2);border-radius:var(--rL);padding:12px 14px;">';
+  h += '<div><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">작성자</div>'
+     + '<select id="wj-flt-author" onchange="wjFltChange()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);">'
+     + '<option value="">전체</option>' + authors.map(function (e) { return '<option value="' + escH(e.id) + '"' + (e.id === WJ_FLT_AUTHOR ? ' selected' : '') + '>' + escH(e.name) + '</option>'; }).join('')
+     + '</select></div>';
+  h += '<div><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">일자 시작</div>'
+     + '<input id="wj-flt-from" type="date" value="' + escH(WJ_FLT_FROM) + '" onchange="wjFltChange()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);"></div>';
+  h += '<div><div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;">일자 종료</div>'
+     + '<input id="wj-flt-to" type="date" value="' + escH(WJ_FLT_TO) + '" onchange="wjFltChange()" style="padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:11px;background:var(--surface);color:var(--text);"></div>';
+  h += '<button onclick="wjFltReset()" style="padding:7px 12px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text3);">↺ 필터 초기화</button>';
+  h += '<div style="flex:1;"></div>';
+  h += '<button onclick="wjWeeklyCSV()" style="padding:7px 12px;background:none;border:1.5px solid var(--border);border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--text2);">⬇ CSV 다운로드</button>';
+  h += '</div>';
+  h += '<div id="wj-weekly-body">' + wjWeeklyBodyHTML() + '</div>';
+  return h;
+}
+function wjWeeklyBodyHTML() {
+  var list = wjFilteredFlat();
+  if (!list.length) return '<div class="wj-empty" style="padding:26px">조건에 맞는 업무일지가 없습니다.</div>';
+  var weeks = wjGroupWeeks(list);
+  var h = '';
+  weeks.forEach(function (wk) {
+    h += '<div class="wj-card">';
+    h += '<div class="wj-card-hdr" style="display:flex;justify-content:space-between;align-items:center;">'
+       + '<span>' + wjWeekLabel(wk.weekStart) + '</span>'
+       + '<span style="font-size:11px;font-weight:600;opacity:.85;">' + wk.items.length + '건</span></div>';
+    h += '<div class="wj-card-body"><div class="wj-filelist">';
+    wk.items.forEach(function (e) {
+      var prev = wjTrunc(e.work || e.felt || e.tomorrow || e.comment || '', 46);
+      h += '<div class="wj-file" onclick="wjOpenEntryFor(\'' + e.empId + '\',\'' + e.id + '\')">'
+         + '<div class="wj-file-icon">📄</div>'
+         + '<div class="wj-file-main">'
+         + '<div class="wj-file-date">' + escH(e.date) + ' <span class="wj-dow">(' + wjWeekday(e.date) + ')</span> · <span style="font-weight:700;color:var(--text)">' + escH(e.empName) + '</span></div>'
+         + '<div class="wj-file-prev">' + escH(prev) + '</div></div>'
+         + '<div class="wj-file-arrow">›</div></div>';
+    });
+    h += '</div></div></div>';
+  });
+  return h;
+}
+function wjFltChange() {
+  var a = document.getElementById('wj-flt-author'), f = document.getElementById('wj-flt-from'), t = document.getElementById('wj-flt-to');
+  WJ_FLT_AUTHOR = a ? a.value : ''; WJ_FLT_FROM = f ? f.value : ''; WJ_FLT_TO = t ? t.value : '';
+  var body = document.getElementById('wj-weekly-body');
+  if (body) body.innerHTML = wjWeeklyBodyHTML();
+}
+function wjFltReset() {
+  WJ_FLT_AUTHOR = ''; WJ_FLT_FROM = ''; WJ_FLT_TO = '';
+  var a = document.getElementById('wj-flt-author'), f = document.getElementById('wj-flt-from'), t = document.getElementById('wj-flt-to');
+  if (a) a.value = ''; if (f) f.value = ''; if (t) t.value = '';
+  var body = document.getElementById('wj-weekly-body');
+  if (body) body.innerHTML = wjWeeklyBodyHTML();
+}
+function wjOpenEntryFor(empId, id) {
+  var list = WJ_ENTRIES[empId] || [];
+  var found = null;
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) { found = list[i]; break; }
+  if (!found) return;
+  WJ_CUR = empId; wjSaveCur();
+  wjRender();
+  wjShowModal(found);
+}
+function wjCsvCell(v) { var s = (v == null ? '' : String(v)).replace(/"/g, '""'); return '"' + s + '"'; }
+function wjWeeklyCSV() {
+  var list = wjFilteredFlat().slice().sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+  var rows = [['주차', '작성자', '일자', '요일', '오늘 한 업무', '느낀 점', '내일 할 일', '멘토·경영진 코멘트']];
+  list.forEach(function (e) {
+    rows.push([wjWeekLabel(e.date), e.empName, e.date, wjWeekday(e.date), e.work || '', e.felt || '', e.tomorrow || '', e.comment || '']);
+  });
+  var csv = rows.map(function (r) { return r.map(wjCsvCell).join(','); }).join('\r\n');
+  var blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = '업무일지_주간_' + wjToday() + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // ── 모달(팝업) ─────────────────────────────────────────────
