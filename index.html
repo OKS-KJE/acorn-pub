@@ -3242,7 +3242,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div id="cr-db-badge" style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3);margin-bottom:14px;padding:8px 12px;background:var(--s2);border-radius:8px;"></div>
 
       <div id="cr-table-missing" style="display:none;margin-bottom:16px;background:rgba(220,38,38,.05);border:1.5px solid rgba(220,38,38,.2);border-radius:var(--rL);padding:14px 18px;">
-        <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px;"><strong style="color:#DC2626;">⚠ Supabase에 cooperation_requests 테이블이 아직 없습니다.</strong> 아래 버튼으로 생성 SQL을 복사해 Supabase SQL Editor에 붙여넣고 실행하면, 이후부터 협조사항이 팀 전체에 저장·동기화됩니다. 테이블이 없어도 이 브라우저에는 계속 저장됩니다.</div>
+        <div id="cr-table-missing-text" style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:8px;"><strong style="color:#DC2626;">⚠ Supabase에 cooperation_requests 테이블이 아직 없습니다.</strong> 아래 버튼으로 생성 SQL을 복사해 Supabase SQL Editor에 붙여넣고 실행하면, 이후부터 협조사항이 팀 전체에 저장·동기화됩니다. 테이블이 없어도 이 브라우저에는 계속 저장됩니다.</div>
         <button onclick="crCopySQL()" style="padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">📋 테이블 생성 SQL 복사</button>
         <span id="cr-table-msg" style="margin-left:10px;font-size:11px;"></span>
       </div>
@@ -8955,6 +8955,10 @@ function crAfterChange(){
 }
 
 // ── Supabase 연결 상태 배지 ───────────────────────────────────
+// 실제 저장에 쓰이는 전체 컬럼이 원격 테이블에 존재하는지까지 확인한다.
+// (select=id 만 확인하면, title/attachment_url 등 신규 컬럼이 없어도 "연결됨"으로
+//  오인되어 실제 저장(upsert)은 계속 실패하는데 배지는 초록불을 보여주는 문제가 있었음)
+var CR_ALL_COLS = 'id,requester,target,title,content,result,attachment_url,attachment_name,request_date,confirm_date,end_date,status';
 function crCheckDb(){
   var el = document.getElementById('cr-db-badge');
   if(!el) return;
@@ -8964,15 +8968,21 @@ function crCheckDb(){
     return;
   }
   el.innerHTML = '<span class="db-dot" style="background:#9aa0a6"></span>확인 중…';
-  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE+'?select=id&limit=1',
+  fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE+'?select='+CR_ALL_COLS+'&limit=1',
     {headers:sbHeaders({'Cache-Control':'no-cache'}), cache:'no-store'}
   ).then(function(res){
     var tb=document.getElementById('cr-table-missing');
+    var tt=document.getElementById('cr-table-missing-text');
     if(res.ok || res.status===406){
       el.innerHTML = '<span class="db-dot" style="background:#50C878"></span>🟢 Supabase 연결됨 — 협조사항이 팀 전체에 저장됩니다';
       if(tb) tb.style.display='none';
     } else if(res.status===404){
       el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>⚠ cooperation_requests 테이블 없음 — localStorage로만 저장 중';
+      if(tt) tt.innerHTML = '<strong style="color:#DC2626;">⚠ Supabase에 cooperation_requests 테이블이 아직 없습니다.</strong> 아래 버튼으로 생성 SQL을 복사해 Supabase SQL Editor에 붙여넣고 실행하면, 이후부터 협조사항이 팀 전체에 저장·동기화됩니다. 테이블이 없어도 이 브라우저에는 계속 저장됩니다.';
+      if(tb) tb.style.display='block';
+    } else if(res.status===400){
+      el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>⚠ 테이블 스키마가 최신이 아닙니다 — 새 협조사항 저장이 실패하고 있을 수 있습니다';
+      if(tt) tt.innerHTML = '<strong style="color:#DC2626;">⚠ cooperation_requests 테이블에 최신 컬럼(title / attachment_url / attachment_name 등)이 없습니다.</strong> 이 경우 이 브라우저에는 저장되지만 다른 PC·팀원 화면에는 나타나지 않습니다(원격 저장이 조용히 실패). 아래 버튼으로 최신 SQL을 복사해 Supabase SQL Editor에서 다시 실행해 주세요 (기존 데이터는 안전합니다).';
       if(tb) tb.style.display='block';
     } else {
       el.innerHTML = '<span class="db-dot" style="background:#e57373"></span>연결 실패 HTTP '+res.status;
@@ -9029,6 +9039,21 @@ function crSetTableMsg(msg, color){
 }
 
 // ── Supabase upsert / delete ─────────────────────────────────
+// 저장/삭제가 원격(Supabase)에 실패하면 콘솔에만 남기지 않고 화면에도 즉시 알린다.
+// (예전에는 실패해도 조용히 넘어가서, 이 브라우저에는 저장된 것처럼 보이지만
+//  실제로는 팀 전체 공유 DB에는 반영되지 않는 상태를 사용자가 알아챌 방법이 없었음)
+function crRemoteFailToast(kind, status){
+  var msg;
+  if(status===400){
+    msg = '⚠ Supabase ' + kind + ' 실패 (테이블 스키마 불일치) — 이 화면에만 저장되고 다른 PC에는 반영되지 않습니다. 관리자에게 SQL 재실행을 요청하세요.';
+  } else if(status===404){
+    msg = '⚠ Supabase ' + kind + ' 실패 (테이블 없음) — 이 화면에만 저장됩니다.';
+  } else {
+    msg = '⚠ Supabase ' + kind + ' 실패 (네트워크/서버 오류) — 이 화면에만 저장됩니다.';
+  }
+  if(typeof wjToast==='function') wjToast(msg); else alert(msg);
+  if(typeof crCheckDb==='function') crCheckDb();
+}
 function crUpsertRemote(rec){
   if(!sbOn()) return;
   var body = Object.assign({}, rec, {updated_at: new Date().toISOString()});
@@ -9037,16 +9062,16 @@ function crUpsertRemote(rec){
     headers: sbHeaders({'Prefer':'resolution=merge-duplicates,return=minimal'}),
     body: JSON.stringify(body)
   }).then(function(r){
-    if(!r.ok) r.text().then(function(t){ console.warn('[cr] upsert FAIL:', r.status, t); });
-  }).catch(function(e){ console.warn('[cr] upsert ERROR:', e.message); });
+    if(!r.ok) r.text().then(function(t){ console.warn('[cr] upsert FAIL:', r.status, t); crRemoteFailToast('저장', r.status); });
+  }).catch(function(e){ console.warn('[cr] upsert ERROR:', e.message); crRemoteFailToast('저장', 0); });
 }
 function crDeleteRemote(id){
   if(!sbOn()) return;
   fetch(SUPABASE_CONFIG.url+'/rest/v1/'+CR_TABLE+'?id=eq.'+encodeURIComponent(id),
     {method:'DELETE', headers:sbHeaders()}
   ).then(function(r){
-    if(!r.ok) r.text().then(function(t){ console.warn('[cr] delete FAIL:', r.status, t); });
-  }).catch(function(e){ console.warn('[cr] delete ERROR:', e.message); });
+    if(!r.ok) r.text().then(function(t){ console.warn('[cr] delete FAIL:', r.status, t); crRemoteFailToast('삭제', r.status); });
+  }).catch(function(e){ console.warn('[cr] delete ERROR:', e.message); crRemoteFailToast('삭제', 0); });
 }
 
 function crSaveRec(rec){
